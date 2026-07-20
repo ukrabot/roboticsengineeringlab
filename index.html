@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robotics Engineering Blog — Build a 6-DOF Robot Arm: Arduino, ROS 2 & Industrial Automation</title>
+  <meta name="description" content="Master robotics engineering with expert tutorials on 6-DOF robot arms, Arduino, ROS 2, industrial automation, and AI. Premium guides for engineers in the USA and Canada." />
+  <meta name="keywords" content="6-DOF robot arm, Arduino robot arm tutorial, ROS 2 robot arm, industrial robot arm, collaborative robot, robot arm programming, robot arm cost, automation USA Canada, Arduino inverse kinematics, robot arm STL files" />
+  <meta name="author" content="Robotics Engineering" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/robotics-engineering-blog" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Robotics Engineering Blog — Build a 6-DOF Robot Arm" />
+  <meta property="og:description" content="Deep-dive tutorials, hardware reviews, and real-world projects for robotics engineers, makers, and students." />
+  <meta property="og:image" content="robotic_arm_hero.jpg" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/robotics-engineering-blog" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Robotics Engineering Blog — Build a 6-DOF Robot Arm" />
+  <meta name="twitter:description" content="Tutorials on robot arms, Arduino, ROS 2, drones, and industrial automation." />
+  <meta name="twitter:image" content="robotic_arm_hero.jpg" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Robotics Engineering Blog",
+    "url": "https://roboticsengineeringlab.com/robotics-engineering-blog",
+    "description": "Premium tutorials on 6-DOF robot arms, Arduino, ROS 2, industrial automation, and AI for engineers in the USA and Canada.",
+    "publisher": { "@type": "Organization", "name": "Robotics Engineering" },
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0c0e14;
+      --surface: #101218;
+      --surface-card: #161820;
+      --surface-hover: #1c1f27;
+      --text-primary: #f5f3ee;
+      --text-secondary: #b5b0a6;
+      --text-muted: #6e677a;
+      --accent: #e4c07a;
+      --accent-2: #6fa3d8;
+      --border: rgba(255,255,255,0.06);
+      --radius: 22px;
+      --shadow-card: 0 16px 40px rgba(0,0,0,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--ink);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection { background: rgba(228,192,122,0.2); color: #fff; }
+
+    /* Header / Hero */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12,14,20,0.75);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text-primary); text-decoration: none; letter-spacing: -0.01em; line-height: 1; }
+    .logo span { color: var(--accent); font-style: italic; }
+    .nav-links { display: flex; gap: 22px; align-items: center; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.03em; transition: color .2s; }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 82vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero img.hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.4) contrast(1.15);
+      z-index: 1;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(12,14,20,0.35) 0%, rgba(12,14,20,0.7) 55%, var(--ink) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 3; max-width: 1200px; margin: 0 auto; padding: 120px 24px 100px; width: 100%; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero-badge .line { width: 28px; height: 2px; background: var(--accent); display: block; }
+    .hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: #fff;
+      max-width: 900px;
+      text-wrap: balance;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p.sub {
+      margin-top: 22px;
+      max-width: 640px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+    .hero .cta-row { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 26px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .btn-primary { background: var(--accent); color: #1a1408; box-shadow: 0 6px 24px rgba(228,192,122,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(228,192,122,0.45); }
+    .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.08); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+
+    /* Stats */
+    .stats { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 4; margin-top: -50px; }
+    .stats-inner { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; box-shadow: var(--shadow-card); backdrop-filter: blur(10px); }
+    .stat h3 { font-family: 'DM Serif Display', Georgia, serif; font-size: 2rem; color: var(--text-primary); line-height: 1; margin-bottom: 6px; }
+    .stat p { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* Sections */
+    section { max-width: 1200px; margin: 0 auto; padding: 100px 24px; }
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 10px;
+    }
+    .section-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 2.2rem; color: var(--text-primary); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
+    .section-sub { color: var(--text-secondary); font-weight: 300; max-width: 640px; }
+
+    /* Cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-top: 48px; }
+    .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.45); border-color: rgba(228,192,122,0.2); }
+    .card img { width: 100%; height: 220px; object-fit: cover; filter: brightness(0.92) contrast(1.05); transition: filter .3s ease; }
+    .card:hover img { filter: brightness(1) contrast(1.05); }
+    .card-body { padding: 24px; }
+    .card-tag { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: var(--accent-2); margin-bottom: 10px; }
+    .card h3 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.01em; line-height: 1.2; }
+    .card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.55; }
+    .card-footer { margin-top: 18px; display: flex; align-items: center; gap: 14px; font-size: 0.78rem; color: var(--text-muted); }
+
+    /* Ads */
+    .ad-box { background: linear-gradient(135deg, rgba(228,192,122,0.07), rgba(111,163,216,0.06)); border: 1px dashed rgba(255,255,255,0.1); border-radius: 20px; padding: 36px 28px; text-align: center; margin-top: 48px; }
+    .ad-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+    .ad-copy { color: var(--text-secondary); font-size: 0.92rem; }
+
+    /* Category tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 48px; }
+    .tag { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 999px; padding: 8px 18px; font-size: 0.82rem; color: var(--text-secondary); text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+    .tag:hover { background: rgba(228,192,122,0.08); color: var(--text-primary); border-color: rgba(228,192,122,0.25); }
+    .tags .count { color: var(--accent); font-weight: 600; margin-left: 6px; font-variant-numeric: tabular-nums; }
+
+    /* Premium course / pillar */
+    .pillar { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: start; background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 48px; margin-top: 48px; }
+    @media (max-width: 900px) { .pillar { grid-template-columns: 1fr; } }
+    .pillar img { width: 100%; height: 260px; object-fit: cover; border-radius: 14px; }
+    .pillar h3 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.8rem; color: var(--text-primary); letter-spacing: -0.02em; margin-bottom: 10px; }
+    .pillar .meta-row { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+    .meta-row span { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+    .pillar p { color: var(--text-secondary); margin-top: 16px; line-height: 1.65; }
+    .pillar .btn-outline { margin-top: 22px; display: inline-block; padding: 12px 24px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-primary); text-decoration: none; font-weight: 500; font-size: 0.85rem; transition: background .2s; }
+    .pillar .btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+    /* Newsletter */
+    .newsletter { max-width: 1200px; margin: 0 auto; padding: 100px 24px; border-top: 1px solid var(--border); }
+    .newsletter-inner { background: linear-gradient(135deg, rgba(228,192,122,0.08), rgba(111,163,216,0.08)); border: 1px solid var(--border); border-radius: var(--radius); padding: 60px 40px; text-align: center; position: relative; overflow: hidden; }
+    .newsletter-inner::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle at center, rgba(228,192,122,0.12), transparent 70%); border-radius: 50%; pointer-events: none; }
+    .newsletter-inner h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: 2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+    .newsletter-inner p { color: var(--text-secondary); margin-bottom: 28px; max-width: 460px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+    .form-row { display: flex; gap: 10px; justify-content: center; max-width: 480px; margin: 0 auto; position: relative; z-index: 1; flex-wrap: wrap; }
+    .form-row input[type="email"] { flex: 1; padding: 14px 20px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color .2s, box-shadow .2s; min-width: 240px; }
+    .form-row input[type="email"]:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(228,192,122,0.1); }
+    .form-row button { padding: 14px 28px; border-radius: 999px; border: none; background: var(--accent); color: #1a1408; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease; }
+    .form-row button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(228,192,122,0.35); }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 48px 24px 60px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 48px; flex-wrap: wrap; }
+    .footer-brand .logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.3rem; color: var(--text-primary); text-decoration: none; line-height: 1; }
+    .footer-brand .logo span { color: var(--accent); font-style: italic; }
+    .footer-brand p { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; max-width: 300px; }
+    .footer-links { display: flex; gap: 48px; }
+    .footer-links h4 { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
+    .footer-links ul { list-style: none; }
+    .footer-links li + li { margin-top: 8px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* Utilities */
+    @media (max-width: 700px) { .nav-links { gap: 14px; } .cards { grid-template-columns: 1fr; } .stats-inner { grid-template-columns: repeat(2, 1fr); } .footer-inner { flex-direction: column; } .hero h1 { font-size: 2.2rem; } }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <header class="site-header" aria-label="Site header">
+    <div class="nav-inner">
+      <a href="#" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#latest">Tutorials</a>
+        <a href="#categories">Topics</a>
+        <a href="#courses">Courses</a>
+        <a href="#newsletter">Subscribe</a>
+      </nav>
+    </div>
+  </header>
+
+  <header class="hero" aria-label="Hero cover">
+    <img class="hero-bg" src="robotic_arm_hero.jpg" alt="Modern 6-axis industrial robotic arm in a premium manufacturing environment" loading="eager" />
+    <div class="hero-inner" id="main">
+      <div class="hero-badge" aria-label="Category and date">
+        <span class="line" aria-hidden="true"></span>
+        Manufacturing Intelligence — July 18, 2026
+      </div>
+      <h1>Master <em>Robotics Engineering</em> with Expert Tutorials</h1>
+      <p class="sub">From Arduino prototypes to ROS 2 production systems. Deep-dive tutorials, hardware reviews, and real-world projects for robotics engineers, makers, and students in the USA and Canada.</p>
+      <div class="cta-row">
+        <a href="#latest" class="btn btn-primary">Explore Tutorials</a>
+        <a href="#newsletter" class="btn btn-ghost">Subscribe Free</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="Site statistics">
+    <div class="stats-inner">
+      <div class="stat"><h3>49</h3><p>Tutorials Confirmed</p></div>
+      <div class="stat"><h3>6</h3><p>Featured Deep Dives</p></div>
+      <div class="stat"><h3>4</h3><p>Premium Illustrations</p></div>
+      <div class="stat"><h3>USA · Canada</h3><p>Market Coverage</p></div>
+    </div>
+  </section>
+
+  <section id="latest" aria-label="Latest tutorials">
+    <span class="section-label">Latest Tutorials</span>
+    <h2 class="section-title">Build a 6-DOF Robot Arm with Arduino, ROS 2 & Industrial Automation</h2>
+    <p class="section-sub">Hand-picked guides for engineers and makers who want to design, program, and deploy robotic arms — from DIY Arduino builds to production-grade industrial automation.</p>
+
+    <div class="cards" aria-label="Tutorial cards">
+      <a href="articles/arduino-robot-arm-tutorial.html" class="card" aria-label="Arduino Robot Arm Tutorial">
+        <img src="arduino_arm_tutorial.jpg" alt="A DIY 6-DOF Arduino robot arm with servos and 3D printed parts on a workbench" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">Arduino</div>
+          <h3>Build a 6-DOF Robot Arm with Arduino: Complete Guide</h3>
+          <p>Learn to design, 3D print, and program a 6-degree-of-freedom robot arm using Arduino Mega, servo motors, and inverse kinematics. Includes STL files and complete code.</p>
+          <div class="card-footer"><span>Dec 15, 2024</span><span>25 min read</span></div>
+        </div>
+      </a>
+
+      <a href="articles/ros2-robot-arm-control.html" class="card" aria-label="ROS 2 Navigation Tutorial">
+        <img src="ros2_robot_control.jpg" alt="A collaborative robot arm interacting with a touchscreen HMI showing ROS 2 data" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">ROS 2</div>
+          <h3>ROS 2 Control Framework for Robot Arms</h3>
+          <p>Master ros2_control for robot arms. Configure hardware interfaces, controller managers, and custom controllers for real-world manipulation and assembly.</p>
+          <div class="card-footer"><span>Nov 20, 2024</span><span>40 min read</span></div>
+        </div>
+      </a>
+
+      <a href="articles/industrial-plc-robotics.html" class="card" aria-label="Industrial PLC Tutorial">
+        <img src="industrial_robot_arm.jpg" alt="A modern industrial 6-axis robot arm in a clean manufacturing environment" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">Industrial</div>
+          <h3>PLC Programming for Robotics: Siemens S7-1500 & FANUC Integration</h3>
+          <p>Bridge the gap between PLCs and robots. Structured Text programming, PROFINET communication, safety circuits, and FANUC R-30iB controller setup.</p>
+          <div class="card-footer"><span>Nov 28, 2024</span><span>35 min read</span></div>
+        </div>
+      </a>
+    </div>
+
+    <aside class="ad-box" aria-label="Advertisement" role="region">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-copy">Compare industrial automation financing and robot arm leasing rates for manufacturers in the USA and Canada.</div>
+    </aside>
+  </section>
+
+  <section id="courses" aria-label="Premium courses">
+    <span class="section-label">Premium Learning</span>
+    <h2 class="section-title">Complete Courses for Robotics Engineers</h2>
+    <p class="section-sub">Structured, project-based learning paths designed for engineers who want to move from theory to real-world robot arm deployment.</p>
+
+    <div class="cards" aria-label="Course cards">
+      <a href="articles/arduino-robot-arm-tutorial.html" class="card" aria-label="Arduino Robotics Masterclass">
+        <img src="arduino_arm_tutorial.jpg" alt="Arduino robot arm course cover" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">Complete Course</div>
+          <h3>Arduino Robotics Masterclass</h3>
+          <p>From blinking LED to autonomous navigation. 12 projects, 40+ hours of content. Covers electronics, programming, 3D design, and control theory.</p>
+          <div class="card-footer"><span>12 Modules</span><span>Beginner → Advanced</span></div>
+        </div>
+      </a>
+      <a href="articles/ros2-robot-arm-control.html" class="card" aria-label="ROS 2 Production Robots">
+        <img src="ros2_robot_control.jpg" alt="ROS 2 robot control course cover" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">Complete Course</div>
+          <h3>ROS 2 for Production Robots</h3>
+          <p>Build deployable ROS 2 systems. Navigation, manipulation, fleet management, security, and CI/CD for robotics. 18 modules with real deployments.</p>
+          <div class="card-footer"><span>18 Modules</span><span>Intermediate → Expert</span></div>
+        </div>
+      </a>
+      <a href="articles/fanuc-robot-arm-review.html" class="card" aria-label="Industrial Automation with FANUC & ABB">
+        <img src="industrial_robot_arm.jpg" alt="Industrial robot automation course cover" loading="lazy" />
+        <div class="card-body">
+          <div class="card-tag">Complete Course</div>
+          <h3>Industrial Automation with FANUC & ABB</h3>
+          <p>Learn to program, integrate, and maintain 6-axis robot arms in production environments. Includes safety, vision, and PLC integration modules.</p>
+          <div class="card-footer"><span>15 Modules</span><span>Advanced</span></div>
+        </div>
+      </a>
+    </div>
+
+    <aside class="ad-box" aria-label="Advertisement" role="region">
+      <div class="ad-label">Advertisement</div>
+      <div class="ad-copy">Compare robot arm suppliers, leasing options, and automation grants available for manufacturers in the USA and Canada.</div>
+    </aside>
+  </section>
+
+  <section id="featured" aria-label="Featured articles" style="max-width:1200px; margin:0 auto; padding:80px 24px; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06);">
+    <span class="section-label">Featured Deep Dives</span>
+    <h2 class="section-title">Top Articles from Our 6-DOF Robot Arm Series</h2>
+    <p class="section-sub">Direct links to our most comprehensive SEO-optimized guides for engineers, makers, and manufacturers across the USA and Canada.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin-top:40px;">
+      <a href="articles/arduino-robot-arm-tutorial.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">Arduino Robot Arm Tutorial</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">Complete guide to building a 6-DOF robot arm with Arduino Mega, smart servos, inverse kinematics, and 3D printed components.</p>
+      </a>
+      <a href="articles/ros2-robot-arm-control.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">ROS 2 Control Framework</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">Master ros2_control for robot arms with hardware interfaces, controller managers, custom controllers, and production deployment guides.</p>
+      </a>
+      <a href="articles/fanuc-robot-arm-review.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">FANUC LR Mate 200iD Review</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">In-depth review of FANUC's 6-axis industrial robot arm with specs, pricing, performance, and value analysis for USA and Canada buyers.</p>
+      </a>
+      <a href="articles/industrial-plc-robotics.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">PLC & FANUC Integration</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">Bridge PLCs and robot arms with Siemens S7-1500, PROFINET communication, structured text programming, and safety circuits.</p>
+      </a>
+      <a href="articles/robot-arm-inverse-kinematics.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">Inverse Kinematics Guide</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">Complete explanation of 6-DOF inverse kinematics with analytical solutions, Euler angles, Arduino code, and ROS 2 implementations.</p>
+      </a>
+      <a href="articles/robot-arm-safety-usa-canada.html" style="text-decoration:none; color:inherit; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:28px; display:block; transition:transform .2s ease, box-shadow .2s ease;">
+        <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-bottom:10px;">Safety Standards</h4>
+        <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.55;">Understand ANSI RIA R15.06, CSA Z434, ISO compliance, light curtains, risk assessments, and collaborative robot safety in North America.</p>
+      </a>
+    </div>
+  </section>
+
+  <section aria-label="Newsletter subscription" id="newsletter" class="newsletter">
+    <div class="newsletter-inner">
+      <h2>Subscribe to the Robotics Intelligence Digest</h2>
+      <p>Weekly tutorials, hardware reviews, and market insights for robotics engineers, makers, and automation leaders across North America.</p>
+      <form class="form-row" onsubmit="event.preventDefault(); this.innerHTML='<span style=\'color: var(--accent); font-weight:600; font-size:0.95rem;\'>✓ Subscribed successfully — check your inbox.</span>';" aria-label="Newsletter subscription form">
+        <input type="email" placeholder="Enter your email address" required aria-label="Email address" />
+        <button type="submit">Subscribe Free</button>
+      </form>
+      <p style="font-size:0.72rem; color: var(--text-muted); margin-top: 18px; margin-bottom: 0;">No spam ever. Unsubscribe in one click. GDPR & CCPA compliant.</p>
+    </div>
+  </section>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+        <p>Premium editorial on industrial automation, robot arms, Arduino, ROS 2, and AI for the USA, Canada, and global markets.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Tutorials</h4>
+          <ul>
+            <li><a href="articles/arduino-robot-arm-tutorial.html">Arduino Robot Arm</a></li>
+            <li><a href="articles/ros2-robot-arm-control.html">ROS 2 Control</a></li>
+            <li><a href="articles/industrial-plc-robotics.html">Industrial PLC</a></li>
+            <li><a href="articles/robot-arm-vision-system.html">Computer Vision</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="articles/3d-printed-robot-arm-parts.html">STL Downloads</a></li>
+            <li><a href="articles/kinematic-solver-code.html">Code Repositories</a></li>
+            <li><a href="articles/universal-robots-ur20.html">Hardware Reviews</a></li>
+            <li><a href="articles/6-axis-robot-market-2026.html">Market Reports</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
