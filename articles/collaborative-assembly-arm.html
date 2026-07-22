@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0091)file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collaborative Robot Arm Assembly: Safety, Design and ROI Guide</title>
   <meta name="description" content="Learn how to design collaborative robot arm assembly cells: safety functions, payload sizing, cycle time, integration, validation and ROI.">
@@ -49,8 +49,8 @@
     ]
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link href="./collaborative-assembly-arm_files/css2" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{--ink:#0b0e14;--surface:#0f1116;--card:#181b21;--primary:#f2f0eb;--secondary:#b0ab9f;--muted:#77736e;--gold:#c9a96e;--blue:#77a5e8;--border:rgba(255,255,255,.08)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -71,16 +71,16 @@
   </style>
 </head>
 <body>
-  <nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="file:///C:/Users/natal/AppData/Local/hermes/cache/index.html">Robotics <span>Engineering</span></a><div class="nav-links"><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/index.html">Cover</a><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/6-dof-robot-arm-guide.html">Guide</a><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/arduino-robot-arm-tutorial.html">Articles</a></div></div></nav>
+  <nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../index.html">Robotics <span>Engineering</span></a><div class="nav-links"><a href="../index.html">Cover</a><a href="../6-dof-robot-arm-guide.html">Guide</a><a href="arduino-robot-arm-tutorial.html">Articles</a></div></div></nav>
 
-  <header class="hero"><img class="hero-bg" src="file:///C:/Users/natal/AppData/Local/hermes/cache/industrial_robot_arm.jpg" alt="Industrial robot arm in a modern manufacturing environment" loading="eager"><div class="hero-inner"><div class="eyebrow">Manufacturing intelligence · Updated July 22, 2026</div><h1>Collaborative Robot Arm Assembly: Safety, Design and ROI</h1><p class="hero-sub">A practical engineering guide to human-robot assembly workflows, robot sizing, safety functions, cycle-time analysis and implementation in North American manufacturing.</p></div></header>
+  <header class="hero"><img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm in a modern manufacturing environment" loading="eager"><div class="hero-inner"><div class="eyebrow">Manufacturing intelligence · Updated July 22, 2026</div><h1>Collaborative Robot Arm Assembly: Safety, Design and ROI</h1><p class="hero-sub">A practical engineering guide to human-robot assembly workflows, robot sizing, safety functions, cycle-time analysis and implementation in North American manufacturing.</p></div></header>
 
   <main class="article-body container">
     <p>Collaborative robot arm assembly is not simply the installation of a smaller industrial robot beside an operator. It is the design of a complete production system in which the robot, gripper, workpiece, tooling, software and human workflow are assessed together. The best applications allocate repetitive, ergonomically difficult or highly consistent actions to the robot while the operator contributes inspection, judgment, replenishment or tasks that change frequently.</p>
 
-    <div class="article-img"><img src="file:///C:/Users/natal/AppData/Local/hermes/cache/ros2_robot_control.jpg" alt="Robot arm control concept for a collaborative assembly workstation" loading="lazy"><div class="caption">A collaborative assembly cell should be engineered as a complete system, not evaluated by robot specifications alone.</div></div>
+    <div class="article-img"><img src="../ros2_robot_control.jpg" alt="Robot arm control concept for a collaborative assembly workstation" loading="lazy"><div class="caption">A collaborative assembly cell should be engineered as a complete system, not evaluated by robot specifications alone.</div></div>
 
-    <nav class="toc" aria-label="Table of contents"><strong>In this guide</strong><ol><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#definition">What collaborative assembly means</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#safety">Safety functions and risk assessment</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#design">Cell design and human workflow</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#sizing">Robot sizing and performance</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#cycle-time">Cycle time and ROI</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#integration">Controls, tooling and validation</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#mistakes">Common design mistakes</a></li><li><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/collaborative-assembly-arm.html#faq">Frequently asked questions</a></li></ol></nav>
+    <nav class="toc" aria-label="Table of contents"><strong>In this guide</strong><ol><li><a href="#definition">What collaborative assembly means</a></li><li><a href="#safety">Safety functions and risk assessment</a></li><li><a href="#design">Cell design and human workflow</a></li><li><a href="#sizing">Robot sizing and performance</a></li><li><a href="#cycle-time">Cycle time and ROI</a></li><li><a href="#integration">Controls, tooling and validation</a></li><li><a href="#mistakes">Common design mistakes</a></li><li><a href="#faq">Frequently asked questions</a></li></ol></nav>
 
     <h2 id="definition">What is a collaborative robot arm assembly cell?</h2>
     <p>A collaborative assembly cell is a workstation where a robot and one or more people share a production process, and in some designs a physical workspace, under defined operating conditions. The collaboration may be sequential rather than simultaneous: the robot presents a part, pauses in a safe state, and the operator completes a joining or inspection step. Other cells use coordinated handover, machine tending or shared kitting.</p>
@@ -133,7 +133,7 @@
 
     <h2 id="resources">Reliable resources for further engineering work</h2>
     <p>Use primary sources for specifications and safety decisions. Useful starting points include <a href="https://www.iso.org/standard/51330.html" target="_blank" rel="noopener noreferrer">ISO 10218-1 information</a>, the <a href="https://www.iso.org/standard/62996.html" target="_blank" rel="noopener noreferrer">ISO/TS 15066 page</a>, the <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434 overview</a>, the <a href="https://www.universal-robots.com/academy/" target="_blank" rel="noopener noreferrer">Universal Robots Academy</a> and the <a href="https://ifr.org/" target="_blank" rel="noopener noreferrer">International Federation of Robotics</a>. Manufacturer pages are appropriate for product data, but independent risk assessment and application testing remain necessary.</p>
-    <p>For related fundamentals, see the <a href="file:///C:/Users/natal/AppData/Local/hermes/cache/6-dof-robot-arm-guide.html">complete 6-DOF robot arm guide</a>, the <a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/robot-arm-calibration.html">robot arm calibration article</a> and the <a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/ros2-robot-arm-control.html">ROS 2 robot arm control guide</a>.</p>
+    <p>For related fundamentals, see the <a href="../6-dof-robot-arm-guide.html">complete 6-DOF robot arm guide</a>, the <a href="robot-arm-calibration.html">robot arm calibration article</a> and the <a href="ros2-robot-arm-control.html">ROS 2 robot arm control guide</a>.</p>
 
     <h2 id="conclusion">Conclusion</h2>
     <p>Successful collaborative robot arm assembly begins with a production problem, not a robot brochure. Define the task, measure the human workflow, select the right collaboration strategy, size the complete mechanism and validate the final cell under realistic conditions. Safety functions, ergonomic design, process sensing and recovery behavior are as important as reach and payload.</p>
@@ -147,10 +147,9 @@
     <div class="faq-item"><details><summary>How do I size a robot for assembly?</summary><p>Size it using total payload, center of gravity, inertia, reach, repeatability, cycle time, mounting orientation and end-effector utilities. Include the gripper, fingers, sensors and workpiece, then confirm the complete load at the most demanding pose in the manufacturer's data.</p></details></div>
     <div class="faq-item"><details><summary>What is a realistic cobot assembly ROI calculation?</summary><p>Estimate annual net benefit from validated labor, quality and throughput improvements, subtract recurring costs, and divide the installed project cost by annual net benefit. Include integration, training, maintenance, tooling, downtime and changeover costs.</p></details></div>
 
-    <div class="cta"><h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3><p>Review robot architecture, programming, calibration and application fundamentals.</p><a class="btn" href="file:///C:/Users/natal/AppData/Local/hermes/cache/6-dof-robot-arm-guide.html">Read the full guide →</a></div>
-    <div class="footer-nav"><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/robot-arm-welding.html">← Previous: Robot arm welding applications</a><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/robot-arm-vision-system.html">Next: Vision systems and robot grasping →</a></div>
+    <div class="cta"><h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3><p>Review robot architecture, programming, calibration and application fundamentals.</p><a class="btn" href="../6-dof-robot-arm-guide.html">Read the full guide →</a></div>
+    <div class="footer-nav"><a href="robot-arm-welding.html">← Previous: Robot arm welding applications</a><a href="robot-arm-vision-system.html">Next: Vision systems and robot grasping →</a></div>
   </main>
-  <footer><div class="container"><div><a class="logo" href="file:///C:/Users/natal/AppData/Local/hermes/cache/index.html">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ROS 2 and industrial automation.</p></div><div><a href="file:///C:/Users/natal/AppData/Local/hermes/cache/index.html">Cover</a> · <a href="file:///C:/Users/natal/AppData/Local/hermes/cache/6-dof-robot-arm-guide.html">Guide</a> · <a href="file:///C:/Users/natal/AppData/Local/hermes/cache/documents/arduino-robot-arm-tutorial.html">Arduino Arm</a></div></div></footer>
-
-
-</body></html>
+  <footer><div class="container"><div><a class="logo" href="../index.html">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ROS 2 and industrial automation.</p></div><div><a href="../index.html">Cover</a> · <a href="../6-dof-robot-arm-guide.html">Guide</a> · <a href="arduino-robot-arm-tutorial.html">Arduino Arm</a></div></div></footer>
+</body>
+</html>
