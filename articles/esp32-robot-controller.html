@@ -1,255 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration - Robotics Engineering</title>
-<meta name="description" content="Use ESP32 for 6-axis robot arm control. Real-time performance, servo bus control, wireless programming, and IoT integration." />
-<meta name="keywords" content="ESP32 robot arm, ESP32 servo controller, wireless robot arm, IoT robot arm controller, 6-DOF robot arm, robot arm USA, robot arm Canada, industrial automation" />
-<meta name="author" content="Robotics Engineering" />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html" />
-<meta property="og:type" content="article" />
-<meta property="og:title" content="ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration" />
-<meta property="og:description" content="Use ESP32 for 6-axis robot arm control. Real-time performance, servo bus control, wireless programming, and IoT integration." />
-<meta property="og:image" content="../industrial_robot_arm.jpg" />
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html" />
-<meta property="og:locale" content="en_US" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration" />
-<meta name="twitter:description" content="Use ESP32 for 6-axis robot arm control. Real-time performance, servo bus control, wireless programming, and IoT integration." />
-<meta name="twitter:image" content="../industrial_robot_arm.jpg" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control</title>
+<meta name="description" content="Learn how to use an ESP32 as a robot arm controller: servo power, PWM wiring, control-loop design, Wi-Fi limits, safety, code and troubleshooting.">
+<meta name="keywords" content="ESP32 robot arm controller, ESP32 servo control, ESP32 PWM robot arm, ESP32 robot Wi-Fi, robot arm wiring">
+<meta name="author" content="Robotics Engineering">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control">
+<meta property="og:description" content="A practical engineering guide to controlling robot-arm servos with an ESP32, including power design, timing, wireless limits, safety and tested Arduino code.">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html">
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control">
+<meta name="twitter:description" content="A practical guide to ESP32 robot-arm control, servo power, PWM, Wi-Fi, safety and Arduino code.">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration",
-  "description": "Use ESP32 for 6-axis robot arm control. Real-time performance, servo bus control, wireless programming, and IoT integration.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control",
+  "description":"A practical engineering guide to controlling robot-arm servos with an ESP32, including power design, timing, wireless limits, safety and Arduino code.",
+  "author":{"@type":"Organization","name":"Robotics Engineering"},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
-  "publisher": {"@type":"Organization","name":"Robotics Engineering"},
-  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/esp32-robot-controller.html"},
-  "image":"../industrial_robot_arm.jpg"
+  "dateModified":"2026-07-22",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/esp32-robot-controller.html"},
+  "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "proficiencyLevel":"Intermediate"
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-::selection { background:rgba(201,169,110,0.25); color:#fff; }
-.container { max-width:1100px; margin:0 auto; padding:0 24px; }
-.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
-.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
-.logo span { color:var(--accent); font-style:italic; }
-.nav-links { display:flex; gap:22px; align-items:center; }
-.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
-.nav-links a:hover { color:var(--text-primary); }
-.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
-.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
-.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
-.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
-.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
-.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
-.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
-.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
-.hero-sub { margin-top:18px; max-width:640px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
-.hero-sub .badge { display:inline-block; background:rgba(201,169,110,0.12); border:1px solid rgba(201,169,110,0.22); color:var(--accent); padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:500; letter-spacing:0.04em; margin-top:12px; }
-.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
-.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
-.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
-.article-body p { color:var(--text-secondary); margin-bottom:20px; }
-.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
-.article-body a:hover { text-decoration-color:var(--accent-2); }
-.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
-.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
-.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
-.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
-.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
-.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
-.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
-thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
-tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
-tbody tr:hover td { background:var(--surface-card); }
-tbody td:first-child { color:var(--text-primary); font-weight:500; }
-.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
-.article-body li { margin-bottom:10px; }
-.article-body ul li::marker { color:var(--accent); }
-.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
-.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
-.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
-.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
-.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
-.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
-.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
-.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
-.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
-.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
-.footer-nav .back-link:hover { text-decoration:underline; }
-@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+:root{--ink:#0b0e14;--surface:#11151c;--card:#181d25;--text:#f4f1ea;--muted:#b5b2aa;--dim:#77736e;--gold:#c9a96e;--blue:#72a4ed;--border:rgba(255,255,255,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1060px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.94);border-bottom:1px solid var(--border);padding:14px 0}.nav-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.3rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px}.nav-links a{color:var(--muted);font-size:.86rem;text-decoration:none}.hero-article{background:linear-gradient(135deg,#182335 0%,#0b0e14 75%);border-bottom:1px solid var(--border)}.hero-inner{padding:92px 24px 74px}.eyebrow{color:var(--gold);font-size:.75rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase}.hero-inner h1{max-width:900px;margin:18px 0 16px;font-family:Georgia,serif;font-weight:400;font-size:clamp(2.2rem,5vw,4.4rem);line-height:1.08;letter-spacing:-.035em}.hero-sub{max-width:720px;color:var(--muted);font-size:1.08rem}.article-body{padding-top:56px;padding-bottom:90px}.article-body h2{margin:52px 0 16px;color:#fff;font-family:Georgia,serif;font-size:2rem;line-height:1.2;font-weight:400}.article-body h3{margin:34px 0 10px;color:var(--text);font-size:1.25rem}.article-body p{max-width:820px;color:var(--muted);margin:0 0 19px}.article-img{margin:0 0 36px;border:1px solid var(--border);border-radius:14px;overflow:hidden}.article-img img{display:block;width:100%;max-height:480px;object-fit:cover}.caption{padding:10px 14px;background:var(--card);color:var(--dim);font-size:.8rem}.toc,.callout{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin:28px 0}.toc strong{color:var(--text)}.toc ol{margin:12px 0 0;padding-left:22px}.toc li{margin:5px 0}.table-wrap{overflow-x:auto;margin:22px 0 28px;border:1px solid var(--border);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{background:var(--card);color:var(--text);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}td{color:var(--muted)}tr:last-child td{border-bottom:0}.article-body ul,.article-body ol{max-width:820px;color:var(--muted);padding-left:25px}.article-body li{margin:8px 0}.article-body li::marker{color:var(--gold)}pre{overflow-x:auto;background:#080a0e;border:1px solid var(--border);border-radius:10px;padding:20px;color:#e9e1c9;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#f0dca5}.callout strong{color:var(--text)}.warning{border-left:4px solid #e5a65b}.faq-item{border-bottom:1px solid var(--border);padding:20px 0}.faq-item summary{cursor:pointer;color:var(--text);font-weight:600}.faq-item p{margin:12px 0 0;font-size:.95rem}.footer-nav{border-top:1px solid var(--border);margin-top:58px;padding-top:30px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:60px}.article-body h2{font-size:1.6rem}.container{padding-left:18px;padding-right:18px}}
 </style>
 </head>
 <body>
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><div class="nav-links"><a href="../index.html">Home</a><a href="../6-dof-robot-arm-guide.html">Robot Arm Guide</a><a href="arduino-robot-arm-tutorial.html">Articles</a></div></div></nav>
+<header class="hero-article"><div class="hero-inner container"><div class="eyebrow">Robot control • ESP32 • Technical guide</div><h1>ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control</h1><p class="hero-sub">How to choose the ESP32 hardware, power a multi-servo arm correctly, generate reliable PWM, add wireless monitoring and design a control system that fails safely.</p></div></header>
+<main class="article-body container">
+<p><strong>Can an ESP32 control a robot arm?</strong> Yes—an ESP32 is a capable low-cost controller for educational arms, prototypes, mobile robots and selected low-payload mechanisms. It provides fast GPIO, hardware PWM, Wi-Fi and Bluetooth Low Energy in a compact board. It is not, by itself, a safety-rated industrial robot controller: motion planning, hardwired emergency stops, current limiting and independent safety hardware remain necessary for a serious machine.</p>
+<div class="article-img"><img src="../industrial_robot_arm.jpg" alt="Industrial robot arm used to illustrate ESP32 robot controller integration" width="1200" height="675" loading="eager"><div class="caption">An ESP32 can coordinate low-voltage actuators and sensors, while power electronics and safety circuits handle the energy of the robot.</div></div>
+<div class="toc" id="contents"><strong>In this guide</strong><ol><li><a href="#architecture">What the ESP32 should control</a></li><li><a href="#power">Power and wiring architecture</a></li><li><a href="#pwm">PWM and servo timing</a></li><li><a href="#code">Working Arduino example</a></li><li><a href="#wireless">Wi-Fi and Bluetooth limits</a></li><li><a href="#safety">Safety and commissioning</a></li><li><a href="#troubleshooting">Troubleshooting</a></li><li><a href="#faq">FAQ</a></li></ol></div>
+<h2 id="architecture">What the ESP32 should control</h2>
+<p>The best role for an ESP32 is a real-time-ish actuator and sensor node, not an excuse to put every function inside one loop. A typical system divides responsibilities into layers: a high-level computer or PLC calculates a trajectory; the ESP32 receives bounded joint targets; motor drivers or smart servos close the position loop; and a separate safety chain can remove actuator power. For a small arm, the ESP32 may also calculate inverse kinematics, but the motion must still be limited by joint ranges, speed, acceleration and workspace rules.</p>
+<p>Classic ESP32-WROOM-32 modules commonly use a dual-core Xtensa LX6 processor up to 240 MHz, 2.4 GHz Wi-Fi and Bluetooth Classic/BLE 4.2. Exact features depend on the board and silicon variant. ESP32-S3, C3 and newer families differ in cores, wireless features, peripherals and voltage behavior, so select the target board before designing a PCB or relying on a pin number.</p>
+<div class="table-wrap"><table><thead><tr><th>Requirement</th><th>Practical ESP32 approach</th><th>Engineering limit</th></tr></thead><tbody><tr><td>Position command</td><td>PWM servo, UART smart servo or CAN transceiver</td><td>Check protocol, current and feedback support</td></tr><tr><td>Joint feedback</td><td>Encoder, potentiometer, current or limit sensor</td><td>ADC readings need filtering and calibration</td></tr><tr><td>High-level link</td><td>Wi-Fi, BLE, UART, RS-485 or CAN</td><td>Wireless latency is variable and not safety-critical</td></tr><tr><td>Safety</td><td>Hardware enable, contactor, e-stop and limits</td><td>Do not depend on firmware or Wi-Fi alone</td></tr></tbody></table></div>
+<h2 id="power">Power and wiring architecture</h2>
+<p>Most robot-arm failures blamed on firmware are actually power problems. The ESP32 operates at 3.3 V logic, while hobby servos often require 4.8–6 V and can draw several amps during startup or a stall. Never power a bank of servos from the ESP32 3.3 V pin. Use a regulated supply sized for the combined peak current, a separate buck converter for the controller, and a common ground between the controller and servo signal circuitry.</p>
+<ul><li>Place a fuse or resettable protection device near the actuator supply.</li><li>Use short, appropriately sized power and ground conductors; route high-current servo return paths away from sensitive analog sensors.</li><li>Add bulk capacitance at the servo distribution point and local decoupling at the ESP32. Capacitors reduce transients; they do not replace a correctly sized supply.</li><li>Check whether a servo signal accepts 3.3 V HIGH. If it does not, use a suitable level shifter or driver.</li><li>Keep the USB ground and motor supply arrangement intentional to avoid ground loops and unexpected current paths.</li></ul>
+<div class="callout warning"><strong>Important:</strong> An emergency-stop button should remove hazardous actuator energy through an appropriate safety circuit. Stopping a task in software, disconnecting Wi-Fi or setting PWM to zero is not equivalent to an emergency stop.</div>
+<h2 id="pwm">PWM and servo timing</h2>
+<p>Many hobby servos use a repeating pulse around 50 Hz, with a pulse width commonly near 1,000–2,000 microseconds. Those values are not universal: some servos accept a wider range and some digital actuators use a completely different serial protocol. Start with the manufacturer’s limits and test one joint without a load. Driving a servo beyond its mechanical range can damage gears, overheat the motor or create an unsafe movement.</p>
+<p>On Arduino-ESP32, the LEDC peripheral generates PWM without busy-waiting in the main loop. Use a defined update rate, constrain every target, and move gradually instead of jumping from one angle to another. A ramp improves mechanical behavior but does not provide torque control, collision detection or a safety rating. For six joints, a dedicated PWM expander or smart-servo bus can simplify wiring, but it still needs a correctly designed power system.</p>
+<h2 id="code">Working Arduino example: one controlled servo</h2>
+<p>The following example targets the Arduino-ESP32 core and uses LEDC. It deliberately starts at a conservative angle, constrains the command and updates without <code>delay()</code>. Confirm the LEDC API for the exact Arduino-ESP32 version used by your project; board packages can change peripheral APIs.</p>
+<pre><code>#include &lt;Arduino.h&gt;
 
-<nav class="site-nav" aria-label="Site navigation">
-<div class="nav-inner">
-<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
-<div class="nav-links">
-<a href="../index.html">Cover</a>
-<a href="../6-dof-robot-arm-guide.html">Guide</a>
-<a href="arduino-robot-arm-tutorial.html">Articles</a>
-</div>
-</div>
-</nav>
+constexpr uint8_t SERVO_PIN = 18;
+constexpr uint32_t PWM_FREQUENCY = 50;
+constexpr uint8_t PWM_RESOLUTION = 16;
+constexpr uint16_t MIN_US = 1000;
+constexpr uint16_t MAX_US = 2000;
+constexpr uint32_t UPDATE_MS = 20;
 
-<header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm hero image" loading="eager" />
-<div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — July 18, 2026</div>
-<h1>ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration</h1>
-<p class="hero-sub">Use ESP32 for 6-axis robot arm control. Real-time performance, servo bus control, wireless programming, and IoT integration. <br><span class="badge">USA &bull; Canada &bull; 6-DOF &bull; High-Value SEO</span></p>
-</div>
-</header>
+uint32_t lastUpdate = 0;
+int targetAngle = 90;
+int currentAngle = 90;
 
-<main class="article-body container" aria-label="Main article content">
+uint32_t microsecondsToDuty(uint16_t pulseUs) {
+  const uint32_t periodUs = 1000000UL / PWM_FREQUENCY;
+  const uint32_t maxDuty = (1UL &lt;&lt; PWM_RESOLUTION) - 1UL;
+  return (static_cast&lt;uint32_t&gt;(pulseUs) * maxDuty) / periodUs;
+}
 
-<div class="article-img" style="margin:32px 0 48px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
-<img src="../arduino_arm_tutorial.jpg" alt="Premium illustration for esp32-robot-controller" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" />
-<div style="padding:14px 16px; font-size:0.82rem; color:#77736e; background:#181b21; border-top:1px solid rgba(255,255,255,0.06);">Editorial photography: Esp32 Robot Controller</div>
-</div>
-<h2>Executive Overview: Why <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller Defines Modern Automation in 2026</h2>
-<p>In the rapidly evolving automation landscape of 2026, <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller stands out as a critical technology for manufacturers, engineers, and makers across the United States and Canada. The details covered in this guide address real-world specifications, market dynamics, and practical implementation strategies that go beyond generic introductions.</p>
-<p>The core technical profile for this topic includes: <strong><a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a>-WROOM-32, dual-core 240 MHz, WiFi, Bluetooth 4.2, PWM bus control</strong>. These specifications directly influence how buyers evaluate robot arms for specific applications — whether assembling small electronic components in Ontario or automating welding operations in Michigan.</p>
-<p>Manufacturers and technology providers associated with this domain include <strong>Espressif, Adafruit, SparkFun</strong>. Regulatory compliance requires attention to <strong>FCC, CE (for commercial modules)</strong>, ensuring that installations meet federal, provincial, and industry-specific requirements in North America.</p>
-<p>Key performance and economic data points for this category: <strong>Real-time loop 500 Hz, wireless range 50 m, power consumption 240 mA at 3.3 V.</strong>. These metrics provide the quantitative foundation for comparing solutions, calculating total cost of ownership, and planning installation timelines.</p>
-<p>The primary use cases and market context for <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller include: <strong>Wireless robot control, IoT integration, remote monitoring, mobile platforms.</strong>. Whether for educational prototyping, high-volume industrial production, or collaborative assembly, understanding these applications helps buyers make strategic, data-driven investment decisions.</p>
+void writeServoAngle(int angle) {
+  angle = constrain(angle, 0, 180);
+  const uint16_t pulseUs = map(angle, 0, 180, MIN_US, MAX_US);
+  ledcWrite(SERVO_PIN, microsecondsToDuty(pulseUs));
+}
 
+void setup() {
+  Serial.begin(115200);
+  ledcAttach(SERVO_PIN, PWM_FREQUENCY, PWM_RESOLUTION);
+  writeServoAngle(currentAngle);
+}
 
-<h2>Technical Deep Dive: Engineering Principles and Specifications</h2>
-<p>The engineering architecture behind <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller relies on six rotational joints arranged in a serial kinematic chain. Joint 1 (base rotation) provides 360° rotation around the vertical axis. Joints 2 and 3 (shoulder and elbow) control vertical elevation and radial reach. Joints 4, 5, and 6 (wrist assembly) manage pitch, yaw, and continuous roll — enabling complete spatial mobility for complex manufacturing operations.</p>
-<p>Specific technical parameters for this topic: <strong>payload capacity, radial reach, positional repeatability, joint velocity, acceleration profiles, and transmission technology</strong>. For the systems discussed here, payload ranges and reach specifications vary significantly based on the application category — desktop DIY, collaborative, or heavy-duty industrial.</p>
-<p>A critical engineering principle is the inverse relationship between payload and reach. As the arm extends to maximum radial distance, the effective payload capacity decreases due to mechanical leverage acting on the shoulder and elbow joints. Dynamic load factors — the transient forces generated during rapid acceleration and directional changes — must also be included in any robust sizing analysis, particularly for high-speed applications such as electronic assembly or rapid material sorting.</p>
-<p>The programming and control environments applicable to <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller include proprietary robot languages, open-source Python frameworks, <a href="https://ros.org/" target="_blank" rel="noopener noreferrer">ROS 2</a> node architectures, and structured industrial programming environments. The diversity of these options creates remarkable strategic flexibility but also requires careful evaluation of integration complexity, service network availability, and long-term technology roadmaps.</p>
-
-
-<h2>Key Specifications and Performance Metrics</h2>
-<p>Buyers evaluating <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller should focus on the parameters most relevant to this domain. The following comparison provides a structured framework specifically aligned with this topic, rather than a generic robot arm comparison.</p>
-<div class="table-wrap" aria-label="Category comparison"><table><thead><tr><th>Category</th><th>Typical Payload</th><th>Typical Reach</th><th>Primary Application</th></tr></thead><tbody><tr><td>Desktop / DIY</td><td>0.5 - 2 kg</td><td>300 - 700 mm</td><td>Education, rapid prototyping</td></tr><tr><td>Collaborative</td><td>10 - 30 kg</td><td>900 - 1,750 mm</td><td>Flexible assembly, packaging</td></tr><tr><td>Industrial / Heavy-Duty</td><td>20 - 700+ kg</td><td>1,650 - 3,500 mm</td><td>Welding, high-volume production</td></tr></tbody></table></div>
-<p>The specific data points for this topic reinforce these benchmarks: <strong>Real-time loop 500 Hz, wireless range 50 m, power consumption 240 mA at 3.3 V.</strong>. Buyers in the USA and Canada should use these verified metrics to construct total cost of ownership models and compare supplier offerings systematically. Data sources include industry reports from <a href="https://ifr.org/" target="_blank" rel="noopener noreferrer">IFR</a>, ANSI/CSA standards documentation, and manufacturer specification sheets.</p>
-
-
-<h2>Market Dynamics and Real-World Applications</h2>
-<p>The North American market for 6-axis robot arms continues to expand rapidly in 2026. In the USA, the Midwest manufacturing corridor (Michigan, Ohio, Indiana, Illinois) and the Southeast industrial region (Tennessee, Georgia, South Carolina, North Carolina) lead in installation rates, driven by state-level incentives for advanced manufacturing, proximity to automotive assembly operations, and robust logistics infrastructure.</p>
-<p>In Canada, Ontario and Quebec dominate robot arm installations, primarily due to rapid growth in electric vehicle supply chains, aerospace manufacturing, and automated food processing. Buyers in both countries must maintain awareness of evolving regulatory requirements — including updates to <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI RIA R15.06</a>, <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a>, provincial occupational health and safety codes, and industry-specific certifications for cleanroom, pharmaceutical, and food-grade environments.</p>
-<p>Specific applications for <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller include: <strong>Wireless robot control, IoT integration, remote monitoring, mobile platforms.</strong>. Whether the goal is high-volume welding, flexible assembly, collaborative packaging, or open-source prototyping, the practical implementation process requires careful coordination of mechanical design, electrical integration, programming, calibration, and maintenance planning.</p>
-<p>The supplier landscape available to North American buyers has become increasingly diverse. Established global manufacturers provide extensive certified service networks. American-based collaborative robot companies emphasize faster delivery timelines and localized technical support. Open-source hardware providers serve the education, research, and small-scale manufacturing markets. This diversity creates remarkable strategic opportunities but also introduces significant evaluation complexity.</p>
-
-
-<h2>Implementation Guidelines and Buyer's Recommendations</h2>
-<p>Before committing capital to any robot arm acquisition related to <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller, buyers should complete a structured evaluation process. The checklist below reflects best practices for the USA and Canada market in 2026.</p>
-<ul>
-<li><strong>Define precise application requirements</strong>: Quantify payload (including end-effector weight), maximum radial reach, positional repeatability, cycle time targets, workspace dimensions, and environmental conditions.</li>
-<li><strong>Evaluate technical specifications</strong>: Confirm compatibility with the specifications listed for this topic: <strong><a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a>-WROOM-32, dual-core 240 MHz, WiFi, Bluetooth 4.2, PWM bus control</strong>.</li>
-<li><strong>Assess control and integration requirements</strong>: Verify programming environment accessibility (Python, <a href="https://ros.org/" target="_blank" rel="noopener noreferrer">ROS 2</a>, proprietary), factory communication protocol compatibility (EtherCAT, PROFINET, EtherNet/IP), and integration requirements with existing PLCs, vision systems, and enterprise systems.</li>
-<li><strong>Analyze safety and regulatory compliance</strong>: Confirm compliance with <strong>FCC, CE (for commercial modules)</strong>. Verify availability of light curtains, area scanners, interlocked access systems, emergency stop circuits, and comprehensive risk assessment documentation.</li>
-<li><strong>Investigate service network and technical support</strong>: Confirm certified service technicians within your region, spare parts inventory levels, emergency response time guarantees, and quality of technical documentation.</li>
-<li><strong>Calculate total cost of ownership</strong>: Include purchase price, installation and commissioning, programming and engineering, operator and technician training, preventive maintenance contracts, energy consumption, spare parts, downtime costs, and end-of-life disposal over a minimum 5-year operational horizon.</li>
-<li><strong>Plan for scalability and technology evolution</strong>: Evaluate whether the selected architecture, control system, and supplier technology roadmap can accommodate future production increases, software updates, and potential AI/vision integration.</li>
-</ul>
-<p>The specific economic and performance characteristics for this category — <strong>Real-time loop 500 Hz, wireless range 50 m, power consumption 240 mA at 3.3 V.</strong> — provide the quantitative foundation for these evaluations. Buyers should prioritize long-term total value over initial acquisition price to ensure enduring, measurable automation benefits.</p>
-
-
-<h2>Related Resources and Next Steps</h2>
-<p>To deepen your understanding of <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller, explore the related articles in this comprehensive series. Each resource connects directly to the core themes of 6-axis robot arm design, programming, economics, and application, providing practical, production-ready knowledge for engineers, makers, and manufacturing leaders.</p>
-<ul>
-<li><a href="aluminum-robot-frame.html">Aluminum Frame Design for Industrial 6-Axis Robot Arms</a></li>
-<li><a href="magnetic-gripper-robot.html">Magnetic Gripper Design for 6-Axis Robot Arms: Ferrous Material Handling</a></li>
-<li><a href="belt-drive-vs-gear-drive.html">Belt Drive vs Gear Drive for 6-Axis Robot Arms: Performance & Maintenance</a></li>
-<li><a href="robot-arm-noise-reduction.html">Noise Reduction Techniques for 6-DOF Robot Arms: Gears, Belts & Dampers</a></li>
-
-<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
-</ul>
-
-<div class="pullquote">
-<blockquote>"Real-time loop 500 Hz, wireless range 50 m, power consumption 240 mA at 3.3 V."</blockquote><cite>- Robotics Engineering, verified against manufacturer specifications and IFR market data.</cite>
-</div>
-
-<h2>Real-World Implementation Context</h2>
-<p>Manufacturers across the USA and Canada have implemented solutions related to <strong><a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller</strong> with measurable results. Implementation requires coordination of mechanical design, electrical integration, programming, calibration, and maintenance planning as described in this guide. Robotics Engineering verifies all case references against manufacturer documentation and industry reports before publication.</p>
-<h2>Sources and References</h2>
-<p>The data, specifications, and recommendations in this guide are drawn from verified industry sources. All market statistics reference the <a href="https://ifr.org/world-robotics/" target="_blank" rel="noopener noreferrer">IFR World Robotics Report 2026</a> or manufacturer-published specification sheets. Safety standards reference the most recent editions of ANSI RIA R15.06, <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a>, and ISO 10218 series documents.</p>
-<ul>
-<li><strong><a href="https://ifr.org/" target="_blank" rel="noopener noreferrer">IFR</a></strong> - World Robotics Report 2026. Global installation statistics, manufacturer rankings, and market growth forecasts.</li><li><strong>ANSI (American National Standards Institute)</strong> - ANSI RIA R15.06 (USA robot safety) and related industrial automation standards.</li><li><strong>CSA Group (Canadian Standards Association)</strong> - <a href="https://www.csagroup.org/" target="_blank" rel="noopener noreferrer">CSA Z434</a> (Canada robot safety requirements) and provincial occupational health codes.</li>
-</ul>
-<p>For real-time specification updates, visit the manufacturer websites listed above. Robotics Engineering verifies technical data against primary sources before publication.</p>
-
-<h2>Conclusion and Strategic Recommendations</h2>
-<p>In 2026, <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller represents a sophisticated intersection of mechanical engineering, software control, economic analysis, and strategic manufacturing planning. Buyers operating within the USA and Canada have access to an exceptionally diverse supplier landscape — from open-source <a href="https://www.arduino.cc/" target="_blank" rel="noopener noreferrer">Arduino</a>-based educational kits to fully integrated AI-enhanced industrial automation systems engineered for continuous high-volume production.</p>
-<p>The information presented in this premium guide — including the technical specifications <strong><a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a>-WROOM-32, dual-core 240 MHz, WiFi, Bluetooth 4.2, PWM bus control</strong>, the market dynamics for manufacturers <strong>Espressif, Adafruit, SparkFun</strong>, the regulatory framework <strong>FCC, CE (for commercial modules)</strong>, and the economic benchmarks <strong>Real-time loop 500 Hz, wireless range 50 m, power consumption 240 mA at 3.3 V.</strong> — is specifically structured to support informed, confident, and strategically sound decision-making.</p>
-<p>We strongly recommend that all buyers begin with a clearly documented definition of application requirements and proceed through a structured comparison framework. For the most current specifications, market pricing updates, product reviews, and tutorial content, we encourage continued engagement with the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Master Guide</a> and the <a href="../index.html">Robotics Engineering Blog</a>, where new premium content is published on an ongoing basis.</p>
-<p>As automation technology continues to evolve through artificial intelligence, open-source hardware ecosystems, collaborative safety systems, and adaptive control algorithms, manufacturers of all sizes will discover new opportunities to improve productivity, enhance quality, reduce costs, and strengthen competitive positioning. By maintaining current awareness of technological developments and evaluating options systematically, buyers across North America can make strategic robot arm investments that deliver enduring, measurable, and transformative benefits.</p>
-
-
-<aside class="ad-box" aria-label="Advertisement" role="region">
-<div class="ad-label">Sponsored</div>
-<div class="ad-copy">Compare automation financing, robot arm leasing, and industrial grants for manufacturers in the USA and Canada.</div>
-</aside>
-
-<div class="faq-item">
-<h4>What is a 6-DOF robot arm?</h4>
-<p>A 6-DOF (six degrees of freedom) robot arm has six independent joints that allow it to position an end-effector at any point within its workspace and orient it in any direction. It is the standard for articulated industrial automation.</p>
-</div>
-<div class="faq-item">
-<h4>How does this relate to <a href="https://www.espressif.com/en/products/socs/esp32" target="_blank" rel="noopener noreferrer">ESP32</a> as Robot Arm Controller?</h4>
-<p>This topic connects directly to the design, programming, economics, and practical application of 6-axis robot arms. The details presented here — including specifications, market dynamics, regulatory requirements, and buyer recommendations — are specifically structured to support informed decision-making for this domain.</p>
-</div>
-
-<div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete premium guide.</p>
-<a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
-</div>
-
-<div class="footer-nav" aria-label="Article navigation">
-<div>
-<a href="arduino-mega-robot-wiring.html" class="back-link" aria-label="Previous article">← Previous: Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</a>
-</div>
-<div>
-<a href="kinematic-solver-code.html" class="back-link" aria-label="Next article">Next: Open Source Kinematic Solver Code for 6-DOF Robot Arms →</a>
-</div>
-</div>
-
+void loop() {
+  const uint32_t now = millis();
+  if (now - lastUpdate &gt;= UPDATE_MS) {
+    lastUpdate = now;
+    if (currentAngle &lt; targetAngle) ++currentAngle;
+    if (currentAngle &gt; targetAngle) --currentAngle;
+    writeServoAngle(currentAngle);
+  }
+}
+</code></pre>
+<p>For a production project, add command validation, a communication timeout, joint calibration values, a watchdog strategy and a hardware enable input. Before adding six axes, test the power rail with an oscilloscope or logger during simultaneous acceleration and verify that the controller resets neither from brownout nor electromagnetic interference.</p>
+<h2 id="wireless">Wi-Fi and Bluetooth: useful, but not deterministic</h2>
+<p>Wi-Fi is excellent for configuration pages, telemetry, firmware updates and non-critical remote commands. It is a poor substitute for a hardwired stop or deterministic motion bus. Radio interference, access-point roaming, retransmissions and task scheduling can create variable latency. Keep the motion loop local, reject stale packets, use sequence numbers and require a fresh heartbeat before accepting new targets. If the heartbeat expires, transition to a defined safe state.</p>
+<p>BLE is useful for commissioning from a phone, while Wi-Fi can expose a local dashboard. Protect any control endpoint with authentication and network isolation. Do not expose an actuator-control web server directly to the public internet. For industrial integration, RS-485, CAN, Ethernet or a certified PLC interface may be more appropriate than a wireless link.</p>
+<h2 id="safety">Safety and commissioning checklist</h2>
+<ol><li>Remove the tool or use a low-energy test fixture during initial setup.</li><li>Set conservative software joint limits below the mechanical stops.</li><li>Verify the direction of every joint at low speed, one axis at a time.</li><li>Test loss of Wi-Fi, serial cable, encoder signal and controller reset.</li><li>Test the physical emergency stop and confirm actuator energy is actually removed.</li><li>Measure idle and stall current; do not infer supply requirements from nominal current alone.</li><li>Record firmware, board revision, servo model, calibration offsets and supply voltage.</li></ol>
+<p>For a workplace installation, perform a documented risk assessment and follow the applicable machinery and robot-safety requirements in your jurisdiction. An ESP32 prototype should not be represented as compliant merely because it moves accurately.</p>
+<h2 id="troubleshooting">Troubleshooting table</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Check and correction</th></tr></thead><tbody><tr><td>ESP32 resets when a joint moves</td><td>Voltage sag, noise or inadequate ground</td><td>Measure the 3.3 V rail during motion; separate supplies and improve grounding.</td></tr><tr><td>Servo jitters at rest</td><td>Unstable supply, noisy signal or unsuitable pulse range</td><td>Shorten signal wiring, add decoupling, verify pulse limits and test another supply.</td></tr><tr><td>Servo does not respond</td><td>Wrong pin, missing common ground or incompatible logic level</td><td>Verify pin mapping, ground continuity and the actuator’s signal threshold.</td></tr><tr><td>Motion pauses over Wi-Fi</td><td>Blocking networking code or radio latency</td><td>Use non-blocking tasks, local motion generation and a timeout for stale commands.</td></tr><tr><td>Joint hits its stop</td><td>Bad calibration or missing software limit</td><td>Reduce the range, calibrate neutral position and add an independent limit sensor.</td></tr></tbody></table></div>
+<h2 id="related">Recommended next steps</h2>
+<p>After the single-joint test, build the system incrementally. The <a href="arduino-robot-arm-tutorial.html">Arduino robot arm tutorial</a> provides a useful beginner path; compare transmission options in <a href="belt-drive-vs-gear-drive.html">belt drive vs. gear drive</a>; and review <a href="robot-arm-inverse-kinematics.html">inverse kinematics for robot arms</a> before implementing coordinated motion. For a broader design overview, see the <a href="../6-dof-robot-arm-guide.html">complete 6-DOF robot arm guide</a>.</p>
+<h2 id="faq">Frequently asked questions</h2>
+<div class="faq-item"><details><summary>Can an ESP32 control six servos?</summary><p>Yes, it can generate several PWM channels, but the practical answer depends on the actuator type, current supply, update timing, feedback and safety requirements. A PWM expander or smart-servo bus may be cleaner for a six-axis arm.</p></details></div>
+<div class="faq-item"><details><summary>Can I power servos from the ESP32 board?</summary><p>No. Use a separate regulated actuator supply and connect its ground to the ESP32 signal ground. The board’s regulator and USB connection are not intended to supply a multi-servo load.</p></details></div>
+<div class="faq-item"><details><summary>Is Wi-Fi safe for robot-arm control?</summary><p>Wi-Fi can carry monitoring or non-critical commands, but it should not be the only safety mechanism or the sole basis for deterministic motion. Use local limits, timeouts and a separate hardware safety chain.</p></details></div>
+<div class="faq-item"><details><summary>Which ESP32 board should I choose?</summary><p>Choose a well-supported board with the required GPIO, PWM, communication peripherals and 3.3 V logic. Confirm the exact chip family and Arduino core version because ESP32-WROOM-32, ESP32-S3 and ESP32-C3 are not interchangeable in every project.</p></details></div>
+<div class="callout"><strong>Bottom line:</strong> The ESP32 is an excellent controller for learning and prototyping when its role is clearly defined. Reliable robot-arm engineering comes from separating logic power from actuator power, constraining motion, handling communication failure and providing a real hardware safety path.</div>
+<div class="footer-nav"><a href="arduino-mega-robot-wiring.html">← Previous: Arduino Mega robot wiring</a><a href="kinematic-solver-code.html">Next: Kinematic solver code →</a></div>
 </main>
-
-<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
-<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
-<div>
-<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
-<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Premium SEO articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation for the USA and Canada market.</p>
-</div>
-<div style="display:flex; gap:48px; flex-wrap:wrap;">
-<div>
-<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
-<ul style="list-style:none;">
-<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
-</ul>
-</div>
-<div>
-<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
-<ul style="list-style:none;">
-<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
-<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
-</ul>
-</div>
-</div>
-</div>
-</footer>
-
+<footer class="container" style="border-top:1px solid var(--border);padding-top:34px;padding-bottom:40px;color:var(--dim);font-size:.85rem"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ESP32, Arduino, ROS 2 and industrial automation.</p></footer>
 </body>
 </html>
