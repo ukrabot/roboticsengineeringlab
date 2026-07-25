@@ -4,21 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us — Robotics Engineering Blog</title>
-  <meta name="description" content="Learn about Robotics Engineering Blog, our mission, and the practical, project-based tutorials we publish." />
+  <meta name="description" content="Learn about Robotics Engineering Blog: who writes our tutorials, our editorial standards, and why we cover robot arms, Arduino, ROS 2, and industrial automation." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://roboticsengineeringlab.com/sobre-nosotros/" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/about.html" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="About Us — Robotics Engineering Blog" />
-  <meta property="og:description" content="Learn about Robotics Engineering Blog, our mission, and the practical, project-based tutorials we publish." />
-  <meta property="og:url" content="https://roboticsengineeringlab.com/sobre-nosotros/" />
+  <meta property="og:description" content="Learn about Robotics Engineering Blog, our editorial standards, and the practical, project-based tutorials we publish." />
+  <meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/about.html" />
   <meta property="og:locale" content="en_US" />
-  
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "url": "https://roboticsengineeringlab.com/about.html",
+    "name": "About Robotics Engineering Blog",
+    "description": "Editorial background, methodology and team behind Robotics Engineering Blog.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Blog",
+      "url": "https://roboticsengineeringlab.com/",
+      "logo": "https://roboticsengineeringlab.com/logo.png",
+      "foundingDate": "2023",
+      "sameAs": [],
+      "employee": [
+        {
+          "@type": "Person",
+          "name": "Marcus Chen",
+          "jobTitle": "Robotics Engineer, Founder & Lead Writer",
+          "url": "https://roboticsengineeringlab.com/about.html"
+        }
+      ]
+    }
+  }
+  </script>
+
   <style>
     :root {
       --ink: #0c0e14;
@@ -100,6 +125,16 @@
     .info-card p { margin-bottom: 8px; }
     .info-card p:last-child { margin-bottom: 0; }
 
+    .team-card {
+      display: flex; gap: 20px; align-items: flex-start;
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px;
+      padding: 26px; margin: 24px 0;
+    }
+    .team-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .team-card h3 { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px; }
+    .team-card .role { font-size: 0.78rem; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+    .team-card p { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 0; }
+
     .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; margin-top: 8px; }
     .contact-item { background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px; padding: 26px; }
     .contact-item .label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); font-weight: 700; margin-bottom: 10px; }
@@ -119,7 +154,7 @@
     .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
     .footer-links a:hover { color: var(--text-primary); }
 
-    @media (max-width: 700px) { .nav-links { gap: 14px; } .footer-inner { flex-direction: column; } }
+    @media (max-width: 700px) { .nav-links { gap: 14px; } .footer-inner { flex-direction: column; } .team-card { flex-direction: column; } }
   </style>
 
 </head>
@@ -127,12 +162,12 @@
 
   <header class="site-header" aria-label="Site header">
     <div class="nav-inner">
-      <a href="/" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+      <a href="/index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
       <nav class="nav-links" aria-label="Primary navigation">
-        <a href="/#latest">Tutorials</a>
-        <a href="/#featured">Topics</a>
-        <a href="/#courses">Courses</a>
-        <a href="/#newsletter">Subscribe</a>
+        <a href="/index.html">Home</a>
+        <a href="/6-dof-robot-arm-guide.html">Guide</a>
+        <a href="/about.html" aria-current="page">About</a>
+        <a href="/contact.html">Contact</a>
       </nav>
     </div>
   </header>
@@ -141,16 +176,17 @@
     <span class="section-label">About</span>
     <h1>About Robotics Engineering Blog</h1>
     <p class="sub">Practical, project-based robotics tutorials for engineers, makers, and students across the USA and Canada.</p>
+    <p class="updated">Founded 2023 · Last updated <time datetime="2024-11-04">November 4, 2024</time></p>
   </section>
 
   <main class="legal-content">
 
     <h2>Our Story</h2>
-    <p>Robotics Engineering Blog started as a set of personal build notes. Every time we designed a robot arm, wired a servo controller, or debugged a ROS 2 launch file, we wrote down what actually worked — the wiring that didn't match the datasheet, the calibration step no one mentions, the PLC fault code that took an afternoon to track down. Those notes turned into full tutorials, and the tutorials turned into this Site.</p>
+    <p>Robotics Engineering Blog started as a set of personal build notes. Every time we designed a robot arm, wired a servo controller, or debugged a ROS 2 launch file, we wrote down what actually worked — the wiring that didn't match the datasheet, the calibration step no one mentions, the PLC fault code that took an afternoon to track down. Those notes turned into full tutorials, and the tutorials turned into this site.</p>
     <p>We started it because most robotics content online falls into one of two extremes: marketing pages that never show real code, or academic papers that assume you already have a lab full of equipment. We wanted something in between — content written by people who actually build the thing, for people who are about to build it themselves.</p>
 
     <h2>What We Cover</h2>
-    <p>Our focus is deliberately narrow so we can go deep instead of wide. Every article on this Site falls into one of four areas:</p>
+    <p>Our focus is deliberately narrow so we can go deep instead of wide. Every article on this site falls into one of four areas:</p>
     <ul>
       <li><strong>Robot arm design and kinematics</strong> — 6-DOF arm builds, inverse kinematics, servo selection, and 3D-printed mechanical design.</li>
       <li><strong>Arduino and embedded control</strong> — microcontroller programming, motor drivers, sensor integration, and low-level control loops.</li>
@@ -159,7 +195,7 @@
     </ul>
 
     <h2>How We Write Our Tutorials</h2>
-    <p>Every guide we publish is built around an actual project we ran on a bench or in a test cell, not a rewrite of a datasheet. Before publishing, we hold each tutorial to the same checklist:</p>
+    <p>Every guide we publish is built around an actual project run on a bench or in a test cell, not a rewrite of a datasheet. Before publishing, we hold each tutorial to the same checklist:</p>
     <ul>
       <li>The build or code sample has been run and tested, not just described in theory.</li>
       <li>Part numbers, wiring diagrams, and code are specific enough to reproduce — no vague placeholders.</li>
@@ -168,24 +204,49 @@
     </ul>
 
     <h2>Editorial Independence</h2>
-    <p>This Site is supported by display advertising through Google AdSense. Advertising revenue keeps every tutorial free to read and does not influence which hardware we recommend or how we evaluate it. When we mention a specific brand — Arduino, FANUC, Siemens, ABB, or any other — it's because it's what we used or tested, not because of a sponsorship. We are not paid by hardware manufacturers to feature their products.</p>
+    <p>This site is supported by display advertising through Google AdSense. Advertising revenue keeps every tutorial free to read and does not influence which hardware we recommend or how we evaluate it. When we mention a specific brand — Arduino, FANUC, Siemens, ABB, or any other — it's because it's what we used or tested, not because of a sponsorship. We are not paid by hardware manufacturers to feature their products, and we do not accept payment in exchange for favorable coverage.</p>
+    <p>See our <a href="/privacy.html">Privacy Policy</a> for details on how advertising cookies are used on this site.</p>
 
     <h2>Who's Behind This Site</h2>
-    <p>Robotics Engineering Blog is run by a small team with hands-on backgrounds in mechanical design, embedded firmware, and industrial controls. We write under the site byline rather than individual bylines for most posts, but we're always reachable if you want to ask who worked on a specific article.</p>
+    <p>Robotics Engineering Blog is written and maintained by a small team with hands-on backgrounds in mechanical design, embedded firmware, and industrial controls.</p>
+
+    <div class="team-card">
+      <img src="/marcus-chen.jpg" alt="Marcus Chen, Robotics Engineer and founder of Robotics Engineering Blog" loading="lazy">
+      <div>
+        <h3>Marcus Chen</h3>
+        <div class="role">Founder &amp; Lead Writer, Robotics Engineer</div>
+        <p>Marcus founded Robotics Engineering Blog after several years building and calibrating robot arms and automation cells for prototyping and STEM training. He writes most of the hands-on Arduino and ROS 2 tutorials on this site.</p>
+      </div>
+    </div>
+
+    <p>Most tutorials are published under the site byline reflecting shared editorial review, but the author of each article is credited individually at the top of the post. If you'd like to know who worked on a specific article, contact us and we'll tell you.</p>
 
     <h2>Corrections and Feedback</h2>
-    <p>We get things wrong sometimes — a miswired pin, an outdated ROS 2 package name, a part that's since been discontinued. If you spot an error in a tutorial, please tell us. We correct published articles and credit readers who flag mistakes when they'd like to be credited.</p>
+    <p>We get things wrong sometimes — a miswired pin, an outdated ROS 2 package name, a part that's since been discontinued. If you spot an error in a tutorial, please tell us. We correct published articles promptly and credit readers who flag mistakes, if they'd like to be credited.</p>
 
     <h2>Get in Touch</h2>
-    <p>Questions about a build, corrections, or topic suggestions are always welcome — visit our <a href="/contacto/">Contact page</a> to reach us directly.</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="label">Email</div>
+        <p><a href="mailto:contact@roboticsengineeringlab.com">contact@roboticsengineeringlab.com</a></p>
+      </div>
+      <div class="contact-item">
+        <div class="label">Corrections & tips</div>
+        <p>Found an error or have a topic suggestion? Use the same email address with "Correction" or "Suggestion" in the subject line.</p>
+      </div>
+      <div class="contact-item">
+        <div class="label">More ways to reach us</div>
+        <p>Visit our <a href="/contact.html">Contact page</a> for a direct message form.</p>
+      </div>
+    </div>
 
   </main>
 
   <footer aria-label="Site footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <a href="/" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
-        <p>Premium editorial on industrial automation, robot arms, Arduino, ROS 2, and AI for the USA, Canada, and global markets.</p>
+        <a href="/index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+        <p>Practical editorial on industrial automation, robot arms, Arduino, and ROS 2 for the USA, Canada, and global markets.</p>
       </div>
       <div class="footer-links">
         <div>
@@ -199,15 +260,15 @@
         <div>
           <h4>Company</h4>
           <ul>
-            <li><a href="/sobre-nosotros/">About Us</a></li>
-            <li><a href="/contacto/">Contact</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact</a></li>
           </ul>
         </div>
         <div>
           <h4>Legal</h4>
           <ul>
-            <li><a href="/politica-de-privacidad/">Privacy Policy</a></li>
-            <li><a href="/terminos-y-condiciones/">Terms &amp; Conditions</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms &amp; Conditions</a></li>
           </ul>
         </div>
       </div>
