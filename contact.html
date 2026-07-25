@@ -1,1 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — Robotics Engineering Blog</title>
+  <meta name="description" content="Get in touch with Robotics Engineering Blog for tutorial corrections, questions, advertising inquiries, or collaboration proposals." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/contact.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact Us — Robotics Engineering Blog" />
+  <meta property="og:description" content="Reach out for tutorial corrections, general questions, advertising inquiries, or collaboration proposals." />
+  <meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/contact.html" />
+  <meta property="og:locale" content="en_US" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Robotics Engineering Blog",
+    "url": "https://roboticsengineeringlab.com/contact.html",
+    "description": "Contact page for Robotics Engineering Blog — tutorial corrections, general inquiries, advertising, and collaboration requests.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Robotics Engineering Blog",
+      "url": "https://roboticsengineeringlab.com/"
+    },
+    "publisher": { "@id": "https://roboticsengineeringlab.com/#organization" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://roboticsengineeringlab.com/index.html"},
+      {"@type": "ListItem", "position": 2, "name": "Contact", "item": "https://roboticsengineeringlab.com/contact.html"}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --ink: #0c0e14;
+      --surface: #101218;
+      --surface-card: #161820;
+      --surface-hover: #1c1f27;
+      --text-primary: #f5f3ee;
+      --text-secondary: #b5b0a6;
+      --text-muted: #6e677a;
+      --accent: #e4c07a;
+      --accent-2: #6fa3d8;
+      --border: rgba(255,255,255,0.06);
+      --radius: 22px;
+      --shadow-card: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--ink);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    ::selection { background: rgba(228,192,122,0.2); color: #fff; }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,14,20,0.75);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text-primary); text-decoration: none; letter-spacing: -0.01em; line-height: 1; }
+    .logo span { color: var(--accent); font-style: italic; }
+    .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.03em; transition: color .2s; }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .page-hero {
+      max-width: 1200px; margin: 0 auto; padding: 90px 24px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+    .page-hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: -0.03em;
+      color: #fff;
+      max-width: 800px;
+    }
+    .page-hero p.sub { margin-top: 16px; max-width: 640px; color: var(--text-secondary); font-size: 1rem; font-weight: 300; }
+
+    .content-wrap { max-width: 1000px; margin: 0 auto; padding: 60px 24px 100px; }
+
+    .reason-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; margin-bottom: 60px; }
+    .reason-card { background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px; padding: 26px; }
+    .reason-card .icon { font-size: 1.4rem; margin-bottom: 12px; display: block; }
+    .reason-card h3 { font-size: 1rem; color: var(--text-primary); margin-bottom: 8px; }
+    .reason-card p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.55; }
+
+    .contact-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
+    @media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; } }
+
+    .form-card { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px; }
+    .form-card h2 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 1.5rem; margin-bottom: 8px; }
+    .form-card > p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 28px; }
+
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(228,192,122,0.1);
+    }
+    .field textarea { resize: vertical; min-height: 130px; }
+    .field select { appearance: none; cursor: pointer; }
+
+    .honeypot { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px 28px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #1a1408;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(228,192,122,0.35); }
+
+    .form-note { font-size: 0.76rem; color: var(--text-muted); margin-top: 16px; text-align: center; }
+    .form-note a { color: var(--accent-2); text-decoration: none; }
+
+    .side-panel .info-block { background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px; padding: 26px; margin-bottom: 20px; }
+    .side-panel .info-block .label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); font-weight: 700; margin-bottom: 10px; }
+    .side-panel .info-block a { color: var(--text-primary); text-decoration: none; font-size: 1rem; font-weight: 500; }
+    .side-panel .info-block a:hover { color: var(--accent); }
+    .side-panel .info-block p { color: var(--text-secondary); font-size: 0.88rem; margin-top: 8px; }
+
+    .response-time { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-secondary); }
+    .response-time .dot { width: 8px; height: 8px; border-radius: 50%; background: #6fd88a; flex-shrink: 0; }
+
+    footer { border-top: 1px solid var(--border); padding: 48px 24px 0; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 48px; flex-wrap: wrap; padding-bottom: 40px; }
+    .footer-brand .logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.3rem; color: var(--text-primary); text-decoration: none; line-height: 1; }
+    .footer-brand .logo span { color: var(--accent); font-style: italic; }
+    .footer-brand p { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; max-width: 300px; }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-links h4 { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 16px; }
+    .footer-links ul { list-style: none; }
+    .footer-links li + li { margin-top: 8px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); padding: 24px; text-align: center; }
+    .footer-bottom p { color: var(--text-muted); font-size: 0.8rem; }
+
+    @media (max-width: 700px) { .nav-links { gap: 12px; } .footer-inner { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" aria-label="Site header">
+    <div class="nav-inner">
+      <a href="index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#categories">Tutorials</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <span class="section-label">Get in Touch</span>
+    <h1>Contact Us</h1>
+    <p class="sub">Questions about a tutorial, spotted an error, or interested in advertising? Here's how to reach the team behind Robotics Engineering Blog.</p>
+  </section>
+
+  <main class="content-wrap">
+
+    <div class="reason-grid" aria-label="Reasons to contact us">
+      <div class="reason-card">
+        <span class="icon" aria-hidden="true">🛠️</span>
+        <h3>Tutorial Corrections</h3>
+        <p>Found a wiring error, an outdated part number, or a bug in our code samples? Let us know and we'll fix it.</p>
+      </div>
+      <div class="reason-card">
+        <span class="icon" aria-hidden="true">💬</span>
+        <h3>General Questions</h3>
+        <p>Stuck on a build following one of our guides? Ask us — we read every message, though we can't debug your full project.</p>
+      </div>
+      <div class="reason-card">
+        <span class="icon" aria-hidden="true">📢</span>
+        <h3>Advertising &amp; Sponsorship</h3>
+        <p>Interested in advertising on the site? Reach out with details about your product and audience fit.</p>
+      </div>
+      <div class="reason-card">
+        <span class="icon" aria-hidden="true">🤝</span>
+        <h3>Collaboration</h3>
+        <p>Proposing a guest tutorial, a hardware review sample, or a topic suggestion? Tell us more below.</p>
+      </div>
+    </div>
+
+    <div class="contact-layout">
+
+      <div class="form-card">
+        <h2>Send Us a Message</h2>
+        <p>Fill out the form and we'll get back to you at the email address you provide.</p>
+
+        <!--
+          This form uses FormSubmit.co, a free service that forwards form
+          submissions to your email with no backend required.
+          Before it works, replace the email below with your real address
+          and submit the form once manually to confirm activation
+          (FormSubmit sends a one-time confirmation email the first time).
+          Docs: https://formsubmit.co/
+        -->
+        <form action="https://formsubmit.co/contact@roboticsengineeringlab.com" method="POST">
+          <input type="hidden" name="_subject" value="New message from roboticsengineeringlab.com" />
+          <input type="hidden" name="_captcha" value="true" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" />
+
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="field">
+            <label for="reason">Reason for contact</label>
+            <select id="reason" name="reason" required>
+              <option value="">Select an option</option>
+              <option value="Tutorial correction">Tutorial correction</option>
+              <option value="General question">General question</option>
+              <option value="Advertising / sponsorship">Advertising / sponsorship</option>
+              <option value="Collaboration / guest post">Collaboration / guest post</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="article">Related article (optional)</label>
+            <input type="text" id="article" name="article" placeholder="e.g. Build a 6-DOF Robot Arm with Arduino" />
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="Tell us what's on your mind..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Message</button>
+          <p class="form-note">By submitting this form, you agree to our <a href="privacy.html">Privacy Policy</a>. We do not share your information with third parties.</p>
+        </form>
+      </div>
+
+      <div class="side-panel">
+        <div class="info-block">
+          <div class="label">Direct Email</div>
+          <a href="mailto:contact@roboticsengineeringlab.com">contact@roboticsengineeringlab.com</a>
+          <p>Prefer email? Write to us directly — this reaches the same inbox as the form above.</p>
+        </div>
+
+        <div class="info-block">
+          <div class="label">Response Time</div>
+          <div class="response-time"><span class="dot" aria-hidden="true"></span> Typically within 2–4 business days</div>
+          <p>We're a small team, so please allow a few days for a reply, especially for detailed technical questions.</p>
+        </div>
+
+        <div class="info-block">
+          <div class="label">Before You Write</div>
+          <p>Check whether your question is already answered in the relevant <a href="index.html#categories" style="color:var(--accent-2); text-decoration:none;">tutorial category</a> or in our <a href="about.html" style="color:var(--accent-2); text-decoration:none;">About page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
+        <p>Practical editorial on industrial automation, robot arms, Arduino, and ROS 2 for the USA, Canada, and global markets.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Popular Tutorials</h4>
+          <ul>
+            <li><a href="articles/arduino-robot-arm-tutorial.html">Arduino Robot Arm</a></li>
+            <li><a href="articles/ros2-robot-arm-control.html">ROS 2 Control</a></li>
+            <li><a href="articles/industrial-plc-robotics.html">Industrial PLC</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Robotics Engineering Blog. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
