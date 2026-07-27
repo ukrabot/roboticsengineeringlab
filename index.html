@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#0c0e14" />
 
   <title>Robotics Engineering Blog — Arduino, ROS 2 & Robot Arm Tutorials</title>
-  <meta name="description" content="49 practical tutorials on 6-DOF robot arms: Arduino wiring, ROS 2 control, industrial PLC integration, grippers, materials, and buying guides for the USA and Canada." />
-  <meta name="author" content="Robotics Engineering Blog" />
+  <meta name="description" content="Practical tutorials on 6-DOF robot arms: Arduino wiring, ROS 2 control, industrial PLC integration, grippers, materials, and buying guidance for the USA and Canada." />
+  <meta name="author" content="Marcus Chen" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://roboticsengineeringlab.com/index.html" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Robotics Engineering Blog — Arduino, ROS 2 & Robot Arm Tutorials" />
-  <meta property="og:description" content="49 practical, tested tutorials on building and deploying 6-DOF robot arms — Arduino, ROS 2, industrial automation, and buying guides." />
+  <meta property="og:description" content="Practical tutorials on building and deploying 6-DOF robot arms — Arduino, ROS 2, industrial automation, and buying guidance." />
   <meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
   <meta property="og:url" content="https://roboticsengineeringlab.com/index.html" />
   <meta property="og:locale" content="en_US" />
@@ -22,7 +22,7 @@
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Robotics Engineering Blog — Arduino, ROS 2 & Robot Arm Tutorials" />
-  <meta name="twitter:description" content="49 practical tutorials on robot arms, Arduino, ROS 2, and industrial automation." />
+  <meta name="twitter:description" content="Practical tutorials on robot arms, Arduino, ROS 2, and industrial automation." />
   <meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
 
   <script type="application/ld+json">
@@ -46,10 +46,24 @@
     "url": "https://roboticsengineeringlab.com/",
     "logo": "https://roboticsengineeringlab.com/logo.png",
     "foundingDate": "2023",
-    "founder": { "@type": "Person", "name": "Marcus Chen" },
-    "sameAs": []
+    "founder": {
+      "@type": "Person",
+      "name": "Marcus Chen",
+      "url": "https://roboticsengineeringlab.com/about.html"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/REPLACE-WITH-REAL-PROFILE",
+      "https://github.com/REPLACE-WITH-REAL-PROFILE"
+    ]
   }
   </script>
+  <!--
+    IMPORTANT: Replace the sameAs URLs above with real, verifiable profiles
+    (LinkedIn, GitHub, YouTube, etc.) before submitting for AdSense review.
+    An empty or placeholder sameAs array is a weak trust signal. If you don't
+    have public profiles yet, remove the sameAs field entirely rather than
+    leaving it empty — an absent field is safer than an empty claim.
+  -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -196,6 +210,21 @@
     .section-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 2.1rem; color: var(--text-primary); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
     .section-sub { color: var(--text-secondary); font-weight: 300; max-width: 680px; }
 
+    /* Editorial intro block */
+    .editorial-note { background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 36px; margin-top: 40px; }
+    .editorial-note p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 14px; }
+    .editorial-note p:last-child { margin-bottom: 0; }
+    .editorial-note a { color: var(--accent-2); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Author box on homepage */
+    .home-author { display: flex; gap: 18px; align-items: flex-start; background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px; padding: 26px; margin-top: 40px; }
+    .home-author img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .home-author h3 { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 6px; }
+    .home-author p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.55; }
+    .home-author .author-links { margin-top: 10px; display: flex; gap: 14px; }
+    .home-author .author-links a { color: var(--accent-2); text-decoration: none; font-size: 0.82rem; font-weight: 600; }
+    .home-author .author-links a:hover { text-decoration: underline; }
+
     /* Cards */
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-top: 48px; }
     .card { background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
@@ -253,7 +282,7 @@
     .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border); padding: 24px; text-align: center; }
     .footer-bottom p { color: var(--text-muted); font-size: 0.8rem; }
 
-    @media (max-width: 700px) { .nav-links { gap: 12px; } .cards { grid-template-columns: 1fr; } .stats-inner { grid-template-columns: repeat(2, 1fr); } .footer-inner { flex-direction: column; } .hero h1 { font-size: 2.1rem; } }
+    @media (max-width: 700px) { .nav-links { gap: 12px; } .cards { grid-template-columns: 1fr; } .stats-inner { grid-template-columns: repeat(2, 1fr); } .footer-inner { flex-direction: column; } .hero h1 { font-size: 2.1rem; } .home-author { flex-direction: column; } }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
 </head>
@@ -279,10 +308,10 @@
     <div class="hero-inner" id="main">
       <div class="hero-badge" aria-label="Category and date">
         <span class="line" aria-hidden="true"></span>
-        Manufacturing Intelligence · Updated <time datetime="2024-11-04">Nov 4, 2024</time>
+        Robotics &amp; Automation Editorial · Updated <time datetime="2024-11-04">Nov 4, 2024</time>
       </div>
-      <h1>Master <em>Robotics Engineering</em> with Practical Tutorials</h1>
-      <p class="sub">From Arduino prototypes to ROS 2 production systems and industrial PLC integration. 49 hands-on tutorials, hardware reviews, and buying guides for engineers, makers, and students in the USA and Canada.</p>
+      <h1>Learn <em>Robotics Engineering</em> Through Practical Tutorials</h1>
+      <p class="sub">From Arduino prototypes to ROS 2 control and industrial PLC integration. Hands-on tutorials, hardware comparisons based on manufacturer documentation, and buying guidance for engineers, makers, and students in the USA and Canada.</p>
       <div class="cta-row">
         <a href="#latest" class="btn btn-primary">Explore Tutorials</a>
         <a href="#categories" class="btn btn-ghost">Browse by Topic</a>
@@ -292,10 +321,10 @@
 
   <section class="stats" aria-label="Site statistics">
     <div class="stats-inner">
-      <div class="stat"><h3>49</h3><p>In-Depth Tutorials</p></div>
+      <div class="stat"><h3>49</h3><p>Published Guides</p></div>
       <div class="stat"><h3>8</h3><p>Core Categories</p></div>
-      <div class="stat"><h3>100%</h3><p>Written From Real Builds</p></div>
-      <div class="stat"><h3>USA · Canada</h3><p>Market Coverage</p></div>
+      <div class="stat"><h3>2023</h3><p>Publishing Since</p></div>
+      <div class="stat"><h3>USA · Canada</h3><p>Market Focus</p></div>
     </div>
   </section>
 
@@ -305,6 +334,11 @@
     <span class="section-label">Start Here</span>
     <h2 class="section-title">Build and Control a 6-DOF Robot Arm</h2>
     <p class="section-sub">The three core tutorials that anchor this site — design and wire a robot arm with Arduino, control it with ROS 2, and integrate it into an industrial PLC workflow.</p>
+
+    <div class="editorial-note" aria-label="Editorial approach">
+      <p><strong>About this site:</strong> Robotics Engineering Blog is a small, independent editorial project focused on 6-DOF robot arms — Arduino and ROS 2 control, mechanical design, and industrial automation. Tutorials that involve physical builds (Arduino wiring, 3D-printed parts, gripper design) are based on hands-on prototyping. Manufacturer hardware reviews (FANUC, ABB, KUKA, etc.) are clearly labeled as specification-based editorial comparisons, since we do not have physical access to $30,000+ industrial robot arms for independent lab testing — we say so explicitly in each of those articles rather than implying hands-on testing that didn't happen.</p>
+      <p>We link directly to primary sources — manufacturer datasheets, open-source repositories, and safety standards bodies (ANSI, CSA, ISO) — wherever a specific number or claim is made. If you spot an error or an outdated figure, please <a href="contact.html">let us know</a>.</p>
+    </div>
 
     <div class="cards" aria-label="Tutorial cards">
       <a href="articles/arduino-robot-arm-tutorial.html" class="card" aria-label="Arduino Robot Arm Tutorial">
@@ -337,22 +371,35 @@
         </div>
       </a>
     </div>
+
+    <div class="home-author" aria-label="Author information">
+      <img src="marcus-chen.jpg" alt="Photo of Marcus Chen" loading="lazy" />
+      <div>
+        <h3>Written and maintained by Marcus Chen</h3>
+        <p>Marcus writes and maintains the tutorials on this site, covering Arduino and ROS 2 robot arm control, mechanical transmission design, and industrial automation basics. Manufacturer hardware reviews are researched from official datasheets and public case studies rather than independent lab testing — this is disclosed on every review page.</p>
+        <div class="author-links">
+          <a href="about.html">Full bio →</a>
+          <!-- Replace with a real, working profile link before submitting for AdSense review -->
+          <a href="https://www.linkedin.com/in/REPLACE-WITH-REAL-PROFILE" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section aria-label="Featured deep dives" style="border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06);">
     <span class="section-label">Featured Deep Dives</span>
-    <h2 class="section-title">Reader Favorites Across the Site</h2>
-    <p class="section-sub">A cross-section of our most-read guides — from inverse kinematics theory to industrial safety compliance and hardware reviews.</p>
+    <h2 class="section-title">A Cross-Section of the Site</h2>
+    <p class="section-sub">A sample of guides across topics — from inverse kinematics theory to industrial safety compliance and hardware comparisons.</p>
     <div class="lite-cards">
       <a href="articles/robot-arm-inverse-kinematics.html" class="lite-card">
         <div class="card-tag">Kinematics</div>
         <h4>Inverse Kinematics for 6-DOF Robot Arms</h4>
-        <p>Analytical solutions, Euler angles, and working Arduino and ROS 2 code examples for solving 6-DOF inverse kinematics.</p>
+        <p>Analytical solutions, Euler angles, and worked Arduino and ROS 2 code examples for solving 6-DOF inverse kinematics.</p>
       </a>
       <a href="articles/fanuc-robot-arm-review.html" class="lite-card">
-        <div class="card-tag">Hardware Review</div>
+        <div class="card-tag">Hardware Comparison</div>
         <h4>FANUC Robot Arm Review</h4>
-        <p>Specs, pricing, performance, and real-world value analysis for FANUC's industrial 6-axis robot arms.</p>
+        <p>Specifications, pricing guidance, and a specs-based comparison against direct competitors for FANUC's industrial 6-axis robot arms.</p>
       </a>
       <a href="articles/robot-arm-safety-usa-canada.html" class="lite-card">
         <div class="card-tag">Safety</div>
@@ -360,9 +407,9 @@
         <p>ANSI/RIA R15.06, CSA Z434, light curtains, and risk assessments explained for North American deployments.</p>
       </a>
       <a href="articles/universal-robots-ur20.html" class="lite-card">
-        <div class="card-tag">Hardware Review</div>
+        <div class="card-tag">Hardware Comparison</div>
         <h4>Universal Robots UR20 Review</h4>
-        <p>An in-depth look at payload, reach, and integration for one of the most widely deployed collaborative robot arms.</p>
+        <p>Payload, reach, and integration notes for one of the most widely deployed collaborative robot arms, based on manufacturer documentation.</p>
       </a>
       <a href="articles/robot-arm-roi-calculator.html" class="lite-card">
         <div class="card-tag">Business</div>
@@ -379,8 +426,8 @@
 
   <section id="categories" aria-label="Browse all tutorials by category">
     <span class="section-label">Browse the Full Library</span>
-    <h2 class="section-title">All 49 Tutorials, Organized by Topic</h2>
-    <p class="section-sub">Every guide we've published, grouped into eight practical categories so you can jump straight to what you need.</p>
+    <h2 class="section-title">All Tutorials, Organized by Topic</h2>
+    <p class="section-sub">Every guide published so far, grouped into eight practical categories so you can jump straight to what you need.</p>
 
     <div class="cat-grid">
 
@@ -510,7 +557,7 @@
   <section aria-label="Newsletter subscription" id="newsletter" class="newsletter">
     <div class="newsletter-inner">
       <h2>Subscribe to New Tutorials</h2>
-      <p>Get notified when we publish a new tutorial. No spam, no fake urgency — just new content when it's ready and tested.</p>
+      <p>Get notified when a new tutorial is published. No spam — just new content when it's ready.</p>
       <form class="form-row" onsubmit="event.preventDefault(); this.innerHTML='<span style=\'color: var(--accent); font-weight:600; font-size:0.95rem;\'>✓ Subscribed — check your inbox to confirm.</span>';" aria-label="Newsletter subscription form">
         <input type="email" placeholder="Enter your email address" required aria-label="Email address" />
         <button type="submit">Subscribe Free</button>
@@ -523,7 +570,7 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <a href="index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
-        <p>Practical editorial on industrial automation, robot arms, Arduino, and ROS 2 for the USA, Canada, and global markets.</p>
+        <p>Independent editorial on industrial automation, robot arms, Arduino, and ROS 2 for makers and engineers in the USA and Canada.</p>
       </div>
       <div class="footer-links">
         <div>
@@ -552,7 +599,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2024 Robotics Engineering Blog. All rights reserved.</p>
+      <p>&copy; 2024–2025 Robotics Engineering Blog. All rights reserved.</p>
     </div>
   </footer>
 
