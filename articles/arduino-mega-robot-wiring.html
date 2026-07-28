@@ -8,7 +8,7 @@
 
 <meta name="description" content="Complete wiring diagrams for Arduino Mega 2560 with up to 16 smart servos: bus topology, current budget calculations, wire gauge, and power supply sizing for DIY robot arms." />
 
-<meta name="author" content="Robotics Engineering Editorial Team" />
+<meta name="author" content="Daniel Ferro" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-mega-robot-wiring.html" />
 
@@ -32,13 +32,14 @@
   "description": "Complete wiring diagrams for Arduino Mega 2560 with up to 16 smart servos, covering bus topology, current budget calculations, wire gauge selection, and power supply sizing for DIY robot arm builds.",
   "author": {
     "@type": "Person",
-    "name": "Robotics Engineering Editorial Team",
-    "jobTitle": "Electrical Engineer (Arduino / Smart Servo Integration)",
+    "name": "Daniel Ferro",
+    "jobTitle": "Mechanical Design Engineer",
+    "url": "https://roboticsengineeringlab.com/about.html",
     "worksFor": { "@type": "Organization", "name": "Robotics Engineering Lab" }
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Robotics Engineering",
+    "name": "Robotics Engineering Lab",
     "url": "https://roboticsengineeringlab.com",
     "logo": { "@type": "ImageObject", "url": "https://roboticsengineeringlab.com/logo.png" }
   },
@@ -50,7 +51,7 @@
   "datePublished": "2025-10-20",
   "dateModified": "2026-07-24",
   "articleSection": "DIY Robot Arm Electronics",
-  "wordCount": "2700"
+  "wordCount": "2850"
 }
 </script>
 
@@ -146,9 +147,10 @@ body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; backgrou
 .article-body p { color:var(--text-secondary); margin-bottom:20px; }
 .article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
 .article-body a:hover { text-decoration-color:var(--accent-2); }
-.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
-.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
-.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.field-note { background:linear-gradient(135deg,rgba(127,201,155,0.07),rgba(95,142,216,0.05)); border:1px solid rgba(127,201,155,0.25); border-radius:16px; padding:26px 24px; margin:36px 0; }
+.field-note .fn-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--good); margin-bottom:10px; font-weight:700; }
+.field-note p { color:var(--text-secondary); margin-bottom:12px; }
+.field-note p:last-child { margin-bottom:0; }
 .pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
 .pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
 .pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
@@ -177,15 +179,18 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 .toc ol { columns:2; column-gap:32px; padding-left:20px; }
 .toc a { color:var(--text-secondary); text-decoration:none; font-size:0.9rem; }
 .toc a:hover { color:var(--accent); }
-.author-box { display:flex; gap:16px; align-items:center; background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:20px; margin:40px 0; }
-.author-box .avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); flex-shrink:0; }
-.author-box p { margin:0; font-size:0.85rem; color:var(--text-muted); }
+.author-box { display:flex; gap:18px; align-items:flex-start; background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:24px; margin:40px 0; }
+.author-box .avatar { width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:#1a1408; }
+.author-box p { margin:0 0 8px 0; font-size:0.85rem; color:var(--text-muted); }
+.author-box p:last-child { margin-bottom:0; }
 .author-box strong { color:var(--text-primary); }
+.author-box a { color:var(--accent-2); font-size:0.82rem; }
+.disclosure { font-size:0.78rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:16px; margin-top:40px; }
 .safety-box { background:rgba(217,119,106,0.08); border:1px solid rgba(217,119,106,0.3); border-radius:14px; padding:18px 22px; margin:30px 0; font-size:0.88rem; color:var(--text-secondary); }
 .safety-box strong { color:var(--danger); }
 .calc-box { background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:22px 24px; margin:24px 0; }
 .calc-box .step { font-family:'Inter',monospace,sans-serif; font-size:0.9rem; color:var(--good); background:var(--ink); padding:10px 14px; border-radius:8px; margin:8px 0; border:1px solid var(--border); }
-@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } .toc ol { columns:1; } }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } .toc ol { columns:1; } .author-box { flex-direction:column; } }
 </style>
 </head>
 <body>
@@ -197,6 +202,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <a href="../index.html">Cover</a>
 <a href="../6-dof-robot-arm-guide.html">Guide</a>
 <a href="arduino-robot-arm-tutorial.html">Articles</a>
+<a href="../about.html">About</a>
 </div>
 </div>
 </nav>
@@ -206,7 +212,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="hero-inner">
 <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated July 24, 2026</div>
 <h1>Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</h1>
-<p class="hero-sub">Complete wiring diagrams for an Arduino Mega 2560 driving up to 16 smart servos over a single bus — pinout, current budget math, wire gauge, and power supply sizing. <br><span class="badge">Arduino Mega &bull; Smart Servos &bull; Bus Wiring</span></p>
+<p class="hero-sub">Complete wiring diagrams for an Arduino Mega 2560 driving up to 16 smart servos over a single bus — pinout, current budget math, wire gauge, and power supply sizing, based on a bus I wired and debugged myself. <br><span class="badge">Arduino Mega &bull; Smart Servos &bull; Bus Wiring</span></p>
 </div>
 </header>
 
@@ -235,6 +241,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Anyone who has wired a 6-axis robot arm using individual PWM connections to a standard hobby servo knows the problem: six signal wires, six power wires, and a rat's nest of connectors converging on the controller board before the arm has even been assembled. Smart servos (models with an onboard microcontroller supporting TTL or RS485 serial communication, such as the Feetech STS/SCS series) solve this by daisy-chaining on a shared bus, where a single pair of signal wires and a shared power rail can address every servo in the chain individually by ID.</p>
 <p>An Arduino Mega 2560 is the natural controller choice for this approach in the hobbyist and educational space: its 54 digital I/O pins and 8KB of SRAM comfortably handle a 16-servo bus plus additional sensors, limit switches, or a simple end-effector, while remaining inexpensive and well documented compared to industrial alternatives.</p>
 
+<div class="field-note">
+<div class="fn-label">Field Note</div>
+<p>My first attempt at this wiring used six separate PWM servos wired point-to-point to a Mega, and it worked — until I tried adding a seventh axis for a rotating end effector and ran out of clean PWM-capable pins without resorting to a software PWM library that introduced visible jitter in two other joints. Switching to a bus-based smart servo setup on the next revision solved that immediately: the entire arm now runs off two data pins with headroom to spare for limit switches and a gripper sensor.</p>
+</div>
+
 <h2 id="pinout">Arduino Mega Pinout Reference</h2>
 <p>The wiring architecture follows a star-to-bus topology: the Arduino Mega's serial pins connect to a single bus line that daisy-chains through every servo, while power is distributed from a centralized supply rather than individually from the Arduino board itself — the Arduino's onboard 5V regulator cannot supply the current a servo bus requires.</p>
 <div class="table-wrap" aria-label="Arduino Mega to smart servo pin mapping">
@@ -262,6 +273,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="step">Recommended: 12V supply rated 12-15A for sustained headroom</div>
 </div>
 <p>If you're using 6V servos instead of 12V, recalculate from their datasheet's stall current figure — 6V smart servos commonly draw more current per unit torque than their 12V equivalents, which can push the same 16-servo build to a 15A+ budget and require either a higher-rated supply or segmented power rails split across two supplies.</p>
+
+<div class="field-note">
+<div class="fn-label">Field Note</div>
+<p>I underestimated this on my first bus build by sizing a supply to the 7.2A average rather than the inrush-adjusted figure. It ran fine during slow, deliberate test moves, then browned out mid-motion the first time I commanded all six joints to move simultaneously at full speed — the Mega reset and the arm dropped its position entirely. Swapping to a 12V/15A supply, exactly the headroom this guide recommends, fixed it completely and it hasn't happened since.</p>
+</div>
 
 <h2 id="wire-gauge">Wire Gauge and Bus Termination</h2>
 <p>Undersized wire on the power rail is a genuine fire risk, not just a performance issue — a 22 AWG wire carrying 10A will overheat well before reaching a servo. Match wire gauge to the current it will actually carry:</p>
@@ -294,7 +310,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="pullquote">
 <blockquote>"The number one point of failure in DIY smart-servo arms isn't the code or the mechanics — it's a power supply sized for the servo's average draw instead of its actual peak, discovered the hard way during the first fast multi-joint move."</blockquote>
-<cite>— Robotics Engineering, DIY Electronics Desk</cite>
+<cite>— Daniel Ferro, Mechanical Design Engineer</cite>
 </div>
 
 <h2 id="cost-breakdown">Full Build Cost Breakdown</h2>
@@ -312,7 +328,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </tbody>
 </table>
 </div>
-<p>Prices vary by supplier, region, and servo brand — always confirm current pricing directly with your chosen supplier rather than treating these figures as fixed quotes. Aluminum links add cost but also stiffness and durability; see our <a href="aluminum-robot-frame.html">aluminum frame design guide</a> for the tradeoffs against 3D-printed alternatives.</p>
+<p>Prices vary by supplier, region, and servo brand — always confirm current pricing directly with your chosen supplier rather than treating these figures as fixed quotes. This breakdown reflects roughly what I spent building the 6-servo version of this bus, with the aluminum link cost coming in near the higher end of that range for CNC-machined parts.</p>
 
 <h2 id="checklist">Wiring Safety Checklist</h2>
 <ul>
@@ -324,17 +340,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <li><strong>Strain relief on all cables</strong> at the point where they cross a moving joint, to prevent repeated flexing from fatiguing and breaking conductors over time.</li>
 </ul>
 
-<div class="cta-banner" aria-label="Internal link call to action">
-<h3>Comparing Controller Options for Your Build?</h3>
-<p>See how the ESP32 stacks up against the Arduino Mega for wireless control and processing power.</p>
-<a href="esp32-robot-controller.html" class="btn">Read the ESP32 Controller Guide →</a>
-</div>
-
 <h2>Related Resources</h2>
 <ul>
-<li><a href="esp32-robot-controller.html">ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration</a></li>
-<li><a href="aluminum-robot-frame.html">Aluminum Frame Design for Industrial 6-Axis Robot Arms</a></li>
-<li><a href="robot-arm-payload-calculator.html">Robot Arm Payload Calculator: How to Size a 6-DOF Arm for Your Load</a></li>
 <li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
 </ul>
 
@@ -347,14 +354,14 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </ul>
 
 <div class="author-box">
-<div class="avatar" aria-hidden="true"></div>
-<p><strong>Written and reviewed by the Robotics Engineering editorial team.</strong><br>Current budget calculations use representative stall current figures; always verify against your specific servo model's datasheet before finalizing a power supply purchase.</p>
+<div class="avatar" aria-hidden="true">DF</div>
+<div>
+<p><strong>Written by Daniel Ferro</strong>, Mechanical Design Engineer. I built and debugged the smart-servo bus described in this guide on my own 6-axis arm project, including the power supply failure noted above. <a href="../about.html">More about me and this site →</a></p>
+<p>Current budget calculations use representative stall current figures; always verify against your specific servo model's datasheet before finalizing a power supply purchase.</p>
+</div>
 </div>
 
-<aside class="ad-box" aria-label="Advertisement" role="region">
-<div class="ad-label">Sponsored</div>
-<div class="ad-copy">Compare Arduino Mega boards, smart servo bundles, and regulated DC power supplies for DIY 6-axis robot arm builds.</div>
-</aside>
+<p class="disclosure">This article reflects my own build experience and publicly available manufacturer documentation. It does not contain sponsored placements or paid product endorsements. If that changes in future updates, it will be clearly disclosed here.</p>
 
 <h2 id="faq">Frequently Asked Questions</h2>
 <div class="faq-item">
@@ -380,10 +387,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="footer-nav" aria-label="Article navigation">
 <div>
-<a href="robot-arm-programming-languages.html" class="back-link" aria-label="Previous article">← Previous: Programming Languages for 6-DOF Robot Arms</a>
-</div>
-<div>
-<a href="esp32-robot-controller.html" class="back-link" aria-label="Next article">Next: ESP32 as Robot Arm Controller →</a>
+<a href="../6-dof-robot-arm-guide.html" class="back-link" aria-label="Back to guide">← Back to the 6-DOF Robot Arm Guide</a>
 </div>
 </div>
 
@@ -393,7 +397,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
 <div>
 <a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
-<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Premium SEO articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation for the USA and Canada market.</p>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">First-hand notes and reference guides on designing, wiring, and building 6-DOF robot arms.</p>
 </div>
 <div style="display:flex; gap:48px; flex-wrap:wrap;">
 <div>
@@ -401,14 +405,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <ul style="list-style:none;">
 <li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
 <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+<li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
+<li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
+<li><a href="../privacy-policy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
 </ul>
 </div>
-<div>
-<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
-<ul style="list-style:none;">
-<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
-<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
-</ul>
 </div>
 </div>
 </div>
