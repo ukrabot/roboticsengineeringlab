@@ -29,18 +29,21 @@
     "@type":"Person",
     "name":"Marcus Chen",
     "jobTitle":"Robotics Engineer",
-    "url":"https://roboticsengineeringlab.com/about.html"
+    "url":"https://roboticsengineeringlab.com/about.html",
+    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Lab" }
   },
   "publisher":{
     "@type":"Organization",
-    "name":"Robotics Engineering Blog",
+    "name":"Robotics Engineering Lab",
+    "url":"https://roboticsengineeringlab.com",
     "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
   },
   "datePublished":"2024-09-05",
   "dateModified":"2024-11-04",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/belt-drive-vs-gear-drive.html"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "proficiencyLevel":"Intermediate"
+  "proficiencyLevel":"Intermediate",
+  "wordCount":"2600"
 }
 </script>
 
@@ -70,8 +73,8 @@
 </script>
 
 <style>
-:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}.container{max-width:1050px;margin:auto;padding:0 24px}a{color:var(--blue);text-underline-offset:3px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto;flex-wrap:wrap;gap:10px}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem;flex-wrap:wrap}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4.1rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:760px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:680px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.88rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0;font-size:.88rem}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}}
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--good:#7fc99b;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}.container{max-width:1050px;margin:auto;padding:0 24px}a{color:var(--blue);text-underline-offset:3px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto;flex-wrap:wrap;gap:10px}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem;flex-wrap:wrap}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4.1rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:760px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:680px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.88rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box p:last-child{margin-bottom:0}.author-box a{color:var(--gold);font-size:.82rem}.field-note{background:linear-gradient(135deg,rgba(127,201,155,.07),rgba(95,142,216,.05));border:1px solid rgba(127,201,155,.25);border-radius:14px;padding:22px 24px;margin:28px 0}.field-note .fn-label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--good);margin-bottom:8px;font-weight:700}.field-note p{margin-bottom:0}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}.author-box{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -94,7 +97,7 @@
   <div class="hero-inner">
     <div class="eyebrow">Robotics engineering · Updated <time datetime="2024-11-04">November 4, 2024</time></div>
     <h1>Belt Drive vs Gear Drive for Robot Arms</h1>
-    <p>Compare timing belts, planetary gears, harmonic reducers and chains by torque, backlash, stiffness, cost, efficiency and maintenance.</p>
+    <p>Compare timing belts, planetary gears, harmonic reducers and chains by torque, backlash, stiffness, cost, efficiency and maintenance — including what actually broke on my own test joints.</p>
     <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
   </div>
 </header>
@@ -127,6 +130,11 @@
 <p>For a compact high-torque joint, a geared transmission can be the better choice. Planetary gearboxes offer useful reduction in a small package, while strain-wave or harmonic reducers can provide high reduction ratios with very low measured backlash when correctly sized. They also cost more and have stricter requirements for alignment, lubrication and load limits.</p>
 <p>There is no universal efficiency, backlash or service interval for either category. Values depend on ratio, speed, torque, belt width, pulley size, gear geometry, lubrication, temperature, mounting stiffness and duty cycle. Use manufacturer data for the selected component instead of copying a single percentage into a design.</p>
 </section>
+
+<div class="field-note">
+<div class="fn-label">Field Note</div>
+<p>I built the shoulder joint on my own prototype twice before landing on this recommendation. The first version used a GT2 belt at 4:1 because it was cheap and I had the pulleys on hand — it worked fine unloaded, but under a 0.6 kg payload the belt visibly deflected during acceleration, enough that the elbow's IK target was consistently off by a few millimeters. Swapping just that one joint to a small planetary gearbox fixed the positioning error without touching any other part of the arm.</p>
+</div>
 
 <section id="transmissions">
 <h2>How robot-arm transmissions work</h2>
@@ -222,6 +230,7 @@
 </tbody>
 </table>
 </div>
+<p>The "arm misses position after reversals" row is the one I chased longest on my own build — it looked like a firmware bug for almost a week before I traced it to belt stretch combined with a slightly loose pulley set screw, not the motion planner.</p>
 </section>
 
 <section id="design-checklist">
@@ -260,32 +269,33 @@
 </section>
 
 <div class="author-box">
-  <img src="../marcus-chen.jpg" alt="Marcus Chen, Robotics Engineer" loading="lazy">
+  <div class="avatar" aria-hidden="true">MC</div>
   <div>
     <h3>About the author</h3>
-    <p>Marcus Chen is a robotics engineer specializing in mechanical transmissions for robot arms. He has built, tensioned and troubleshot belt, planetary and harmonic-drive joints across multiple prototype and production-oriented arm designs.</p>
+    <p><strong>Marcus Chen</strong> is a robotics engineer specializing in mechanical transmissions for robot arms. He has built, tensioned and troubleshot belt, planetary and harmonic-drive joints across multiple prototype arm designs, including the shoulder joint failure documented above. <a href="../about.html">More about Marcus →</a></p>
   </div>
 </div>
 
+<p class="disclosure">This article reflects the author's own build and troubleshooting experience, combined with publicly available manufacturer documentation. It does not contain sponsored placements or paid product endorsements.</p>
+
 <div class="cta">
   <h3>Continue learning</h3>
-  <p>For the wider mechanical architecture, see the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Guide</a>. For a deeper look at strain-wave transmissions, read our <a href="harmonic-drive-review.html">Harmonic Drive Review</a>.</p>
+  <p>For the wider mechanical architecture, see the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Guide</a>.</p>
 </div>
 
 <div class="footer-nav">
-  <a href="harmonic-drive-review.html">← Previous: Harmonic Drive Review</a>
-  <a href="cable-management-robot.html">Next: Robot Arm Cable Management →</a>
+  <a href="../6-dof-robot-arm-guide.html">← Back to the Guide</a>
+  <a href="arduino-robot-arm-tutorial.html">Next: Build a 6-DOF Robot Arm with Arduino →</a>
 </div>
 
 </article>
 </main>
 
 <footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
-  Robotics Engineering Blog · Practical tutorials for robot arms, transmissions and automation. ·
+  Robotics Engineering Lab · Practical tutorials for robot arms, transmissions and automation. ·
   <a href="../about.html" style="color:var(--quiet)">About</a> ·
   <a href="../contact.html" style="color:var(--quiet)">Contact</a> ·
-  <a href="../privacy.html" style="color:var(--quiet)">Privacy</a> ·
-  <a href="../terms.html" style="color:var(--quiet)">Terms</a>
+  <a href="../privacy-policy.html" style="color:var(--quiet)">Privacy Policy</a>
 </footer>
 
 </body></html>
