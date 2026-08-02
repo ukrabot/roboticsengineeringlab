@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design Guide</title>
+<meta name="description" content="Engineering guide to vacuum grippers for 6-axis robot arms. Calculate holding force, size Venturi ejectors, select suction cup materials, and optimize pick-and-place cycle times." />
+<meta name="author" content="Robotics Engineering" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/vacuum-gripper-robot.html" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design Guide" />
+<meta property="og:description" content="Engineering guide to vacuum grippers for 6-axis robot arms. Calculate holding force, size Venturi ejectors, and optimize pick-and-place cycle times." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/vacuum-gripper-robot.html" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Vacuum Gripper Integration for 6-DOF Robot Arms" />
+<meta name="twitter:description" content="Calculate holding force, size Venturi ejectors, and optimize pick-and-place cycles for industrial robot arms." />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design Guide",
+  "description": "Engineering guide to vacuum grippers for 6-axis robot arms. Calculate holding force, size Venturi ejectors, select suction cup materials, and optimize pick-and-place cycle times.",
+  "author": {
+    "@type": "Organization",
+    "name": "Robotics Engineering",
+    "url": "https://roboticsengineeringlab.com/"
+  },
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-24",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering",
+    "url": "https://roboticsengineeringlab.com/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/vacuum-gripper-robot.html"
+  },
+  "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between a Venturi ejector and an electric vacuum pump on a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Venturi ejector uses compressed plant air to create vacuum locally right at the robot wrist, offering rapid response times and very low weight, but consuming continuous compressed air. An electric vacuum pump uses a motorized blower or vane pump, making it ideal for mobile robots (AMRs) or facilities where compressed air is unavailable or porous materials require very high air flow."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you size suction cups for high-acceleration robot pick-and-place?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Theoretical holding force is calculated using F = ΔP × A. However, for dynamic robot motion, engineers apply a safety factor of 2.0 for horizontal lifts with low acceleration, and 4.0 or higher for vertical lifts where shear forces act across the cup during rapid acceleration and deceleration."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is a blow-off pulse necessary for vacuum grippers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When a vacuum valve closes, residual negative pressure inside the suction cups and pneumatic hoses can cause parts to stick for several hundred milliseconds. An active blow-off pulse injects a brief burst of positive compressed air into the cups, breaking the vacuum immediately and reducing release cycle time down to 0.05–0.1 seconds."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../index.html">Cover</a>
+<a href="../6-dof-robot-arm-guide.html">Guide</a>
+<a href="arduino-robot-arm-tutorial.html">Articles</a>
+</div>
+</div>
+</nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm equipped with a vacuum gripper pick and place cell" loading="eager" decoding="async" width="1920" height="1080" />
+<div class="hero-inner">
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> End-of-Arm Tooling (EOAT) — Updated July 24, 2026</div>
+<h1>Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design</h1>
+<p class="hero-sub">Engineering guide to designing and sizing vacuum EOAT systems for 6-axis robot arms. Suction cup mechanics, Venturi ejector sizing, air consumption modeling, and cycle time optimization.</p>
+</div>
+</header>
+
+<main class="article-body container" aria-label="Main article content">
+
+<div class="article-img" style="margin:32px 0 48px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
+<img src="../industrial_robot_arm.jpg" alt="Robotic arm picking up sheet metal using multiple suction cups" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" loading="lazy" decoding="async" width="1400" height="800" />
+<div style="padding:14px 16px; font-size:0.82rem; color:#77736e; background:#181b21; border-top:1px solid rgba(255,255,255,0.06);">Image: Multi-cup vacuum end-effector handling smooth metal sheets.</div>
+</div>
+
+<h2>Why Vacuum Grippers Dominate High-Speed Pick-and-Place</h2>
+<p>Vacuum End-of-Arm Tooling (EOAT) is the standard solution for handling smooth, flat, or semi-porous objects across consumer goods, automotive glass, and electronics assembly. Unlike mechanical parallel grippers that require physical clearance around a part's perimeter, vacuum cups interface directly with the top surface. This allows high-density packing, box depalletizing, and part transfer without modifying fixture spacing.</p>
+<p>However, an effective vacuum system requires more than mounting rubber cups to an aluminum profile. Engineers must calculate theoretical holding forces against dynamic robot acceleration, manage internal line restrictions, and select the correct vacuum generation architecture.</p>
+
+<div class="pullquote">
+<blockquote>Vacuum gripping is atmospheric clamping: atmospheric pressure holds the workpiece against the cup when negative pressure is established inside.</blockquote>
+<cite>- Robotics Engineering, Pneumatic Automation Division</cite>
+</div>
+
+<h2>Theoretical vs. Dynamic Holding Force Calculations</h2>
+<p>The holding force generated by a vacuum cup is governed by the pressure differential (ΔP) between atmospheric pressure and the internal vacuum level, multiplied by the cup's effective surface area (A):</p>
+<p><strong>F = ΔP × A</strong></p>
+<p>For example, a 40 mm diameter suction cup has an effective area of roughly 12.57 cm² (0.001257 m²). Operating at a typical industrial vacuum level of -0.7 bar (70 kPa below ambient), the theoretical vertical holding force is approximately <strong>88 N</strong> (equivalent to roughly 9 kg of static mass at sea level).</p>
+
+<h3>Applying Dynamic Safety Factors</h3>
+<p>In high-speed 6-axis robot motion, static calculations are insufficient. When the arm accelerates laterally or rotates its wrist (J4, J5, J6), the workpiece experiences both shear forces and centrifugal forces. Engineers apply strict safety factors (S):</p>
+<ul>
+<li><strong>Horizontal Lift, Low Acceleration ( < 1g ):</strong> Safety factor S = 2.0.</li>
+<li><strong>Vertical Lift or High Acceleration ( > 1g ):</strong> Safety factor S = 4.0 or higher. Shear friction between the cup lip and the part surface is typically only 0.1 to 0.4 of the normal force, making slippage the primary failure mode.</li>
+</ul>
+
+<h2>Vacuum Generation: Decentralized Venturi vs. Electric Pumps</h2>
+<p>Selecting the vacuum generator impacts robot payload, response time, and energy efficiency. The two primary technologies used in 6-DOF robot cells are decentralized Venturi ejectors and electric vacuum blowers.</p>
+
+<div class="table-wrap" aria-label="Vacuum generator comparison">
+<table>
+<thead>
+<tr><th>Generator Type</th><th>Operating Principle</th><th>Best Application Fit</th><th>Key Trade-off</th></tr>
+</thead>
+<tbody>
+<tr><td>Decentralized Venturi (<a href="https://www.piab.com/" target="_blank" rel="noopener noreferrer">Piab</a> COAX)</td><td>Compressed air expansion</td><td>High-speed sheet metal, packaging</td><td>Consumes continuous compressed air (~20 L/min)</td></tr>
+<tr><td>Electric Vacuum Pump (<a href="https://www.schmalz.com/" target="_blank" rel="noopener noreferrer">Schmalz</a> ECBPM)</td><td>Integrated 24V DC motor</td><td>Autonomous mobile robots (AMRs), cobots</td><td>Higher mass on the wrist; lower peak vacuum flow</td></tr>
+<tr><td>Multi-Stage Ejector (<a href="https://www.festo.com/" target="_blank" rel="noopener noreferrer">Festo</a> OVEM)</td><td>Cascaded Venturi nozzles</td><td>Porous materials (cardboard, raw wood)</td><td>Requires larger pneumatic feed tubing</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>For high-speed industrial robots, decentralized Venturi ejectors mounted directly on the tool flange are preferred. Minimizing the hose length between the ejector and the suction cup eliminates pneumatic line latency, reducing the time required to build full vacuum down to <strong>0.05–0.15 seconds</strong>.</p>
+
+<h2>Suction Cup Geometry and Material Selection</h2>
+<p>Matching the cup material and shape to the workpiece prevents dropouts and surface marking:</p>
+<ul>
+<li><strong>Flat Cups:</strong> Offer high rigidity and minimal internal volume, resulting in the fastest evacuation times and the greatest resistance to shear forces during high-speed lateral motion. Ideal for flat steel, glass, and smooth plastic.</li>
+<li><strong>1.5 to 2.5 Bellows Cups:</strong> The accordion folds provide vertical compliance, allowing the cup to adapt to curved surfaces or height variations on a conveyor. However, bellows cups can buckle under high lateral acceleration.</li>
+<li><strong>Cup Materials:</strong> 
+  <strong>Nitrile (NBR)</strong> is cost-effective and oil-resistant for metal stamping; 
+  <strong>Silicone (VMQ)</strong> handles extreme temperatures and food-grade tasks but can leave microscopic residues on glass or painted surfaces; 
+  <strong>Polyurethane (Elastodur)</strong> provides maximum wear resistance in high-abrasion applications.</li>
+</ul>
+
+<h2>Cycle Time Optimization: The Blow-Off Pulse</h2>
+<p>In high-throughput pick-and-place cells, the release phase can become a bottleneck. Simply shutting off the compressed air to a Venturi ejector leaves residual vacuum inside the suction cup, causing the workpiece to cling for 200–500 ms after the command is sent.</p>
+<p>To achieve instantaneous release, industrial vacuum systems use an active <strong>blow-off pulse</strong>. When the drop command is executed, a small valve injects a brief burst of positive pressure (0.2–0.5 bar) into the cup cavity, equalizing pressure with the atmosphere in under 0.05 seconds. This allows the robot to immediately retract without dragging the part.</p>
+
+<h2>Implementation Checklist for Robot Cell Builders</h2>
+<ul>
+<li><strong>Calculate Total EOAT Weight:</strong> Include the mounting plate, manifolds, ejectors, sensors, and suction cups. Subtract this total from the robot's rated payload to determine maximum part capacity.</li>
+<li><strong>Minimize Pneumatic Tube Length:</strong> Mount the vacuum ejector and blow-off valve as close to the cups as possible. Every meter of hose adds dead volume and delays cycle response.</li>
+<li><strong>Install Digital Vacuum Switches:</strong> Never program blind pick timers. Use a digital pressure sensor with an adjustable threshold (e.g., confirming -0.65 bar) before initiating robot arm motion.</li>
+<li><strong>Account for Surface Porosity:</strong> When handling corrugated cardboard or raw wood, vacuum levels will drop due to leakage. Size the generator for high suction flow rate (L/min) rather than ultimate vacuum level.</li>
+</ul>
+
+<h2>Related Resources</h2>
+<ul>
+<li><a href="robot-arm-gripper-design.html">Gripper Design Guide for 6-DOF Robot Arms: Vacuum, Magnetic & Mechanical</a></li>
+<li><a href="magnetic-gripper-robot.html">Magnetic Gripper Design for 6-Axis Robot Arms: Ferrous Handling</a></li>
+<li><a href="robot-arm-cooling.html">Cooling Systems for High-Payload 6-Axis Robot Arms</a></li>
+<li><a href="robot-light-curtain-integration.html">Integrating Light Curtains with 6-DOF Robot Arms: Safety Zones & Setup</a></li>
+<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+</ul>
+
+<h2>Sources and Methodology</h2>
+<p>Technical data in this guide (e.g., -0.7 bar operating vacuum, 20 L/min air consumption benchmarks, safety factors) reflect industrial automation standards and technical documentation from manufacturers including Piab, Schmalz, and Festo. Mechanical safety considerations reference ISO 12100. Always verify holding force calculations on actual production samples to account for surface finish and porosity variations.</p>
+
+<div class="faq-item">
+<h4>What is the difference between a Venturi ejector and an electric vacuum pump on a robot arm?</h4>
+<p>A Venturi ejector uses compressed plant air to create vacuum locally right at the robot wrist, offering rapid response times and very low weight, but consuming continuous compressed air. An electric vacuum pump uses a motorized blower or vane pump, making it ideal for mobile robots (AMRs) or facilities where compressed air is unavailable.</p>
+</div>
+<div class="faq-item">
+<h4>How do you size suction cups for high-acceleration robot pick-and-place?</h4>
+<p>Theoretical holding force is calculated using F = ΔP × A. However, for dynamic robot motion, engineers apply a safety factor of 2.0 for horizontal lifts with low acceleration, and 4.0 or higher for vertical lifts where shear forces act across the cup during rapid acceleration and deceleration.</p>
+</div>
+<div class="faq-item">
+<h4>Why is a blow-off pulse necessary for vacuum grippers?</h4>
+<p>When a vacuum valve closes, residual negative pressure inside the suction cups and pneumatic hoses can cause parts to stick for several hundred milliseconds. An active blow-off pulse injects a brief burst of positive compressed air into the cups, breaking the vacuum immediately and reducing release cycle time down to 0.05–0.1 seconds.</p>
+</div>
+
+<div class="cta-banner" aria-label="Internal link call to action">
+<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
+<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete premium guide.</p>
+<a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
+</div>
+
+<div class="footer-nav" aria-label="Article navigation">
+<div>
+<a href="robot-end-effector-selection.html" class="back-link" aria-label="Previous article">← Previous: End Effector Selection Guide for 6-Axis Robot Arms</a>
+</div>
+<div>
+<a href="magnetic-gripper-robot.html" class="back-link" aria-label="Next article">Next: Magnetic Gripper Design for 6-Axis Robot Arms →</a>
+</div>
+</div>
+
+</main>
+
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+
+</body>
+</html>

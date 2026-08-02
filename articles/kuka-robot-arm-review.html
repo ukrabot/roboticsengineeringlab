@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>KUKA KR 20 R1810 Review (2026): Specs, Use Cases, Pricing & Integration Notes</title>
+<meta name="description" content="Independent engineering review of the KUKA KR 20 R1810: payload, reach, controller (KR C5), welding/assembly use cases, safety standards, and integration tips for USA & Canada." />
+<meta name="author" content="Robotics Engineering" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/kuka-robot-arm-review.html" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="KUKA KR 20 R1810 Review (2026): Specs, Use Cases, Pricing & Integration Notes" />
+<meta property="og:description" content="Independent engineering review of the KUKA KR 20 R1810: payload, reach, KR C5 controller, safety standards, and integration tips for USA & Canada." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/kuka-robot-arm-review.html" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="KUKA KR 20 R1810 Review (2026): Specs, Use Cases, Pricing & Integration Notes" />
+<meta name="twitter:description" content="Independent engineering review of the KUKA KR 20 R1810: payload, reach, KR C5 controller, and integration notes for USA & Canada." />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+
+<!-- Structured Data: Article + FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "KUKA KR 20 R1810 Review (2026): Specs, Use Cases, Pricing & Integration Notes",
+  "description": "Independent engineering review of the KUKA KR 20 R1810: payload, reach, controller (KR C5), welding/assembly use cases, safety standards, and integration tips for USA & Canada.",
+  "author": {
+    "@type": "Organization",
+    "name": "Robotics Engineering",
+    "url": "https://roboticsengineeringlab.com/"
+  },
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-24",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering",
+    "url": "https://roboticsengineeringlab.com/"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/kuka-robot-arm-review.html"
+  },
+  "image": [
+    "https://roboticsengineeringlab.com/industrial_robot_arm.jpg"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a 6-DOF robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 6-DOF (six degrees of freedom) robot arm has six independent joints that let it position and orient an end-effector throughout its workspace. This is the standard configuration for articulated industrial robots used in welding, handling, and assembly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the KUKA KR 20 R1810 a good fit for automotive welding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can be a strong fit for many welding cells when the tool weight, cable dress pack, duty cycle, and required reach are within the robot’s payload/reach envelope. Final suitability depends on torch package, cycle time, part access, and safety cell design."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What safety standards apply in the USA and Canada?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Common references include ISO 10218 for robot safety, ANSI/RIA R15.06 in the USA, and CSA Z434 in Canada. A formal risk assessment and appropriate safeguarding (e-stops, interlocks, scanners/light curtains where needed) are required for deployment."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* (Your original CSS unchanged, except optional minor additions) */
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+    <div class="nav-links">
+      <a href="../index.html">Cover</a>
+      <a href="../6-dof-robot-arm-guide.html">Guide</a>
+      <a href="arduino-robot-arm-tutorial.html">Articles</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero-article" aria-label="Article hero">
+  <img class="hero-bg"
+       src="../industrial_robot_arm.jpg"
+       alt="Industrial robot arm in a manufacturing cell"
+       loading="eager"
+       decoding="async"
+       width="1920"
+       height="1080" />
+  <div class="hero-inner">
+    <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — Updated July 24, 2026</div>
+    <h1>KUKA KR 20 R1810 Review (2026): What It’s Good At, What to Watch, and How to Spec It</h1>
+    <p class="hero-sub">
+      Engineering-focused review covering payload/reach fit, controller and integration notes, typical pricing signals, and safety considerations for USA & Canada.
+    </p>
+  </div>
+</header>
+
+<main class="article-body container" aria-label="Main article content">
+
+  <!-- Primary image -->
+  <div class="article-img" style="margin:32px 0 48px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
+    <img src="../industrial_robot_arm.jpg"
+         alt="Articulated industrial robot arm used for welding and handling"
+         style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);"
+         loading="lazy"
+         decoding="async"
+         width="1400"
+         height="800" />
+    <div style="padding:14px 16px; font-size:0.82rem; color:#77736e; background:#181b21; border-top:1px solid rgba(255,255,255,0.06);">
+      Image: representative industrial robot cell (for illustration).
+    </div>
+  </div>
+
+  <h2>Quick verdict</h2>
+  <p>
+    The <a href="https://www.kuka.com/en-us/products/robot-systems/industrial-robots/kr-20-r1810" target="_blank" rel="noopener noreferrer">KR 20 R1810</a>
+    is a practical choice when you need a <strong>~20 kg payload class</strong> articulated arm with enough reach for mid-size welding/handling tasks,
+    and you want to stay inside a mature ecosystem of industrial service, safety documentation, and integration tooling.
+  </p>
+
+  <h3>Best for</h3>
+  <ul>
+    <li>Automotive and tier suppliers running repeatable welding or handling cycles</li>
+    <li>General manufacturing cells where tool + cable package weight is predictable</li>
+    <li>Plants that already standardize on industrial fieldbuses and safety PLC workflows</li>
+  </ul>
+
+  <h3>Not ideal for</h3>
+  <ul>
+    <li>Applications requiring collaborative operation without a safety cell (use a cobot instead)</li>
+    <li>Very long reach or higher payload needs (step up to a larger class)</li>
+    <li>Teams needing a “plug-and-play” maker experience (industrial robots require engineering time)</li>
+  </ul>
+
+  <div class="pullquote">
+    <blockquote>Review focus: sizing, integration, safety and total cost — not marketing claims.</blockquote>
+    <cite>- Robotics Engineering editorial methodology</cite>
+  </div>
+
+  <h2>Core specs (what matters when sizing a cell)</h2>
+  <p>
+    Start with the sizing triad: <strong>payload</strong> (including EOAT + dress pack), <strong>reach</strong>, and <strong>duty cycle</strong>.
+    The KR 20 R1810 is commonly discussed around <strong>20 kg payload</strong> and <strong>~1810 mm reach</strong>.
+    Confirm the exact numbers in the official datasheet for your variant and mounting orientation.
+  </p>
+
+  <div class="table-wrap" aria-label="Sizing checklist">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Why it matters</th>
+          <th>What to verify</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Payload (kg)</td>
+          <td>Tool weight, cable forces, dynamic loads</td>
+          <td>EOAT mass + dress pack + worst-case acceleration</td>
+        </tr>
+        <tr>
+          <td>Reach (mm)</td>
+          <td>Part access, fixture layout, cell footprint</td>
+          <td>Real reach to weld seam / pick point with clearance</td>
+        </tr>
+        <tr>
+          <td>Repeatability</td>
+          <td>Quality, scrap rate, rework</td>
+          <td>Spec sheet + process capability study (Cp/Cpk) where possible</td>
+        </tr>
+        <tr>
+          <td>Controller & I/O</td>
+          <td>Integration cost/time</td>
+          <td>Bus support (PROFINET/EtherNet/IP), safety I/O, spares</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Engineering notes: kinematics, dynamics, and real payload</h2>
+  <p>
+    Like most 6-axis industrial arms, the KR 20 class uses a serial kinematic chain: base rotation, shoulder/elbow positioning, and a 3-axis wrist.
+    In practice, your “usable payload” is constrained by <strong>moment</strong> (tool length), not just mass.
+  </p>
+  <p>
+    If your EOAT is long (for example, a torch with extended neck or a large gripper), you may hit wrist torque limits before reaching the nominal payload.
+    Plan a margin for acceleration peaks and process forces (e.g., spot welding gun reaction forces).
+  </p>
+
+  <h2>Controller and integration (USA & Canada reality)</h2>
+  <p>
+    Many buyers care less about the arm itself and more about what it costs to integrate.
+    For KUKA deployments, confirm your controller generation (often referenced as <strong>KR C5</strong> in current product lines)
+    and your plant standard for communications:
+  </p>
+  <ul>
+    <li><strong>PLC/fieldbus:</strong> PROFINET, EtherNet/IP, EtherCAT (depending on your architecture)</li>
+    <li><strong>Safety:</strong> risk assessment workflow, safe stops, interlocks, scanners/light curtains as required</li>
+    <li><strong>Software stack:</strong> vendor tools + optional ROS 2 bridging for R&D (when appropriate)</li>
+  </ul>
+
+  <h2>Safety and compliance (don’t skip this)</h2>
+  <p>
+    In North America, typical references include
+    <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a> (USA),
+    <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a> (Canada),
+    and <strong>ISO 10218</strong>.
+    Final requirements depend on your cell design, guarding concept, and local OH&S rules.
+  </p>
+
+  <h2>Typical pricing signals & total cost (how buyers should think)</h2>
+  <p>
+    Industrial robot pricing varies with configuration, controller, options, integrator margin, and service terms.
+    In many North American projects, a robot in this class is often discussed in a broad band (for example <strong>USD ~$55k–$85k</strong> for the robot package),
+    but your <strong>cell cost</strong> can be multiple times that once you include tooling, safety, fixtures, and commissioning.
+  </p>
+  <p>
+    A useful approach: build a 5-year model including engineering hours, downtime risk, spare parts, training, and preventive maintenance.
+  </p>
+
+  <h2>Pros and cons (straightforward)</h2>
+  <h3>Pros</h3>
+  <ul>
+    <li>Strong fit for many mid-payload welding/handling cells</li>
+    <li>Mature industrial ecosystem (documentation, service networks, integration partners)</li>
+    <li>Good pathway to standard industrial safety and PLC integration practices</li>
+  </ul>
+
+  <h3>Cons / watch-outs</h3>
+  <ul>
+    <li>Integration effort can dominate cost (especially for first-time buyers)</li>
+    <li>Nominal payload is not the same as “usable payload” with long tools and fast motion</li>
+    <li>Not a cobot—assume guarding and a proper risk assessment</li>
+  </ul>
+
+  <h2>Buyer checklist (printable)</h2>
+  <ul>
+    <li><strong>Tooling:</strong> EOAT weight, length, and process forces documented</li>
+    <li><strong>Cycle:</strong> required takt time + acceleration limits defined</li>
+    <li><strong>Layout:</strong> reach study with fixtures, clearances, and cable routing</li>
+    <li><strong>Integration:</strong> PLC brand, bus protocol, and I/O list confirmed</li>
+    <li><strong>Safety:</strong> risk assessment owner assigned; safeguarding concept selected</li>
+    <li><strong>Support:</strong> local service availability and spare parts lead times checked</li>
+  </ul>
+
+  <h2>Related resources</h2>
+  <ul>
+    <li><a href="robot-arm-inverse-kinematics.html">Inverse kinematics for 6‑DOF robot arms</a></li>
+    <li><a href="robot-arm-safety-usa-canada.html">Robot safety standards in USA & Canada (ANSI/RIA, CSA, ISO)</a></li>
+    <li><a href="robot-arm-gripper-design.html">Gripper design guide (vacuum, magnetic, mechanical)</a></li>
+    <li><a href="robot-arm-plc-integration.html">Integrating robot arms with PLCs (Siemens / Allen‑Bradley)</a></li>
+    <li><a href="../6-dof-robot-arm-guide.html">Complete 6‑DOF robot arm guide (2026)</a></li>
+  </ul>
+
+  <h2>Sources</h2>
+  <ul>
+    <li>KUKA product page (KR 20 R1810): <a href="https://www.kuka.com/en-us/products/robot-systems/industrial-robots/kr-20-r1810" target="_blank" rel="noopener noreferrer">kuka.com</a></li>
+    <li>International Federation of Robotics: <a href="https://ifr.org/" target="_blank" rel="noopener noreferrer">ifr.org</a></li>
+    <li>ANSI/RIA standards: <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ansi.org</a></li>
+    <li>CSA Z434 overview: <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">csagroup.org</a></li>
+  </ul>
+
+  <p style="color:var(--text-muted); font-size:0.9rem; margin-top:26px;">
+    <strong>Editorial note:</strong> This review is informational and does not constitute a vendor quote. Specs and pricing should be confirmed with the manufacturer or an authorized integrator for your exact configuration and region.
+  </p>
+
+<div class="faq-item">
+    <h4>What is a 6-DOF robot arm?</h4>
+    <p>A 6-DOF robot arm has six independent joints that allow full positioning and orientation of the end-effector within its workspace.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Is the KR 20 R1810 a good fit for automotive welding?</h4>
+    <p>It can be, provided your torch package, reach, duty cycle, and safeguarding concept align with the robot’s payload/torque limits and your process requirements.</p>
+  </div>
+  <div class="faq-item">
+    <h4>What safety standards apply in the USA and Canada?</h4>
+    <p>Common references include ISO 10218, ANSI/RIA R15.06 (USA) and CSA Z434 (Canada). A formal risk assessment is required.</p>
+  </div>
+
+  <div class="cta-banner" aria-label="Internal link call to action">
+    <h3>Continue Reading: 6‑DOF Robot Arm Master Guide</h3>
+    <p>Specifications, pricing drivers, manufacturer comparisons, and buyer recommendations.</p>
+    <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
+  </div>
+
+  <div class="footer-nav" aria-label="Article navigation">
+    <div>
+      <a href="abb-robot-arm-review.html" class="back-link" aria-label="Previous article">← Previous: ABB IRB 2600 Review</a>
+    </div>
+    <div>
+      <a href="universal-robots-ur20.html" class="back-link" aria-label="Next article">Next: Universal Robots UR20 Review →</a>
+    </div>
+  </div>
+
+</main>
+
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+  <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+    <div>
+      <a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+      <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:360px;">
+        Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.
+      </p>
+    </div>
+    <div style="display:flex; gap:48px; flex-wrap:wrap;">
+      <div>
+        <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+        <ul style="list-style:none;">
+          <li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+          <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+        <ul style="list-style:none;">
+          <li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+          <li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
