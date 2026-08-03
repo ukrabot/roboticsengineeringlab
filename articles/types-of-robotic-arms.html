@@ -35,11 +35,6 @@
 <meta name="twitter:description" content="Articulated, SCARA, delta, Cartesian, cylindrical and polar arms compared — workspace, payload, speed, selection framework and FAQs.">
 <meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg">
 
-<!-- AdSense (replace client and slot with your IDs) -->
-<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
-<link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
-
 <!-- Schema: TechArticle -->
 <script type="application/ld+json">
 {
@@ -191,8 +186,6 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
 .type-card svg{width:100%;height:80px}
 .type-card h4{margin:8px 0 4px;font-size:.95rem;color:#fff}
 .type-card p{font-size:.8rem;margin:0;color:var(--faint);max-width:none}
-.ad{max-width:830px;margin:22px 0;padding:0}
-.ad .adsbygoogle{display:block;min-height:90px}
 @media(max-width:700px){
   .nav-links{gap:10px}
   .hero h1{font-size:2.35rem}
@@ -230,17 +223,6 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
 </nav>
 
 <main class="article-body container">
-  <!-- AdSense: Top in-article -->
-  <section class="ad" aria-label="Advertisement">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="0000001000"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-  </section>
-
   <p>Every robot arm on a factory floor is built around one of a small number of kinematic structures — the arrangement of joints and links that determines its workspace shape, speed, payload and precision. Picking the wrong structure for a task is one of the most common and most expensive automation mistakes: an arm that is technically capable of a job can still be the wrong tool if its workspace geometry, speed profile or footprint fight the application.</p>
   <p>This guide walks through the six configurations that cover almost every robotic arm you will encounter — articulated, SCARA, delta, Cartesian, cylindrical and polar — and gives a practical framework for narrowing down which one belongs in your process.</p>
 
@@ -314,17 +296,6 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
     <li><strong>Cons:</strong> More complex programming; larger safety envelope for the same reach; higher cost at heavy payloads.</li>
     <li><strong>Typical uses:</strong> Welding, tending, painting, palletizing, deburring.</li>
   </ul>
-
-  <!-- Mid-article ad -->
-  <section class="ad" aria-label="Advertisement">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="0000001001"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-  </section>
 
   <h2 id="scara">SCARA arms</h2>
   <p>SCARA stands for Selective Compliance Assembly Robot Arm. The structure has two parallel rotary joints that move in a horizontal plane, plus a rigid vertical (Z) axis for insertion or lifting. That "selective compliance" — flexible in X-Y, rigid in Z — is exactly what high-speed vertical insertion tasks like pin placement or PCB assembly need, and it is why SCARA robots dominate electronics manufacturing.</p>
@@ -404,17 +375,6 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
     <li><strong>Underestimating floor space for a spherical workspace.</strong> An articulated arm's sphere often needs more clear floor area than its reach number suggests once safety zones are added.</li>
     <li><strong>Assuming "cobot" means "any configuration is fine."</strong> Collaborative behavior is a safety layer on top of a structure — verify the underlying kinematics still fit the task.</li>
   </ul>
-
-  <!-- Bottom in-article ad -->
-  <section class="ad" aria-label="Advertisement">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-0000000000000000"
-         data-ad-slot="0000001002"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-  </section>
 
   <h2 id="faq">Frequently asked questions</h2>
   <div class="faq-item">
