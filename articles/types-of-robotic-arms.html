@@ -1,14 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated (2026 Guide)</title>
-<meta name="description" content="A practical engineering comparison of the six main robot arm configurations — articulated, SCARA, delta, Cartesian, cylindrical and polar — covering workspace shape, payload, speed and how to choose.">
-<meta name="keywords" content="types of robotic arms, types of industrial robots, robot arm configurations, SCARA vs articulated, delta robot vs SCARA, cartesian robot arm, robot arm selection guide">
+<meta name="description" content="A practical engineering comparison of the six main robot arm configurations — articulated, SCARA, delta, Cartesian, cylindrical and polar — covering workspace shape, payload, speed, precision, costs and a step-by-step selection framework.">
+<meta name="keywords" content="types of robotic arms, types of industrial robots, robot arm configurations, SCARA vs articulated, delta robot vs SCARA, cartesian robot arm, robot arm selection guide, robotic arm types explained">
 <meta name="author" content="Robotics Engineering">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
+<link rel="alternate" hreflang="en" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
+
+<!-- Performance -->
+<link rel="preload" as="image" href="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" imagesrcset="https://roboticsengineeringlab.com/robotic_arm_hero.jpg 1600w" imagesizes="100vw" fetchpriority="high">
+
+<!-- Open Graph -->
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Robotics Engineering">
 <meta property="article:section" content="Robot Arm Fundamentals">
@@ -19,11 +25,22 @@
 <meta property="og:url" content="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
 <meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg">
 <meta property="og:image:alt" content="Industrial robot arm illustrating robotic arm configurations">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="900">
 <meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Types of Robotic Arms Explained (2026 Guide)">
-<meta name="twitter:description" content="Articulated, SCARA, delta, Cartesian, cylindrical and polar arms compared — workspace, payload, speed and selection framework.">
+<meta name="twitter:description" content="Articulated, SCARA, delta, Cartesian, cylindrical and polar arms compared — workspace, payload, speed, selection framework and FAQs.">
 <meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg">
+
+<!-- AdSense (replace client and slot with your IDs) -->
+<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+<link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
+
+<!-- Schema: TechArticle -->
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -31,115 +48,446 @@
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html"},
   "headline":"Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated",
   "description":"A practical engineering comparison of the six main robot arm configurations and a framework for choosing between them.",
-  "image":"https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
+  "image":{
+    "@type":"ImageObject",
+    "url":"https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
+    "width":1600,
+    "height":900
+  },
   "author":{"@type":"Organization","name":"Robotics Engineering"},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2026-08-02",
   "dateModified":"2026-08-02",
   "inLanguage":"en-US",
   "articleSection":"Robot Arm Fundamentals",
-  "keywords":["types of robotic arms","types of industrial robots","robot arm configurations"]
+  "isAccessibleForFree": true,
+  "keywords":[
+    "types of robotic arms","types of industrial robots","robot arm configurations",
+    "SCARA vs articulated","delta vs SCARA","Cartesian robot arm","robot arm selection guide"
+  ],
+  "about":[
+    {"@type":"Thing","name":"Industrial robotics"},
+    {"@type":"Thing","name":"Robot kinematics"}
+  ]
 }
 </script>
+
+<!-- Schema: FAQPage -->
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"FAQPage",
   "mainEntity":[
     {"@type":"Question","name":"What are the 6 main types of robotic arms?","acceptedAnswer":{"@type":"Answer","text":"The six main configurations are articulated (revolute), SCARA, delta (parallel), Cartesian (gantry), cylindrical and polar (spherical). Each is defined by its joint arrangement and the resulting workspace shape, not by brand or application alone."}},
-    {"@type":"Question","name":"What type of robot arm is fastest?","acceptedAnswer":{"@type":"Answer","text":"Delta robots are generally the fastest for light payloads, commonly used for high-speed pick-and-place because their parallel-link structure keeps moving mass low. SCARA robots are the next fastest for planar assembly tasks."}},
-    {"@type":"Question","name":"Which robot arm type is most common in industry?","acceptedAnswer":{"@type":"Answer","text":"Six-axis articulated arms are the most widely deployed configuration because their spherical workspace and multi-axis wrist handle the broadest range of tasks, from welding to machine tending to palletizing."}},
-    {"@type":"Question","name":"Is a cobot a different type of robotic arm?","acceptedAnswer":{"@type":"Answer","text":"Not structurally. Most collaborative robots use an articulated or SCARA kinematic structure; what makes them a cobot is power-and-force-limiting design and safety-rated monitoring, not a different joint arrangement."}}
+    {"@type":"Question","name":"What type of robot arm is fastest?","acceptedAnswer":{"@type":"Answer","text":"Delta robots are generally the fastest for light payloads because their parallel-link structure keeps moving mass low. SCARA robots are the next fastest for planar assembly tasks."}},
+    {"@type":"Question","name":"Which robot arm type is most common in industry?","acceptedAnswer":{"@type":"Answer","text":"Six-axis articulated arms are the most widely deployed configuration due to their spherical workspace and multi-axis wrist, which handle the broadest range of tasks from welding to machine tending to palletizing."}},
+    {"@type":"Question","name":"Is a cobot a different type of robotic arm?","acceptedAnswer":{"@type":"Answer","text":"Not structurally. Most collaborative robots use an articulated or SCARA kinematic structure; what makes them a cobot is power-and-force-limiting design and safety-rated monitoring, not a different joint arrangement."}},
+    {"@type":"Question","name":"SCARA vs articulated: which should I choose?","acceptedAnswer":{"@type":"Answer","text":"Choose SCARA for high-speed planar assembly and vertical insertions with light payloads. Choose an articulated arm for tasks that need arbitrary tool orientations, reach around obstacles, or multi-directional approach angles."}},
+    {"@type":"Question","name":"Are polar and cylindrical robots still relevant?","acceptedAnswer":{"@type":"Answer","text":"They exist but are less common in new specs. Cylindrical robots suit compact machine tending and rotary fixtures; polar robots are largely legacy, with articulated arms covering similar or better workspaces today."}}
   ]
 }
 </script>
+
+<!-- Schema: BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+    {"@type":"ListItem","position":2,"name":"Types of Robotic Arms","item":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html"}
+  ]
+}
+</script>
+
+<!-- Schema: ItemList of arm types -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ItemList",
+  "name":"Robotic arm types",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Articulated (revolute) robot"},
+    {"@type":"ListItem","position":2,"name":"SCARA robot"},
+    {"@type":"ListItem","position":3,"name":"Delta (parallel) robot"},
+    {"@type":"ListItem","position":4,"name":"Cartesian (gantry) robot"},
+    {"@type":"ListItem","position":5,"name":"Cylindrical robot"},
+    {"@type":"ListItem","position":6,"name":"Polar (spherical) robot"}
+  ]
+}
+</script>
+
+<!-- Schema: HowTo (selection framework) -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"HowTo",
+  "name":"How to choose the right robotic arm type",
+  "description":"A step-by-step framework to select a robot arm configuration based on workspace, speed, payload and orientation needs.",
+  "totalTime":"PT3M",
+  "estimatedCost":{"@type":"MonetaryAmount","currency":"USD","value":"0"},
+  "step":[
+    {"@type":"HowToStep","name":"Map your required points","text":"List all pick/place points and approach vectors; define minimum/maximum Z heights and clearances."},
+    {"@type":"HowToStep","name":"Match workspace geometry","text":"Use workspace shape as the first filter: spherical (articulated), cylindrical (SCARA/cylindrical), rectangular (Cartesian), shallow dome (delta)."},
+    {"@type":"HowToStep","name":"Check speed vs payload","text":"Use delta or SCARA for high-speed, light payloads; Cartesian or articulated for heavier loads."},
+    {"@type":"HowToStep","name":"Confirm orientation needs","text":"If arbitrary tool angles or wrist articulation are required, prefer articulated (6-axis)."},
+    {"@type":"HowToStep","name":"Validate footprint and guarding","text":"Ensure floor space fits the required safety and maintenance clearances."}
+  ]
+}
+</script>
+
 <style>
-:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--faint:#77736e;--gold:#c9a96e;--blue:#77a5e8;--line:rgba(255,255,255,.09)}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--ink);color:var(--text);line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1100px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 0}.nav-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}.logo{font:1.35rem Georgia,serif;color:var(--text);text-decoration:none}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px}.nav-links a{color:var(--muted);font-size:.85rem;text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:flex-end;overflow:hidden}.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.42) contrast(1.08)}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,20,.25),rgba(11,14,20,.75) 70%,var(--ink));pointer-events:none}.hero-inner{position:relative;z-index:1;width:100%;padding:100px 24px 76px;max-width:1100px;margin:auto}.eyebrow{color:var(--gold);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}.hero h1{max-width:900px;margin-top:16px;font:300 clamp(2.3rem,5vw,4rem)/1.08 Georgia,serif}.hero-sub{max-width:760px;margin-top:18px;color:var(--muted);font-size:1.05rem}.article-body{padding-top:68px;padding-bottom:90px}.article-body h2{margin:56px 0 18px;font:300 2rem/1.15 Georgia,serif;color:#fff}.article-body h3{margin:32px 0 10px;font:400 1.25rem/1.2 Georgia,serif}.article-body p{max-width:830px;margin-bottom:20px;color:var(--muted)}.article-body ul,.article-body ol{max-width:830px;padding-left:25px;margin:14px 0 24px;color:var(--muted)}li{margin:8px 0}.article-img{max-width:830px;margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{display:block;width:100%;height:auto}.caption{padding:12px 16px;background:var(--card);color:var(--faint);font-size:.82rem}.toc,.callout,.cta{max-width:830px;border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0;background:linear-gradient(135deg,rgba(201,169,110,.09),rgba(119,165,232,.05))}.toc strong{display:block;margin-bottom:8px;color:#fff}.toc ol{margin:0}.table-wrap{max-width:100%;overflow-x:auto;margin:22px 0 28px;border:1px solid var(--line);border-radius:12px}.table-wrap table{width:100%;min-width:690px;border-collapse:collapse;font-size:.88rem}.table-wrap th{background:var(--card);color:var(--faint);padding:13px;text-align:left;text-transform:uppercase;font-size:.72rem;letter-spacing:.06em}.table-wrap td{padding:13px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}.table-wrap td:first-child{color:var(--text);font-weight:500}.callout{border-left:3px solid var(--gold);border-radius:0 14px 14px 0}.callout strong{color:var(--text)}.formula{max-width:830px;padding:16px 20px;background:#11151d;border:1px solid var(--line);border-radius:10px;color:#e4d5b4;font-family:ui-monospace,monospace;overflow:auto}.faq-item{max-width:830px;border-bottom:1px solid var(--line);padding:18px 0}.faq-item summary{cursor:pointer;color:var(--text);font-weight:500}.faq-item p{margin:12px 0 0;font-size:.94rem}.cta{text-align:center}.btn{display:inline-block;margin-top:8px;padding:11px 24px;border-radius:999px;background:var(--gold);color:#1a1408;text-decoration:none;font-weight:700}.footer-nav{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:32px;margin-top:55px}.footer-nav a{color:var(--gold);text-decoration:none}footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);font-size:.83rem}
-.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:830px;margin:8px 0 32px}.type-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card)}.type-card svg{width:100%;height:80px}.type-card h4{margin:8px 0 4px;font-size:.95rem;color:#fff}.type-card p{font-size:.8rem;margin:0;color:var(--faint);max-width:none}
-@media(max-width:700px){.nav-links{gap:10px}.hero h1{font-size:2.35rem}.hero-inner{padding-top:80px}.article-body h2{font-size:1.7rem}.type-grid{grid-template-columns:repeat(2,1fr)}}
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#d7d3c8;--faint:#9a9488;--gold:#c9a96e;--blue:#77a5e8;--line:rgba(255,255,255,.09)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--ink);color:var(--text);line-height:1.7}
+a{color:var(--blue);text-underline-offset:3px}
+.container{max-width:1100px;margin:auto;padding:0 24px}
+.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 0}
+.nav-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.logo{font:1.35rem Georgia,serif;color:var(--text);text-decoration:none}
+.logo span{color:var(--gold);font-style:italic}
+.nav-links{display:flex;gap:20px}
+.nav-links a{color:var(--muted);font-size:.9rem;text-decoration:none}
+.hero{position:relative;min-height:54vh;display:flex;align-items:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.42) contrast(1.08)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,20,.25),rgba(11,14,20,.75) 70%,var(--ink));pointer-events:none}
+.hero-inner{position:relative;z-index:1;width:100%;padding:100px 24px 76px;max-width:1100px;margin:auto}
+.eyebrow{color:var(--gold);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.hero h1{max-width:900px;margin-top:16px;font:300 clamp(2.3rem,5vw,4rem)/1.08 Georgia,serif}
+.hero-sub{max-width:860px;margin-top:18px;color:var(--muted);font-size:1.08rem}
+.breadcrumbs{max-width:1100px;margin:10px auto 0;padding:0 24px;color:var(--faint);font-size:.85rem}
+.breadcrumbs a{color:var(--muted);text-decoration:none}
+.article-body{padding-top:48px;padding-bottom:90px}
+.article-body h2{margin:56px 0 18px;font:300 2rem/1.15 Georgia,serif;color:#fff}
+.article-body h3{margin:32px 0 10px;font:400 1.25rem/1.2 Georgia,serif}
+.article-body p{max-width:830px;margin-bottom:18px;color:var(--muted)}
+.article-body ul,.article-body ol{max-width:830px;padding-left:25px;margin:14px 0 24px;color:var(--muted)}
+li{margin:8px 0}
+.article-img{max-width:830px;margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.article-img img{display:block;width:100%;height:auto}
+.caption{padding:12px 16px;background:var(--card);color:var(--faint);font-size:.82rem}
+.toc,.callout,.cta,.glossary{max-width:830px;border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0;background:linear-gradient(135deg,rgba(201,169,110,.09),rgba(119,165,232,.05))}
+.toc strong{display:block;margin-bottom:8px;color:#fff}
+.toc ol{margin:0}
+.table-wrap{max-width:100%;overflow-x:auto;margin:22px 0 28px;border:1px solid var(--line);border-radius:12px}
+.table-wrap table{width:100%;min-width:720px;border-collapse:collapse;font-size:.9rem}
+.table-wrap th{background:var(--card);color:var(--faint);padding:13px;text-align:left;text-transform:uppercase;font-size:.72rem;letter-spacing:.06em}
+.table-wrap td{padding:13px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}
+.table-wrap td:first-child{color:var(--text);font-weight:500}
+.callout{border-left:3px solid var(--gold);border-radius:0 14px 14px 0}
+.callout strong{color:var(--text)}
+.formula{max-width:830px;padding:14px 18px;background:#11151d;border:1px solid var(--line);border-radius:10px;color:#e4d5b4;font-family:ui-monospace,monospace;overflow:auto}
+.faq-item{max-width:830px;border-bottom:1px solid var(--line);padding:18px 0}
+.faq-item summary{cursor:pointer;color:var(--text);font-weight:600}
+.faq-item p{margin:12px 0 0;font-size:.95rem}
+.cta{text-align:center}
+.btn{display:inline-block;margin-top:8px;padding:11px 24px;border-radius:999px;background:var(--gold);color:#1a1408;text-decoration:none;font-weight:700}
+.footer-nav{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:32px;margin-top:55px}
+.footer-nav a{color:var(--gold);text-decoration:none}
+footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);font-size:.83rem}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:830px;margin:8px 0 32px}
+.type-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--card)}
+.type-card svg{width:100%;height:80px}
+.type-card h4{margin:8px 0 4px;font-size:.95rem;color:#fff}
+.type-card p{font-size:.8rem;margin:0;color:var(--faint);max-width:none}
+.ad{max-width:830px;margin:22px 0;padding:0}
+.ad .adsbygoogle{display:block;min-height:90px}
+@media(max-width:700px){
+  .nav-links{gap:10px}
+  .hero h1{font-size:2.35rem}
+  .hero-inner{padding-top:80px}
+  .article-body h2{font-size:1.7rem}
+  .type-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
-<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a class="logo" href="../index.html">Robotics <span>Engineering</span></a><div class="nav-links"><a href="../index.html">Cover</a><a href="../6-dof-robot-arm-guide.html">Guide</a><a href="arduino-robot-arm-tutorial.html">Articles</a></div></div></nav>
-<header class="hero"><img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Industrial robot arm representing robotic arm configurations" width="1600" height="900" loading="eager"><div class="hero-inner"><div class="eyebrow">Robot arm fundamentals · Updated August 2, 2026</div><h1>Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated</h1><p class="hero-sub">Six workspace geometries, one decision: which robot arm configuration actually fits your part, your speed target and your floor space.</p></div></header>
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner container">
+    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <div class="nav-links">
+      <a href="../index.html">Cover</a>
+      <a href="../6-dof-robot-arm-guide.html">Guide</a>
+      <a href="arduino-robot-arm-tutorial.html">Articles</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Industrial robot arm representing robotic arm configurations" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high">
+  <div class="hero-inner">
+    <div class="eyebrow">Robot arm fundamentals · Updated August 2, 2026</div>
+    <h1>Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated</h1>
+    <p class="hero-sub">Six workspace geometries, one decision: which robot arm configuration actually fits your part, your speed target and your floor space.</p>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a> › <span>Types of Robotic Arms</span>
+  </div>
+</nav>
+
 <main class="article-body container">
-<p>Every robot arm on a factory floor is built around one of a small number of kinematic structures — the arrangement of joints and links that determines its workspace shape, speed, payload and precision. Picking the wrong structure for a task is one of the most common and most expensive automation mistakes: an arm that is technically capable of a job can still be the wrong tool if its workspace geometry, speed profile or footprint fight the application.</p>
-<p>This guide walks through the six configurations that cover almost every robotic arm you will encounter — articulated, SCARA, delta, Cartesian, cylindrical and polar — and gives a practical framework for narrowing down which one belongs in your process.</p>
-<nav class="toc" aria-label="Table of contents"><strong>In this guide</strong><ol><li><a href="#comparison">Quick comparison table</a></li><li><a href="#articulated">Articulated (6-axis) arms</a></li><li><a href="#scara">SCARA arms</a></li><li><a href="#delta">Delta / parallel arms</a></li><li><a href="#cartesian">Cartesian / gantry robots</a></li><li><a href="#cylindrical">Cylindrical arms</a></li><li><a href="#polar">Polar / spherical arms</a></li><li><a href="#cobots">Where cobots fit in</a></li><li><a href="#choosing">How to choose: a decision framework</a></li><li><a href="#mistakes">Common selection mistakes</a></li><li><a href="#faq">Frequently asked questions</a></li></ol></nav>
+  <!-- AdSense: Top in-article -->
+  <section class="ad" aria-label="Advertisement">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-0000000000000000"
+         data-ad-slot="0000001000"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </section>
 
-<h2 id="comparison">Quick comparison: workspace shape at a glance</h2>
-<p>Before the detail, here is the shape each configuration traces through space. Workspace geometry is the single most useful filter when narrowing down a robot type, because it tells you immediately whether the arm can physically reach the points your process needs.</p>
-<div class="type-grid">
-<div class="type-card"><svg viewBox="0 0 120 90"><circle cx="60" cy="50" r="30" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="70" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="70" x2="60" y2="40" stroke="#f2f0eb" stroke-width="2"/><line x1="60" y1="40" x2="80" y2="28" stroke="#f2f0eb" stroke-width="2"/></svg><h4>Articulated</h4><p>Spherical envelope, 4–6+ rotary joints</p></div>
-<div class="type-card"><svg viewBox="0 0 120 90"><ellipse cx="60" cy="65" rx="34" ry="9" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><ellipse cx="60" cy="30" rx="34" ry="9" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><line x1="26" y1="30" x2="26" y2="65" stroke="#c9a96e" stroke-width="1" opacity=".4"/><line x1="94" y1="30" x2="94" y2="65" stroke="#c9a96e" stroke-width="1" opacity=".4"/><rect x="52" y="12" width="16" height="10" fill="#77a5e8"/><line x1="60" y1="22" x2="80" y2="30" stroke="#f2f0eb" stroke-width="2"/></svg><h4>SCARA</h4><p>Cylindrical envelope, rigid Z-axis</p></div>
-<div class="type-card"><svg viewBox="0 0 120 90"><rect x="30" y="10" width="60" height="10" fill="#77a5e8"/><line x1="38" y1="20" x2="55" y2="55" stroke="#c9a96e" stroke-width="2"/><line x1="82" y1="20" x2="65" y2="55" stroke="#c9a96e" stroke-width="2"/><line x1="60" y1="20" x2="60" y2="55" stroke="#c9a96e" stroke-width="2"/><rect x="48" y="55" width="24" height="8" fill="#f2f0eb"/><path d="M40 70 Q60 60 80 70" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="3 3"/></svg><h4>Delta</h4><p>Shallow dome, parallel links</p></div>
-<div class="type-card"><svg viewBox="0 0 120 90"><rect x="20" y="18" width="80" height="54" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><line x1="20" y1="45" x2="100" y2="45" stroke="#77a5e8" stroke-width="2"/><line x1="60" y1="18" x2="60" y2="72" stroke="#77a5e8" stroke-width="2" opacity=".5"/><rect x="52" y="38" width="16" height="14" fill="#f2f0eb"/></svg><h4>Cartesian</h4><p>Rectangular envelope, linear rails</p></div>
-<div class="type-card"><svg viewBox="0 0 120 90"><path d="M60 80 L60 30 A34 34 0 0 1 94 55 Z" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="72" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="72" x2="60" y2="34" stroke="#f2f0eb" stroke-width="2"/></svg><h4>Cylindrical</h4><p>Cylindrical wedge, rotary + linear</p></div>
-<div class="type-card"><svg viewBox="0 0 120 90"><path d="M60 82 A40 40 0 0 1 100 42" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><path d="M60 82 A40 40 0 0 0 20 42" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="72" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="72" x2="85" y2="45" stroke="#f2f0eb" stroke-width="2"/></svg><h4>Polar</h4><p>Spherical wedge, pivoting base</p></div>
-</div>
+  <p>Every robot arm on a factory floor is built around one of a small number of kinematic structures — the arrangement of joints and links that determines its workspace shape, speed, payload and precision. Picking the wrong structure for a task is one of the most common and most expensive automation mistakes: an arm that is technically capable of a job can still be the wrong tool if its workspace geometry, speed profile or footprint fight the application.</p>
+  <p>This guide walks through the six configurations that cover almost every robotic arm you will encounter — articulated, SCARA, delta, Cartesian, cylindrical and polar — and gives a practical framework for narrowing down which one belongs in your process.</p>
 
-<div class="table-wrap"><table><caption class="caption">General engineering ranges. Always confirm payload, reach and speed against a specific model's data sheet.</caption><thead><tr><th>Type</th><th>Workspace</th><th>Typical payload</th><th>Relative speed</th><th>Best for</th></tr></thead><tbody>
-<tr><td>Articulated</td><td>Spherical</td><td>~3 kg to 800+ kg</td><td>Medium-high</td><td>Welding, machine tending, palletizing, general handling</td></tr>
-<tr><td>SCARA</td><td>Cylindrical</td><td>~1–20 kg</td><td>High</td><td>Electronics assembly, dispensing, fast pick-and-place</td></tr>
-<tr><td>Delta</td><td>Shallow dome</td><td>~0.1–8 kg</td><td>Very high</td><td>Food, pharma and cosmetics packaging at high cycle rates</td></tr>
-<tr><td>Cartesian / gantry</td><td>Rectangular</td><td>Light to very heavy</td><td>Medium</td><td>Long-travel CNC loading, 3D printing, palletizing gantries</td></tr>
-<tr><td>Cylindrical</td><td>Cylindrical wedge</td><td>~10–150 kg</td><td>Medium</td><td>Compact machine tending, rotary fixture loading</td></tr>
-<tr><td>Polar / spherical</td><td>Spherical wedge</td><td>Varies by model</td><td>Medium</td><td>Legacy heavy handling; largely superseded by articulated arms</td></tr>
-</tbody></table></div>
+  <nav class="toc" aria-label="Table of contents">
+    <strong>In this guide</strong>
+    <ol>
+      <li><a href="#comparison">Quick comparison table</a></li>
+      <li><a href="#articulated">Articulated (6-axis) arms</a></li>
+      <li><a href="#scara">SCARA arms</a></li>
+      <li><a href="#delta">Delta / parallel arms</a></li>
+      <li><a href="#cartesian">Cartesian / gantry robots</a></li>
+      <li><a href="#cylindrical">Cylindrical arms</a></li>
+      <li><a href="#polar">Polar / spherical arms</a></li>
+      <li><a href="#cobots">Where cobots fit in</a></li>
+      <li><a href="#choosing">How to choose: a decision framework</a></li>
+      <li><a href="#mistakes">Common selection mistakes</a></li>
+      <li><a href="#faq">Frequently asked questions</a></li>
+    </ol>
+  </nav>
 
-<h2 id="articulated">Articulated (revolute) arms</h2>
-<p>Articulated arms use a chain of rotary joints — most commonly six — mounted on a fixed or mobile base, mimicking a human shoulder-elbow-wrist arrangement. Because every joint rotates, the reachable workspace approximates a sphere, which is why articulated arms handle the widest range of orientations and part geometries of any configuration. This is the arm type most people picture when they hear "industrial robot," and it is the structure behind the compact FANUC LR Mate reviewed on this site, the mid-size <a href="kuka-robot-arm-review.html">KUKA KR 20 R1810</a>, and heavier-duty collaborative arms like the <a href="universal-robots-ur20.html">Universal Robots UR20</a>.</p>
-<p>The tradeoff for that flexibility is programming complexity and, at the joint level, lower stiffness than a Cartesian structure at equivalent reach — every additional degree of freedom is another source of compliance and calibration error. For the full math behind positioning an articulated wrist at a target pose, see our <a href="robot-arm-inverse-kinematics.html">inverse kinematics guide</a>.</p>
+  <h2 id="comparison">Quick comparison: workspace shape at a glance</h2>
+  <p>Before the detail, here is the shape each configuration traces through space. Workspace geometry is the single most useful filter when narrowing down a robot type, because it tells you immediately whether the arm can physically reach the points your process needs.</p>
 
-<h2 id="scara">SCARA arms</h2>
-<p>SCARA stands for Selective Compliance Assembly Robot Arm. The structure has two parallel rotary joints that move in a horizontal plane, plus a rigid vertical (Z) axis for insertion or lifting. That "selective compliance" — flexible in X-Y, rigid in Z — is exactly what high-speed vertical insertion tasks like pin placement or PCB assembly need, and it is why SCARA robots dominate electronics manufacturing.</p>
-<p>Because the arm's mass stays largely in a horizontal plane and the structure is mechanically simpler than a 6-axis arm, SCARA robots achieve higher cycle rates than articulated arms at comparable payloads, at the cost of a smaller working envelope and no ability to approach a part from an arbitrary angle.</p>
+  <div class="type-grid">
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><circle cx="60" cy="50" r="30" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="70" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="70" x2="60" y2="40" stroke="#f2f0eb" stroke-width="2"/><line x1="60" y1="40" x2="80" y2="28" stroke="#f2f0eb" stroke-width="2"/></svg>
+      <h4>Articulated</h4><p>Spherical envelope, 4–6+ rotary joints</p>
+    </div>
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><ellipse cx="60" cy="65" rx="34" ry="9" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><ellipse cx="60" cy="30" rx="34" ry="9" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><line x1="26" y1="30" x2="26" y2="65" stroke="#c9a96e" stroke-width="1" opacity=".4"/><line x1="94" y1="30" x2="94" y2="65" stroke="#c9a96e" stroke-width="1" opacity=".4"/><rect x="52" y="12" width="16" height="10" fill="#77a5e8"/><line x1="60" y1="22" x2="80" y2="30" stroke="#f2f0eb" stroke-width="2"/></svg>
+      <h4>SCARA</h4><p>Cylindrical envelope, rigid Z-axis</p>
+    </div>
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><rect x="30" y="10" width="60" height="10" fill="#77a5e8"/><line x1="38" y1="20" x2="55" y2="55" stroke="#c9a96e" stroke-width="2"/><line x1="82" y1="20" x2="65" y2="55" stroke="#c9a96e" stroke-width="2"/><line x1="60" y1="20" x2="60" y2="55" stroke="#c9a96e" stroke-width="2"/><rect x="48" y="55" width="24" height="8" fill="#f2f0eb"/><path d="M40 70 Q60 60 80 70" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+      <h4>Delta</h4><p>Shallow dome, parallel links</p>
+    </div>
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><rect x="20" y="18" width="80" height="54" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><line x1="20" y1="45" x2="100" y2="45" stroke="#77a5e8" stroke-width="2"/><line x1="60" y1="18" x2="60" y2="72" stroke="#77a5e8" stroke-width="2" opacity=".5"/><rect x="52" y="38" width="16" height="14" fill="#f2f0eb"/></svg>
+      <h4>Cartesian</h4><p>Rectangular envelope, linear rails</p>
+    </div>
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><path d="M60 80 L60 30 A34 34 0 0 1 94 55 Z" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="72" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="72" x2="60" y2="34" stroke="#f2f0eb" stroke-width="2"/></svg>
+      <h4>Cylindrical</h4><p>Cylindrical wedge, rotary + linear</p>
+    </div>
+    <div class="type-card">
+      <svg viewBox="0 0 120 90"><path d="M60 82 A40 40 0 0 1 100 42" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><path d="M60 82 A40 40 0 0 0 20 42" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="4 3"/><rect x="50" y="72" width="20" height="10" fill="#77a5e8"/><line x1="60" y1="72" x2="85" y2="45" stroke="#f2f0eb" stroke-width="2"/></svg>
+      <h4>Polar</h4><p>Spherical wedge, pivoting base</p>
+    </div>
+  </div>
 
-<h2 id="delta">Delta / parallel arms</h2>
-<p>Delta robots hang three (occasionally four) parallel arms from a fixed overhead frame down to a common end-effector platform. Because the motors stay mounted on the frame instead of traveling with the arm, the moving mass is very low — which is the entire reason delta robots hold the speed record among industrial arm types. Their tradeoff is a shallow, dome-shaped workspace and light payload ceiling, which is why they are almost exclusively used for high-speed, low-payload picking on conveyor lines: food packaging, pharmaceutical blister packs, small-parts sorting.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="caption">General engineering ranges. Always confirm payload, reach and speed against a specific model's data sheet.</caption>
+      <thead><tr><th>Type</th><th>Workspace</th><th>Typical payload</th><th>Relative speed</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td>Articulated</td><td>Spherical</td><td>~3 kg to 800+ kg</td><td>Medium–high</td><td>Welding, machine tending, palletizing, general handling</td></tr>
+        <tr><td>SCARA</td><td>Cylindrical</td><td>~1–20 kg</td><td>High</td><td>Electronics assembly, dispensing, fast pick-and-place</td></tr>
+        <tr><td>Delta</td><td>Shallow dome</td><td>~0.1–8 kg</td><td>Very high</td><td>Food/pharma/cosmetics high-speed picking</td></tr>
+        <tr><td>Cartesian / gantry</td><td>Rectangular</td><td>Light to very heavy</td><td>Medium</td><td>Long-travel CNC loading, 3D printing, palletizing gantries</td></tr>
+        <tr><td>Cylindrical</td><td>Cylindrical wedge</td><td>~10–150 kg</td><td>Medium</td><td>Compact machine tending, rotary fixture loading</td></tr>
+        <tr><td>Polar / spherical</td><td>Spherical wedge</td><td>Varies by model</td><td>Medium</td><td>Legacy heavy handling; often superseded by articulated arms</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-<h2 id="cartesian">Cartesian / gantry robots</h2>
-<p>Cartesian robots move along three linear, mutually perpendicular axes (X, Y, Z) instead of rotating joints. That linear-only motion makes them mechanically simple, highly rigid, and straightforward to program — moving in a straight line is the native motion, not an interpolated one. Gantry-style Cartesian systems can also scale to very large working volumes simply by lengthening the rails, which is why they show up in large-format 3D printing, CNC machine loading and warehouse-scale palletizing where an articulated arm's reach would be the limiting factor.</p>
-<p>The cost of that rigidity is a rectangular workspace that wastes floor space relative to a sphere, and no ability to change tool orientation without adding a rotary wrist module.</p>
+  <h2 id="articulated">Articulated (revolute) arms</h2>
+  <p>Articulated arms use a chain of rotary joints — most commonly six — mounted on a fixed or mobile base, mimicking a human shoulder-elbow-wrist arrangement. Because every joint rotates, the reachable workspace approximates a sphere, which is why articulated arms handle the widest range of orientations and part geometries of any configuration. This is the arm type most people picture when they hear "industrial robot," and it is the structure behind the compact FANUC LR Mate reviewed on this site, the mid-size <a href="kuka-robot-arm-review.html">KUKA KR 20 R1810</a>, and heavier-duty collaborative arms like the <a href="universal-robots-ur20.html">Universal Robots UR20</a>.</p>
+  <p>The tradeoff for that flexibility is programming complexity and, at the joint level, lower stiffness than a Cartesian structure at equivalent reach — every additional degree of freedom is another source of compliance and calibration error. For the full math behind positioning an articulated wrist at a target pose, see our <a href="robot-arm-inverse-kinematics.html">inverse kinematics guide</a>.</p>
+  <ul>
+    <li><strong>Pros:</strong> Maximum orientation freedom; broad application coverage; excellent around-obstacle reach.</li>
+    <li><strong>Cons:</strong> More complex programming; larger safety envelope for the same reach; higher cost at heavy payloads.</li>
+    <li><strong>Typical uses:</strong> Welding, tending, painting, palletizing, deburring.</li>
+  </ul>
 
-<h2 id="cylindrical">Cylindrical arms</h2>
-<p>Cylindrical robots combine one rotary joint at the base with linear joints for radial and vertical motion, tracing a cylindrical (or wedge-shaped) workspace. They occupy a middle ground between Cartesian rigidity and articulated flexibility: compact, mechanically simple, and well suited to loading a rotary fixture or a small machine cell from a fixed station, but with limited orientation control at the tool.</p>
+  <!-- Mid-article ad -->
+  <section class="ad" aria-label="Advertisement">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-0000000000000000"
+         data-ad-slot="0000001001"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </section>
 
-<h2 id="polar">Polar (spherical) arms</h2>
-<p>Polar arms use two rotary joints plus one linear joint to sweep a spherical-wedge workspace — historically one of the earliest industrial robot layouts, used for heavy handling and early die-casting and forging cells. Most new deployments today use an articulated arm instead, which delivers a comparable or larger workspace with more orientation freedom for a similar footprint, so polar robots are now mostly found in legacy installations rather than new specifications.</p>
+  <h2 id="scara">SCARA arms</h2>
+  <p>SCARA stands for Selective Compliance Assembly Robot Arm. The structure has two parallel rotary joints that move in a horizontal plane, plus a rigid vertical (Z) axis for insertion or lifting. That "selective compliance" — flexible in X-Y, rigid in Z — is exactly what high-speed vertical insertion tasks like pin placement or PCB assembly need, and it is why SCARA robots dominate electronics manufacturing.</p>
+  <p>Because the arm's mass stays largely in a horizontal plane and the structure is mechanically simpler than a 6-axis arm, SCARA robots achieve higher cycle rates than articulated arms at comparable payloads, at the cost of a smaller working envelope and no ability to approach a part from an arbitrary angle.</p>
+  <ul>
+    <li><strong>Pros:</strong> Very fast cycles; excellent vertical insertion; compact footprint.</li>
+    <li><strong>Cons:</strong> Limited orientation control; cylindrical workspace only.</li>
+    <li><strong>Typical uses:</strong> Electronics assembly, screwdriving, dispensing, light pick-and-place.</li>
+  </ul>
 
-<h2 id="cobots">Where collaborative robots (cobots) fit in</h2>
-<p>"Cobot" describes a safety behavior, not a seventh kinematic type. Most collaborative robots are built on an articulated or SCARA structure and become collaborative through power-and-force limiting, rounded surfaces and safety-rated monitoring that allows them to share space with people without a fence, under a proper risk assessment. For a full comparison of collaborative arms by brand, payload and price, see our <a href="collaborative-robot-arm-2026.html">collaborative robot arm buying guide</a>.</p>
+  <h2 id="delta">Delta / parallel arms</h2>
+  <p>Delta robots hang three (occasionally four) parallel arms from a fixed overhead frame down to a common end-effector platform. Because the motors stay mounted on the frame instead of traveling with the arm, the moving mass is very low — which is the entire reason delta robots hold the speed record among industrial arm types. Their tradeoff is a shallow, dome-shaped workspace and light payload ceiling, which is why they are almost exclusively used for high-speed, low-payload picking on conveyor lines: food packaging, pharmaceutical blister packs, small-parts sorting.</p>
+  <ul>
+    <li><strong>Pros:</strong> Highest speeds; low moving mass; excellent for tracking conveyors.</li>
+    <li><strong>Cons:</strong> Limited payload; shallow workspace; overhead mounting required.</li>
+    <li><strong>Typical uses:</strong> Primary packaging, sorting, small-part kitting.</li>
+  </ul>
 
-<div class="callout"><strong>Rule of thumb:</strong> workspace shape first, then speed, then payload. An arm that cannot geometrically reach every point your process needs is disqualified regardless of how fast or strong it is.</div>
+  <h2 id="cartesian">Cartesian / gantry robots</h2>
+  <p>Cartesian robots move along three linear, mutually perpendicular axes (X, Y, Z) instead of rotating joints. That linear-only motion makes them mechanically simple, highly rigid, and straightforward to program — moving in a straight line is the native motion, not an interpolated one. Gantry-style Cartesian systems can also scale to very large working volumes simply by lengthening the rails, which is why they show up in large-format 3D printing, CNC machine loading and warehouse-scale palletizing where an articulated arm's reach would be the limiting factor.</p>
+  <p>The cost of that rigidity is a rectangular workspace that wastes floor space relative to a sphere, and no ability to change tool orientation without adding a rotary wrist module.</p>
+  <ul>
+    <li><strong>Pros:</strong> High rigidity; simple control; easily scalable working volume.</li>
+    <li><strong>Cons:</strong> Larger footprint; needs additional axes for wrist orientation.</li>
+    <li><strong>Typical uses:</strong> CNC loading, 3D printing, long-stroke handling, gantry palletizers.</li>
+  </ul>
 
-<h2 id="choosing">How to choose: a decision framework</h2>
-<div class="table-wrap"><table><thead><tr><th>If your priority is…</th><th>Start with</th></tr></thead><tbody>
-<tr><td>Maximum flexibility, varied part orientations</td><td>Articulated (6-axis)</td></tr>
-<tr><td>Fastest possible cycle time on light parts</td><td>Delta or SCARA</td></tr>
-<tr><td>High-speed vertical insertion (electronics)</td><td>SCARA</td></tr>
-<tr><td>Long, straight-line travel or very large payload</td><td>Cartesian / gantry</td></tr>
-<tr><td>Compact footprint feeding a single fixed station</td><td>Cylindrical</td></tr>
-<tr><td>Sharing space with operators, no fencing</td><td>Collaborative articulated or SCARA</td></tr>
-</tbody></table></div>
-<p>Once workspace shape narrows the field, size the arm against your actual load — not the headline payload number. Our <a href="robot-arm-payload-calculator.html">payload calculator</a> walks through including gripper weight, cabling and safety margin, and the <a href="robot-arm-roi-calculator.html">ROI calculator</a> helps translate a shortlist into a defensible business case.</p>
+  <h2 id="cylindrical">Cylindrical arms</h2>
+  <p>Cylindrical robots combine one rotary joint at the base with linear joints for radial and vertical motion, tracing a cylindrical (or wedge-shaped) workspace. They occupy a middle ground between Cartesian rigidity and articulated flexibility: compact, mechanically simple, and well suited to loading a rotary fixture or a small machine cell from a fixed station, but with limited orientation control at the tool.</p>
+  <ul>
+    <li><strong>Pros:</strong> Compact; simple kinematics; good for fixed-station tasks.</li>
+    <li><strong>Cons:</strong> Limited wrist DOF; constrained workspace wedge.</li>
+    <li><strong>Typical uses:</strong> Rotary fixture loading, compact tending cells.</li>
+  </ul>
 
-<h2 id="mistakes">Common selection mistakes</h2>
-<ul>
-<li><strong>Sizing from payload alone.</strong> Two arms with the same rated payload can have very different usable workspaces and wrist inertia limits.</li>
-<li><strong>Ignoring wrist orientation needs.</strong> A Cartesian or SCARA arm that cannot rotate a tool to the angle your process needs will fail regardless of its precision.</li>
-<li><strong>Underestimating floor space for a spherical workspace.</strong> An articulated arm's sphere often needs more clear floor area than its reach number suggests once safety zones are added.</li>
-<li><strong>Assuming "cobot" means "any configuration is fine."</strong> Collaborative behavior is a safety layer on top of a structure — verify the underlying kinematics still fit the task.</li>
-</ul>
+  <h2 id="polar">Polar (spherical) arms</h2>
+  <p>Polar arms use two rotary joints plus one linear joint to sweep a spherical-wedge workspace — historically one of the earliest industrial robot layouts, used for heavy handling and early die-casting and forging cells. Most new deployments today use an articulated arm instead, which delivers a comparable or larger workspace with more orientation freedom for a similar footprint, so polar robots are now mostly found in legacy installations rather than new specifications.</p>
+  <ul>
+    <li><strong>Pros:</strong> Spherical reach from a compact base; good legacy heavy handling.</li>
+    <li><strong>Cons:</strong> Less flexible than articulated; limited availability in new models.</li>
+    <li><strong>Typical uses:</strong> Legacy heavy-duty cells, specialized replacements.</li>
+  </ul>
 
-<h2 id="faq">Frequently asked questions</h2>
-<div class="faq-item"><details><summary>What are the 6 main types of robotic arms?</summary><p>Articulated, SCARA, delta, Cartesian, cylindrical and polar. Each is defined by its joint arrangement and the resulting workspace shape rather than by brand or industry.</p></details></div>
-<div class="faq-item"><details><summary>What type of robot arm is fastest?</summary><p>Delta robots generally lead on speed for light payloads because their motors stay off the moving structure. SCARA arms are the next fastest for planar assembly work.</p></details></div>
-<div class="faq-item"><details><summary>Which robot arm type is most common in industry?</summary><p>Six-axis articulated arms, because their spherical workspace and multi-axis wrist cover the broadest range of tasks from welding to palletizing.</p></details></div>
-<div class="faq-item"><details><summary>Is a cobot a different type of robotic arm?</summary><p>Not structurally. Most cobots use an articulated or SCARA kinematic structure; power-and-force limiting and safety monitoring is what makes them collaborative.</p></details></div>
+  <h2 id="cobots">Where collaborative robots (cobots) fit in</h2>
+  <p>"Cobot" describes a safety behavior, not a seventh kinematic type. Most collaborative robots are built on an articulated or SCARA structure and become collaborative through power-and-force limiting, rounded surfaces and safety-rated monitoring that allows them to share space with people without a fence, under a proper risk assessment. For a full comparison of collaborative arms by brand, payload and price, see our <a href="collaborative-robot-arm-2026.html">collaborative robot arm buying guide</a>.</p>
 
-<div class="cta"><h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3><p>Review robot architecture, programming, calibration and application fundamentals.</p><a class="btn" href="../6-dof-robot-arm-guide.html">Read the full guide →</a></div>
-<div class="footer-nav"><a href="robot-arm-inverse-kinematics.html">← Previous: Inverse kinematics for 6-DOF arms</a><a href="palletizing-robot-arm.html">Next: Palletizing robot arm guide →</a></div>
-</main><footer><div class="container"><a class="logo" href="../index.html">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ROS 2 and industrial automation.</p></div></footer>
-</body></html>
+  <div class="callout"><strong>Rule of thumb:</strong> workspace shape first, then speed, then payload. An arm that cannot geometrically reach every point your process needs is disqualified regardless of how fast or strong it is.</div>
+
+  <h2 id="choosing">How to choose: a decision framework</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>If your priority is…</th><th>Start with</th></tr></thead>
+      <tbody>
+        <tr><td>Maximum flexibility, varied part orientations</td><td>Articulated (6-axis)</td></tr>
+        <tr><td>Fastest possible cycle time on light parts</td><td>Delta or SCARA</td></tr>
+        <tr><td>High-speed vertical insertion (electronics)</td><td>SCARA</td></tr>
+        <tr><td>Long, straight-line travel or very large payload</td><td>Cartesian / gantry</td></tr>
+        <tr><td>Compact footprint feeding a single fixed station</td><td>Cylindrical</td></tr>
+        <tr><td>Sharing space with operators, no fencing</td><td>Collaborative articulated or SCARA</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ol>
+    <li><strong>Map points and approaches:</strong> all pick/place poses, approach angles and Z heights.</li>
+    <li><strong>Match workspace:</strong> spherical vs cylindrical vs rectangular vs dome.</li>
+    <li><strong>Filter by speed/payload:</strong> delta/SCARA for light and fast; Cartesian/articulated for heavy or long travel.</li>
+    <li><strong>Check orientation needs:</strong> if you need arbitrary wrist angles, prefer articulated.</li>
+    <li><strong>Validate cell footprint and guarding:</strong> include safety zones and maintenance access.</li>
+    <li><strong>Build a shortlist and model ROI:</strong> use our <a href="robot-arm-payload-calculator.html">payload calculator</a> and <a href="robot-arm-roi-calculator.html">ROI calculator</a>.</li>
+  </ol>
+
+  <h2 id="mistakes">Common selection mistakes</h2>
+  <ul>
+    <li><strong>Sizing from payload alone.</strong> Two arms with the same rated payload can have very different usable workspaces and wrist inertia limits.</li>
+    <li><strong>Ignoring wrist orientation needs.</strong> A Cartesian or SCARA arm that cannot rotate a tool to the angle your process needs will fail regardless of its precision.</li>
+    <li><strong>Underestimating floor space for a spherical workspace.</strong> An articulated arm's sphere often needs more clear floor area than its reach number suggests once safety zones are added.</li>
+    <li><strong>Assuming "cobot" means "any configuration is fine."</strong> Collaborative behavior is a safety layer on top of a structure — verify the underlying kinematics still fit the task.</li>
+  </ul>
+
+  <!-- Bottom in-article ad -->
+  <section class="ad" aria-label="Advertisement">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-0000000000000000"
+         data-ad-slot="0000001002"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  </section>
+
+  <h2 id="faq">Frequently asked questions</h2>
+  <div class="faq-item">
+    <details>
+      <summary>What are the 6 main types of robotic arms?</summary>
+      <p>Articulated, SCARA, delta, Cartesian, cylindrical and polar. Each is defined by its joint arrangement and the resulting workspace shape rather than by brand or industry.</p>
+    </details>
+  </div>
+  <div class="faq-item">
+    <details>
+      <summary>What type of robot arm is fastest?</summary>
+      <p>Delta robots generally lead on speed for light payloads because their motors stay off the moving structure. SCARA arms are the next fastest for planar assembly work.</p>
+    </details>
+  </div>
+  <div class="faq-item">
+    <details>
+      <summary>Which robot arm type is most common in industry?</summary>
+      <p>Six-axis articulated arms, because their spherical workspace and multi-axis wrist cover the broadest range of tasks from welding to palletizing.</p>
+    </details>
+  </div>
+  <div class="faq-item">
+    <details>
+      <summary>Is a cobot a different type of robotic arm?</summary>
+      <p>Not structurally. Most cobots use an articulated or SCARA kinematic structure; power-and-force limiting and safety monitoring is what makes them collaborative.</p>
+    </details>
+  </div>
+  <div class="faq-item">
+    <details>
+      <summary>SCARA vs articulated: which should I choose?</summary>
+      <p>SCARA for fast planar assembly and vertical insertions with light payloads. Articulated for arbitrary tool orientations, obstacle avoidance, and complex approach angles.</p>
+    </details>
+  </div>
+  <div class="faq-item">
+    <details>
+      <summary>Are polar and cylindrical robots still relevant?</summary>
+      <p>Cylindrical robots can be great in compact tending cells and rotary fixtures. Polar robots are mostly legacy; articulated arms usually replace them in new specs.</p>
+    </details>
+  </div>
+
+  <section class="glossary" aria-label="Glossary">
+    <h3>Glossary</h3>
+    <ul>
+      <li><strong>Workspace (envelope):</strong> The 3D region the tool can reach.</li>
+      <li><strong>DOF (Degrees of Freedom):</strong> The number of independent joint motions.</li>
+      <li><strong>Parallel robot:</strong> A mechanism where multiple kinematic chains support a common platform (e.g., delta).</li>
+      <li><strong>PFL (Power-and-Force Limiting):</strong> Collaborative safety design that limits energy in human contact.</li>
+    </ul>
+  </section>
+
+  <div class="cta">
+    <h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3>
+    <p>Review robot architecture, programming, calibration and application fundamentals.</p>
+    <a class="btn" href="../6-dof-robot-arm-guide.html">Read the full guide →</a>
+  </div>
+
+  <div class="footer-nav">
+    <a href="robot-arm-inverse-kinematics.html">← Previous: Inverse kinematics for 6-DOF arms</a>
+    <a href="palletizing-robot-arm.html">Next: Palletizing robot arm guide →</a>
+  </div>
+
+  <hr class="divider" style="border:none;border-top:1px solid var(--line);margin:38px 0">
+
+  <section aria-label="About the author" class="article-body">
+    <h3>About the author</h3>
+    <p>Robotics Engineering publishes practical, vendor-neutral guidance on robot arms, ROS 2 and industrial automation. This article is maintained by our editorial engineering team and updated as standards and best practices evolve.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <p>Technical articles on robot arms, ROS 2 and industrial automation.</p>
+  </div>
+</footer>
+</body>
+</html>
