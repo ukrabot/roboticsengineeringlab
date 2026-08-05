@@ -1,0 +1,54 @@
+archivo,palabras,enlaces_externos,imagenes,prioridad,acciones
+articles/3d-printed-robot-arm-parts.html,2371,40,2,media,"añadir pruebas, ejemplos y evidencia propia"
+articles/6-axis-robot-market-2026.html,2624,19,2,media,revisar promesa del título y metodología
+articles/abb-robot-arm-review.html,1906,12,3,media,"añadir pruebas, ejemplos y evidencia propia"
+articles/aluminum-robot-frame.html,2351,2,1,media,añadir imagen/diagrama específico
+articles/arduino-mega-robot-wiring.html,2125,1,1,media,añadir fuentes primarias; añadir imagen/diagrama específico
+articles/arduino-robot-arm-tutorial.html,2157,0,2,media,añadir fuentes primarias
+articles/belt-drive-vs-gear-drive.html,2137,0,2,media,añadir fuentes primarias
+articles/best-3d-printer-robot-parts.html,2412,0,2,media,añadir fuentes primarias; revisar promesa del título y metodología
+articles/cable-management-robot.html,2219,0,3,media,añadir fuentes primarias
+articles/carbon-fiber-robot-parts.html,2267,0,3,media,añadir fuentes primarias
+articles/collaborative-assembly-arm.html,2152,5,2,media,añadir autor verificable
+articles/collaborative-robot-arm-2026.html,1769,16,2,media,añadir autor verificable
+articles/esp32-robot-controller.html,1627,0,1,alta,añadir fuentes primarias; añadir autor verificable; añadir imagen/diagrama específico
+articles/fanuc-robot-arm-review.html,1535,2,2,media,añadir autor verificable
+articles/force-torque-sensors-robot.html,2407,4,2,media,añadir autor verificable
+articles/future-6-dof-robot-arms.html,2448,22,2,media,añadir autor verificable
+articles/harmonic-drive-review.html,2480,3,2,media,añadir autor verificable
+articles/industrial-plc-robotics.html,2022,5,1,media,añadir autor verificable; añadir imagen/diagrama específico
+articles/joint-encoders-robot-arm.html,2330,4,1,media,añadir imagen/diagrama específico
+articles/kinematic-solver-code.html,2654,10,1,media,añadir imagen/diagrama específico
+articles/kuka-robot-arm-review.html,962,7,2,media,ampliar con procedimiento o datos
+articles/magnetic-gripper-robot.html,1271,6,2,media,añadir autor verificable; ampliar con procedimiento o datos
+articles/palletizing-robot-arm.html,1562,0,1,alta,añadir fuentes primarias; añadir imagen/diagrama específico; revisar promesa del título y metodología
+articles/robot-area-scanner.html,1401,6,2,media,añadir autor verificable; ampliar con procedimiento o datos
+articles/robot-arm-battery-power.html,2180,0,1,media,añadir fuentes primarias; añadir imagen/diagrama específico
+articles/robot-arm-calibration.html,1177,2,2,media,añadir autor verificable; ampliar con procedimiento o datos
+articles/robot-arm-controller-comparison.html,1683,3,1,media,añadir imagen/diagrama específico
+articles/robot-arm-cooling.html,1411,0,2,alta,añadir fuentes primarias; añadir autor verificable; ampliar con procedimiento o datos
+articles/robot-arm-dust-protection.html,1293,3,2,media,añadir autor verificable; ampliar con procedimiento o datos
+articles/robot-arm-emergency-stop.html,1362,4,2,media,añadir autor verificable; ampliar con procedimiento o datos
+articles/robot-arm-gripper-design.html,1624,3,2,media,añadir autor verificable
+articles/robot-arm-inverse-kinematics.html,2307,3,1,media,añadir autor verificable; añadir imagen/diagrama específico
+articles/robot-arm-leasing-buying.html,1770,1,1,alta,añadir fuentes primarias; añadir autor verificable; añadir imagen/diagrama específico
+articles/robot-arm-maintenance.html,1920,3,2,media,añadir autor verificable
+articles/robot-arm-noise-reduction.html,2452,0,1,alta,añadir fuentes primarias; añadir autor verificable; añadir imagen/diagrama específico
+articles/robot-arm-payload-calculator.html,1801,0,1,alta,añadir fuentes primarias; añadir autor verificable; añadir imagen/diagrama específico; revisar promesa del título y metodología
+articles/robot-arm-plc-integration.html,2215,6,2,media,añadir autor verificable
+articles/robot-arm-programming-languages.html,2763,5,2,media,añadir autor verificable
+articles/robot-arm-roi-calculator.html,1644,1,1,alta,añadir fuentes primarias; añadir autor verificable; añadir imagen/diagrama específico; revisar promesa del título y metodología
+articles/robot-arm-safety-usa-canada.html,2213,1,1,media,añadir fuentes primarias; añadir imagen/diagrama específico
+articles/robot-arm-simulation-software.html,2588,11,2,media,añadir autor verificable
+articles/robot-arm-training-program.html,2609,6,2,media,añadir autor verificable
+articles/robot-arm-vision-system.html,2890,12,2,media,añadir autor verificable
+articles/robot-arm-welding.html,2655,16,2,media,añadir autor verificable
+articles/robot-end-effector-selection.html,2158,2,1,media,añadir imagen/diagrama específico
+articles/robot-light-curtain-integration.html,2224,3,1,media,añadir imagen/diagrama específico
+articles/robot-risk-assessment.html,2009,6,1,media,añadir imagen/diagrama específico
+articles/ros2-robot-arm-control.html,1898,7,1,media,añadir imagen/diagrama específico
+articles/smart-servo-robot-arm.html,2194,3,1,media,añadir imagen/diagrama específico
+articles/standard-bots-ro1.html,1303,5,1,media,añadir imagen/diagrama específico; ampliar con procedimiento o datos
+articles/types-of-robotic-arms.html,1845,0,1,media,añadir fuentes primarias; añadir imagen/diagrama específico
+articles/universal-robots-ur20.html,1167,5,2,media,ampliar con procedimiento o datos
+articles/vacuum-gripper-robot.html,1245,3,2,media,añadir autor verificable; ampliar con procedimiento o datos
