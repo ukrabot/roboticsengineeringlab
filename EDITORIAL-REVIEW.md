@@ -41,3 +41,5 @@ Se añadieron bloques de fuentes primarias y documentación técnica en 12 artí
 ## Referencias de tablas
 
 Se añadieron captions con enlaces de referencia a las 90 tablas detectadas. Cuando el artículo ya tenía una fuente externa, se usa como referencia primaria; cuando no la tenía, el caption está marcado explícitamente como “Suggested primary reference”. En todos los casos se indica que el lector debe verificar cada fila contra la revisión vigente y la configuración exacta. No se presentan estas referencias genéricas como prueba de cada cifra; la verificación fila por fila sigue siendo necesaria para datos de fabricante, precios y normas.
+
+Se añadió a `about.html` una metodología editorial pública: diferencia entre especificaciones documentadas, cálculos e información probada físicamente; explica el uso de fuentes primarias, límites y política de correcciones.
