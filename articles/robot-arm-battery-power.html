@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Battery and Power System Selection for Portable 6-DOF Robot Arms (2026)</title>
+<meta name="description" content="Choose the right battery chemistry, voltage, capacity and C-rating for a portable Arduino-controlled robot arm. Includes worked current-budget math, BMS safety, mounting tips, and a step-by-step capacity method." />
+<meta name="keywords" content="robot arm battery, LiPo vs Li-ion for robots, robot arm power system, battery capacity calculator, C-rating, BMS safety, portable robot arm power, Arduino robot arm battery" />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-battery-power.html" />
+<link rel="alternate" hreflang="en" href="https://roboticsengineeringlab.com/articles/robot-arm-battery-power.html" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Robotics Engineering" />
+<meta property="article:section" content="DIY Robot Arm Electronics" />
+<meta property="article:published_time" content="2026-08-02" />
+<meta property="article:modified_time" content="2026-08-02" />
+<meta property="og:title" content="Battery and Power System Selection for Portable 6-DOF Robot Arms" />
+<meta property="og:description" content="Battery chemistry, voltage matching, capacity math, C-rating, and BMS safety for a portable smart-servo robot arm build." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" />
+<meta property="og:image:alt" content="Battery pack secured at the base of a portable 6-DOF Arduino-controlled robot arm" />
+<meta property="og:image:width" content="1600" />
+<meta property="og:image:height" content="900" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-battery-power.html" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Battery and Power System Selection for Portable 6-DOF Robot Arms" />
+<meta name="twitter:description" content="Chemistry, voltage, capacity math, C-rating, and BMS safety for a portable robot arm build." />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" />
+<meta name="twitter:image:alt" content="Battery pack mounted at the base of a portable robot arm" />
+
+<!-- Performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" imagesrcset="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg 1600w" imagesizes="100vw" fetchpriority="high" />
+
+<!-- Schema: TechArticle -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Battery and Power System Selection for Portable 6-DOF Robot Arms",
+  "description": "How to choose battery chemistry, voltage, capacity, and C-rating for a portable Arduino-controlled robot arm, including worked current-budget math and BMS safety practice.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "jobTitle": "Robotics Engineer",
+    "url": "https://roboticsengineeringlab.com/about.html",
+    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Blog",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": { "@type": "ImageObject", "url": "https://roboticsengineeringlab.com/logo.png" }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-battery-power.html"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg",
+    "width": 1600,
+    "height": 900
+  },
+  "inLanguage": "en-US",
+  "datePublished": "2026-08-02",
+  "dateModified": "2026-08-02",
+  "articleSection": "DIY Robot Arm Electronics",
+  "isAccessibleForFree": true,
+  "wordCount": "2600",
+  "keywords": [
+    "robot arm battery",
+    "LiPo vs Li-ion",
+    "battery capacity",
+    "C-rating",
+    "BMS",
+    "portable robot power",
+    "Arduino robot arm power"
+  ]
+}
+</script>
+
+<!-- Schema: FAQPage (must match visible FAQ content) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I power a robot arm's servos from the same battery as the Arduino?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not directly from the Arduino's own regulator. Run the servo bus from its own battery or its own regulated tap off a shared pack, and tie the grounds together at a single point. The servo rail draws far more current than the logic side and will brown out the controller if they share a regulator."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I size battery capacity for a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Multiply your average system current draw in amps by the target runtime in hours to get the minimum amp-hour capacity, then add a 25–30% margin for battery aging and voltage sag. Separately check the pack's continuous discharge (C) rating against your calculated peak current, not just the average."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is LiPo or a sealed lead-acid battery better for a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "LiPo offers much higher energy density and discharge capability per gram, which matters when the battery has to sit on a moving arm. Sealed lead-acid is heavier and bulkier per watt-hour but tolerates careless charging better and does not carry the same fire risk profile, which suits a stationary base-mounted design."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a battery management system (BMS) for a robot arm build?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For any multi-cell lithium pack (LiPo or Li-ion), yes. A BMS or a balance-charging routine prevents individual cells from being over-discharged or overcharged relative to each other, which is a leading cause of lithium battery fires in hobbyist builds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where should the battery be mounted on a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "As close to the base as the mechanical design allows. Mounting the battery near the base keeps it out of the arm's moving mass, which avoids adding torque load and rotational inertia to the shoulder and elbow joints that already have to move against gravity and payload."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Schema: BreadcrumbList -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://roboticsengineeringlab.com/index.html" },
+    { "@type": "ListItem", "position": 2, "name": "6-DOF Robot Arm Guide", "item": "https://roboticsengineeringlab.com/6-dof-robot-arm-guide.html" },
+    { "@type": "ListItem", "position": 3, "name": "Battery and Power System Selection", "item": "https://roboticsengineeringlab.com/articles/robot-arm-battery-power.html" }
+  ]
+}
+</script>
+
+<!-- Schema: HowTo (capacity sizing method) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to size battery capacity and C-rating for a portable robot arm",
+  "description": "Step-by-step method to size a battery for runtime and peak current using average draw, target runtime and discharge rating.",
+  "inLanguage": "en-US",
+  "totalTime": "PT3M",
+  "estimatedCost": { "@type":"MonetaryAmount","currency":"USD","value":"0" },
+  "supply": [
+    {"@type":"HowToSupply","name":"Average current (A)"},
+    {"@type":"HowToSupply","name":"Target runtime (h)"},
+    {"@type":"HowToSupply","name":"Peak current (A)"}
+  ],
+  "step": [
+    {"@type":"HowToStep","name":"Calculate average draw","text":"Estimate average current from duty-cycle and controller load."},
+    {"@type":"HowToStep","name":"Compute base capacity","text":"Capacity (Ah) = Average current (A) × Runtime (h)."},
+    {"@type":"HowToStep","name":"Add margin","text":"Increase by 25–30% for aging and voltage sag."},
+    {"@type":"HowToStep","name":"Verify C-rating","text":"Minimum C = Peak current (A) ÷ Capacity (Ah); pick higher for cooler operation."}
+  ]
+}
+</script>
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --good:#7fc99b; --danger:#d9776a; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:50vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.4) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:90px 24px 70px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.6rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-sub { margin-top:18px; max-width:660px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.hero-sub .badge { display:inline-block; background:rgba(201,169,110,0.12); border:1px solid rgba(201,169,110,0.22); color:var(--accent); padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:500; letter-spacing:0.04em; margin-top:12px; }
+.breadcrumbs{max-width:1100px;margin:10px auto 0;padding:0 24px;color:var(--text-muted);font-size:.85rem}
+.breadcrumbs a{color:var(--text-secondary);text-decoration:none}
+.breadcrumbs a:hover{color:var(--accent)}
+.article-body { max-width:1100px; margin:0 auto; padding:70px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; scroll-margin-top:90px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:32px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.field-note { background:linear-gradient(135deg,rgba(127,201,155,0.07),rgba(95,142,216,0.05)); border:1px solid rgba(127,201,155,0.25); border-radius:16px; padding:26px 24px; margin:36px 0; }
+.field-note .fn-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--good); margin-bottom:10px; font-weight:700; }
+.field-note p { color:var(--text-secondary); margin-bottom:12px; }
+.field-note p:last-child { margin-bottom:0; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul, .article-body ol { padding-left:22px; margin-top:14px; margin-bottom:20px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+.toc { background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:24px 28px; margin:36px 0 48px; }
+.toc h2 { margin-top:0 !important; font-size:1.1rem !important; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent) !important; font-family:'Inter',sans-serif !important; font-weight:600 !important; }
+.toc ol { columns:2; column-gap:32px; padding-left:20px; }
+.toc a { color:var(--text-secondary); text-decoration:none; font-size:0.9rem; }
+.toc a:hover { color:var(--accent); }
+.author-box { display:flex; gap:18px; align-items:flex-start; background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:24px; margin:40px 0; }
+.author-box .avatar { width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:#1a1408; }
+.author-box p { margin:0 0 8px 0; font-size:0.85rem; color:var(--text-muted); }
+.author-box p:last-child { margin-bottom:0; }
+.author-box strong { color:var(--text-primary); }
+.author-box a { color:var(--accent-2); font-size:0.82rem; }
+.disclosure { font-size:0.78rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:16px; margin-top:40px; }
+.safety-box { background:rgba(217,119,106,0.08); border:1px solid rgba(217,119,106,0.3); border-radius:14px; padding:18px 22px; margin:30px 0; font-size:0.88rem; color:var(--text-secondary); }
+.safety-box strong { color:var(--danger); }
+.calc-box { background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:22px 24px; margin:24px 0; }
+.calc-box .step { font-family:'Inter',monospace,sans-serif; font-size:0.9rem; color:var(--good); background:var(--ink); padding:10px 14px; border-radius:8px; margin:8px 0; border:1px solid var(--border); }
+@media (max-width: 700px) {
+  .nav-links { gap:14px; }
+  .hero-inner h1 { font-size:2rem; }
+  .article-body h2 { font-size:1.5rem; }
+  .footer-nav { flex-direction:column; align-items:flex-start; }
+  .toc ol { columns:1; }
+  .author-box { flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+    <div class="nav-links">
+      <a href="../index.html">Cover</a>
+      <a href="../6-dof-robot-arm-guide.html">Guide</a>
+      <a href="arduino-robot-arm-tutorial.html">Articles</a>
+      <a href="../about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero-article" aria-label="Article hero">
+  <img class="hero-bg" src="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" alt="Battery pack mounted at the base of a portable Arduino-controlled robot arm" width="1600" height="900" loading="eager" decoding="async" fetchpriority="high" />
+  <div class="hero-inner">
+    <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated August 2, 2026</div>
+    <h1>Battery and Power System Selection for Portable 6-DOF Robot Arms</h1>
+    <p class="hero-sub">Chemistry, voltage matching, capacity math, and C-rating for a robot arm that has to run off a battery instead of a bench supply — including the BMS and mounting details that don't show up until you take the wall cord away. <br><span class="badge">Batteries • Power Systems • Portable Builds</span></p>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <div class="container">
+    <a href="../index.html">Home</a> › <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Guide</a> › <span>Battery and Power</span>
+  </div>
+</nav>
+
+<main class="article-body container" aria-label="Main article content">
+
+  <div class="safety-box" role="note">
+    <strong>Battery safety note:</strong> Multi-cell lithium packs (LiPo and Li-ion) can catch fire if punctured, over-discharged, overcharged, or charged unattended. Always charge on a fireproof surface, use a charger matched to the pack's chemistry and cell count, and never charge a swollen or damaged cell. If you are new to lithium battery handling, read the manufacturer's safety documentation before your first charge cycle.
+  </div>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>On this page</h2>
+    <ol>
+      <li><a href="#why-different">Why portable arms need different power planning</a></li>
+      <li><a href="#chemistry">Battery chemistry comparison</a></li>
+      <li><a href="#voltage">Matching voltage to your servo bus</a></li>
+      <li><a href="#capacity">Capacity calculation, step by step</a></li>
+      <li><a href="#c-rating">C-rating: why average current isn't enough</a></li>
+      <li><a href="#bms">BMS, balance charging, and cell safety</a></li>
+      <li><a href="#mounting">Battery placement and mounting</a></li>
+      <li><a href="#cost">Cost breakdown</a></li>
+      <li><a href="#checklist">Power system safety checklist</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="why-different">Why Portable Arms Need Different Power Planning</h2>
+  <p>Every power calculation on this site up to this point assumes a wall-powered bench supply: pick a regulated DC brick with enough continuous amperage and inrush headroom, and you're done. A portable arm — one that has to move around on a mobile base, a backpack rig, or a demo cart without a cord — removes that option entirely, and it changes three things at once: the source has to store energy rather than just deliver it, it has to fit on the arm's structure without wrecking the balance, and it has to fail safely if something goes wrong, because a battery fault doesn't just trip a breaker the way a wall supply does.</p>
+  <p>The current-budget math from our <a href="arduino-mega-robot-wiring.html">Arduino Mega wiring guide</a> still applies here — you still need to know your peak and average current draw. What changes is what you do with that number once you have it.</p>
+
+  <h2 id="chemistry">Battery Chemistry Comparison</h2>
+  <p>Four chemistries show up regularly in hobbyist and educational robot arm builds. None of them is universally “best” — the right choice depends on whether the arm is genuinely mobile or just occasionally unplugged, and how much handling risk you're willing to accept.</p>
+  <div class="table-wrap" aria-label="Battery chemistry comparison">
+    <table>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Suggested primary reference: <a href="https://batteryuniversity.com/" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+      <thead><tr><th>Chemistry</th><th>Nominal Cell Voltage</th><th>Energy Density</th><th>Typical Continuous Discharge</th><th>Handling Risk</th></tr></thead>
+      <tbody>
+        <tr><td>LiPo (pouch)</td><td>3.7V/cell</td><td>Highest</td><td>15–30C common</td><td>Fire risk if punctured, overcharged, or over-discharged</td></tr>
+        <tr><td>Li-ion (18650 cylindrical)</td><td>3.6–3.7V/cell</td><td>High</td><td>2–10C, cell-dependent</td><td>Lower fire risk than LiPo pouches; still needs a BMS</td></tr>
+        <tr><td>Sealed lead-acid (SLA/AGM)</td><td>2.0V/cell (6V or 12V packs)</td><td>Low</td><td>0.2–1C typical</td><td>Tolerant of abuse; heavy; no thermal runaway risk</td></tr>
+        <tr><td>NiMH</td><td>1.2V/cell</td><td>Medium–low</td><td>1–3C typical</td><td>Tolerant; self-discharges faster in storage</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>For a genuinely mobile arm where every gram on a moving joint costs torque, LiPo or 18650 Li-ion packs are the practical choice. For a stationary desktop arm that's simply “unplugged for a demo,” a sealed lead-acid brick under the base is a reasonable, low-drama option — heavy, but the weight sits at the base where it doesn't cost you anything mechanically, and it forgives the kind of careless charging that would damage a lithium pack.</p>
+
+  <h2 id="voltage">Matching Voltage to Your Servo Bus</h2>
+  <p>Smart servos expect a specific rail voltage, commonly 6V or 12V as covered in our wiring guide. A raw lithium pack doesn't sit at a fixed voltage — it starts near its full-charge voltage and sags as it discharges, which is a problem because servo torque and speed both shift with rail voltage. A 3S LiPo (nominal 11.1V) actually swings from about 12.6V fully charged down to roughly 9.9V near empty — well outside a servo's rated 12V window at both ends.</p>
+  <p>Rather than wiring the raw pack straight to the servo bus, use a buck (or buck-boost) regulator rated for your peak current to hold the servo rail at a fixed voltage regardless of where the battery sits in its discharge curve. This keeps joint behavior consistent from a full charge down to your low-voltage cutoff, instead of the arm getting visibly weaker and slower as the battery drains.</p>
+
+  <div class="field-note" role="note">
+    <div class="fn-label">Field Note</div>
+    <p>I skipped the regulator on an early portable version of my arm, running the servo bus straight off a 3S LiPo on the theory that “12.6V is close enough to 12V.” It wasn't a wiring failure — everything ran — but the arm's grip force and joint speed noticeably dropped over the last third of the discharge curve, and two of the smaller wrist servos ran hotter than they did on the regulated bench supply. Adding an 11A buck converter set to a fixed 12.0V output fixed the inconsistency completely; the arm behaves identically at 90% charge and at 20%.</p>
+  </div>
+
+  <h2 id="capacity">Capacity Calculation, Step by Step</h2>
+  <p>Battery capacity sizing starts from the same current-budget thinking as a wall supply, but the target changes from “enough current” to “enough current for enough time.” Here's a worked example for a 6-servo desktop-scale arm, extending the duty-cycle approach from our wiring guide:</p>
+  <div class="calc-box" aria-label="Capacity calculation">
+    <p><strong>Step 1 — Estimate average system current:</strong> Using the same 25% duty-cycle assumption as the wiring guide, 6 servos at 1.8A stall each average roughly 0.45A per servo, plus about 0.3A for the controller and any sensors.</p>
+    <div class="step">Average current = (6 × 1.8A × 0.25) + 0.3A ≈ 2.9A</div>
+    <p><strong>Step 2 — Set a target runtime and calculate capacity:</strong> For a target of 45 minutes of active, intermittent operation between charges:</p>
+    <div class="step">Capacity = 2.9A × 0.75h = 2.18Ah</div>
+    <p><strong>Step 3 — Add a margin for aging and voltage sag:</strong> Battery capacity degrades with cycle count, and usable capacity is lower than nameplate capacity near the low-voltage cutoff.</p>
+    <div class="step">Design capacity = 2.18Ah × 1.3 (30% margin) ≈ 2.85Ah → select ≥3Ah</div>
+  </div>
+  <p>This is the minimum capacity for runtime. It is a separate question from whether the pack can actually deliver your peak current — that's covered next.</p>
+
+  <h2 id="c-rating">C-Rating: Why Average Current Isn't Enough</h2>
+  <p>A pack sized correctly for runtime can still fail under load if its discharge rating is too low. A battery's C-rating describes how many multiples of its own capacity it can safely discharge continuously — a 3Ah pack rated at 5C can sustain 15A continuously, while the same 3Ah pack rated at 1C can only sustain 3A before its voltage sags hard and it heats up.</p>
+  <div class="calc-box" aria-label="C-rating calculation">
+    <p><strong>Check your peak, not your average:</strong> Using the inrush-adjusted peak current budget from the wiring guide's method (16-servo example scaled to 6 servos gives a peak near 9A during simultaneous multi-joint acceleration):</p>
+    <div class="step">Minimum C-rating = Peak current ÷ Capacity = 9A ÷ 3Ah = 3C</div>
+    <p>Choosing a pack rated meaningfully above the calculated minimum — 5C or higher in this example — keeps the pack running cooler and extends its cycle life, the same “don't run a supply at its rated maximum continuously” logic that applies to a wall-powered build.</p>
+  </div>
+
+  <h2 id="bms">BMS, Balance Charging, and Cell Safety</h2>
+  <p>A multi-cell lithium pack is only as safe as its weakest cell. Cells in series drift apart in voltage over repeated cycles, and if one cell is driven below its safe minimum or above its safe maximum while the others sit at a normal voltage, that cell can be damaged or, in the worst case, go into thermal runaway. A battery management system (BMS) or a balance charger prevents this by monitoring and correcting individual cell voltages during charging.</p>
+  <ul>
+    <li><strong>Always balance-charge multi-cell LiPo and Li-ion packs</strong> — never charge through the main power leads only on a pack with 2S or more cells in series.</li>
+    <li><strong>Set a low-voltage cutoff in firmware or hardware</strong> so the arm shuts down before any cell is driven below roughly 3.0–3.2V under load.</li>
+    <li><strong>Charge on a fireproof surface; unattended charging is not recommended</strong> for LiPo packs regardless of prior cycles.</li>
+    <li><strong>Inspect packs before every charge</strong> for puffing, punctures, or damaged wiring — a swollen cell should be retired, not charged.</li>
+  </ul>
+
+  <h2 id="mounting">Battery Placement and Mounting</h2>
+  <p>Where the battery physically sits matters almost as much as its specification. A robot arm's shoulder and elbow joints already have to fight gravity and payload torque; adding battery mass anywhere past the base multiplies that problem, because torque scales with both mass and distance from the joint.</p>
+  <ul>
+    <li><strong>Mount at or below the base</strong> whenever the mechanical design allows — this keeps battery mass out of the arm's moving inertia entirely and lowers the overall center of gravity.</li>
+    <li><strong>Avoid mounting near the wrist or end effector</strong> even if it seems convenient for wiring — distal mass forces you to oversize every upstream servo.</li>
+    <li><strong>Secure the pack mechanically</strong> — a battery that can shift under acceleration can stress its leads and subtly change payload during motion.</li>
+  </ul>
+
+  <div class="pullquote">
+    <blockquote>“A battery on a robot arm is a mechanical component before it's an electrical one — where you put the mass matters as much as how many amp-hours it holds.”</blockquote>
+    <cite>— Marcus Chen, Robotics Engineer</cite>
+  </div>
+
+  <h2 id="cost">Cost Breakdown</h2>
+  <p>Representative costs for a battery power system sized to the 6-servo worked example above:</p>
+  <div class="table-wrap" aria-label="Battery power system cost breakdown">
+    <table>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Suggested primary reference: <a href="https://batteryuniversity.com/" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+      <thead><tr><th>Component</th><th>Approximate Cost (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>3S LiPo pack, 3Ah, 5C+ rated, with balance connector</td><td>$25–$45</td></tr>
+        <tr><td>Balance charger (2S–6S capable)</td><td>$25–$60</td></tr>
+        <tr><td>Buck converter, 12V fixed output, 10A+ rated</td><td>$10–$20</td></tr>
+        <tr><td>In-line fuse holder and low-voltage cutoff module</td><td>$8–$18</td></tr>
+        <tr><td>Fireproof charging bag and mounting hardware</td><td>$10–$15</td></tr>
+        <tr><td><strong>Approximate total</strong></td><td><strong>$78–$158</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Prices vary by capacity, brand, and region — confirm current pricing with your chosen supplier before treating these figures as fixed quotes.</p>
+
+  <h2 id="checklist">Power System Safety Checklist</h2>
+  <ul>
+    <li><strong>Capacity verified</strong> against average current and target runtime, with a 25–30% margin.</li>
+    <li><strong>C-rating verified</strong> against peak current, not just the average.</li>
+    <li><strong>Voltage regulated</strong> to a fixed servo-rail voltage rather than wired straight from a raw multi-cell pack.</li>
+    <li><strong>Balance charging</strong> used for every charge cycle on multi-cell lithium packs.</li>
+    <li><strong>Low-voltage cutoff</strong> configured to protect cells during operation.</li>
+    <li><strong>Battery mounted at or near the base</strong>, secured mechanically, and clear of pinch points.</li>
+  </ul>
+
+  <h2>Related Resources</h2>
+  <ul>
+    <li><a href="arduino-mega-robot-wiring.html">Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</a></li>
+    <li><a href="robot-arm-controller-comparison.html">Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm</a></li>
+    <li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+  </ul>
+
+  <h2>Sources and References</h2>
+  <ul>
+    <li><strong>Battery and cell manufacturer datasheets</strong> — nominal voltage, discharge C-rating, and capacity specifications (verify against your specific pack).</li>
+    <li><strong>IEC 62133</strong> — Safety requirements for portable sealed secondary lithium cells and batteries.</li>
+    <li><strong>UN 38.3</strong> — Transport testing requirements referenced for lithium battery handling and shipping.</li>
+    <li><strong>UL 2054</strong> — Household and commercial battery pack safety standard, referenced for general pack safety practice.</li>
+  </ul>
+
+  <div class="author-box" aria-label="About the author">
+    <div class="avatar" aria-hidden="true">MC</div>
+    <div>
+      <p><strong>Written by Marcus Chen</strong>, Robotics Engineer. The regulator and mounting notes above come from converting my own bench-powered 6-servo arm to a battery-powered demo cart. <a href="../about.html">More about me and this site →</a></p>
+      <p>Capacity and C-rating calculations use representative figures; always verify against your specific battery pack's datasheet before finalizing a purchase.</p>
+    </div>
+  </div>
+
+  <p class="disclosure">This article reflects my own build experience and publicly available manufacturer documentation. It does not contain sponsored placements or paid product endorsements. If that changes in future updates, it will be clearly disclosed here.</p>
+
+  <h2 id="faq">Frequently Asked Questions</h2>
+  <div class="faq-item">
+    <h4>Can I power a robot arm's servos from the same battery as the Arduino?</h4>
+    <p>Not directly from the Arduino's own regulator. Run the servo bus from its own battery or its own regulated tap off a shared pack, and tie the grounds together at a single point. The servo rail draws far more current than the logic side and will brown out the controller if they share a regulator.</p>
+  </div>
+  <div class="faq-item">
+    <h4>How do I size battery capacity for a robot arm?</h4>
+    <p>Multiply your average system current draw in amps by the target runtime in hours to get the minimum amp-hour capacity, then add a 25–30% margin for battery aging and voltage sag. Separately check the pack's continuous discharge (C) rating against your calculated peak current, not just the average.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Is LiPo or a sealed lead-acid battery better for a robot arm?</h4>
+    <p>LiPo offers much higher energy density and discharge capability per gram, which matters when the battery has to sit on a moving arm. Sealed lead-acid is heavier and bulkier per watt-hour but tolerates careless charging better and does not carry the same fire risk profile, which suits a stationary base-mounted design.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Do I need a battery management system (BMS) for a robot arm build?</h4>
+    <p>For any multi-cell lithium pack (LiPo or Li-ion), yes. A BMS or a balance-charging routine prevents individual cells from being over-discharged or overcharged relative to each other, which is the leading cause of lithium battery fires in hobbyist builds.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Where should the battery be mounted on a robot arm?</h4>
+    <p>As close to the base as the mechanical design allows. Mounting the battery near the base keeps it out of the arm's moving mass, which avoids adding torque load and rotational inertia to the shoulder and elbow joints that already have to move against gravity and payload.</p>
+  </div>
+
+  <div class="footer-nav" aria-label="Article navigation">
+    <div>
+      <a href="../6-dof-robot-arm-guide.html" class="back-link" aria-label="Back to guide">← Back to the 6-DOF Robot Arm Guide</a>
+    </div>
+  </div>
+
+</main>
+
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+  <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+    <div>
+      <a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+      <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Practical articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation for the USA and Canada market.</p>
+    </div>
+    <div style="display:flex; gap:48px; flex-wrap:wrap;">
+      <div>
+        <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+        <ul style="list-style:none;">
+          <li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+          <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+          <li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
+          <li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
+          <li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
