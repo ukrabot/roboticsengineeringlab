@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robot Arm Cable Management: Routing and Slip Rings</title>
+<meta name="description" content="Learn robot arm cable management: internal routing, drag chains, dress packs, slip rings, bend radius, EMI protection, strain relief and maintenance.">
+<meta name="author" content="Marcus Chen">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/cable-management-robot.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Robot Arm Cable Management: Routing, Drag Chains and Slip Rings">
+<meta property="og:description" content="A practical guide to routing power, data, pneumatic hoses and coolant lines on six-axis robot arms.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/cable-management-robot.html">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Robot Arm Cable Management">
+<meta name="twitter:description" content="Routing, bend radius, dress packs, drag chains, slip rings and maintenance for reliable robot-arm cabling.">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Robot Arm Cable Management: Routing, Drag Chains and Slip Rings",
+  "description":"A practical guide to routing power, data, pneumatic hoses and coolant lines on six-axis robot arms.",
+  "author":{
+    "@type":"Person",
+    "name":"Marcus Chen",
+    "jobTitle":"Robotics Engineer",
+    "url":"https://roboticsengineeringlab.com/about.html"
+  },
+  "publisher":{
+    "@type":"Organization",
+    "name":"Robotics Engineering Blog",
+    "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
+  },
+  "datePublished":"2024-09-08",
+  "dateModified":"2024-11-04",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/cable-management-robot.html"},
+  "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "proficiencyLevel":"Intermediate"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/index.html"},
+    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/index.html#categories"},
+    {"@type":"ListItem","position":3,"name":"Robot Arm Cable Management","item":"https://roboticsengineeringlab.com/articles/cable-management-robot.html"}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Should cables be routed inside a robot arm?","acceptedAnswer":{"@type":"Answer","text":"Internal routing can protect cables and improve the arm's envelope, but it requires sufficient space, bend relief, access for replacement and a validated motion envelope. An external dress pack is often easier to inspect and service."}},
+    {"@type":"Question","name":"What bend radius should robot cables use?","acceptedAnswer":{"@type":"Answer","text":"Use the cable or hose manufacturer's dynamic bend radius, not a generic rule. Dynamic applications commonly require a larger radius than stationary wiring, and repeated torsion may require a special torsion-rated cable."}},
+    {"@type":"Question","name":"When does a robot arm need a slip ring?","acceptedAnswer":{"@type":"Answer","text":"A slip ring is useful when a joint must rotate continuously while power or signals pass across the rotating interface. Select it by circuit count, current, voltage, signal type, speed, protection, life rating and allowable noise—not by channel count alone."}},
+    {"@type":"Question","name":"How can robot-arm cable failures be prevented?","acceptedAnswer":{"@type":"Answer","text":"Use suitable continuous-flex cables, correct bend radius, strain relief, separation of power and data, controlled service loops, protected connectors and a documented inspection routine. Validate the complete cable path through every joint motion."}}
+  ]
+}
+</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}.container{max-width:1050px;margin:auto;padding:0 24px}a{color:var(--blue);text-underline-offset:3px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto;flex-wrap:wrap;gap:10px}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem;flex-wrap:wrap}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4.1rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:760px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0;font-size:.88rem}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="../6-dof-robot-arm-guide.html">Guide</a>
+      <a href="../index.html#categories">Articles</a>
+      <a href="../about.html">About</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <img src="../industrial_robot_arm.jpg" alt="Robot arm with protected cable routing" fetchpriority="high">
+  <div class="hero-inner">
+    <div class="eyebrow">Robotics engineering · Updated <time datetime="2024-11-04">November 4, 2024</time></div>
+    <h1>Robot Arm Cable Management</h1>
+    <p>Design reliable routing for power, feedback, data, pneumatic hoses and coolant lines using internal channels, dress packs, drag chains and slip rings.</p>
+    <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 15 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="article-img">
+  <img src="../industrial_robot_arm.jpg" alt="Cable routing concepts for a six-axis robot arm" loading="lazy">
+  <div class="caption">Cable management is a motion-system problem: the path must survive bending, torsion, acceleration, heat, abrasion and service work.</div>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#decision">Quick design decision</a></li>
+    <li><a href="#loads">What the cable system must survive</a></li>
+    <li><a href="#routing">Internal routing, dress packs and drag chains</a></li>
+    <li><a href="#sliprings">Slip rings and continuous rotation</a></li>
+    <li><a href="#selection">Cable, hose and connector selection</a></li>
+    <li><a href="#design">Layout and installation method</a></li>
+    <li><a href="#bend">Bend radius, twist and cable fill</a></li>
+    <li><a href="#maintenance">Inspection and troubleshooting</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
+  </ol>
+</div>
+
+<section id="decision">
+<h2>The short answer: how should robot-arm cables be routed?</h2>
+<p>Use the simplest cable path that survives the complete range of motion. For a small educational arm, an external sleeve with generous bend loops may be sufficient. For a compact machine, internal channels can protect wiring and improve appearance. For a production arm with repeated motion, use continuous-flex cables, engineered strain relief, validated bend radius and a documented replacement procedure.</p>
+<figure class="editorial-illustration" style="margin:32px 0 44px;">
+  <img src="diagram-cable-routing.png" alt="Conceptual cable-routing strategies for a multi-axis robot arm." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration. Conceptual diagram; dimensions, ratings and wiring must be validated against the selected components.</figcaption>
+</figure>
+
+<p>A slip ring is not a general-purpose cable organizer. It is an electromechanical interface for transferring power or signals across a rotating joint. Use one when a joint must rotate continuously and a cable would otherwise twist beyond its limit. If the joint only moves through a limited angle, a properly sized service loop may be cheaper and easier to maintain.</p>
+<p>The most common failure is not a dramatic cable break. It is an intermittent encoder, communication or safety signal caused by repeated flexing, an over-tight tie, a connector that carries mechanical load or a cable that violates its dynamic bend radius.</p>
+</section>
+
+<section id="loads">
+<h2>What a robot-arm cable system must survive</h2>
+<p>Robot cabling experiences a different environment from stationary control-panel wiring. The cable can bend thousands or millions of times, twist around a wrist axis, rub against a printed cover, accelerate with the link and heat up near motors or weld equipment. A pneumatic hose can also kink or fatigue while its fittings see side loads.</p>
+<ul>
+<li><strong>Bending:</strong> repeated flexing around a defined radius changes the conductor and insulation stress.</li>
+<li><strong>Torsion:</strong> twisting a cable bundle is different from bending it and may require a torsion-rated construction.</li>
+<li><strong>Pulling:</strong> the connector should not carry the weight or acceleration of the bundle.</li>
+<li><strong>Abrasion:</strong> rubbing against a frame, drag-chain separator or sleeve can wear the jacket.</li>
+<li><strong>Heat and chemicals:</strong> welding spatter, coolant, oil, UV and cleaning agents require compatible jackets.</li>
+<li><strong>Electrical noise:</strong> motor power and switching currents can disturb encoder, Ethernet, analog and safety signals.</li>
+</ul>
+<p>Define the duty cycle before choosing a cable. Ten slow movements per day is not equivalent to continuous six-axis production. Record joint angle, speed, acceleration, bend radius, twist, temperature and contamination so that the selected cable system matches the real application.</p>
+</section>
+
+<section id="routing">
+<h2>Internal routing versus external routing</h2>
+<h3>Internal routing</h3>
+<p>Internal routing places cables through hollow links or protected channels. It reduces snagging, improves the work envelope and can protect wiring from abrasion. The disadvantages are reduced access, difficult replacement and the risk of creating a sharp bend at an entry or exit. Every internal passage needs rounded edges, a replaceable grommet and a way to inspect or pull a replacement harness.</p>
+<h3>External dress packs</h3>
+<p>A dress pack uses a flexible conduit, braided sleeve, clamps and strain relief outside the arm. It is easier to inspect and modify when the tool changes. Use a controlled service loop rather than a loose bundle that can catch on the workspace. The loop must be tested at every joint angle, including the worst-case combination of shoulder, elbow and wrist positions.</p>
+<h3>Drag chains</h3>
+<p>A drag chain, or energy chain, constrains cables to a repeatable bend radius. Select the chain by inner height, width, allowable fill, radius, travel, speed and mounting method. Do not fill every available space: cables need room to move and should not be forced against separators. The chain's bend radius must be compatible with the largest cable or hose inside it.</p>
+<div class="table-wrap">
+<table>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Suggested primary reference: <a href="https://www.igus.com/info/chainflex" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<thead><tr><th>Method</th><th>Advantages</th><th>Risks and limits</th><th>Best fit</th></tr></thead>
+<tbody>
+<tr><td>Internal channel</td><td>Protected, compact, clean envelope</td><td>Harder service and inspection</td><td>Compact prototypes and enclosed joints</td></tr>
+<tr><td>External dress pack</td><td>Accessible and easy to change</td><td>Can snag or rub if poorly restrained</td><td>Production tools with frequent changes</td></tr>
+<tr><td>Drag chain</td><td>Controlled radius and organized motion</td><td>Needs correct fill and mounting</td><td>Linear axes and predictable articulation</td></tr>
+<tr><td>Slip ring</td><td>Allows continuous rotation</td><td>Contact wear, noise and circuit limits</td><td>Continuous-rotation base or wrist</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="sliprings">
+<h2>Slip rings and continuous rotation</h2>
+<p>A slip ring transfers electrical power or signals between a stationary side and a rotating side. It commonly contains conductive rings, brushes or contact elements, insulation and a housing. Some designs add Ethernet, fiber-optic or fluid rotary unions, but these functions should not be assumed from the word "slip ring" alone.</p>
+<h3>How to specify one</h3>
+<ul>
+<li><strong>Circuits:</strong> count power, ground, encoder, Ethernet, analog, digital and shield paths separately.</li>
+<li><strong>Electrical rating:</strong> check current and voltage per circuit, including inrush and fault conditions.</li>
+<li><strong>Signal quality:</strong> verify bandwidth, contact resistance, insulation resistance and shielding for data.</li>
+<li><strong>Speed and rotation:</strong> specify continuous speed, direction reversals and allowable rotation angle.</li>
+<li><strong>Mechanical load:</strong> do not use the slip-ring shaft or housing as a structural bearing unless rated for that load.</li>
+<li><strong>Environment:</strong> check IP rating, temperature, dust, coolant, vibration and installation orientation.</li>
+<li><strong>Life:</strong> use the manufacturer's life test conditions; a cycle rating is meaningful only when speed and load are comparable.</li>
+</ul>
+<p>Ethernet through a contact-based slip ring may need a purpose-designed module and careful cable termination. High-speed differential signals are sensitive to impedance discontinuity, contact noise and shielding. If a joint only needs limited travel, retaining a cable loop can avoid these signal-integrity issues.</p>
+</section>
+
+<section id="selection">
+<h2>Selecting cables, hoses and connectors</h2>
+<h3>Dynamic cable versus flexible cable</h3>
+<p>A cable described as flexible is not automatically rated for continuous flexing. Look for a dynamic-chain, torsion, robotic or continuous-motion rating and read the test conditions. The manufacturer's minimum dynamic bend radius is the controlling value. Do not design to a smaller radius because the cable appears to fit.</p>
+<h3>Separate power and signal</h3>
+<p>Keep motor, heater, solenoid and high-current power cables separated from encoder, Ethernet, analog and safety wiring. If they must share a conduit, use physical separators and shielded cables selected for the application. Terminate shields according to the drive and control-system design; an arbitrary shield connection can create a ground loop.</p>
+<h3>Pneumatic and coolant lines</h3>
+<p>Choose hose material and fittings for pressure, temperature, chemical exposure and minimum dynamic bend radius. Prevent fittings from bending the hose at the connector. A strain-relieved hose should not pull sideways on a valve, gripper or spindle. For coolant, plan for leaks and provide a route that keeps fluid away from electrical connectors.</p>
+<h3>Connectors and service loops</h3>
+<p>Use locking connectors with the required current, voltage, IP and vibration ratings. Leave enough service length to replace a connector without replacing the entire harness, but do not create a loop that can enter the robot's pinch zone. Mark both ends of every cable and document connector pinout, shield, spare cores and replacement part number.</p>
+</section>
+
+<section id="design">
+<h2>Cable-routing design method</h2>
+<ol>
+<li><strong>Map the envelope:</strong> create a CAD or physical model of every joint at its minimum and maximum angle.</li>
+<li><strong>List all services:</strong> motors, brakes, encoders, Ethernet, safety, gripper power, pneumatics, vacuum and coolant.</li>
+<li><strong>Set fixed points:</strong> define where the harness is anchored and where it must remain free to move.</li>
+<li><strong>Apply bend-radius rules:</strong> use the largest manufacturer value in a mixed bundle and account for movement, not just assembly shape.</li>
+<li><strong>Add strain relief:</strong> clamp the jacket or use a rated boot close to each connector.</li>
+<li><strong>Separate noisy circuits:</strong> place power and data in different paths where practical.</li>
+<li><strong>Check twist:</strong> rotate each wrist through its full path and mark the harness to observe torsion.</li>
+<li><strong>Test the worst pose:</strong> move slowly through combined joint limits while watching for rubbing, tension and pinching.</li>
+<li><strong>Document service:</strong> photograph the route, label connectors and record inspection points.</li>
+</ol>
+<p>Do not tighten ordinary cable ties directly around a dynamic cable bundle. A tie that creates a hard pressure point can reduce flex life. Use smooth clamps, hook-and-loop straps or cable-management hardware intended for motion.</p>
+</section>
+
+<section id="bend">
+<h2>Bend radius, twist and cable fill</h2>
+<p>The bend radius is measured from the centerline of the cable to the center of the bend. A cable manufacturer may specify separate values for fixed installation and dynamic motion. The dynamic value is the one that matters inside a drag chain or moving arm. If several cables have different values, use the largest value or separate the cables into suitable paths.</p>
+<p>Drag-chain fill should be planned by cross-sectional area and movement. Cables should not be packed so tightly that they cannot change position, and heavy cables should not crush smaller signal cables. Use separators when power, data and hoses need controlled spacing. Verify that the chain does not twist or buckle at its mounting points.</p>
+</section>
+
+<section id="maintenance">
+<h2>Inspection, testing and maintenance</h2>
+<p>Inspect the harness at commissioning and at an interval based on duty cycle. Look for jacket polishing, flat spots, cracks, exposed braid, loose clamps, connector movement, hose kinks and unexpected changes in motor or encoder behavior. A thermal camera or voltage measurement can help locate a high-resistance connection, but it does not replace mechanical inspection.</p>
+<ul>
+<li>Move the arm slowly through the full envelope with power isolated from the tool where safe.</li>
+<li>Check continuity and insulation only with methods compatible with connected electronics.</li>
+<li>Monitor encoder errors, communication retries, safety faults and intermittent tool resets.</li>
+<li>Measure bend and twist at the most demanding joint rather than at the easiest-to-reach section.</li>
+<li>Replace a damaged cable instead of wrapping a moving failure point with tape.</li>
+</ul>
+<p>For a slip ring, trend contact resistance, signal errors, temperature and rotation count where possible. Do not clean contacts with an unapproved solvent or open a sealed unit without the manufacturer's procedure.</p>
+</section>
+
+<section id="troubleshooting">
+<h2>Cable-management troubleshooting</h2>
+<div class="table-wrap">
+<table>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Suggested primary reference: <a href="https://www.igus.com/info/chainflex" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<thead><tr><th>Symptom</th><th>Likely cause</th><th>What to check</th></tr></thead>
+<tbody>
+<tr><td>Encoder errors at one joint angle</td><td>Cable bend, pinch or connector strain</td><td>Move slowly through the angle and inspect the harness while monitoring diagnostics.</td></tr>
+<tr><td>Ethernet drops during wrist rotation</td><td>Signal-rated cable or slip-ring limitation</td><td>Check differential cable, shielding, termination and the slip ring's data specification.</td></tr>
+<tr><td>Hose leaks near a fitting</td><td>Side load, excessive bend or wrong fitting</td><td>Reroute with a bend guide and replace the stressed hose section.</td></tr>
+<tr><td>Drag chain is noisy or jerky</td><td>Overfill, wrong radius or poor mounting</td><td>Measure chain fill, spacing, alignment and the required dynamic radius.</td></tr>
+<tr><td>Harness rubs against the arm</td><td>Missing clamp or insufficient service loop</td><td>Add a controlled restraint and retest every joint combination.</td></tr>
+<tr><td>Slip ring signal becomes intermittent</td><td>Contact wear, contamination or overload</td><td>Review life, current, speed, environment and contact-resistance trend.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="safety">
+<h2>Safety and responsible installation</h2>
+<p>Cable routing can create a new pinch point even when the robot mechanics are safe. Guard moving chains, exposed loops and rotating interfaces. Keep emergency-stop and safety circuits independent from non-safety accessories unless the complete safety design has been validated. Never assume a protective sleeve makes a cable safe to touch or prevents electrical faults.</p>
+<p>Industrial deployment requires a risk assessment, guarding, validated stop functions and compliance with applicable standards. A six-axis prototype can use an external sleeve, but it must still be secured so it cannot catch on people, tools or surrounding machinery.</p>
+</section>
+
+<section id="conclusion">
+<h2>Final thoughts</h2>
+<p>Cable management is easy to underestimate because it rarely causes a dramatic, one-time failure — instead it produces the kind of intermittent encoder glitch or communication dropout that takes hours to diagnose. Treat the harness as a moving mechanical component with its own bend radius, torsion limits and service life, not as an afterthought once the joints and motors are chosen. A well-documented cable path, tested through every combination of joint limits, will save far more troubleshooting time than it costs to plan upfront.</p>
+</section>
+
+<section id="faq">
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details><summary>Should cables be routed inside a robot arm?</summary><p>Internal routing can protect cables and improve the arm's envelope, but it requires sufficient space, bend relief, access for replacement and a validated motion envelope. An external dress pack is often easier to inspect and service.</p></details>
+<details><summary>What bend radius should robot cables use?</summary><p>Use the cable or hose manufacturer's dynamic bend radius, not a generic rule. Dynamic applications commonly require a larger radius than stationary wiring, and repeated torsion may require a special torsion-rated cable.</p></details>
+<details><summary>When does a robot arm need a slip ring?</summary><p>A slip ring is useful when a joint must rotate continuously while power or signals pass across the rotating interface. Select it by circuit count, current, voltage, signal type, speed, protection, life rating and allowable noise.</p></details>
+<details><summary>How can robot-arm cable failures be prevented?</summary><p>Use suitable continuous-flex cables, correct bend radius, strain relief, separation of power and data, controlled service loops, protected connectors and a documented inspection routine. Validate the complete cable path through every joint motion.</p></details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="author-avatar" aria-label="Author initials" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#e4c07a;color:#1a1408;font-weight:700;flex-shrink:0;">MC</div>
+  <div>
+    <h3>About the author</h3>
+    <p>Marcus Chen is a robotics engineer specializing in electromechanical integration for robot arms. He has designed and troubleshot dress packs, drag chains and slip-ring installations across multiple prototype and production robot cells.</p>
+  </div>
+</div>
+
+<div class="cta">
+  <h3>Continue learning</h3>
+  <p>For transmission and joint design, read the <a href="belt-drive-vs-gear-drive.html">belt drive versus gear drive comparison</a> and the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Guide</a>.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="belt-drive-vs-gear-drive.html">← Previous: Belt Drive vs Gear Drive</a>
+  <a href="robot-arm-cooling.html">Next: Robot Arm Cooling Systems →</a>
+</div>
+
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  Robotics Engineering Blog · Practical tutorials for robot arms, cabling and automation. ·
+  <a href="../about.html" style="color:var(--quiet)">About</a> ·
+  <a href="../contact.html" style="color:var(--quiet)">Contact</a> ·
+  <a href="../privacy.html" style="color:var(--quiet)">Privacy</a> ·
+  <a href="../terms.html" style="color:var(--quiet)">Terms</a>
+</footer>
+
+</body></html>
