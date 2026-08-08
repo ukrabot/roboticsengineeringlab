@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0c0e14" />
+  <title>Page Not Found (404) — Robotics Engineering Blog</title>
+  <meta name="description" content="The page you were looking for could not be found. Browse our robot arm, Arduino, and ROS 2 tutorials instead." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0c0e14;
+      --surface-card: #161820;
+      --text-primary: #f5f3ee;
+      --text-secondary: #b5b0a6;
+      --text-muted: #6e677a;
+      --accent: #e4c07a;
+      --accent-2: #6fa3d8;
+      --border: rgba(255,255,255,0.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--ink);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    .site-header { border-bottom: 1px solid var(--border); padding: 14px 0; }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text-primary); text-decoration: none; line-height: 1; }
+    .logo span { color: var(--accent); font-style: italic; }
+    .nav-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    main { flex: 1; max-width: 820px; margin: 0 auto; padding: 90px 24px; width: 100%; }
+    .code { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+    h1 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -0.03em; margin-bottom: 16px; }
+    .lead { color: var(--text-secondary); font-size: 1rem; font-weight: 300; max-width: 560px; }
+    .actions { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; padding: 13px 26px; border-radius: 999px; font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #1a1408; }
+    .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.1); }
+
+    .suggest { margin-top: 56px; background: var(--surface-card); border: 1px solid var(--border); border-radius: 18px; padding: 28px; }
+    .suggest h2 { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; font-size: 1.2rem; margin-bottom: 16px; }
+    .suggest ul { list-style: none; }
+    .suggest li { margin-bottom: 10px; }
+    .suggest a { color: var(--accent-2); text-decoration: none; font-size: 0.9rem; }
+    .suggest a:hover { color: var(--accent); }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 24px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; }
+    .footer-inner p { color: var(--text-muted); font-size: 0.8rem; }
+    .footer-inner nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-inner nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.82rem; }
+    .footer-inner nav a:hover { color: var(--text-primary); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="/index.html" class="logo">Robotics <span>Engineering</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="/index.html">Home</a>
+        <a href="/6-dof-robot-arm-guide.html">Guide</a>
+        <a href="/index.html#categories">Articles</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="code">Error 404</div>
+    <h1>We couldn't find that page</h1>
+    <p class="lead">The link may be outdated, or the page may have been moved or renamed. Everything else on the site is still here — start from one of the links below.</p>
+
+    <div class="actions">
+      <a href="/index.html" class="btn btn-primary">Go to homepage</a>
+      <a href="/index.html#categories" class="btn btn-ghost">Browse all tutorials</a>
+    </div>
+
+    <section class="suggest" aria-label="Popular pages">
+      <h2>Popular starting points</h2>
+      <ul>
+        <li><a href="/articles/arduino-robot-arm-tutorial.html">Build a 6-DOF Robot Arm with Arduino</a></li>
+        <li><a href="/articles/ros2-robot-arm-control.html">ROS 2 Control Framework for Robot Arms</a></li>
+        <li><a href="/articles/industrial-plc-robotics.html">PLC Programming for Robotics</a></li>
+        <li><a href="/articles/robot-arm-inverse-kinematics.html">Inverse Kinematics for 6-DOF Robot Arms</a></li>
+        <li><a href="/articles/robot-arm-safety-usa-canada.html">Robot Arm Safety Standards (USA &amp; Canada)</a></li>
+        <li><a href="/contact.html">Report a broken link</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links">
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms &amp; Conditions</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
