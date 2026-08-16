@@ -383,10 +383,11 @@
     <div class="nav-inner">
       <a href="index.html" class="logo" aria-label="Back to Robotics Engineering Blog">Robotics <span>Engineering</span></a>
       <div class="nav-links">
-        <a href="index.html#latest">Tutorials</a>
-        <a href="index.html#categories">Topics</a>
-        <a href="index.html#courses">Courses</a>
-        <a href="6-dof-robot-arm-guide.html">6-DOF Guide</a>
+        <a href="index.html">Home</a>
+        <a href="articles/index.html">Tutorials</a>
+        <a href="6-dof-robot-arm-guide.html" aria-current="page">Guide</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </nav>
@@ -464,8 +465,8 @@
         </ul>
 
         <div class="article-img">
-          <img src="arduino_arm_tutorial.jpg" alt="A DIY Arduino 6-DOF robot arm with servos, 3D printed links, and wiring on a clean workbench" />
-          <div class="img-caption">A DIY 6-DOF robot arm built with Arduino Mega, A1-16 smart servos, and 3D-printed structural components.</div>
+          <img src="articles/diagram-6dof-kinematics.jpg" alt="Editorial diagram of a six-axis robot arm and its joint frames" />
+          <div class="img-caption">Original editorial diagram of a 6-DOF serial arm. Conceptual illustration — not a photograph of a specific kit.</div>
         </div>
 
         <h2 id="specifications">6-DOF Robot Arm Specifications: DIY vs. Industrial</h2>
@@ -645,25 +646,25 @@
       <aside class="sidebar" aria-label="Sidebar content">
         <div class="sidebar-block">
           <h4>About This Guide</h4>
-          <p>This is a premium editorial guide to 6-DOF robot arms, updated July 18, 2026. All prices, specifications, and manufacturer details reflect the current North American market.</p>
-          <p><a href="index.html">Read more tutorials →</a></p>
+          <p>Specification ranges and prices are compiled from public manufacturer and distributor figures. Confirm every number with a current quote. Updated August 16, 2026.</p>
+          <p><a href="articles/index.html">Open the tutorial library →</a></p>
         </div>
 
         <div class="sidebar-block">
           <h4>Quick Navigation</h4>
-          <p><a href="#">What Is a 6-DOF Robot Arm?</a></p>
-          <p><a href="#">Inverse Kinematics</a></p>
-          <p><a href="#">Specifications Table</a></p>
-          <p><a href="#">Price Guide</a></p>
-          <p><a href="#">Buyer's Checklist</a></p>
-          <p><a href="#">FAQs</a></p>
+          <p><a href="#what-is-6dof">What is a 6-DOF robot arm?</a></p>
+          <p><a href="#inverse-kinematics">Inverse kinematics</a></p>
+          <p><a href="#specifications">Specifications table</a></p>
+          <p><a href="#price-guide">Price guide</a></p>
+          <p><a href="#buyers-checklist">Buyer checklist</a></p>
+          <p><a href="#faq">FAQs</a></p>
         </div>
 
         <div class="sidebar-block">
           <h4>Related Articles</h4>
-          <p><a href="index.html">Build a 6-DOF Robot Arm with Arduino</a></p>
-          <p><a href="index.html">ROS 2 Control Framework</a></p>
-          <p><a href="index.html">Industrial PLC Programming</a></p>
+          <p><a href="articles/arduino-robot-arm-tutorial.html">Arduino 6-DOF tutorial</a></p>
+          <p><a href="articles/ros2-robot-arm-control.html">ROS 2 control</a></p>
+          <p><a href="articles/industrial-plc-robotics.html">PLC programming</a></p>
         </div>
 
 </aside>
@@ -680,17 +681,17 @@
         <div>
           <h4 style="font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 14px;">Tutorials</h4>
           <ul style="list-style: none;">
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Arduino Arm</a></li>
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">ROS 2 Control</a></li>
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Industrial PLC</a></li>
+            <li><a href="articles/arduino-robot-arm-tutorial.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Arduino Arm</a></li>
+            <li><a href="articles/ros2-robot-arm-control.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">ROS 2 Control</a></li>
+            <li><a href="articles/industrial-plc-robotics.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Industrial PLC</a></li>
           </ul>
         </div>
         <div>
           <h4 style="font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 14px;">Resources</h4>
           <ul style="list-style: none;">
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">STL Downloads</a></li>
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Hardware Reviews</a></li>
-            <li><a href="#" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Market Reports</a></li>
+            <li><a href="about.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">About</a></li>
+            <li><a href="contact.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Contact</a></li>
+            <li><a href="privacy.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;">Privacy</a></li>
           </ul>
         </div>
       </div>
@@ -703,8 +704,7 @@
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use cookies to run this site and, with your consent, to show personalized ads through Google AdSense.
-        You can decline and still read everything. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
