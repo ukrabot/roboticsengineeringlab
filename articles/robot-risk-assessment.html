@@ -7,12 +7,12 @@
 <meta name="description" content="How to conduct a robot arm risk assessment using the ISO 12100 methodology — hazard identification, severity/probability scoring, PLr determination per ISO 13849-1, and a task-based worksheet structure." />
 <meta name="author" content="Robotics Engineering" />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-risk-assessment.html" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-risk-assessment" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Robot Arm Risk Assessment: ISO 12100 Method & PLr Determination" />
 <meta property="og:description" content="How to conduct a robot arm risk assessment — hazard identification, severity/probability scoring, PLr determination, and a task-based worksheet structure." />
 <meta property="og:image" content="../robotic_arm_hero.jpg" />
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-risk-assessment.html" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-risk-assessment" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Robot Arm Risk Assessment: ISO 12100 Method & PLr Determination" />
@@ -24,11 +24,11 @@
   "@type": "TechArticle",
   "headline": "Robot Arm Risk Assessment: ISO 12100 Method, PLr Determination & Worksheet",
   "description": "How to conduct a robot arm risk assessment using the ISO 12100 methodology, including hazard identification, severity/probability scoring, and PLr determination per ISO 13849-1.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "datePublished":"2025-07-09",
   "dateModified":"2025-11-07",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
-  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-risk-assessment.html"},
+  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-risk-assessment"},
   "image":"../robotic_arm_hero.jpg"
 }
 </script>
@@ -145,7 +145,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
    "@type": "ListItem",
    "position": 1,
    "name": "Home",
-   "item": "https://roboticsengineeringlab.com/index.html"
+   "item": "https://roboticsengineeringlab.com/"
   },
   {
    "@type": "ListItem",
@@ -157,7 +157,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
    "@type": "ListItem",
    "position": 3,
    "name": "Robot Arm Risk Assessment: ISO 12100 Method & PLr Determination",
-   "item": "https://roboticsengineeringlab.com/articles/robot-risk-assessment.html"
+   "item": "https://roboticsengineeringlab.com/articles/robot-risk-assessment"
   }
  ]
 }
@@ -167,13 +167,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <nav class="site-nav" aria-label="Site navigation">
 <div class="nav-inner">
-<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
 </div>
 </nav>
@@ -257,7 +257,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <tbody>
 <tr><td><a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a></td><td>USA industrial robot safety (based on ISO 10218)</td><td>Category 3 / PL d commonly required for perimeter safeguarding e-stop and gate interlock circuits</td></tr>
 <tr><td>CSA Z434</td><td>Canada industrial robot safety</td><td>Aligned closely with ANSI/RIA R15.06 and ISO 10218; provincial OHS codes may add requirements</td></tr>
-<tr><td><a href="https://www.iso.org/standard/68449.html" target="_blank" rel="noopener noreferrer">ISO 10218-1/2</a></td><td>Robot manufacturer (Part 1) and integrator/system (Part 2) requirements globally</td><td>Defines baseline safety requirements robots and integrated systems must meet</td></tr>
+<tr><td><a href="https://www.iso.org/standard/68449" target="_blank" rel="noopener noreferrer">ISO 10218-1/2</a></td><td>Robot manufacturer (Part 1) and integrator/system (Part 2) requirements globally</td><td>Defines baseline safety requirements robots and integrated systems must meet</td></tr>
 <tr><td>ISO/TS 15066</td><td>Collaborative robot applications specifically</td><td>Defines the four collaborative modes (safety-rated monitored stop, hand guiding, speed and separation monitoring, power and force limiting) and biomechanical force/pressure limits</td></tr>
 <tr><td>ISO 13849-1</td><td>Safety-related control system design (cross-industry)</td><td>Source of the Category (B,1-4) and Performance Level (a-e) framework referenced by the robot-specific standards above</td></tr>
 </tbody>
@@ -304,7 +304,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <ul>
 <li><strong>ISO 12100</strong> — Safety of machinery: General principles for risk assessment and risk reduction. The foundational methodology referenced throughout this article.</li>
 <li><strong>ISO 13849-1</strong> — Safety-related parts of control systems: source of the Category and Performance Level framework.</li>
-<li><strong><a href="https://www.iso.org/standard/68449.html" target="_blank" rel="noopener noreferrer">ISO 10218-1 &amp; -2</a></strong> — Robots and robotic devices: safety requirements for industrial robots (Part 1: robots; Part 2: robot systems and integration).</li>
+<li><strong><a href="https://www.iso.org/standard/68449" target="_blank" rel="noopener noreferrer">ISO 10218-1 &amp; -2</a></strong> — Robots and robotic devices: safety requirements for industrial robots (Part 1: robots; Part 2: robot systems and integration).</li>
 <li><strong>ISO/TS 15066</strong> — Robots and robotic devices: collaborative robots, including biomechanical limit tables.</li>
 <li><strong><a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a></strong> — American National Standard for Industrial Robots and Robot Systems, Safety Requirements.</li>
 <li><strong><a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a></strong> — Industrial Robots and Robot Systems: General Safety Requirements (Canada).</li>
@@ -338,29 +338,29 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <h2>Related Reading</h2>
 <ul>
-<li><a href="robot-arm-emergency-stop.html">Emergency Stop Design for 6-Axis Robot Arms: Safety Circuits & Standards</a></li>
-<li><a href="robot-area-scanner.html">Area Scanner Setup for Robot Arms: 3D Safety Monitoring & Interlocks</a></li>
-<li><a href="robot-arm-training-program.html">Designing a Robot Arm Training Program for Factory Operators</a></li>
-<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+<li><a href="robot-arm-emergency-stop">Emergency Stop Design for 6-Axis Robot Arms: Safety Circuits & Standards</a></li>
+<li><a href="robot-area-scanner">Area Scanner Setup for Robot Arms: 3D Safety Monitoring & Interlocks</a></li>
+<li><a href="robot-arm-training-program">Designing a Robot Arm Training Program for Factory Operators</a></li>
+<li><a href="../6-dof-robot-arm-guide">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
 <h3>Continue with the Master Guide</h3>
 <p>How the topics on this page fit into a complete robot arm build.</p>
-<a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
+<a href="../6-dof-robot-arm-guide" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published July 9, 2025 &middot; last reviewed November 7, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published July 9, 2025 &middot; last reviewed November 7, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
-<a href="robot-area-scanner.html" class="back-link" aria-label="Previous article">← Previous: Area Scanner Setup for Robot Arms: 3D Safety Monitoring & Interlocks</a>
+<a href="robot-area-scanner" class="back-link" aria-label="Previous article">← Previous: Area Scanner Setup for Robot Arms: 3D Safety Monitoring & Interlocks</a>
 </div>
 <div>
-<a href="robot-arm-training-program.html" class="back-link" aria-label="Next article">Next: Designing a Robot Arm Training Program for Factory Operators →</a>
+<a href="robot-arm-training-program" class="back-link" aria-label="Next article">Next: Designing a Robot Arm Training Program for Factory Operators →</a>
 </div>
 </div>
 
@@ -369,22 +369,22 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
 <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
 <div>
-<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
 <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Technical articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation.</p>
 </div>
 <div style="display:flex; gap:48px; flex-wrap:wrap;">
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
 <ul style="list-style:none;">
-<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 </ul>
 </div>
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
 <ul style="list-style:none;">
-<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
-<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
 </ul>
 </div>
 </div>
@@ -392,11 +392,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 
@@ -407,7 +407,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

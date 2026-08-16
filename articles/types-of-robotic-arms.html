@@ -8,8 +8,8 @@
 <meta name="keywords" content="types of robotic arms, types of industrial robots, robot arm configurations, SCARA vs articulated, delta robot vs SCARA, cartesian robot arm, robot arm selection guide, robotic arm types explained">
 <meta name="author" content="Robotics Engineering">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
-<link rel="alternate" hreflang="en" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms">
+<link rel="alternate" hreflang="en" href="https://roboticsengineeringlab.com/articles/types-of-robotic-arms">
 
 <!-- Performance -->
 <link rel="preload" as="image" href="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" imagesrcset="https://roboticsengineeringlab.com/robotic_arm_hero.jpg 1600w" imagesizes="100vw" fetchpriority="high">
@@ -22,7 +22,7 @@
 <meta property="article:modified_time" content="2026-08-02">
 <meta property="og:title" content="Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated (2026 Guide)">
 <meta property="og:description" content="Workspace shape, payload, speed, precision and cost for the six main robot arm configurations, plus a framework for choosing the right one.">
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/types-of-robotic-arms">
 <meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg">
 <meta property="og:image:alt" content="Industrial robot arm illustrating robotic arm configurations">
 <meta property="og:image:width" content="1600">
@@ -40,7 +40,7 @@
 {
   "@context":"https://schema.org",
   "@type":"TechArticle",
-  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms"},
   "headline":"Types of Robotic Arms Explained: SCARA, Delta, Cartesian & Articulated",
   "description":"A practical engineering comparison of the six main robot arm configurations and a framework for choosing between them.",
   "image":{
@@ -49,7 +49,7 @@
     "width":1600,
     "height":900
   },
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2024-03-23",
   "dateModified":"2024-05-26",
@@ -90,7 +90,7 @@
   "@type":"BreadcrumbList",
   "itemListElement":[
     {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
-    {"@type":"ListItem","position":2,"name":"Types of Robotic Arms","item":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms.html"}
+    {"@type":"ListItem","position":2,"name":"Types of Robotic Arms","item":"https://roboticsengineeringlab.com/articles/types-of-robotic-arms"}
   ]
 }
 </script>
@@ -223,13 +223,13 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
 <body>
 <nav class="site-nav" aria-label="Site navigation">
   <div class="nav-inner container">
-    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <a class="logo" href="../">Robotics <span>Engineering</span></a>
     <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
   </div>
 </nav>
@@ -245,7 +245,7 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
 
 <nav class="breadcrumbs" aria-label="Breadcrumb">
   <div class="container">
-    <a href="../index.html">Home</a> › <span>Types of Robotic Arms</span>
+    <a href="../">Home</a> › <span>Types of Robotic Arms</span>
   </div>
 </nav>
 
@@ -321,8 +321,8 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
   </div>
 
   <h2 id="articulated">Articulated (revolute) arms</h2>
-  <p>Articulated arms use a chain of rotary joints — most commonly six — mounted on a fixed or mobile base, mimicking a human shoulder-elbow-wrist arrangement. Because every joint rotates, the reachable workspace approximates a sphere, which is why articulated arms handle the widest range of orientations and part geometries of any configuration. This is the arm type most people picture when they hear "industrial robot," and it is the structure behind the compact FANUC LR Mate reviewed on this site, the mid-size <a href="kuka-robot-arm-review.html">KUKA KR 20 R1810</a>, and heavier-duty collaborative arms like the <a href="universal-robots-ur20.html">Universal Robots UR20</a>.</p>
-  <p>The tradeoff for that flexibility is programming complexity and, at the joint level, lower stiffness than a Cartesian structure at equivalent reach — every additional degree of freedom is another source of compliance and calibration error. For the full math behind positioning an articulated wrist at a target pose, see our <a href="robot-arm-inverse-kinematics.html">inverse kinematics guide</a>.</p>
+  <p>Articulated arms use a chain of rotary joints — most commonly six — mounted on a fixed or mobile base, mimicking a human shoulder-elbow-wrist arrangement. Because every joint rotates, the reachable workspace approximates a sphere, which is why articulated arms handle the widest range of orientations and part geometries of any configuration. This is the arm type most people picture when they hear "industrial robot," and it is the structure behind the compact FANUC LR Mate reviewed on this site, the mid-size <a href="kuka-robot-arm-review">KUKA KR 20 R1810</a>, and heavier-duty collaborative arms like the <a href="universal-robots-ur20">Universal Robots UR20</a>.</p>
+  <p>The tradeoff for that flexibility is programming complexity and, at the joint level, lower stiffness than a Cartesian structure at equivalent reach — every additional degree of freedom is another source of compliance and calibration error. For the full math behind positioning an articulated wrist at a target pose, see our <a href="robot-arm-inverse-kinematics">inverse kinematics guide</a>.</p>
   <ul>
     <li><strong>Pros:</strong> Maximum orientation freedom; broad application coverage; excellent around-obstacle reach.</li>
     <li><strong>Cons:</strong> More complex programming; larger safety envelope for the same reach; higher cost at heavy payloads.</li>
@@ -372,7 +372,7 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
   </ul>
 
   <h2 id="cobots">Where collaborative robots (cobots) fit in</h2>
-  <p>"Cobot" describes a safety behavior, not a seventh kinematic type. Most collaborative robots are built on an articulated or SCARA structure and become collaborative through power-and-force limiting, rounded surfaces and safety-rated monitoring that allows them to share space with people without a fence, under a proper risk assessment. For a full comparison of collaborative arms by brand, payload and price, see our <a href="collaborative-robot-arm-2026.html">collaborative robot arm buying guide</a>.</p>
+  <p>"Cobot" describes a safety behavior, not a seventh kinematic type. Most collaborative robots are built on an articulated or SCARA structure and become collaborative through power-and-force limiting, rounded surfaces and safety-rated monitoring that allows them to share space with people without a fence, under a proper risk assessment. For a full comparison of collaborative arms by brand, payload and price, see our <a href="collaborative-robot-arm-2026">collaborative robot arm buying guide</a>.</p>
 
   <div class="callout"><strong>Rule of thumb:</strong> workspace shape first, then speed, then payload. An arm that cannot geometrically reach every point your process needs is disqualified regardless of how fast or strong it is.</div>
 
@@ -398,7 +398,7 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
     <li><strong>Filter by speed/payload:</strong> delta/SCARA for light and fast; Cartesian/articulated for heavy or long travel.</li>
     <li><strong>Check orientation needs:</strong> if you need arbitrary wrist angles, prefer articulated.</li>
     <li><strong>Validate cell footprint and guarding:</strong> include safety zones and maintenance access.</li>
-    <li><strong>Build a shortlist and model ROI:</strong> use our <a href="robot-arm-payload-calculator.html">payload calculator</a> and <a href="robot-arm-roi-calculator.html">ROI calculator</a>.</li>
+    <li><strong>Build a shortlist and model ROI:</strong> use our <a href="robot-arm-payload-calculator">payload calculator</a> and <a href="robot-arm-roi-calculator">ROI calculator</a>.</li>
   </ol>
 
   <h2 id="mistakes">Common selection mistakes</h2>
@@ -460,12 +460,12 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
   <div class="cta">
     <h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3>
     <p>Review robot architecture, programming, calibration and application fundamentals.</p>
-    <a class="btn" href="../6-dof-robot-arm-guide.html">Read the full guide →</a>
+    <a class="btn" href="../6-dof-robot-arm-guide">Read the full guide →</a>
   </div>
 
   <div class="footer-nav">
-    <a href="robot-arm-inverse-kinematics.html">← Previous: Inverse kinematics for 6-DOF arms</a>
-    <a href="palletizing-robot-arm.html">Next: Palletizing robot arm guide →</a>
+    <a href="robot-arm-inverse-kinematics">← Previous: Inverse kinematics for 6-DOF arms</a>
+    <a href="palletizing-robot-arm">Next: Palletizing robot arm guide →</a>
   </div>
 
   <hr class="divider" style="border:none;border-top:1px solid var(--line);margin:38px 0">
@@ -478,17 +478,17 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
 
 <footer>
   <div class="container">
-    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <a class="logo" href="../">Robotics <span>Engineering</span></a>
     <p>Technical articles on robot arms, ROS 2 and industrial automation.</p>
   </div>
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 <div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
@@ -498,7 +498,7 @@ footer{border-top:1px solid var(--line);padding:40px 24px;color:var(--faint);fon
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

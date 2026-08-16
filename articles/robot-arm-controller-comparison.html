@@ -10,13 +10,13 @@
 
 <meta name="author" content="Marcus Chen" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison" />
 
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm" />
 <meta property="og:description" content="Real-time PWM handling, power draw, cost, and hybrid architecture guidance for choosing a robot arm controller." />
 <meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison" />
 <meta property="og:locale" content="en_US" />
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -30,7 +30,7 @@
   "@type": "TechArticle",
   "headline": "Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm",
   "description": "A practical comparison of Raspberry Pi, Arduino Mega, and ESP32 as robot arm controllers, covering real-time PWM handling, power draw, cost, and hybrid architectures.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -39,7 +39,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html"
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison"
   },
   "image": "https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
   "datePublished": "2025-10-09",
@@ -103,9 +103,9 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://roboticsengineeringlab.com/index.html" },
-    { "@type": "ListItem", "position": 2, "name": "6-DOF Robot Arm Guide", "item": "https://roboticsengineeringlab.com/6-dof-robot-arm-guide.html" },
-    { "@type": "ListItem", "position": 3, "name": "Robot Arm Controller Comparison", "item": "https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://roboticsengineeringlab.com/" },
+    { "@type": "ListItem", "position": 2, "name": "6-DOF Robot Arm Guide", "item": "https://roboticsengineeringlab.com/6-dof-robot-arm-guide" },
+    { "@type": "ListItem", "position": 3, "name": "Robot Arm Controller Comparison", "item": "https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison" }
   ]
 }
 </script>
@@ -211,13 +211,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <nav class="site-nav" aria-label="Site navigation">
 <div class="nav-inner">
-<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
 </div>
 </nav>
@@ -271,7 +271,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <h2 id="pwm">Real-Time PWM Handling: The Deciding Factor</h2>
 <p>This is where the three boards diverge the most, and it's the single biggest reason project boards get swapped mid-build. Arduino's microcontroller has no operating system between your code and the hardware timers, so a PWM pulse goes out exactly when your code says it should, every time. ESP32 is similar in practice — its LEDC peripheral gives you up to 16 independently configurable PWM channels in hardware, which comfortably covers a 6-axis arm plus a gripper channel.</p>
 <p>A Raspberry Pi is a different situation. It runs full Linux, and while recent Pi boards do expose true hardware PWM through the onboard I/O controller, only a small number of GPIO lines actually carry it — commonly just two independent channels in practice, since several of the PWM-capable pins share the same underlying channel in pairs. Software PWM works on any GPIO pin, but it's generated by the OS scheduler rather than dedicated silicon, so it can jitter under system load in a way that shows up as a servo that twitches slightly even when it should be holding still.</p>
-<p>The practical fix, and the one used on essentially every serious Pi-based servo project, is to hand PWM generation off to a dedicated I2C driver board like the PCA9685 — the same 16-channel chip covered in our <a href="arduino-robot-arm-tutorial.html">Arduino 6-DOF tutorial</a>. The Pi tells the PCA9685 what angle each channel should hold over I2C, and the driver chip generates the actual PWM waveform in dedicated hardware, completely independent of what Linux is doing at that instant.</p>
+<p>The practical fix, and the one used on essentially every serious Pi-based servo project, is to hand PWM generation off to a dedicated I2C driver board like the PCA9685 — the same 16-channel chip covered in our <a href="arduino-robot-arm-tutorial">Arduino 6-DOF tutorial</a>. The Pi tells the PCA9685 what angle each channel should hold over I2C, and the driver chip generates the actual PWM waveform in dedicated hardware, completely independent of what Linux is doing at that instant.</p>
 
 <div class="field-note">
 <div class="fn-label">Field Note</div>
@@ -279,7 +279,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <h2 id="power">Power Draw Comparison</h2>
-<p>Power draw scales with what's on the board, and it matters directly if you're building the battery-powered arm covered in our <a href="robot-arm-battery-power.html">battery and power system guide</a> — a controller with a heavier power budget eats directly into your runtime.</p>
+<p>Power draw scales with what's on the board, and it matters directly if you're building the battery-powered arm covered in our <a href="robot-arm-battery-power">battery and power system guide</a> — a controller with a heavier power budget eats directly into your runtime.</p>
 <div class="table-wrap" aria-label="Controller power draw comparison">
 <table>
 <caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
@@ -291,7 +291,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </tbody>
 </table>
 </div>
-<p>None of these figures include the servo bus itself, which is sized separately using the current-budget method in our <a href="arduino-mega-robot-wiring.html">wiring guide</a>. The controller's own draw is a separate, additive line item on top of that.</p>
+<p>None of these figures include the servo bus itself, which is sized separately using the current-budget method in our <a href="arduino-mega-robot-wiring">wiring guide</a>. The controller's own draw is a separate, additive line item on top of that.</p>
 
 <h2 id="decision">Which One Should You Pick?</h2>
 <ul>
@@ -302,7 +302,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </ul>
 
 <h2 id="hybrid">Hybrid Architecture: Using Two Boards Together</h2>
-<p>The most common architecture in serious builds isn't "pick one," it's "split the job." A Raspberry Pi handles the parts that need real compute — camera input, path planning, a <a href="ros2-robot-arm-control.html">ROS 2</a> node, a web interface — and hands off a target joint pose to a microcontroller (Arduino or ESP32) over serial or USB. The microcontroller's only job is converting that pose into precise, jitter-free PWM output, which is exactly what it's built to do without an operating system getting in the way.</p>
+<p>The most common architecture in serious builds isn't "pick one," it's "split the job." A Raspberry Pi handles the parts that need real compute — camera input, path planning, a <a href="ros2-robot-arm-control">ROS 2</a> node, a web interface — and hands off a target joint pose to a microcontroller (Arduino or ESP32) over serial or USB. The microcontroller's only job is converting that pose into precise, jitter-free PWM output, which is exactly what it's built to do without an operating system getting in the way.</p>
 <p>This division of labor means neither board is doing a job it's poorly suited for: the Pi never has to fight Linux scheduling for real-time timing, and the microcontroller never has to run a vision pipeline it doesn't have the RAM for.</p>
 
 <div class="pullquote">
@@ -327,11 +327,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <h2>Related Resources</h2>
 <ul>
-<li><a href="arduino-mega-robot-wiring.html">Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</a></li>
-<li><a href="esp32-robot-controller.html">ESP32 as a Robot Arm Controller</a></li>
-<li><a href="ros2-robot-arm-control.html">ROS 2 Control Architecture for 6-DOF Robot Arms</a></li>
-<li><a href="robot-arm-battery-power.html">Battery and Power System Selection for Portable 6-DOF Robot Arms</a></li>
-<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+<li><a href="arduino-mega-robot-wiring">Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</a></li>
+<li><a href="esp32-robot-controller">ESP32 as a Robot Arm Controller</a></li>
+<li><a href="ros2-robot-arm-control">ROS 2 Control Architecture for 6-DOF Robot Arms</a></li>
+<li><a href="robot-arm-battery-power">Battery and Power System Selection for Portable 6-DOF Robot Arms</a></li>
+<li><a href="../6-dof-robot-arm-guide">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
 </ul>
 
 <h2>Sources and References</h2>
@@ -345,7 +345,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="author-box">
 <div class="avatar" aria-hidden="true">MC</div>
 <div>
-<p><strong>Written by Marcus Chen</strong>, Robotics Engineer. The hybrid architecture described here is what I settled on after running into the software-PWM jitter issue firsthand. <a href="../about.html">More about me and this site →</a></p>
+<p><strong>Written by Marcus Chen</strong>, Robotics Engineer. The hybrid architecture described here is what I settled on after running into the software-PWM jitter issue firsthand. <a href="../about">More about me and this site →</a></p>
 <p>Power draw and PWM channel figures are representative; always verify against your specific board revision's datasheet before finalizing a design.</p>
 </div>
 </div>
@@ -377,11 +377,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Specification note: figures transcribed from manufacturer documentation, not a bench test. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published October 9, 2025 &middot; last reviewed March 31, 2026</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Specification note: figures transcribed from manufacturer documentation, not a bench test. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published October 9, 2025 &middot; last reviewed March 31, 2026</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
-<a href="../6-dof-robot-arm-guide.html" class="back-link" aria-label="Back to guide">← Back to the 6-DOF Robot Arm Guide</a>
+<a href="../6-dof-robot-arm-guide" class="back-link" aria-label="Back to guide">← Back to the 6-DOF Robot Arm Guide</a>
 </div>
 </div>
 
@@ -390,19 +390,19 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
 <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
 <div>
-<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
 <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Practical articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation for the USA and Canada market.</p>
 </div>
 <div style="display:flex; gap:48px; flex-wrap:wrap;">
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
 <ul style="list-style:none;">
-<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
-<li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
-<li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
-<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+<li><a href="../about" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
+<li><a href="../contact" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
+<li><a href="../privacy" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
+        <a href="../editorial-standards" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
 </ul>
 </div>
 </div>
@@ -411,10 +411,10 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 
@@ -425,7 +425,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

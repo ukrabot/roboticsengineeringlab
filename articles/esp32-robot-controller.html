@@ -8,11 +8,11 @@
 <meta name="keywords" content="ESP32 robot arm controller, ESP32 servo control, ESP32 PWM robot arm, ESP32 robot Wi-Fi, robot arm wiring">
 <meta name="author" content="Robotics Engineering">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/esp32-robot-controller">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control">
 <meta property="og:description" content="A practical engineering guide to controlling robot-arm servos with an ESP32, including power design, timing, wireless limits, safety and tested Arduino code.">
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/esp32-robot-controller.html">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/esp32-robot-controller">
 <meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
@@ -25,11 +25,11 @@
   "@type":"TechArticle",
   "headline":"ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control",
   "description":"A practical engineering guide to controlling robot-arm servos with an ESP32, including power design, timing, wireless limits, safety and Arduino code.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2024-09-09",
   "dateModified":"2025-02-08",
-  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/esp32-robot-controller.html"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/esp32-robot-controller"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "proficiencyLevel":"Intermediate"
 }
@@ -72,7 +72,7 @@
    "@type": "ListItem",
    "position": 1,
    "name": "Home",
-   "item": "https://roboticsengineeringlab.com/index.html"
+   "item": "https://roboticsengineeringlab.com/"
   },
   {
    "@type": "ListItem",
@@ -84,19 +84,19 @@
    "@type": "ListItem",
    "position": 3,
    "name": "ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control",
-   "item": "https://roboticsengineeringlab.com/articles/esp32-robot-controller.html"
+   "item": "https://roboticsengineeringlab.com/articles/esp32-robot-controller"
   }
  ]
 }
 </script>
 </head>
 <body>
-<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../" class="logo">Robotics <span>Engineering</span></a><div class="nav-links">
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div></div></nav>
 <header class="hero-article"><div class="hero-inner container"><div class="eyebrow">Robot control • ESP32 • Technical guide</div><h1>ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control</h1><p class="hero-sub">How to choose the ESP32 hardware, power a multi-servo arm correctly, generate reliable PWM, add wireless monitoring and design a control system that fails safely.</p></div></header>
 <main class="article-body container">
@@ -174,7 +174,7 @@ void loop() {
 <div class="table-wrap"><table>
 <caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption><thead><tr><th>Symptom</th><th>Likely cause</th><th>Check and correction</th></tr></thead><tbody><tr><td>ESP32 resets when a joint moves</td><td>Voltage sag, noise or inadequate ground</td><td>Measure the 3.3 V rail during motion; separate supplies and improve grounding.</td></tr><tr><td>Servo jitters at rest</td><td>Unstable supply, noisy signal or unsuitable pulse range</td><td>Shorten signal wiring, add decoupling, verify pulse limits and test another supply.</td></tr><tr><td>Servo does not respond</td><td>Wrong pin, missing common ground or incompatible logic level</td><td>Verify pin mapping, ground continuity and the actuator’s signal threshold.</td></tr><tr><td>Motion pauses over Wi-Fi</td><td>Blocking networking code or radio latency</td><td>Use non-blocking tasks, local motion generation and a timeout for stale commands.</td></tr><tr><td>Joint hits its stop</td><td>Bad calibration or missing software limit</td><td>Reduce the range, calibrate neutral position and add an independent limit sensor.</td></tr></tbody></table></div>
 <h2 id="related">Recommended next steps</h2>
-<p>After the single-joint test, build the system incrementally. The <a href="arduino-robot-arm-tutorial.html">Arduino robot arm tutorial</a> provides a useful beginner path; compare transmission options in <a href="belt-drive-vs-gear-drive.html">belt drive vs. gear drive</a>; and review <a href="robot-arm-inverse-kinematics.html">inverse kinematics for robot arms</a> before implementing coordinated motion. For a broader design overview, see the <a href="../6-dof-robot-arm-guide.html">complete 6-DOF robot arm guide</a>.</p>
+<p>After the single-joint test, build the system incrementally. The <a href="arduino-robot-arm-tutorial">Arduino robot arm tutorial</a> provides a useful beginner path; compare transmission options in <a href="belt-drive-vs-gear-drive">belt drive vs. gear drive</a>; and review <a href="robot-arm-inverse-kinematics">inverse kinematics for robot arms</a> before implementing coordinated motion. For a broader design overview, see the <a href="../6-dof-robot-arm-guide">complete 6-DOF robot arm guide</a>.</p>
 <h2 id="faq">Frequently asked questions</h2>
 <div class="faq-item"><details><summary>Can an ESP32 control six servos?</summary><p>Yes, it can generate several PWM channels, but the practical answer depends on the actuator type, current supply, update timing, feedback and safety requirements. A PWM expander or smart-servo bus may be cleaner for a six-axis arm.</p></details></div>
 <div class="faq-item"><details><summary>Can I power servos from the ESP32 board?</summary><p>No. Use a separate regulated actuator supply and connect its ground to the ESP32 signal ground. The board’s regulator and USB connection are not intended to supply a multi-servo load.</p></details></div>
@@ -184,9 +184,9 @@ void loop() {
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Practical guide: every value quoted is either cited or derived on this page. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published September 9, 2024 &middot; last reviewed February 8, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Practical guide: every value quoted is either cited or derived on this page. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published September 9, 2024 &middot; last reviewed February 8, 2025</span></p>
 </aside>
-<div class="footer-nav"><a href="arduino-mega-robot-wiring.html">← Previous: Arduino Mega robot wiring</a><a href="kinematic-solver-code.html">Next: Kinematic solver code →</a></div>
+<div class="footer-nav"><a href="arduino-mega-robot-wiring">← Previous: Arduino Mega robot wiring</a><a href="kinematic-solver-code">Next: Kinematic solver code →</a></div>
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
 <p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Ratings and limits shown must be confirmed against documentation for your exact configuration.</p>
@@ -196,14 +196,14 @@ void loop() {
 <p style="font-size:.75rem;color:#888;margin-bottom:0;">Links checked: August 5, 2026.</p>
 </section>
 </main>
-<footer class="container" style="border-top:1px solid var(--border);padding-top:34px;padding-bottom:40px;color:var(--dim);font-size:.85rem"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ESP32, Arduino, ROS 2 and industrial automation.</p><div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+<footer class="container" style="border-top:1px solid var(--border);padding-top:34px;padding-bottom:40px;color:var(--dim);font-size:.85rem"><a href="../" class="logo">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, ESP32, Arduino, ROS 2 and industrial automation.</p><div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 <div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
@@ -213,7 +213,7 @@ void loop() {
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

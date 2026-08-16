@@ -8,7 +8,7 @@
 <meta name="keywords" content="PLC robot integration, Siemens S7-1500 robot, FANUC R-30iB PROFINET, Structured Text robot handshake, robot cell safety PLC">
 <meta name="author" content="Robotics Engineering">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/industrial-plc-robotics.html">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/industrial-plc-robotics">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Robotics Engineering">
 <meta property="og:title" content="PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design">
@@ -27,11 +27,11 @@
 {
   "@context":"https://schema.org",
   "@type":"TechArticle",
-  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/industrial-plc-robotics.html"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/industrial-plc-robotics"},
   "headline":"PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design",
   "description":"Engineering guide to bridging a PLC and a 6-axis robot controller: handshake design, Structured Text, fieldbus options, and safety-category architecture.",
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2024-12-23",
   "dateModified":"2025-02-06",
@@ -108,7 +108,7 @@
    "@type": "ListItem",
    "position": 1,
    "name": "Home",
-   "item": "https://roboticsengineeringlab.com/index.html"
+   "item": "https://roboticsengineeringlab.com/"
   },
   {
    "@type": "ListItem",
@@ -120,19 +120,19 @@
    "@type": "ListItem",
    "position": 3,
    "name": "PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design",
-   "item": "https://roboticsengineeringlab.com/articles/industrial-plc-robotics.html"
+   "item": "https://roboticsengineeringlab.com/articles/industrial-plc-robotics"
   }
  ]
 }
 </script>
 </head>
 <body>
-<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../" class="logo">Robotics <span>Engineering</span></a><div class="nav-links">
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div></div></nav>
 <header class="hero-article"><div class="hero-inner container"><div class="eyebrow">Industrial automation • PLC • Robot integration</div><h1>PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design</h1><p class="hero-sub">How to divide responsibility between a PLC and a robot controller, design a reliable handshake, choose a fieldbus, write the Structured Text logic, and architect the safety circuit correctly.</p></div></header>
 <main class="article-body container">
@@ -270,10 +270,10 @@ END_CASE;
 </ol>
 
 <h2 id="sources">Sources</h2>
-<p>For current specifications, confirm directly with the manufacturer documentation rather than relying on a summary: the <a href="https://new.siemens.com/us/en/products/automation/systems/industrial/plc/s7-1500.html" target="_blank" rel="noopener noreferrer">Siemens S7-1500 product page</a>, the <a href="https://www.fanucamerica.com/products/cnc-controllers/r-30ib" target="_blank" rel="noopener noreferrer">FANUC R-30iB controller page</a>, the <a href="https://webstore.iec.ch/en/publication/59880" target="_blank" rel="noopener noreferrer">IEC 61131-3 standard</a> for programming languages, the <a href="https://www.iso.org/standard/73029.html" target="_blank" rel="noopener noreferrer">ISO 13849-1 information page</a> for safety-related control system categories, and <a href="https://www.profinet.com/" target="_blank" rel="noopener noreferrer">PROFINET / PI International</a> for fieldbus specifications. Standards editions and product options change; verify the current revision before specifying a cell.</p>
+<p>For current specifications, confirm directly with the manufacturer documentation rather than relying on a summary: the <a href="https://new.siemens.com/us/en/products/automation/systems/industrial/plc/s7-1500" target="_blank" rel="noopener noreferrer">Siemens S7-1500 product page</a>, the <a href="https://www.fanucamerica.com/products/cnc-controllers/r-30ib" target="_blank" rel="noopener noreferrer">FANUC R-30iB controller page</a>, the <a href="https://webstore.iec.ch/en/publication/59880" target="_blank" rel="noopener noreferrer">IEC 61131-3 standard</a> for programming languages, the <a href="https://www.iso.org/standard/73029" target="_blank" rel="noopener noreferrer">ISO 13849-1 information page</a> for safety-related control system categories, and <a href="https://www.profinet.com/" target="_blank" rel="noopener noreferrer">PROFINET / PI International</a> for fieldbus specifications. Standards editions and product options change; verify the current revision before specifying a cell.</p>
 
 <h2 id="related">Related robot-arm guides</h2>
-<p>Continue with the <a href="ros2-robot-arm-control.html">ROS 2 robot control guide</a>, the <a href="robot-arm-safety-usa-canada.html">robot arm safety standards overview</a>, and the <a href="robot-arm-gripper-design.html">gripper design guide</a>. Together with this article, they cover the control, communication, and mechanical decisions in a typical industrial robot cell.</p>
+<p>Continue with the <a href="ros2-robot-arm-control">ROS 2 robot control guide</a>, the <a href="robot-arm-safety-usa-canada">robot arm safety standards overview</a>, and the <a href="robot-arm-gripper-design">gripper design guide</a>. Together with this article, they cover the control, communication, and mechanical decisions in a typical industrial robot cell.</p>
 
 <h2 id="faq">Frequently asked questions</h2>
 <div class="faq-item"><details><summary>Does the PLC or the robot controller run the motion program?</summary><p>The robot controller runs the motion program and interpolates the joints. The PLC does not send trajectories; it exchanges a small set of discrete or integer signals with the robot controller and coordinates the rest of the cell.</p></details></div>
@@ -285,18 +285,18 @@ END_CASE;
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 23, 2024 &middot; last reviewed February 6, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 23, 2024 &middot; last reviewed February 6, 2025</span></p>
 </aside>
-<div class="footer-nav"><a href="ros2-robot-arm-control.html">← Previous: ROS 2 Control Framework for 6-Axis Robot Arms</a><a href="robot-arm-gripper-design.html">Next: Gripper Design Guide for 6-DOF Robot Arms →</a></div>
+<div class="footer-nav"><a href="ros2-robot-arm-control">← Previous: ROS 2 Control Framework for 6-Axis Robot Arms</a><a href="robot-arm-gripper-design">Next: Gripper Design Guide for 6-DOF Robot Arms →</a></div>
 </main>
-<footer class="container" style="border-top:1px solid var(--border);padding-top:34px;padding-bottom:40px;color:var(--dim);font-size:.85rem"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, PLC integration, ROS 2 and industrial automation.</p><div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+<footer class="container" style="border-top:1px solid var(--border);padding-top:34px;padding-bottom:40px;color:var(--dim);font-size:.85rem"><a href="../" class="logo">Robotics <span>Engineering</span></a><p>Technical articles on robot arms, PLC integration, ROS 2 and industrial automation.</p><div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 <div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
@@ -306,7 +306,7 @@ END_CASE;
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

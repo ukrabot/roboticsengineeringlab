@@ -7,12 +7,12 @@
 <meta name="description" content="How ros2_control actually works for 6-DOF robot arms — writing a hardware interface plugin, configuring controllers via YAML, and connecting to MoveIt 2, with real code examples." />
 <meta name="author" content="Robotics Engineering" />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/ros2-robot-arm-control" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="ros2_control for 6-Axis Robot Arms: Hardware Interfaces & Code" />
 <meta property="og:description" content="How ros2_control works for 6-DOF arms — hardware interface plugins, controller YAML configuration, and MoveIt 2 integration with real code." />
 <meta property="og:image" content="../ros2_robot_control.jpg" />
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/ros2-robot-arm-control" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="ros2_control for 6-Axis Robot Arms: Hardware Interfaces & Code" />
@@ -24,11 +24,11 @@
   "@type": "TechArticle",
   "headline": "ros2_control for 6-Axis Robot Arms: Hardware Interfaces, YAML Config & Code",
   "description": "How ros2_control works for 6-DOF robot arms, including hardware interface plugins, controller YAML configuration, and MoveIt 2 integration.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "datePublished":"2024-05-23",
   "dateModified":"2024-08-27",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
-  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html"},
+  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/ros2-robot-arm-control"},
   "image":"../ros2_robot_control.jpg"
 }
 </script>
@@ -152,7 +152,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
    "@type": "ListItem",
    "position": 1,
    "name": "Home",
-   "item": "https://roboticsengineeringlab.com/index.html"
+   "item": "https://roboticsengineeringlab.com/"
   },
   {
    "@type": "ListItem",
@@ -164,7 +164,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
    "@type": "ListItem",
    "position": 3,
    "name": "ros2_control for 6-Axis Robot Arms: Hardware Interfaces, YAML Config & Real Code",
-   "item": "https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html"
+   "item": "https://roboticsengineeringlab.com/articles/ros2-robot-arm-control"
   }
  ]
 }
@@ -174,13 +174,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <nav class="site-nav" aria-label="Site navigation">
 <div class="nav-inner">
-<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
 </div>
 </nav>
@@ -291,7 +291,7 @@ private:
 };
 </code></pre>
 </div>
-<p>The <code>read()</code> and <code>write()</code> methods are called at the controller manager's update rate — this is where you'd insert the actual serial protocol code (like the bus servo packet structure covered in our <a href="smart-servo-robot-arm.html">servo motor guide</a>) or an EtherCAT process data exchange. Everything above this layer never needs to know which one you're using.</p>
+<p>The <code>read()</code> and <code>write()</code> methods are called at the controller manager's update rate — this is where you'd insert the actual serial protocol code (like the bus servo packet structure covered in our <a href="smart-servo-robot-arm">servo motor guide</a>) or an EtherCAT process data exchange. Everything above this layer never needs to know which one you're using.</p>
 
 <div class="callout-warning">
 <strong>The plugin must be exported and registered.</strong> A working hardware interface also requires a <code>PLUGINLIB_EXPORT_CLASS</code> macro call and a plugin XML description file so <code>pluginlib</code> can dynamically load your class by the name referenced in the URDF. Omitting this is one of the most common first-time build errors — the controller manager fails at runtime with a "plugin not found" error rather than a compile error.
@@ -388,7 +388,7 @@ ros2 topic echo /joint_states
       - joint_6
 </code></pre>
 </div>
-<p>This is the seam where inverse kinematics (covered in our <a href="kinematic-solver-code.html">IK solver article</a>) and trajectory execution meet: MoveIt handles the planning and IK internally, and hands off only the resulting joint trajectory to ros2_control for execution — you generally don't call your own IK code directly when using this stack.</p>
+<p>This is the seam where inverse kinematics (covered in our <a href="kinematic-solver-code">IK solver article</a>) and trajectory execution meet: MoveIt handles the planning and IK internally, and hands off only the resulting joint trajectory to ros2_control for execution — you generally don't call your own IK code directly when using this stack.</p>
 
 <h2>Real-Time Considerations</h2>
 <p>For simulation or slow-moving educational arms, a standard Linux kernel works fine. For anything driving physical actuators at meaningful speed, scheduling jitter matters: if the OS occasionally delays your control loop by a few milliseconds, a fast-moving joint can overshoot or stutter. Production deployments typically run on a <strong>PREEMPT_RT patched kernel</strong>, which guarantees more consistent timing for the process running the controller manager. This is a deployment/OS-level concern, not something configured within ros2_control itself, but it directly affects whether your configured <code>update_rate</code> is actually achievable in practice.</p>
@@ -457,30 +457,30 @@ ros2 topic echo /joint_states
 
 <h2>Related Reading</h2>
 <ul>
-<li><a href="kinematic-solver-code.html">Inverse Kinematics Code for 6-DOF Robot Arms</a></li>
-<li><a href="smart-servo-robot-arm.html">Servo Motors for Robot Arms: PWM vs Smart Bus Servos Explained</a></li>
-<li><a href="joint-encoders-robot-arm.html">Joint Encoders for Robot Arms: Absolute, Incremental & Magnetic Types</a></li>
-<li><a href="arduino-robot-arm-tutorial.html">How to Build a 6-DOF Robot Arm with Arduino: Complete Tutorial</a></li>
-<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+<li><a href="kinematic-solver-code">Inverse Kinematics Code for 6-DOF Robot Arms</a></li>
+<li><a href="smart-servo-robot-arm">Servo Motors for Robot Arms: PWM vs Smart Bus Servos Explained</a></li>
+<li><a href="joint-encoders-robot-arm">Joint Encoders for Robot Arms: Absolute, Incremental & Magnetic Types</a></li>
+<li><a href="arduino-robot-arm-tutorial">How to Build a 6-DOF Robot Arm with Arduino: Complete Tutorial</a></li>
+<li><a href="../6-dof-robot-arm-guide">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
 <h3>Next: the 6-DOF Robot Arm Master Guide</h3>
 <p>Architecture, programming, calibration and application fundamentals in one place.</p>
-<a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
+<a href="../6-dof-robot-arm-guide" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published May 23, 2024 &middot; last reviewed August 27, 2024</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published May 23, 2024 &middot; last reviewed August 27, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
-<a href="arduino-robot-arm-tutorial.html" class="back-link" aria-label="Previous article">← Previous: How to Build a 6-DOF Robot Arm with Arduino: Complete Tutorial</a>
+<a href="arduino-robot-arm-tutorial" class="back-link" aria-label="Previous article">← Previous: How to Build a 6-DOF Robot Arm with Arduino: Complete Tutorial</a>
 </div>
 <div>
-<a href="industrial-plc-robotics.html" class="back-link" aria-label="Next article">Next: PLC Programming for Robotics: Siemens S7-1500 & FANUC Integration →</a>
+<a href="industrial-plc-robotics" class="back-link" aria-label="Next article">Next: PLC Programming for Robotics: Siemens S7-1500 & FANUC Integration →</a>
 </div>
 </div>
 
@@ -489,22 +489,22 @@ ros2 topic echo /joint_states
 <footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
 <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
 <div>
-<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
 <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Technical articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation.</p>
 </div>
 <div style="display:flex; gap:48px; flex-wrap:wrap;">
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
 <ul style="list-style:none;">
-<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 </ul>
 </div>
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
 <ul style="list-style:none;">
-<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
-<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
 </ul>
 </div>
 </div>
@@ -512,11 +512,11 @@ ros2 topic echo /joint_states
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 
@@ -527,7 +527,7 @@ ros2 topic echo /joint_states
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

@@ -8,13 +8,13 @@
 <meta name="description" content="Learn to build a 6-DOF Arduino robot arm: servo wiring, PCA9685 setup, calibration, inverse kinematics, code examples and safety tips.">
 <meta name="author" content="Marcus Chen">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial">
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="Build a 6-DOF Robot Arm with Arduino: Full Tutorial">
 <meta property="og:description" content="A practical tutorial covering servo selection, external power, PCA9685 wiring, calibration and inverse kinematics for a 6-DOF Arduino robot arm.">
 <meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-arduino-servo-power.jpg">
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -28,7 +28,7 @@
   "@type":"TechArticle",
   "headline":"How to Build a 6-DOF Robot Arm with Arduino: Wiring, Code and Inverse Kinematics",
   "description":"A practical guide to building and calibrating a six-degree-of-freedom Arduino robot arm with hobby servos and 3D-printed parts.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{
     "@type":"Organization",
     "name":"Robotics Engineering Blog",
@@ -37,7 +37,7 @@
   },
   "datePublished":"2024-03-09",
   "dateModified":"2024-07-08",
-  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "proficiencyLevel":"Intermediate",
   "dependencies":"Arduino Mega 2560, PCA9685 servo driver, six compatible servos, external 5-8.4 V servo power supply",
@@ -50,9 +50,9 @@
   "@context":"https://schema.org",
   "@type":"BreadcrumbList",
   "itemListElement":[
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/index.html"},
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
     {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
-    {"@type":"ListItem","position":3,"name":"Arduino Robot Arm Tutorial","item":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html"}
+    {"@type":"ListItem","position":3,"name":"Arduino Robot Arm Tutorial","item":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial"}
   ]
 }
 </script>
@@ -104,13 +104,13 @@
 
 <nav class="site-nav" aria-label="Site navigation">
   <div class="nav-inner">
-    <a class="logo" href="../index.html">Robotics <span>Engineering</span></a>
+    <a class="logo" href="../">Robotics <span>Engineering</span></a>
     <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
   </div>
 </nav>
@@ -121,7 +121,7 @@
     <div class="eyebrow">Robotics tutorial · Updated <time datetime="2024-07-08">July 8, 2024</time></div>
     <h1>How to Build a 6-DOF Robot Arm with Arduino</h1>
     <p>A practical guide to mechanical layout, servo power, PCA9685 wiring, calibration and inverse kinematics for a lightweight educational robot arm — written as a practical educational build: power, wiring, calibration and inverse kinematics, with the failure modes that usually stop a first arm.</p>
-    <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
+    <p class="byline">By <a href="../about">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
   </div>
 </header>
 
@@ -331,7 +331,7 @@ void loop() {
   <div class="avatar" aria-hidden="true">MC</div>
   <div>
     <h3>About the author</h3>
-    <p><strong>Marcus Chen</strong> is a robotics engineer specializing in low-cost automation and educational robot platforms. He has built and calibrated multiple Arduino and ROS-based robot arms for prototyping and STEM training, including the six-servo prototype documented in this tutorial. <a href="../about.html">More about Marcus →</a></p>
+    <p><strong>Marcus Chen</strong> is a robotics engineer specializing in low-cost automation and educational robot platforms. He has built and calibrated multiple Arduino and ROS-based robot arms for prototyping and STEM training, including the six-servo prototype documented in this tutorial. <a href="../about">More about Marcus →</a></p>
   </div>
 </div>
 
@@ -339,12 +339,12 @@ void loop() {
 
 <div class="cta">
   <h3>Continue learning</h3>
-  <p>For a broader comparison of robot-arm architectures, see the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Guide</a>. Always consult the manufacturer documentation for your exact servo and driver before final wiring.</p>
+  <p>For a broader comparison of robot-arm architectures, see the <a href="../6-dof-robot-arm-guide">6-DOF Robot Arm Guide</a>. Always consult the manufacturer documentation for your exact servo and driver before final wiring.</p>
 </div>
 
 <div class="footer-nav">
-  <a href="../index.html">← Previous: Cover</a>
-  <a href="../6-dof-robot-arm-guide.html">Next: The 6-DOF Robot Arm Guide →</a>
+  <a href="../">← Previous: Cover</a>
+  <a href="../6-dof-robot-arm-guide">Next: The 6-DOF Robot Arm Guide →</a>
 </div>
 
 </article>
@@ -361,18 +361,18 @@ void loop() {
 <footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
   <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
   <p style="margin-top:10px;">
-    <a href="../about.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
-    <a href="../contact.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
-    <a href="../privacy.html" style="color:var(--muted);text-decoration:none;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
+    <a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
+    <a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
+    <a href="../privacy" style="color:var(--muted);text-decoration:none;">Privacy Policy</a>
+        <a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
   </p>
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 
@@ -383,7 +383,7 @@ void loop() {
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">

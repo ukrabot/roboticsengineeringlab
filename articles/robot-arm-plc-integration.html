@@ -8,12 +8,12 @@
 <meta name="keywords" content="robot arm PLC integration, Siemens S7-1500 robot, Allen-Bradley CompactLogix robot, PROFINET robot arm, EtherNet/IP robot integration, 6-axis robot safety interlock, industrial automation USA Canada" />
 <meta name="author" content="Robotics Engineering" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-plc-integration.html" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-plc-integration" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Integrating 6-Axis Robot Arms with Siemens & Allen-Bradley PLCs" />
 <meta property="og:description" content="PROFINET vs EtherNet/IP, I/O mapping, and safety interlocks for connecting robot arms to PLCs in North American factories." />
 <meta property="og:image" content="../industrial_robot_arm.jpg" />
-<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-plc-integration.html" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-plc-integration" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Integrating 6-Axis Robot Arms with Siemens & Allen-Bradley PLCs" />
@@ -26,7 +26,7 @@
   "@type": "TechArticle",
   "headline": "Integrating 6-Axis Robot Arms with Siemens and Allen-Bradley PLCs",
   "description": "Step-by-step guide to integrating 6-axis robot arms with Siemens S7-1500 and Allen-Bradley CompactLogix PLCs: PROFINET vs EtherNet/IP, I/O tag mapping, and Category 4 safety interlocks.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "datePublished":"2025-03-09",
   "dateModified":"2025-07-08",
   "publisher": {
@@ -34,7 +34,7 @@
     "name":"Robotics Engineering",
     "logo": {"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
   },
-  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-arm-plc-integration.html"},
+  "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-arm-plc-integration"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "wordCount": "2400",
   "articleSection": "Industrial Automation"
@@ -46,9 +46,9 @@
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/index.html"},
-    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html"},
-    {"@type":"ListItem","position":3,"name":"Robot Arm PLC Integration","item":"https://roboticsengineeringlab.com/articles/robot-arm-plc-integration.html"}
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial"},
+    {"@type":"ListItem","position":3,"name":"Robot Arm PLC Integration","item":"https://roboticsengineeringlab.com/articles/robot-arm-plc-integration"}
   ]
 }
 </script>
@@ -193,13 +193,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <nav class="site-nav" aria-label="Site navigation">
 <div class="nav-inner">
-<a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="index.html">Tutorials</a>
-      <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../about.html">About</a>
-      <a href="../contact.html">Contact</a>
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
     </div>
 </div>
 </nav>
@@ -248,8 +248,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <h2 id="profinet-vs-ethernetip">PROFINET vs. EtherNet/IP: Which Network Should Drive Your Robot Cell?</h2>
 <p>The single biggest architectural decision in any robot-to-PLC integration is the fieldbus. In practice, the choice is rarely about which protocol is "better" — it's about which protocol your plant already standardized on.</p>
 <ul>
-<li><strong>PROFINET</strong> is the default for plants running <a href="https://www.siemens.com/global/en/products/automation/systems/industrial/plc.html" target="_blank" rel="noopener noreferrer">Siemens S7-1200/1500</a> PLCs programmed in TIA Portal. It uses a GSDML device file to describe the robot controller's I/O structure, supports cyclic real-time data exchange down to 1 ms, and integrates cleanly with Siemens' PROFIsafe protocol for safety-rated signals over the same cable.</li>
-<li><strong>EtherNet/IP</strong> is the standard for <a href="https://www.rockwellautomation.com/en-us/products/hardware/allen-bradley.html" target="_blank" rel="noopener noreferrer">Allen-Bradley</a> ControlLogix and CompactLogix processors running Studio 5000. It relies on an EDS (Electronic Data Sheet) file for device configuration and uses CIP Safety for safety-rated I/O over the same physical network.</li>
+<li><strong>PROFINET</strong> is the default for plants running <a href="https://www.siemens.com/global/en/products/automation/systems/industrial/plc" target="_blank" rel="noopener noreferrer">Siemens S7-1200/1500</a> PLCs programmed in TIA Portal. It uses a GSDML device file to describe the robot controller's I/O structure, supports cyclic real-time data exchange down to 1 ms, and integrates cleanly with Siemens' PROFIsafe protocol for safety-rated signals over the same cable.</li>
+<li><strong>EtherNet/IP</strong> is the standard for <a href="https://www.rockwellautomation.com/en-us/products/hardware/allen-bradley" target="_blank" rel="noopener noreferrer">Allen-Bradley</a> ControlLogix and CompactLogix processors running Studio 5000. It relies on an EDS (Electronic Data Sheet) file for device configuration and uses CIP Safety for safety-rated I/O over the same physical network.</li>
 <li><strong>Modbus TCP</strong> still shows up on older or budget-driven installations. It's simple and vendor-neutral but lacks native safety extensions, so it's rarely used for anything beyond non-safety status reporting.</li>
 <li><strong>OPC-UA</strong> is increasingly layered on top of either network for MES/SCADA reporting — production counts, cycle-time analytics, and predictive maintenance data — without interfering with the deterministic control traffic.</li>
 </ul>
@@ -345,18 +345,18 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <h2>Related Resources and Next Steps</h2>
 <p>To go deeper into the surrounding topics referenced in this guide, explore these related articles:</p>
 <ul>
-<li><a href="esp32-robot-controller.html">ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration</a></li>
-<li><a href="carbon-fiber-robot-parts.html">Carbon Fiber Components for Lightweight 6-DOF Robot Arms</a></li>
-<li><a href="force-torque-sensors-robot.html">Force and Torque Sensors for 6-DOF Robot Arms: Integration & Calibration</a></li>
-<li><a href="cable-management-robot.html">Robot Arm Cable Management: Internal Routing, Slip Rings & Protective Sleeves</a></li>
-<li><a href="../6-dof-robot-arm-guide.html">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
+<li><a href="esp32-robot-controller">ESP32 as Robot Arm Controller: Performance, WiFi & Bluetooth Integration</a></li>
+<li><a href="carbon-fiber-robot-parts">Carbon Fiber Components for Lightweight 6-DOF Robot Arms</a></li>
+<li><a href="force-torque-sensors-robot">Force and Torque Sensors for 6-DOF Robot Arms: Integration & Calibration</a></li>
+<li><a href="cable-management-robot">Robot Arm Cable Management: Internal Routing, Slip Rings & Protective Sleeves</a></li>
+<li><a href="../6-dof-robot-arm-guide">The Complete 6-DOF Robot Arm Guide (2026)</a></li>
 </ul>
 
 <h2>Sources and References</h2>
 <p>Technical claims in this guide are cross-checked against manufacturer documentation and the following standards bodies:</p>
 <ul>
-<li><strong><a href="https://www.siemens.com/global/en/products/automation/systems/industrial/plc.html" target="_blank" rel="noopener noreferrer">Siemens Industrial Automation</a></strong> — S7-1500 and TIA Portal PROFINET configuration documentation.</li>
-<li><strong><a href="https://www.rockwellautomation.com/en-us/products/hardware/allen-bradley.html" target="_blank" rel="noopener noreferrer">Rockwell Automation</a></strong> — CompactLogix/ControlLogix and Studio 5000 EtherNet/IP documentation.</li>
+<li><strong><a href="https://www.siemens.com/global/en/products/automation/systems/industrial/plc" target="_blank" rel="noopener noreferrer">Siemens Industrial Automation</a></strong> — S7-1500 and TIA Portal PROFINET configuration documentation.</li>
+<li><strong><a href="https://www.rockwellautomation.com/en-us/products/hardware/allen-bradley" target="_blank" rel="noopener noreferrer">Rockwell Automation</a></strong> — CompactLogix/ControlLogix and Studio 5000 EtherNet/IP documentation.</li>
 <li><strong>PROFIBUS & PROFINET International (PI)</strong> — PROFINET and PROFIsafe technical specifications.</li>
 <li><strong><a href="https://www.odva.org/" target="_blank" rel="noopener noreferrer">ODVA</a></strong> — EtherNet/IP and CIP Safety specifications.</li>
 <li><strong>ANSI (American National Standards Institute)</strong> — ANSI RIA R15.06 robot safety standard.</li>
@@ -366,7 +366,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <h2>Conclusion</h2>
 <p>Integrating a 6-axis robot arm with a Siemens or Allen-Bradley PLC is fundamentally a discipline problem, not a technology problem — the protocols, I/O structures, and safety categories described in this guide are well documented by both vendors. Cells fail in commissioning when tag names drift between the robot and PLC programs, when safety bypasses aren't tracked, or when the network isn't sized for the actual traffic load. Start with a shared I/O tag sheet, choose the network protocol that matches your existing PLC fleet, and treat safety wiring as a separate, auditable circuit from day one.</p>
-<p>For further reading on the mechanical and control-system side of 6-DOF robot arms, see the <a href="../6-dof-robot-arm-guide.html">6-DOF Robot Arm Master Guide</a>.</p>
+<p>For further reading on the mechanical and control-system side of 6-DOF robot arms, see the <a href="../6-dof-robot-arm-guide">6-DOF Robot Arm Master Guide</a>.</p>
 
 <div class="author-box">
 <div class="avatar" aria-hidden="true"></div>
@@ -394,20 +394,20 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="cta-banner" aria-label="Internal link call to action">
 <h3>Continue with the Master Guide</h3>
 <p>How the topics on this page fit into a complete robot arm build.</p>
-<a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
+<a href="../6-dof-robot-arm-guide" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published March 9, 2025 &middot; last reviewed July 8, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published March 9, 2025 &middot; last reviewed July 8, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
-<a href="robot-arm-maintenance.html" class="back-link" aria-label="Previous article">← Previous: 6-Axis Robot Arm Maintenance Schedule</a>
+<a href="robot-arm-maintenance" class="back-link" aria-label="Previous article">← Previous: 6-Axis Robot Arm Maintenance Schedule</a>
 </div>
 <div>
-<a href="robot-arm-programming-languages.html" class="back-link" aria-label="Next article">Next: Programming Languages for 6-DOF Robot Arms →</a>
+<a href="robot-arm-programming-languages" class="back-link" aria-label="Next article">Next: Programming Languages for 6-DOF Robot Arms →</a>
 </div>
 </div>
 
@@ -416,22 +416,22 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
 <div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
 <div>
-<a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
 <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Practical articles on 6-DOF robot arms, Arduino, ROS 2, and industrial automation for the USA and Canada market.</p>
 </div>
 <div style="display:flex; gap:48px; flex-wrap:wrap;">
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
 <ul style="list-style:none;">
-<li><a href="../index.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 </ul>
 </div>
 <div>
 <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
 <ul style="list-style:none;">
-<li><a href="arduino-robot-arm-tutorial.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
-<li><a href="ros2-robot-arm-control.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
 </ul>
 </div>
 </div>
@@ -439,11 +439,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
 
@@ -454,7 +454,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
         We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
-        <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
