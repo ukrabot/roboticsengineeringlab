@@ -24,9 +24,9 @@
   "@type": "TechArticle",
   "headline": "Inverse Kinematics Code for 6-DOF Robot Arms: Python, C++ & Arduino Examples",
   "description": "Working inverse kinematics code for 6-DOF robot arms, including geometric spherical-wrist decoupling, Jacobian-based numerical IK, and a practical Arduino implementation.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2024-06-23",
+  "dateModified":"2024-07-24",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
   "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/kinematic-solver-code.html"},
   "image":"../robotic_arm_hero.jpg",
@@ -144,6 +144,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Inverse Kinematics Code for 6-DOF Robot Arms: Python, C++ & Arduino",
+   "item": "https://roboticsengineeringlab.com/articles/kinematic-solver-code.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -161,9 +187,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="6-DOF robot arm kinematic chain used for inverse kinematics examples" loading="eager" />
+<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="6-DOF robot arm kinematic chain used for inverse kinematics examples" loading="eager" / width="1024" height="1536">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Software — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Software — Updated July 24, 2024</div>
 <h1>Inverse Kinematics Code for 6-DOF Robot Arms: <em>Python, C++ & Arduino</em></h1>
 <p class="hero-sub">A working geometric IK solver for arms with a spherical wrist, a Jacobian-based numerical solver for everything else, and an honest answer to whether your Arduino can actually run it in real time.</p>
 </div>
@@ -175,7 +201,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Before solving inverse kinematics, you need forward kinematics (FK) — computing the end-effector's pose from known joint angles. This is done using Denavit-Hartenberg (DH) parameters, a standard way to describe each joint's geometry with four values: link length (a), link twist (α), link offset (d), and joint angle (θ).</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-6dof-kinematics.jpg" alt="Editorial diagram of joint axes used by an inverse-kinematics solver." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Diagram is indicative and not to scale.</figcaption>
 </figure>
 
 <p>Each joint's transformation is a 4×4 homogeneous matrix. Multiplying all six matrices together gives the full transform from the base to the end-effector.</p>
@@ -420,7 +446,7 @@ void loop() {
 <h2>Geometric vs. Numerical: When to Use Each</h2>
 <div class="table-wrap" aria-label="IK method comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Property</th><th>Geometric (Spherical Wrist)</th><th>Numerical (Jacobian/DLS)</th></tr></thead>
 <tbody>
 <tr><td>Speed</td><td>Very fast — closed-form, fixed number of operations</td><td>Slower — iterative, variable number of steps to converge</td></tr>
@@ -498,15 +524,15 @@ assert converged and position_error &lt; 1e-3, "IK solver failed round-trip test
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Next: the 6-DOF Robot Arm Master Guide</h3>
+<p>Architecture, programming, calibration and application fundamentals in one place.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Practical guide: every value quoted is either cited or derived on this page. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published June 23, 2024 &middot; last reviewed July 24, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -519,7 +545,7 @@ assert converged and position_error &lt; 1e-3, "IK solver failed round-trip test
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Component limits vary by variant and revision; check the governing datasheet.</p>
 <ul>
 <li><a href="https://docs.ros.org/" target="_blank" rel="noopener noreferrer">ROS 2 documentation</a></li><li><a href="https://modernrobotics.northwestern.edu/" target="_blank" rel="noopener noreferrer">Modern Robotics online textbook</a></li>
 </ul>
@@ -556,6 +582,7 @@ assert converged and position_error &lt; 1e-3, "IK solver failed round-trip test
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

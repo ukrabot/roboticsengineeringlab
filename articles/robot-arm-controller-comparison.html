@@ -15,14 +15,14 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm" />
 <meta property="og:description" content="Real-time PWM handling, power draw, cost, and hybrid architecture guidance for choosing a robot arm controller." />
-<meta property="og:image" content="https://roboticsengineeringlab.com/articles/robotic_arm_hero.jpg" />
+<meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
 <meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html" />
 <meta property="og:locale" content="en_US" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Raspberry Pi vs Arduino vs ESP32 for Robot Arm Control" />
 <meta name="twitter:description" content="Real-time PWM handling, power draw, cost, and hybrid architecture guidance for choosing a robot arm controller." />
-<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/robotic_arm_hero.jpg" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
 
 <script type="application/ld+json">
 {
@@ -30,13 +30,7 @@
   "@type": "TechArticle",
   "headline": "Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm",
   "description": "A practical comparison of Raspberry Pi, Arduino Mega, and ESP32 as robot arm controllers, covering real-time PWM handling, power draw, cost, and hybrid architectures.",
-  "author": {
-    "@type": "Person",
-    "name": "Marcus Chen",
-    "jobTitle": "Robotics Engineer",
-    "url": "https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -47,9 +41,9 @@
     "@type": "WebPage",
     "@id": "https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison.html"
   },
-  "image": "https://roboticsengineeringlab.com/articles/robotic_arm_hero.jpg",
-  "datePublished": "2026-07-27",
-  "dateModified": "2026-07-27",
+  "image": "https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
+  "datePublished": "2025-10-09",
+  "dateModified": "2026-03-31",
   "articleSection": "DIY Robot Arm Electronics",
   "wordCount": "2500"
 }
@@ -229,9 +223,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="robotic_arm_hero.jpg" alt="Raspberry Pi, Arduino Mega, and ESP32 boards next to a robot arm controller enclosure" loading="eager" width="1600" height="900" />
+<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Raspberry Pi, Arduino Mega, and ESP32 boards next to a robot arm controller enclosure" loading="eager" width="1600" height="900" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated July 27, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated March 31, 2026</div>
 <h1>Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm</h1>
 <p class="hero-sub">What each board is actually good at, where the PWM and power-draw trade-offs bite, and why most serious builds — including mine — end up running two of them together instead of picking just one. <br><span class="badge">Controllers &bull; Raspberry Pi &bull; ESP32</span></p>
 </div>
@@ -257,14 +251,14 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>"Which board should I use?" is really three separate questions wearing one trench coat: can it generate clean, consistent timing signals for six or more servos at once, does it have enough compute for anything beyond fixed motion sequences (vision, path planning, a ROS 2 node), and does its power and logic-voltage profile fit the rest of your build. Get the first one wrong and joints twitch or drift. Get the second one wrong and you've bought more board than your project needs, or far less.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-ros2-control.jpg" alt="Editorial diagram of a robot control stack used when comparing controllers." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 
 <h2 id="overview">Three Boards at a Glance</h2>
 <div class="table-wrap" aria-label="Controller board comparison overview">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Board</th><th>What it is</th><th>Native servo timing</th><th>Logic voltage</th><th>Best fit</th></tr></thead>
 <tbody>
 <tr><td>Arduino Mega 2560</td><td>Bare microcontroller, no OS</td><td>Excellent — dedicated hardware timers, 54 digital pins</td><td>5V</td><td>Pure real-time servo control, point-to-point wiring</td></tr>
@@ -288,7 +282,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Power draw scales with what's on the board, and it matters directly if you're building the battery-powered arm covered in our <a href="robot-arm-battery-power.html">battery and power system guide</a> — a controller with a heavier power budget eats directly into your runtime.</p>
 <div class="table-wrap" aria-label="Controller power draw comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Board</th><th>Typical Idle Draw</th><th>Typical Active Draw</th><th>Recommended Supply</th></tr></thead>
 <tbody>
 <tr><td>Arduino Mega 2560</td><td>~50-80mA</td><td>~100-150mA</td><td>5V USB or 7-12V barrel jack</td></tr>
@@ -319,7 +313,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <h2 id="cost">Cost Comparison</h2>
 <div class="table-wrap" aria-label="Controller cost comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Setup</th><th>Approximate Cost (USD)</th><th>Notes</th></tr></thead>
 <tbody>
 <tr><td>Arduino Mega 2560 alone</td><td>$15 - $40</td><td>No driver board needed for a 6-servo PWM build</td></tr>
@@ -382,8 +376,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Specification note: figures transcribed from manufacturer documentation, not a bench test. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published October 9, 2025 &middot; last reviewed March 31, 2026</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -407,7 +401,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 <li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
 <li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
-<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
+<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
 </ul>
 </div>
 </div>

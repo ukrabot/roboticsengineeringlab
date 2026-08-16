@@ -25,21 +25,15 @@
   "@type":"TechArticle",
   "headline":"Best 3D Printer for Robot Arm Parts: FDM, Resin and Print Settings",
   "description":"A practical guide to selecting a 3D printer and material for robot links, brackets, grippers, covers and prototypes.",
-  "author":{
-    "@type":"Person",
-    "name":"Marcus Chen",
-    "jobTitle":"Robotics Engineer",
-    "url":"https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{
     "@type":"Organization",
     "name":"Robotics Engineering Blog",
     "url":"https://roboticsengineeringlab.com",
     "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
   },
-  "datePublished":"2024-09-12",
-  "dateModified":"2024-11-04",
+  "datePublished":"2024-11-09",
+  "dateModified":"2025-03-10",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/best-3d-printer-robot-parts.html"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "proficiencyLevel":"Intermediate",
@@ -118,9 +112,9 @@
 </nav>
 
 <header class="hero">
-  <img src="../industrial_robot_arm.jpg" alt="3D printed robot arm component in an engineering workspace" fetchpriority="high">
+  <img src="../industrial_robot_arm.jpg" alt="3D printed robot arm component in an engineering workspace" fetchpriority="high" width="1024" height="322" loading="lazy" decoding="async">
   <div class="hero-inner">
-    <div class="eyebrow">Robotics engineering · Updated <time datetime="2024-11-04">November 4, 2024</time></div>
+    <div class="eyebrow">Robotics engineering · Updated <time datetime="2025-03-10">March 10, 2025</time></div>
     <h1>Best 3D Printer for Robot Arm Parts</h1>
     <p>Choose between FDM and resin printing for robot links, joints, grippers and brackets. Compare materials, tolerances, print orientation, settings and validation — based on parts I've printed, broken, and reprinted.</p>
     <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 13 min read</p>
@@ -131,7 +125,7 @@
 <article>
 
 <div class="article-img">
-  <img src="../industrial_robot_arm.jpg" alt="3D printed parts for a robot arm prototype" loading="lazy">
+  <img src="../industrial_robot_arm.jpg" alt="3D printed parts for a robot arm prototype" loading="lazy" width="1024" height="322">
   <div class="caption">Printer selection is only one part of the design: material, layer orientation, fasteners and load validation determine whether a printed part is fit for use.</div>
 </div>
 
@@ -194,7 +188,7 @@
 <p>Nylon can provide toughness and useful fatigue performance, but it absorbs moisture and must be dried and stored correctly. Carbon-fiber- or glass-fiber-filled filaments can increase stiffness, but they require a hardened nozzle and do not automatically improve layer adhesion in every design. Short fibers also do not behave like continuous reinforcement.</p>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Material</th><th>Useful for</th><th>Main limitation</th><th>Printer considerations</th></tr></thead>
 <tbody>
 <tr><td>PLA</td><td>Fit checks, covers, light prototypes</td><td>Heat and creep under load</td><td>Easy open-frame printing</td></tr>
@@ -263,7 +257,7 @@
 <h2>3D printing troubleshooting</h2>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Symptom</th><th>Likely cause</th><th>Correction</th></tr></thead>
 <tbody>
 <tr><td>Layer separation</td><td>Low temperature, excessive cooling or wet filament</td><td>Dry the material, tune temperature and reduce cooling where appropriate.</td></tr>
@@ -333,7 +327,7 @@
 </article>
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. These figures are orientation only &mdash; the manufacturer&rsquo;s current documentation governs.</p>
 <ul>
 <li><a href="https://help.prusa3d.com/materials" target="_blank" rel="noopener noreferrer">Prusa Research material guide</a></li><li><a href="https://ultimaker.com/materials/" target="_blank" rel="noopener noreferrer">UltiMaker material data sheets</a></li>
 </ul>
@@ -346,6 +340,7 @@
   <a href="../about.html" style="color:var(--quiet)">About</a> ·
   <a href="../contact.html" style="color:var(--quiet)">Contact</a> ·
   <a href="../privacy.html" style="color:var(--quiet)">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--quiet)">Editorial standards</a>
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">

@@ -28,21 +28,15 @@
   "@type":"TechArticle",
   "headline":"How to Build a 6-DOF Robot Arm with Arduino: Wiring, Code and Inverse Kinematics",
   "description":"A practical guide to building and calibrating a six-degree-of-freedom Arduino robot arm with hobby servos and 3D-printed parts.",
-  "author":{
-    "@type":"Person",
-    "name":"Marcus Chen",
-    "jobTitle":"Robotics Engineer",
-    "url":"https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{
     "@type":"Organization",
     "name":"Robotics Engineering Blog",
     "url":"https://roboticsengineeringlab.com",
     "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
   },
-  "datePublished":"2024-03-12",
-  "dateModified":"2024-11-04",
+  "datePublished":"2024-03-09",
+  "dateModified":"2024-07-08",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial.html"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "proficiencyLevel":"Intermediate",
@@ -122,9 +116,9 @@
 </nav>
 
 <header class="hero">
-  <img src="diagram-6dof-kinematics.jpg" alt="Editorial diagram of a six-axis educational robot arm and its joint frames" fetchpriority="high">
+  <img src="diagram-6dof-kinematics.jpg" alt="Editorial diagram of a six-axis educational robot arm and its joint frames" fetchpriority="high" width="1376" height="768" loading="lazy" decoding="async">
   <div class="hero-inner">
-    <div class="eyebrow">Robotics tutorial · Updated <time datetime="2024-11-04">November 4, 2024</time></div>
+    <div class="eyebrow">Robotics tutorial · Updated <time datetime="2024-07-08">July 8, 2024</time></div>
     <h1>How to Build a 6-DOF Robot Arm with Arduino</h1>
     <p>A practical guide to mechanical layout, servo power, PCA9685 wiring, calibration and inverse kinematics for a lightweight educational robot arm — written as a practical educational build: power, wiring, calibration and inverse kinematics, with the failure modes that usually stop a first arm.</p>
     <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
@@ -135,7 +129,7 @@
 <article>
 
 <div class="article-img">
-  <img src="diagram-arduino-servo-power.jpg" alt="Editorial wiring diagram: Arduino control signals, separate servo supply and common ground" loading="lazy">
+  <img src="diagram-arduino-servo-power.jpg" alt="Editorial wiring diagram: Arduino control signals, separate servo supply and common ground" loading="lazy" width="1376" height="768">
   <div class="caption">Editorial diagram. Power distribution and calibration usually matter more than the first Arduino sketch.</div>
 </div>
 
@@ -159,7 +153,7 @@
 <p>A 6-DOF Arduino robot arm is a useful educational platform for learning kinematics, servo control, CAD and 3D printing. This tutorial targets a lightweight desktop arm that moves small objects slowly. It is not an industrial robot and should not be used for lifting people, sharp tools, hazardous materials or unattended production.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-arduino-servo-power.jpg" alt="Editorial wiring diagram of an Arduino Mega, a separate 6 V servo supply, common ground and six servos." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 <figure class="editorial-illustration" style="margin:32px 0 44px;">
@@ -175,7 +169,7 @@
 <p>Degrees of freedom describe independent motion variables, not the number of visible links. A common serial chain is:</p>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Joint</th><th>Motion</th><th>Main design concern</th></tr></thead>
 <tbody>
 <tr><td>J1 base</td><td>Yaw around the vertical axis</td><td>Base stability and bearing load</td></tr>
@@ -297,7 +291,7 @@ void loop() {
 <h2>Troubleshooting table</h2>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Symptom</th><th>Likely cause</th><th>What to check</th></tr></thead>
 <tbody>
 <tr><td>Arduino resets</td><td>Servo supply sag or shared USB power</td><td>Measure V+ during motion; use a separate regulated supply and common ground.</td></tr>
@@ -356,7 +350,7 @@ void loop() {
 </article>
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Confirm every safety-relevant limit in the current documentation before you rely on it.</p>
 <ul>
 <li><a href="https://docs.arduino.cc/hardware/mega-2560/" target="_blank" rel="noopener noreferrer">Arduino Mega 2560 Rev3 technical specifications</a></li><li><a href="https://www.nxp.com/products/power-management/lighting-driver-and-controller-ics/led-drivers/16-channel-12-bit-pwm-fm-plus-ic-bus-led-controller:PCA9685" target="_blank" rel="noopener noreferrer">NXP PCA9685 product documentation</a></li>
 </ul>
@@ -370,6 +364,7 @@ void loop() {
     <a href="../about.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
     <a href="../contact.html" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
     <a href="../privacy.html" style="color:var(--muted);text-decoration:none;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
   </p>
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>

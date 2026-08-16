@@ -24,9 +24,9 @@
   "@type": "TechArticle",
   "headline": "ros2_control for 6-Axis Robot Arms: Hardware Interfaces, YAML Config & Code",
   "description": "How ros2_control works for 6-DOF robot arms, including hardware interface plugins, controller YAML configuration, and MoveIt 2 integration.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2024-05-23",
+  "dateModified":"2024-08-27",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
   "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html"},
   "image":"../ros2_robot_control.jpg"
@@ -37,9 +37,9 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"What is ros2_control and how is it different from writing your own driver?","acceptedAnswer":{"@type":"Answer","text":"ros2_control is a standardized framework that separates hardware communication from control algorithms. Instead of writing a custom PID loop and trajectory follower for every robot, you write a small hardware interface plugin that exposes joint states and accepts commands, and reuse standard, tested controllers (joint trajectory controller, position controllers, etc.) that work identically across different robots."},
-    {"@type":"Question","name":"What's the difference between a hardware interface and a controller in ros2_control?","acceptedAnswer":{"@type":"Answer","text":"The hardware interface is the layer that talks to your actual motors and encoders — reading real joint positions and sending real commands, specific to your robot. The controller is hardware-agnostic logic (like a joint trajectory controller) that runs on top of the hardware interface, consuming standardized state data and producing standardized commands, regardless of what physical hardware is underneath."},
-    {"@type":"Question","name":"Do I need real-time Linux (PREEMPT_RT) to use ros2_control?","acceptedAnswer":{"@type":"Answer","text":"Not strictly for development or simulation, but for control loops running at high update rates (500Hz-1kHz) on real hardware, a standard non-real-time kernel introduces scheduling jitter that can cause instability, especially for high-precision industrial applications. PREEMPT_RT is recommended for production deployments controlling physical actuators directly."},
+    {"@type":"Question","name":"What is ros2_control and how is it different from writing your own driver?","acceptedAnswer":{"@type":"Answer","text":"ros2_control is a standardized framework that separates hardware communication from control algorithms. Instead of writing a custom PID loop and trajectory follower for every robot, you write a small hardware interface plugin that exposes joint states and accepts commands, and reuse standard, tested controllers (joint trajectory controller, position controllers, etc.) that work identically across different robots."}},
+    {"@type":"Question","name":"What's the difference between a hardware interface and a controller in ros2_control?","acceptedAnswer":{"@type":"Answer","text":"The hardware interface is the layer that talks to your actual motors and encoders — reading real joint positions and sending real commands, specific to your robot. The controller is hardware-agnostic logic (like a joint trajectory controller) that runs on top of the hardware interface, consuming standardized state data and producing standardized commands, regardless of what physical hardware is underneath."}},
+    {"@type":"Question","name":"Do I need real-time Linux (PREEMPT_RT) to use ros2_control?","acceptedAnswer":{"@type":"Answer","text":"Not strictly for development or simulation, but for control loops running at high update rates (500Hz-1kHz) on real hardware, a standard non-real-time kernel introduces scheduling jitter that can cause instability, especially for high-precision industrial applications. PREEMPT_RT is recommended for production deployments controlling physical actuators directly."}},
     {"@type":"Question","name":"Can ros2_control talk directly to an EtherCAT servo drive?","acceptedAnswer":{"@type":"Answer","text":"Yes, but not natively out of the box — you write a hardware interface plugin that internally uses an EtherCAT master library (such as SOEM or IgH EtherCAT Master) to communicate with the drives, and exposes the resulting joint data through the standard ros2_control interface so the rest of the stack doesn't need to know EtherCAT is involved."}}
   ]
 }
@@ -143,6 +143,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "ros2_control for 6-Axis Robot Arms: Hardware Interfaces, YAML Config & Real Code",
+   "item": "https://roboticsengineeringlab.com/articles/ros2-robot-arm-control.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -160,9 +186,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../ros2_robot_control.jpg" alt="ROS 2 control architecture diagram for a 6-DOF robot arm" loading="eager" />
+<img class="hero-bg" src="../ros2_robot_control.jpg" alt="ROS 2 control architecture diagram for a 6-DOF robot arm" loading="eager" / width="1536" height="1024">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Software — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Software — Updated August 27, 2024</div>
 <h1>ros2_control for 6-Axis Robot Arms: <em>Hardware Interfaces, YAML Config & Real Code</em></h1>
 <p class="hero-sub">The framework that separates "write a custom driver for every robot" from "write one small plugin and reuse everything else." Here's what actually happens between a trajectory command and a motor turning.</p>
 </div>
@@ -174,7 +200,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Before ros2_control existed as a standard, every ROS robot driver reinvented the same wheel: reading joint encoders, running a control loop, handling trajectory interpolation, and exposing that to the rest of the software stack — all custom, all slightly incompatible with the next robot's driver. <strong>ros2_control's core idea is separation of concerns</strong>: hardware-specific code (talking to your actual motors) is isolated into a small, swappable component, while control logic (trajectory following, PID loops, gravity compensation) lives in reusable, hardware-agnostic controllers that work identically whether you're driving a simulated arm, a Dynamixel-based DIY arm, or an EtherCAT industrial servo system.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-ros2-control.jpg" alt="Editorial flowchart of ros2_control: user node, controller manager, hardware interface and robot or simulator." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 <p>This matters practically: once you've written a correct hardware interface for your robot, you get access to the entire ecosystem of existing controllers (joint trajectory controller, forward position controller, admittance controller) and tools (MoveIt 2, rqt_joint_trajectory_controller, ros2_control's built-in diagnostics) without writing any of that logic yourself.</p>
@@ -439,15 +465,15 @@ ros2 topic echo /joint_states
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Next: the 6-DOF Robot Arm Master Guide</h3>
+<p>Architecture, programming, calibration and application fundamentals in one place.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published May 23, 2024 &middot; last reviewed August 27, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -489,6 +515,7 @@ ros2 topic echo /joint_states
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

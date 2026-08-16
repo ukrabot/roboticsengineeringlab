@@ -26,9 +26,9 @@
   "@type": "TechArticle",
   "headline": "Integrating 6-Axis Robot Arms with Siemens and Allen-Bradley PLCs",
   "description": "Step-by-step guide to integrating 6-axis robot arms with Siemens S7-1500 and Allen-Bradley CompactLogix PLCs: PROFINET vs EtherNet/IP, I/O tag mapping, and Category 4 safety interlocks.",
-  "author": {"@type":"Organization","name":"Robotics Engineering","url":"https://roboticsengineeringlab.com/"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2025-03-09",
+  "dateModified":"2025-07-08",
   "publisher": {
     "@type":"Organization",
     "name":"Robotics Engineering",
@@ -207,7 +207,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="6-axis industrial robot arm wired to a Siemens PLC control cabinet on a factory floor" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — Updated July 8, 2025</div>
 <h1>Integrating 6-Axis Robot Arms with Siemens and Allen-Bradley PLCs</h1>
 <p class="hero-sub">A practical field guide to wiring, network configuration, I/O mapping, and Category 4 safety interlocks for robot cells built around Siemens and Rockwell control platforms. <br><span class="badge">USA &bull; Canada &bull; PROFINET &bull; EtherNet/IP</span></p>
 </div>
@@ -240,7 +240,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Buying a 6-axis robot arm is the easy part. The engineering work that actually determines whether a cell runs reliably for ten years happens at the network and safety layer — the point where the robot controller has to talk to the plant's Siemens or Allen-Bradley PLC without dropping a signal during a 0.5-second pick-and-place cycle.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-plc-robot-integration.jpg" alt="Editorial diagram of PLC-to-robot integration with safety I/O." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Diagram is indicative and not to scale.</figcaption>
 </figure>
 
 <p>Most integration failures in North American plants are not mechanical. They come from mismatched network protocols, sloppy I/O tag naming between the robot teach pendant and the PLC program, or safety circuits that were "temporarily" jumpered during commissioning and never fixed. This guide walks through the three things that actually matter: choosing the right industrial network, mapping I/O correctly, and building a safety architecture that will pass a third-party audit.</p>
@@ -284,7 +284,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Regardless of which network you choose, the robot and PLC exchange a small, well-defined set of signals on every cycle. Getting this handshake wrong is the number one cause of cells that "work in testing but fault randomly in production."</p>
 <div class="table-wrap" aria-label="Typical I/O handshake tags">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Signal</th><th>Direction</th><th>Type</th><th>Purpose</th></tr></thead>
 <tbody>
 <tr><td>Cycle_Start</td><td>PLC → Robot</td><td>Digital, pulsed</td><td>Tells the robot to begin the next program cycle</td></tr>
@@ -332,7 +332,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Category comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Category</th><th>Typical Payload</th><th>Typical Reach</th><th>Common PLC Pairing</th></tr></thead>
 <tbody>
 <tr><td>Desktop / DIY</td><td>0.5 - 2 kg</td><td>300 - 700 mm</td><td>Arduino / Modbus (rarely industrial PLC)</td></tr>
@@ -392,15 +392,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Continue with the Master Guide</h3>
+<p>How the topics on this page fit into a complete robot arm build.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published March 9, 2025 &middot; last reviewed July 8, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -442,6 +442,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

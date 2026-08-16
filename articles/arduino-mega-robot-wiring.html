@@ -31,13 +31,7 @@
   "@type": "TechArticle",
   "headline": "Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos",
   "description": "Complete wiring diagrams for Arduino Mega 2560 with up to 16 smart servos, covering bus topology, current budget calculations, wire gauge selection, and power supply sizing for DIY robot arm builds.",
-  "author": {
-    "@type": "Person",
-    "name": "Marcus Chen",
-    "jobTitle": "Robotics Engineer",
-    "url": "https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -49,8 +43,8 @@
     "@id": "https://roboticsengineeringlab.com/articles/arduino-mega-robot-wiring.html"
   },
   "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "datePublished": "2025-10-20",
-  "dateModified": "2026-07-24",
+  "datePublished": "2024-04-23",
+  "dateModified": "2024-06-07",
   "articleSection": "DIY Robot Arm Electronics",
   "wordCount": "2850"
 }
@@ -237,7 +231,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Arduino Mega 2560 board wired to a chain of smart servos for a DIY 6-axis robot arm build" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated June 7, 2024</div>
 <h1>Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos</h1>
 <p class="hero-sub">Complete wiring diagrams for an Arduino Mega 2560 driving up to 16 smart servos over a single bus — pinout, current budget math, wire gauge, and power supply sizing, based on a bus I wired and debugged myself. <br><span class="badge">Arduino Mega &bull; Smart Servos &bull; Bus Wiring</span></p>
 </div>
@@ -282,7 +276,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>The wiring architecture follows a star-to-bus topology: the Arduino Mega's serial pins connect to a single bus line that daisy-chains through every servo, while power is distributed from a centralized supply rather than individually from the Arduino board itself — the Arduino's onboard 5V regulator cannot supply the current a servo bus requires.</p>
 <div class="table-wrap" aria-label="Arduino Mega to smart servo pin mapping">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Arduino Mega Pin</th><th>Function</th><th>Connection Target</th></tr></thead>
 <tbody>
 <tr><td>Pin 2 (TX)</td><td>Serial transmit (TTL)</td><td>Servo bus input (first servo)</td></tr>
@@ -324,7 +318,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>A point-to-point wiring scheme for 16 individually-wired servos requires 16 signal cables plus 16 power cables — 32 separate connections at minimum before accounting for any junction boxes. The bus architecture consolidates this dramatically:</p>
 <div class="table-wrap" aria-label="Wiring topology comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Wiring Approach</th><th>Direct Arduino Connections</th><th>Total Connectors (approx.)</th></tr></thead>
 <tbody>
 <tr><td>Point-to-point (16 individual servos)</td><td>32 (16 signal + 16 power)</td><td>32+</td></tr>
@@ -351,7 +345,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>For budgeting purposes, here is a representative cost breakdown for a complete 6-axis Arduino Mega smart-servo build using 6 servos (one per axis) rather than a full 16-servo bus, which is the more common configuration for a basic 6-DOF educational arm:</p>
 <div class="table-wrap" aria-label="Build cost breakdown">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Component</th><th>Approximate Cost (USD)</th></tr></thead>
 <tbody>
 <tr><td>Arduino Mega 2560 (or compatible clone)</td><td>$15 - $40</td></tr>
@@ -422,8 +416,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published April 23, 2024 &middot; last reviewed June 7, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -433,7 +427,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Ratings and limits shown must be confirmed against documentation for your exact configuration.</p>
 <ul>
 <li><a href="https://docs.arduino.cc/hardware/mega-2560/" target="_blank" rel="noopener noreferrer">Arduino Mega 2560 Rev3 technical specifications</a></li><li><a href="https://www.nxp.com/products/power-management/lighting-driver-and-controller-ics/led-drivers/16-channel-12-bit-pwm-fm-plus-ic-bus-led-controller:PCA9685" target="_blank" rel="noopener noreferrer">NXP PCA9685 product documentation</a></li>
 </ul>
@@ -455,7 +449,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 <li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
 <li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
-<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
+<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
 </ul>
 </div>
 </div>

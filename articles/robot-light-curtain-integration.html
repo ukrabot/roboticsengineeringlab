@@ -24,9 +24,9 @@
   "@type": "TechArticle",
   "headline": "Safety Light Curtains for Robot Arms: Minimum Safe Distance Formula & Wiring",
   "description": "How to size and wire a safety light curtain for a robot arm cell, including the ISO 13855 minimum safe distance formula, IEC 61496 resolution requirements, and muting logic.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2025-08-09",
+  "dateModified":"2026-03-05",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
   "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-light-curtain-integration.html"},
   "image":"../industrial_robot_arm.jpg"
@@ -37,9 +37,9 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How do you calculate the minimum safe distance for a light curtain?","acceptedAnswer":{"@type":"Answer","text":"ISO 13855 defines the formula S = (K × T) + C, where K is the approach speed of the body part (typically 1600 mm/s for whole-body approach), T is the total stopping time of the machine plus the response time of the safety system, and C is an additional distance based on the light curtain's detection capability (resolution). This gives the minimum distance the light curtain must be positioned from the hazard."},
-    {"@type":"Question","name":"What light curtain resolution do I need for a robot arm application?","acceptedAnswer":{"@type":"Answer","text":"IEC 61496 ties resolution to what the curtain must detect: a 14mm resolution finger-detection curtain is required where fingers or hands could reach through, while a 30mm or larger resolution hand/arm-detection curtain may be sufficient for whole-body access points where finger intrusion isn't the primary concern. Using coarser resolution than the hazard requires is a common and serious safety gap."},
-    {"@type":"Question","name":"What is muting and when is it allowed on a light curtain protecting a robot cell?","acceptedAnswer":{"@type":"Answer","text":"Muting temporarily and automatically suspends the light curtain's protective function to allow material to pass through the detection zone, such as pallets entering on a conveyor. It's only permitted when the muting condition can be reliably distinguished from a person entering the zone, typically confirmed through a sequenced pair of muting sensors, and must never remain active during the robot's normal operating cycle when a person could be present."},
+    {"@type":"Question","name":"How do you calculate the minimum safe distance for a light curtain?","acceptedAnswer":{"@type":"Answer","text":"ISO 13855 defines the formula S = (K × T) + C, where K is the approach speed of the body part (typically 1600 mm/s for whole-body approach), T is the total stopping time of the machine plus the response time of the safety system, and C is an additional distance based on the light curtain's detection capability (resolution). This gives the minimum distance the light curtain must be positioned from the hazard."}},
+    {"@type":"Question","name":"What light curtain resolution do I need for a robot arm application?","acceptedAnswer":{"@type":"Answer","text":"IEC 61496 ties resolution to what the curtain must detect: a 14mm resolution finger-detection curtain is required where fingers or hands could reach through, while a 30mm or larger resolution hand/arm-detection curtain may be sufficient for whole-body access points where finger intrusion isn't the primary concern. Using coarser resolution than the hazard requires is a common and serious safety gap."}},
+    {"@type":"Question","name":"What is muting and when is it allowed on a light curtain protecting a robot cell?","acceptedAnswer":{"@type":"Answer","text":"Muting temporarily and automatically suspends the light curtain's protective function to allow material to pass through the detection zone, such as pallets entering on a conveyor. It's only permitted when the muting condition can be reliably distinguished from a person entering the zone, typically confirmed through a sequenced pair of muting sensors, and must never remain active during the robot's normal operating cycle when a person could be present."}},
     {"@type":"Question","name":"Can a light curtain alone make a robot cell fully compliant?","acceptedAnswer":{"@type":"Answer","text":"No. A light curtain is one safeguarding component within a broader safety system that must include a safety-rated stopping function (safety relay or safety PLC), verified stopping time and distance calculations, and often complementary measures like fixed guarding on non-access sides of the cell. The light curtain's own certification does not certify the overall cell design."}}
   ]
 }
@@ -141,6 +141,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Safety Light Curtains for Robot Arms: The Minimum Safe Distance Formula & Wiring",
+   "item": "https://roboticsengineeringlab.com/articles/robot-light-curtain-integration.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -158,9 +184,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Robot arm cell perimeter protected by a safety light curtain" loading="eager" />
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Robot arm cell perimeter protected by a safety light curtain" loading="eager" / width="1024" height="322">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Compliance Engineering — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Compliance Engineering — Updated March 5, 2026</div>
 <h1>Safety Light Curtains for Robot Arms: <em>The Minimum Safe Distance Formula & Wiring</em></h1>
 <p class="hero-sub">A light curtain that's wired correctly but positioned too close to the hazard provides zero protection. Here's the ISO 13855 formula that determines placement, the resolution rules from IEC 61496, and how the stop signal actually reaches the robot.</p>
 </div>
@@ -176,7 +202,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>A light curtain's detection capability is only half of what makes it a valid safeguard — the other half is <strong>where it's positioned</strong>. If a person can breach the curtain and reach the hazard before the robot fully stops, the safeguard has failed regardless of how fast the sensor itself responds. This is why ISO 13855 defines a mandatory minimum safe distance calculation, not just a resolution requirement — and it's the single most commonly skipped step in DIY or under-scoped safety integrations.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-safety-cell.jpg" alt="Editorial robot-cell layout showing a light curtain at an access opening." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
 
@@ -242,7 +268,7 @@ reachable hazard point of the robot's motion envelope.
 <p>IEC 61496 (the product standard governing electro-sensitive protective equipment) ties required resolution to what the curtain must reliably detect, based on the access it's protecting:</p>
 <div class="table-wrap" aria-label="Resolution selection guide">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Access Scenario</th><th>Typical Resolution Needed</th><th>Reasoning</th></tr></thead>
 <tbody>
 <tr><td>Finger/hand could reach through a gap or opening</td><td>14mm (finger detection)</td><td>Coarser resolution risks a finger passing through undetected between beams</td></tr>
@@ -343,15 +369,15 @@ Light Curtain OSSD2 ──┐                                     ├──► S
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Go deeper: the Master Guide</h3>
+<p>Full walkthrough of robot architecture, control software and integration.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Reproducible guide: figures shown come from the formulas printed on this page. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 9, 2025 &middot; last reviewed March 5, 2026</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -393,6 +419,7 @@ Light Curtain OSSD2 ──┐                                     ├──► S
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

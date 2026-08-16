@@ -31,10 +31,10 @@
   "headline":"PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design",
   "description":"Engineering guide to bridging a PLC and a 6-axis robot controller: handshake design, Structured Text, fieldbus options, and safety-category architecture.",
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "author":{"@type":"Organization","name":"Robotics Engineering"},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-23",
+  "datePublished":"2024-12-23",
+  "dateModified":"2025-02-06",
   "inLanguage":"en-US",
   "articleSection":"Industrial Automation",
   "keywords":["PLC robot integration","Structured Text","PROFINET","robot cell safety"]
@@ -99,6 +99,32 @@
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "PLC Integration for Robot Cells: Structured Text, PROFINET, and Safety Design",
+   "item": "https://roboticsengineeringlab.com/articles/industrial-plc-robotics.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a href="../index.html" class="logo">Robotics <span>Engineering</span></a><div class="nav-links">
@@ -114,11 +140,11 @@
 <p><strong>Does a PLC control the robot's motion?</strong> No — and this is the single most common misunderstanding in robot-cell integration. The robot controller (FANUC, ABB, KUKA, or similar) owns the trajectory, the joint interpolation, and the servo loop. The PLC's job is to coordinate everything <em>around</em> the robot: conveyors, fixtures, vision triggers, part-presence sensors, and the safety chain. The interface between the two is a small, well-defined set of signals — not a stream of motion commands.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-plc-robot-integration.jpg" alt="Editorial diagram of a robot controller, safety PLC, fieldbus and e-stop loop." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 
-<div class="article-img"><img src="../industrial_robot_arm.jpg" alt="Industrial robot arm integrated with PLC-controlled conveyors and fixtures" loading="eager"><div class="caption">A PLC coordinates the cell around the robot; the robot controller owns the motion.</div></div>
+<div class="article-img"><img src="../industrial_robot_arm.jpg" alt="Industrial robot arm integrated with PLC-controlled conveyors and fixtures" loading="eager" width="1024" height="322"><div class="caption">A PLC coordinates the cell around the robot; the robot controller owns the motion.</div></div>
 
 <nav class="toc" aria-label="Table of contents"><strong>In this guide</strong><ol>
 <li><a href="#split">Dividing responsibility: PLC vs. robot controller</a></li>
@@ -139,7 +165,7 @@
 <h2 id="fieldbus">Choosing a communication link: PROFINET, EtherNet/IP, or discrete I/O</h2>
 <p>Most modern robot controllers offer an optional fieldbus card so the controller appears to the PLC as an I/O device on the network. Siemens PLCs commonly use PROFINET; Allen-Bradley/Rockwell PLCs commonly use EtherNet/IP. The robot vendor's option catalog determines which protocols are actually available for a given controller and firmware version — always confirm the exact option code with the robot vendor before assuming a protocol is supported.</p>
 <div class="table-wrap"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Option</th><th>Typical fit</th><th>Trade-off</th></tr></thead><tbody>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption><thead><tr><th>Option</th><th>Typical fit</th><th>Trade-off</th></tr></thead><tbody>
 <tr><td>Discrete digital I/O</td><td>Small cells, few signals, simple handshake</td><td>Easy to troubleshoot with a multimeter; wiring grows with signal count; no built-in diagnostics.</td></tr>
 <tr><td>PROFINET</td><td>Siemens-centric plants, many signals, diagnostics needed</td><td>Reduces wiring to one network cable; adds network configuration and a dependency on network health.</td></tr>
 <tr><td>EtherNet/IP</td><td>Rockwell/Allen-Bradley-centric plants</td><td>Same trade-offs as PROFINET, different ecosystem and tag mapping conventions.</td></tr>
@@ -149,7 +175,7 @@
 <h2 id="handshake">Designing the handshake signal set</h2>
 <p>Regardless of the physical link, most PLC-robot interfaces converge on a similar signal set. Naming varies by integrator, but the functions below appear in nearly every cell:</p>
 <div class="table-wrap"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Signal</th><th>Direction</th><th>Purpose</th></tr></thead><tbody>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption><thead><tr><th>Signal</th><th>Direction</th><th>Purpose</th></tr></thead><tbody>
 <tr><td>Program / Job Select</td><td>PLC → Robot</td><td>Tells the controller which taught program or part variant to run next.</td></tr>
 <tr><td>Cycle Start</td><td>PLC → Robot</td><td>Requests the robot to begin the selected program once it is ready.</td></tr>
 <tr><td>Robot Ready</td><td>Robot → PLC</td><td>Confirms the controller is in automatic mode, faults are clear, and it can accept a start.</td></tr>
@@ -225,7 +251,7 @@ END_CASE;
 
 <h2 id="failures">Common integration failures</h2>
 <div class="table-wrap"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Symptom</th><th>Likely cause</th><th>Check and correction</th></tr></thead><tbody>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption><thead><tr><th>Symptom</th><th>Likely cause</th><th>Check and correction</th></tr></thead><tbody>
 <tr><td>Robot starts a stale or wrong program</td><td>Program-select signals changed after Cycle Start was already latched</td><td>Only sample program-select values while the robot is in IDLE/Ready, before asserting Cycle Start.</td></tr>
 <tr><td>Cell hangs with no fault indication</td><td>Fieldbus link frozen; last-known values still look valid to the PLC</td><td>Add a heartbeat/sequence counter on both sides and a timeout that forces a defined fault state.</td></tr>
 <tr><td>Robot double-triggers on noisy signal</td><td>Cycle Start read as a level instead of a rising edge, or contact bounce on discrete I/O</td><td>Trigger on a rising edge internally and add debounce/filtering on physical inputs.</td></tr>
@@ -258,8 +284,8 @@ END_CASE;
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 23, 2024 &middot; last reviewed February 6, 2025</span></p>
 </aside>
 <div class="footer-nav"><a href="ros2-robot-arm-control.html">← Previous: ROS 2 Control Framework for 6-Axis Robot Arms</a><a href="robot-arm-gripper-design.html">Next: Gripper Design Guide for 6-DOF Robot Arms →</a></div>
 </main>
@@ -269,6 +295,7 @@ END_CASE;
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

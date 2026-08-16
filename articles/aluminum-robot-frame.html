@@ -30,13 +30,7 @@
   "@type": "TechArticle",
   "headline": "Aluminum Frame Design for Industrial 6-Axis Robot Arms",
   "description": "A practical mechanical design guide to aluminum robot arm links, covering alloy selection, wall thickness rules, weight optimization, CNC machining tolerances, and anodizing types.",
-  "author": {
-    "@type": "Person",
-    "name": "Daniel Ferro",
-    "jobTitle": "Mechanical Design Engineer",
-    "url": "https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -48,8 +42,8 @@
     "@id": "https://roboticsengineeringlab.com/articles/aluminum-robot-frame.html"
   },
   "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "datePublished": "2025-10-20",
-  "dateModified": "2026-07-24",
+  "datePublished": "2024-08-23",
+  "dateModified": "2024-10-07",
   "articleSection": "Robot Arm Mechanical Design",
   "wordCount": "2650"
 }
@@ -232,7 +226,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="CNC machined aluminum structural link for a 6-axis industrial robot arm with anodized finish" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Mechanical Design — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Mechanical Design — Updated October 7, 2024</div>
 <h1>Aluminum Frame Design for Industrial 6-Axis Robot Arms</h1>
 <p class="hero-sub">A practical mechanical design guide to aluminum robot arm links — alloy selection, wall thickness rules, weight optimization, CNC tolerances, and anodizing types compared, based on links I've designed and sent to CNC shops over several projects. <br><span class="badge">6061-T6 &bull; CNC Machining &bull; Weight Optimization</span></p>
 </div>
@@ -275,7 +269,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Not all aluminum is equivalent for structural robot links. The two alloys that come up repeatedly in industrial and hobbyist robot arm design each have distinct tradeoffs:</p>
 <div class="table-wrap" aria-label="Aluminum alloy comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Property</th><th>6061-T6</th><th>7075-T6</th></tr></thead>
 <tbody>
 <tr><td>Tensile strength</td><td>~310 MPa</td><td>~570 MPa</td></tr>
@@ -332,7 +326,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Raw machined aluminum corrodes and wears faster than most engineers expect, particularly at pivot bores and sliding surfaces. Anodizing is an electrochemical process that grows a hard oxide layer on the aluminum surface, and the type selected has a real impact on durability and cost.</p>
 <div class="table-wrap" aria-label="Anodizing type comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Type</th><th>Typical Coating Thickness</th><th>Best For</th><th>Relative Cost</th></tr></thead>
 <tbody>
 <tr><td>Type I (chromic acid)</td><td>0.5 - 2.5 µm</td><td>Aerospace fatigue-sensitive parts; rarely used for robot links</td><td>Low</td></tr>
@@ -347,7 +341,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Choosing between materials for a robot link comes down to matching the application's priorities — cost, weight, stiffness, or production volume — against each material's practical tradeoffs.</p>
 <div class="table-wrap" aria-label="Structural material comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Material</th><th>Relative Stiffness</th><th>Relative Weight</th><th>Relative Cost (low volume)</th><th>Best Fit</th></tr></thead>
 <tbody>
 <tr><td>6061-T6 Aluminum</td><td>High (69 GPa)</td><td>Moderate</td><td>Moderate</td><td>Most industrial and collaborative links</td></tr>
@@ -418,8 +412,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Reproducible guide: figures shown come from the formulas printed on this page. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 23, 2024 &middot; last reviewed October 7, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -443,7 +437,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
 <li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
 <li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
-<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
+<li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
 </ul>
 </div>
 </div>

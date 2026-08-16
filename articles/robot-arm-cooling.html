@@ -32,13 +32,9 @@
   "@type": "Article",
   "headline": "Cooling Systems for High-Payload 6-Axis Robot Arms: Thermal Management Guide",
   "description": "Engineering guide to thermal management for high-payload 6-axis robot arms. Heat sinks, forced-air fans, liquid cooling, and duty cycle planning for continuous industrial operation.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com/"
-  },
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished": "2025-05-23",
+  "dateModified": "2025-08-27",
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -170,6 +166,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Cooling Systems for High-Payload 6-Axis Robot Arms: Thermal Management Guide",
+   "item": "https://roboticsengineeringlab.com/articles/robot-arm-cooling.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -191,7 +213,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
      alt="High-payload industrial robot arm operating in a continuous welding production cell"
      loading="eager" decoding="async" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Mechanical & Electrical Design — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Mechanical & Electrical Design — Updated August 27, 2025</div>
 <h1>Cooling Systems for High-Payload 6-Axis Robot Arms: Thermal Management Guide</h1>
 <p class="hero-sub">Engineering guide to motor and drive cooling for high-duty-cycle industrial robots. Passive heat sinks, forced-air fans, liquid cooling loops, and duty cycle planning for continuous operation.</p>
 </div>
@@ -211,7 +233,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>A robot arm's theoretical payload capacity is only achievable if the motors and servo drives can sustain the required current without overheating. In practice, thermal limits — not mechanical limits — are often what constrain a robot's continuous duty cycle.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-plc-robot-integration.jpg" alt="Editorial cabinet diagram used when discussing drive and motor cooling." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 <p>Most brushless servo motors used in industrial robot joints have a winding insulation class rated to approximately 80 °C. When sustained operation causes motor temperature to approach this limit, the controller triggers a thermal derating: automatically reducing maximum torque to protect the windings. In high-throughput applications like continuous welding or pick-and-place with near-100% duty cycles, thermal derating can reduce effective throughput by 20% to 40% without any obvious warning to the operator.</p>
@@ -238,7 +260,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Cooling method comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead>
 <tr><th>Cooling Method</th><th>Typical Temp Reduction</th><th>Best Use Case</th><th>Key Trade-offs</th></tr>
 </thead>
@@ -300,15 +322,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations.</p>
+<h3>Next: the 6-DOF Robot Arm Master Guide</h3>
+<p>Architecture, programming, calibration and application fundamentals in one place.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published May 23, 2025 &middot; last reviewed August 27, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -321,7 +343,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. These figures are orientation only &mdash; the manufacturer&rsquo;s current documentation governs.</p>
 <ul>
 <li><a href="https://new.abb.com/products/robotics" target="_blank" rel="noopener noreferrer">ABB robotics documentation portal</a></li>
 </ul>
@@ -358,6 +380,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

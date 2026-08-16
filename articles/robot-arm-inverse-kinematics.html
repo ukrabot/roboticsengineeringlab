@@ -26,9 +26,9 @@
   "@type": "TechArticle",
   "headline": "Inverse Kinematics Explained for 6-DOF Robot Arms",
   "description": "A step-by-step breakdown of inverse kinematics with a worked example, analytical wrist-decoupling solution, and working code in Python and Arduino.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2024-04-09",
+  "dateModified":"2024-11-03",
   "publisher": {
     "@type":"Organization",
     "name":"Robotics Engineering",
@@ -178,6 +178,32 @@ pre code { color:#c9d8f2; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Inverse Kinematics Explained for 6-DOF Robot Arms",
+   "item": "https://roboticsengineeringlab.com/articles/robot-arm-inverse-kinematics.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -195,9 +221,9 @@ pre code { color:#c9d8f2; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../arduino_arm_tutorial.jpg" alt="Diagram of a 6-DOF robot arm joint chain used to explain inverse kinematics calculations" loading="eager" />
+<img class="hero-bg" src="../arduino_arm_tutorial.jpg" alt="Diagram of a 6-DOF robot arm joint chain used to explain inverse kinematics calculations" loading="eager" / width="1536" height="1024">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robotics Fundamentals — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robotics Fundamentals — Updated November 3, 2024</div>
 <h1>Inverse Kinematics Explained for 6-DOF Robot Arms</h1>
 <p class="hero-sub">A step-by-step breakdown of how robot arms calculate joint angles from a target position — including the math, a worked numerical example, and working code in Python and Arduino. <br><span class="badge">Beginner-Friendly &bull; Code Included &bull; ROS 2 Compatible</span></p>
 </div>
@@ -209,7 +235,7 @@ pre code { color:#c9d8f2; }
 <p>Every 6-DOF robot arm has two related but opposite math problems to solve. <strong>Forward kinematics (FK)</strong> answers: "If I set joints 1 through 6 to these specific angles, where will the gripper end up in 3D space?" This is a straightforward calculation — you always get exactly one answer, computed by chaining together rotation and translation matrices for each joint.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-6dof-kinematics.jpg" alt="Editorial kinematics diagram of a 6-DOF serial arm and tool pose." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 <p><strong>Inverse kinematics (IK)</strong> asks the opposite question: "I want the gripper at this exact position and orientation — what should each of the six joint angles be?" This is dramatically harder. Unlike forward kinematics, inverse kinematics can have zero solutions (the point is unreachable), exactly one solution, multiple valid solutions (the same point reached with the elbow up or down), or infinite solutions (in redundant robots with more than 6 joints).</p>
@@ -227,7 +253,7 @@ pre code { color:#c9d8f2; }
 <p>Before solving IK, you need a standardized way to describe your robot's geometry. The <strong>Denavit-Hartenberg convention</strong> assigns four parameters to each joint, describing how its coordinate frame relates to the previous joint's frame:</p>
 <div class="table-wrap" aria-label="DH parameter definitions">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Parameter</th><th>Symbol</th><th>Description</th></tr></thead>
 <tbody>
 <tr><td>Link length</td><td>a</td><td>Distance between joint axes along the common normal</td></tr>
@@ -240,7 +266,7 @@ pre code { color:#c9d8f2; }
 <p>Example DH table for a generic 6-DOF arm (values in mm and degrees, representative of a mid-size industrial arm):</p>
 <div class="table-wrap" aria-label="Example DH table">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Joint</th><th>a (mm)</th><th>α (°)</th><th>d (mm)</th><th>θ (variable)</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>0</td><td>-90</td><td>333</td><td>θ1</td></tr>
@@ -401,7 +427,7 @@ def request_ik_solution(moveit_instance, target_pose: PoseStamped):
 
 <div class="table-wrap" aria-label="IK method comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Method</th><th>Typical Solve Time</th><th>Best For</th><th>Limitation</th></tr></thead>
 <tbody>
 <tr><td>Analytical (closed-form)</td><td>0.3 - 2 ms</td><td>Spherical-wrist arms, real-time control</td><td>Requires specific joint geometry</td></tr>
@@ -469,15 +495,15 @@ def request_ik_solution(moveit_instance, target_pose: PoseStamped):
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Next: the 6-DOF Robot Arm Master Guide</h3>
+<p>Architecture, programming, calibration and application fundamentals in one place.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published April 9, 2024 &middot; last reviewed November 3, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -490,7 +516,7 @@ def request_ik_solution(moveit_instance, target_pose: PoseStamped):
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Ratings and limits shown must be confirmed against documentation for your exact configuration.</p>
 <ul>
 <li><a href="https://docs.ros.org/" target="_blank" rel="noopener noreferrer">ROS 2 documentation</a></li><li><a href="https://modernrobotics.northwestern.edu/" target="_blank" rel="noopener noreferrer">Modern Robotics online textbook</a></li>
 </ul>
@@ -527,6 +553,7 @@ def request_ik_solution(moveit_instance, target_pose: PoseStamped):
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

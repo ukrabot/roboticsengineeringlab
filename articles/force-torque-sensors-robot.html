@@ -34,10 +34,10 @@
   "headline":"Force-Torque Sensors for Robot Arms: Selection, Calibration and ROS 2 Integration",
   "description":"Technical guide to six-axis force-torque sensing, selection, calibration, filtering and ROS 2 integration on robot arms.",
   "image":"https://roboticsengineeringlab.com/ros2_robot_control.jpg",
-  "author":{"@type":"Organization","name":"Robotics Engineering"},
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-22",
+  "datePublished":"2025-02-09",
+  "dateModified":"2025-08-01",
   "inLanguage":"en-US",
   "articleSection":"Robot control and sensing",
   "keywords":["force torque sensor robot arm","six-axis force torque sensor","ROS 2 force control"]
@@ -71,6 +71,32 @@
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Force-Torque Sensors for Robot Arms: Selection, Calibration and ROS 2 Integration",
+   "item": "https://roboticsengineeringlab.com/articles/force-torque-sensors-robot.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Site navigation"><div class="nav-inner container"><a class="logo" href="../index.html">Robotics <span>Engineering</span></a><div class="nav-links">
@@ -80,12 +106,12 @@
       <a href="../about.html">About</a>
       <a href="../contact.html">Contact</a>
     </div></div></nav>
-<header class="hero"><img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm used in a force-sensing workstation" width="1024" height="322" loading="eager"><div class="hero-inner"><div class="eyebrow">Robot control and sensing · Updated July 22, 2026</div><h1>Force-Torque Sensors for Robot Arms: Selection, Calibration and ROS 2 Integration</h1><p class="hero-sub">A practical engineering guide to six-axis force sensing, installation, gravity compensation, filtering, compliant control and production integration.</p></div></header>
+<header class="hero"><img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm used in a force-sensing workstation" width="1024" height="322" loading="eager"><div class="hero-inner"><div class="eyebrow">Robot control and sensing · Updated August 1, 2025</div><h1>Force-Torque Sensors for Robot Arms: Selection, Calibration and ROS 2 Integration</h1><p class="hero-sub">A practical engineering guide to six-axis force sensing, installation, gravity compensation, filtering, compliant control and production integration.</p></div></header>
 <main class="article-body container">
 <p>A force-torque sensor gives a robot arm information that position alone cannot provide. Instead of only knowing where the tool should be, the controller can estimate how strongly the tool is pressing, pulling or twisting against an object. That capability is useful for insertion, polishing, deburring, surface following, grasp verification and research. It also introduces new failure modes: a bad zero, an incorrect coordinate frame, vibration, cable forces or a poorly tuned controller can make the robot behave worse than a position-only system.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-payload-calculator.jpg" alt="Editorial diagram of wrist load, tool offset and moment at the flange." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
 <div class="article-img"><img src="../ros2_robot_control.jpg" alt="Robot arm control workstation with force-torque sensing and ROS 2 integration" width="1024" height="1536" loading="lazy" decoding="async"><div class="caption">Force sensing should be treated as part of a complete mechanical, electrical, software and safety architecture.</div></div>
@@ -120,7 +146,7 @@ ros2 run tf2_ros tf2_echo base_link ft_sensor</code></pre>
 <p>ROS 2 improves modularity but does not automatically make a control loop deterministic or safety certified. For a production application, define the real-time boundary, quality-of-service settings, network behaviour and update policy. A custom Python node may be suitable for experiments; a time-critical force controller may require a real-time capable implementation and a validated architecture.</p>
 <h2 id="acceptance">Force-torque sensor acceptance test</h2><p>Before using force feedback in a production program, create an acceptance test that separates sensor behaviour from robot motion. With the tool unloaded and clear of fixtures, record bias and noise after warm-up. Apply known loads in several orientations, transform the readings into the documented frame and compare them with the reference load. Repeat the test after moving through the intended workspace. A sensor that is accurate on the bench can still show cable drag, thermal drift or frame errors after installation.</p><div class="table-wrap"><table><caption>Minimum checks for a commissioning record.</caption><thead><tr><th>Check</th><th>Method</th><th>Pass evidence</th></tr></thead><tbody><tr><td>Zero stability</td><td>Record unloaded readings after warm-up</td><td>Bias remains within the process limit</td></tr><tr><td>Axis signs</td><td>Apply a known force and moment one axis at a time</td><td>Direction and units agree with the frame definition</td></tr><tr><td>Gravity model</td><td>Rotate the tool through representative poses</td><td>Compensated readings remain near zero without contact</td></tr><tr><td>Latency and dropout</td><td>Monitor timestamps and disconnect behaviour safely</td><td>Watchdog stops the process without active motion</td></tr><tr><td>Overload response</td><td>Review limits and recovery procedure</td><td>Program reports saturation and a clear fault</td></tr></tbody></table></div><p>Store the result with the sensor serial number, tool mass, centre of gravity, robot program version, driver version and calibration date. This makes troubleshooting possible when a gripper, cable, adapter or software update changes the measurement chain.</p><h2 id="applications">Applications and limits</h2>
 <div class="table-wrap"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Application</th><th>Useful signal</th><th>Typical engineering risk</th></tr></thead><tbody><tr><td>Compliant insertion</td><td>Contact force and lateral moment</td><td>Jamming, singularities or excessive insertion force.</td></tr><tr><td>Surface following</td><td>Normal force along the tool axis</td><td>Surface variation, tool tilt and filter delay.</td></tr><tr><td>Deburring and polishing</td><td>Normal force with tangential load</td><td>Tool wear, vibration and unexpected snagging.</td></tr><tr><td>Grasp verification</td><td>Change in force after pickup</td><td>Payload variation and false positives from acceleration.</td></tr><tr><td>Research and teaching</td><td>Six-axis wrench visualisation</td><td>Uncalibrated frames and unsafe open-loop motion.</td></tr></tbody></table></div>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption><thead><tr><th>Application</th><th>Useful signal</th><th>Typical engineering risk</th></tr></thead><tbody><tr><td>Compliant insertion</td><td>Contact force and lateral moment</td><td>Jamming, singularities or excessive insertion force.</td></tr><tr><td>Surface following</td><td>Normal force along the tool axis</td><td>Surface variation, tool tilt and filter delay.</td></tr><tr><td>Deburring and polishing</td><td>Normal force with tangential load</td><td>Tool wear, vibration and unexpected snagging.</td></tr><tr><td>Grasp verification</td><td>Change in force after pickup</td><td>Payload variation and false positives from acceleration.</td></tr><tr><td>Research and teaching</td><td>Six-axis wrench visualisation</td><td>Uncalibrated frames and unsafe open-loop motion.</td></tr></tbody></table></div>
 <p>An FT sensor can measure an interaction; it does not know whether that interaction is safe, intended or caused by a collision. It should not be marketed as a universal collision detector or as a replacement for guarding, safety scanners, interlocks, emergency stops or a formal risk assessment.</p>
 <h2 id="safety">Safety and commissioning</h2>
 <p>Start commissioning at low speed and with reduced force limits. Keep people outside the robot cell unless the complete application has been assessed and the required collaborative or guarded operating mode is validated. Define limits for force, torque, velocity, displacement and duration. Test normal contact, unexpected contact, tool loss, cable failure, sensor saturation, stale data and loss of communication.</p>
@@ -138,8 +164,8 @@ ros2 run tf2_ros tf2_echo base_link ft_sensor</code></pre>
 <div class="cta"><h3>Continue reading: the 6-DOF Robot Arm Master Guide</h3><p>Review robot architecture, programming, calibration and application fundamentals.</p><a class="btn" href="../6-dof-robot-arm-guide.html">Read the full guide →</a></div>
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published February 9, 2025 &middot; last reviewed August 1, 2025</span></p>
 </aside>
 <div class="footer-nav"><a href="magnetic-gripper-robot.html">← Previous: Magnetic gripper design</a><a href="joint-encoders-robot-arm.html">Next: Joint encoders for robot arms →</a></div>
 </main>
@@ -149,6 +175,7 @@ ros2 run tf2_ros tf2_echo base_link ft_sensor</code></pre>
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

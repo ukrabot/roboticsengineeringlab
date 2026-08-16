@@ -32,11 +32,7 @@
   "@type": "TechArticle",
   "headline": "Robot Arm Safety Standards: ANSI RIA, CSA Z434 & ISO Compliance",
   "description": "A practical guide to robot arm safety requirements in the United States and Canada, including ANSI/RIA R15.06, CSA Z434, ISO 10218, safeguarding devices, collaborative applications, and risk assessments.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com"
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -48,8 +44,8 @@
     "@id": "https://roboticsengineeringlab.com/articles/robot-arm-safety-usa-canada.html"
   },
   "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "datePublished": "2025-04-23",
+  "dateModified": "2025-06-07",
   "articleSection": "Industrial Robot Safety",
   "inLanguage": "en-US",
   "wordCount": "2800"
@@ -286,7 +282,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm cell with perimeter safety fencing illustrating ANSI, CSA, and ISO robot safety standards" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Industrial Robot Safety — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Industrial Robot Safety — Updated June 7, 2025</div>
 <h1>Robot Arm Safety Standards in the USA and Canada: ANSI, CSA & ISO Explained</h1>
 <p class="hero-sub">A field-level breakdown of ANSI/RIA R15.06, CSA Z434, ISO 10218, and ISO/TS 15066 — what each standard actually requires, how risk assessments work, and which safeguarding device fits which application. <br><span class="badge">USA &bull; Canada &bull; Cobots &bull; Risk Assessment</span></p>
 </div>
@@ -318,7 +314,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Robot safety compliance in North America is not governed by a single law that says "your robot must meet standard X." Instead, it works through a layered system: government regulators (OSHA in the USA, provincial ministries of labour in Canada) set broad duty-of-care requirements, and consensus standards developed by industry bodies — ANSI/RIA in the United States, CSA in Canada, and ISO internationally — define the specific technical criteria that are recognized as evidence of due diligence.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-safety-cell.jpg" alt="Editorial diagram of safeguarding devices used in a North American robot cell." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 <p>In practice, this means a plant in Michigan and a plant in Ontario building the exact same robot cell will reference two different standard numbers — ANSI/RIA R15.06 and CSA Z434 respectively — even though both standards are harmonized with the same underlying ISO 10218 framework and require nearly identical engineering controls. Understanding this relationship is the first step to building a compliance program that doesn't duplicate effort across borders.</p>
@@ -344,7 +340,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>ISO/TS 15066 is a technical specification that supplements ISO 10218 specifically for collaborative robot applications. It defines four recognized collaborative operating modes and provides guidance on the pain and injury thresholds used to set force and pressure limits for applications where a robot and a person may share the same workspace without a physical barrier.</p>
 <div class="table-wrap" aria-label="Collaborative operating modes">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Collaborative Mode</th><th>How It Works</th><th>Typical Use Case</th></tr></thead>
 <tbody>
 <tr><td>Safety-rated monitored stop</td><td>Robot fully stops when a person enters the collaborative workspace</td><td>Manual load/unload stations</td></tr>
@@ -376,7 +372,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Once the risk assessment identifies where engineering controls are needed, the choice of physical safeguarding device depends heavily on the geometry of the cell and how frequently people need access.</p>
 <div class="table-wrap" aria-label="Safeguarding device comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Device</th><th>Best For</th><th>Limitation</th></tr></thead>
 <tbody>
 <tr><td>Fixed physical guarding</td><td>Zones with no routine human access</td><td>Requires tools to remove; not practical for frequent access points</td></tr>
@@ -394,7 +390,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>When a safety device is specified, it's rated according to ISO 13849-1 using a Performance Level (PL a through PL e) or, under the older but still-referenced IEC 62061 framework, a Safety Integrity Level (SIL). These ratings describe how reliably the safety function performs under fault conditions — not how "advanced" the equipment is.</p>
 <div class="table-wrap" aria-label="Performance level reference">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Performance Level</th><th>Typical Application</th><th>Common Architecture</th></tr></thead>
 <tbody>
 <tr><td>PL c</td><td>Lower-risk auxiliary functions</td><td>Single-channel with monitoring</td></tr>
@@ -466,8 +462,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published April 23, 2025 &middot; last reviewed June 7, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -509,6 +505,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

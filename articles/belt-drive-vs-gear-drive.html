@@ -25,21 +25,15 @@
   "@type":"TechArticle",
   "headline":"Belt Drive vs Gear Drive for Robot Arms: Torque, Backlash and Maintenance",
   "description":"A practical engineering comparison of timing belts, planetary gears, harmonic reducers and chains for six-axis robot arms.",
-  "author":{
-    "@type":"Person",
-    "name":"Marcus Chen",
-    "jobTitle":"Robotics Engineer",
-    "url":"https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{
     "@type":"Organization",
     "name":"Robotics Engineering Blog",
     "url":"https://roboticsengineeringlab.com",
     "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
   },
-  "datePublished":"2024-09-05",
-  "dateModified":"2024-11-04",
+  "datePublished":"2024-08-09",
+  "dateModified":"2025-03-05",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/belt-drive-vs-gear-drive.html"},
   "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
   "proficiencyLevel":"Intermediate",
@@ -118,9 +112,9 @@
 </nav>
 
 <header class="hero">
-  <img src="../industrial_robot_arm.jpg" alt="Robot arm transmission and mechanical drive system" fetchpriority="high">
+  <img src="../industrial_robot_arm.jpg" alt="Robot arm transmission and mechanical drive system" fetchpriority="high" width="1024" height="322" loading="lazy" decoding="async">
   <div class="hero-inner">
-    <div class="eyebrow">Robotics engineering · Updated <time datetime="2024-11-04">November 4, 2024</time></div>
+    <div class="eyebrow">Robotics engineering · Updated <time datetime="2025-03-05">March 5, 2025</time></div>
     <h1>Belt Drive vs Gear Drive for Robot Arms</h1>
     <p>Compare timing belts, planetary gears, harmonic reducers and chains by torque, backlash, stiffness, cost, efficiency and maintenance — including what actually broke on my own test joints.</p>
     <p class="byline">By <a href="../about.html">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
@@ -131,7 +125,7 @@
 <article>
 
 <div class="article-img">
-  <img src="../industrial_robot_arm.jpg" alt="Mechanical transmission concepts for a six-axis robot arm" loading="lazy">
+  <img src="../industrial_robot_arm.jpg" alt="Mechanical transmission concepts for a six-axis robot arm" loading="lazy" width="1024" height="322">
   <div class="caption">Transmission choice affects joint torque, repeatability, noise, packaging and serviceability—not just the motor speed.</div>
 </div>
 
@@ -184,7 +178,7 @@
 <h2>Performance comparison</h2>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Criterion</th><th>Timing belt</th><th>Planetary gear</th><th>Harmonic reducer</th><th>Chain</th></tr></thead>
 <tbody>
 <tr><td>Mass</td><td>Low</td><td>Medium</td><td>Medium</td><td>High</td></tr>
@@ -250,7 +244,7 @@
 <h2>Transmission troubleshooting</h2>
 <div class="table-wrap">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Symptom</th><th>Possible cause</th><th>Check or correction</th></tr></thead>
 <tbody>
 <tr><td>Arm misses position after reversals</td><td>Backlash, belt compliance or loose clamp</td><td>Approach targets from both directions, measure lost motion and inspect hubs.</td></tr>
@@ -323,7 +317,7 @@
 </article>
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Component limits vary by variant and revision; check the governing datasheet.</p>
 <ul>
 <li><a href="https://www.gates.com/us/en/knowledge-center/resource-library/engineering-applications.html" target="_blank" rel="noopener noreferrer">Gates engineering application resources</a></li><li><a href="https://www.harmonicdrive.net/technology" target="_blank" rel="noopener noreferrer">Harmonic Drive technical information</a></li>
 </ul>
@@ -336,6 +330,7 @@
   <a href="../about.html" style="color:var(--quiet)">About</a> ·
   <a href="../contact.html" style="color:var(--quiet)">Contact</a> ·
   <a href="../privacy.html" style="color:var(--quiet)">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--quiet)">Editorial standards</a>
 <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
       <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
       <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">

@@ -24,9 +24,9 @@
   "@type": "Article",
   "headline": "Robot Arm Joint Encoders Explained: Absolute vs Incremental vs Magnetic",
   "description": "How absolute, incremental, and magnetic encoders work in 6-axis robot arm joints, including resolution math, bus protocols, and selection criteria.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2024-09-23",
+  "dateModified":"2024-12-28",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
   "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/joint-encoders-robot-arm.html"},
   "image":"../industrial_robot_arm.jpg"
@@ -151,6 +151,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Joint Encoders for Robot Arms: How Absolute, Incremental & Magnetic Types Actually Work",
+   "item": "https://roboticsengineeringlab.com/articles/joint-encoders-robot-arm.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -168,9 +194,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Robot arm joint with encoder feedback assembly" loading="eager" />
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Robot arm joint with encoder feedback assembly" loading="eager" / width="1024" height="322">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Engineering — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Control Engineering — Updated December 28, 2024</div>
 <h1>Joint Encoders for Robot Arms: <em>How Absolute, Incremental & Magnetic Types Actually Work</em></h1>
 <p class="hero-sub">Every one of a 6-axis arm's six joints depends on a single small sensor to know exactly where it is. Here's the engineering behind that sensor — resolution math, homing routines, and why most modern arms don't use the same encoder type on every joint.</p>
 </div>
@@ -182,7 +208,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>A 6-axis robot arm doesn't know where its tool center point is in space — it calculates it. The controller reads the angle of each of the six joints, runs that data through forward kinematics, and derives the position of the end-effector. If a single joint's angle reading is wrong by even a fraction of a degree, that error compounds through the kinematic chain and shows up as a positioning mistake at the tool, often magnified several times over by the length of the downstream links.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-6dof-kinematics.jpg" alt="Editorial diagram of joint frames on a six-axis robot arm." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 <p>This is why the encoder — not the motor, not the gearbox — is often the component that ultimately limits a robot's repeatability. Two arms with identical motors and identical harmonic drives can have very different repeatability specs purely because of encoder resolution and mounting quality.</p>
@@ -209,7 +235,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 <h2>Absolute vs. Incremental vs. Magnetic: Direct Comparison</h2>
 <div class="table-wrap" aria-label="Encoder type comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Property</th><th>Optical Absolute</th><th>Optical Incremental</th><th>Magnetic (AMR/Hall)</th></tr></thead>
 <tbody>
 <tr><td>Position known at power-on</td><td>Yes, immediately</td><td>No — requires homing</td><td>Yes, immediately</td></tr>
@@ -230,7 +256,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 <p>Raw encoder signals rarely travel far on their own — modern servo drives use digital bus protocols that combine position data, temperature, and diagnostics on a small number of wires. Understanding these matters when integrating third-party encoders or troubleshooting a joint fault.</p>
 <div class="table-wrap" aria-label="Encoder bus comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Protocol</th><th>Wiring</th><th>Typical Update Rate</th><th>Common Use</th></tr></thead>
 <tbody>
 <tr><td>SSI (Synchronous Serial Interface)</td><td>4 wires (clock + data, differential)</td><td>Up to ~2 Mbit/s</td><td>Legacy industrial absolute encoders</td></tr>
@@ -317,15 +343,15 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Continue with the Master Guide</h3>
+<p>How the topics on this page fit into a complete robot arm build.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published September 23, 2024 &middot; last reviewed December 28, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -367,6 +393,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
