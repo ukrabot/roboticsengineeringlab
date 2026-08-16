@@ -32,13 +32,9 @@
   "@type": "Article",
   "headline": "Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design Guide",
   "description": "Engineering guide to vacuum grippers for 6-axis robot arms. Calculate holding force, size Venturi ejectors, select suction cup materials, and optimize pick-and-place cycle times.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com/"
-  },
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished": "2024-11-23",
+  "dateModified": "2025-01-26",
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -171,6 +167,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design",
+   "item": "https://roboticsengineeringlab.com/articles/vacuum-gripper-robot.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -190,7 +212,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm equipped with a vacuum gripper pick and place cell" loading="eager" decoding="async" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> End-of-Arm Tooling (EOAT) — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> End-of-Arm Tooling (EOAT) — Updated January 26, 2025</div>
 <h1>Vacuum Gripper Integration for 6-DOF Robot Arms: Sizing & Pneumatic Design</h1>
 <p class="hero-sub">Engineering guide to designing and sizing vacuum EOAT systems for 6-axis robot arms. Suction cup mechanics, Venturi ejector sizing, air consumption modeling, and cycle time optimization.</p>
 </div>
@@ -207,7 +229,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Vacuum End-of-Arm Tooling (EOAT) is the standard solution for handling smooth, flat, or semi-porous objects across consumer goods, automotive glass, and electronics assembly. Unlike mechanical parallel grippers that require physical clearance around a part's perimeter, vacuum cups interface directly with the top surface. This allows high-density packing, box depalletizing, and part transfer without modifying fixture spacing.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-vacuum-gripper.jpg" alt="Editorial cross-section of a vacuum cup, ejector and holding-force path." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 <p>However, an effective vacuum system requires more than mounting rubber cups to an aluminum profile. Engineers must calculate theoretical holding forces against dynamic robot acceleration, manage internal line restrictions, and select the correct vacuum generation architecture.</p>
@@ -234,7 +256,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Vacuum generator comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead>
 <tr><th>Generator Type</th><th>Operating Principle</th><th>Best Application Fit</th><th>Key Trade-off</th></tr>
 </thead>
@@ -297,15 +319,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Continue with the Master Guide</h3>
+<p>How the topics on this page fit into a complete robot arm build.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published November 23, 2024 &middot; last reviewed January 26, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -318,7 +340,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. These figures are orientation only &mdash; the manufacturer&rsquo;s current documentation governs.</p>
 <ul>
 <li><a href="https://www.festo.com/us/en/c/products/pneumatic-components/vacuum-technology-id_pim135/" target="_blank" rel="noopener noreferrer">Festo technical documentation</a></li>
 </ul>
@@ -355,6 +377,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

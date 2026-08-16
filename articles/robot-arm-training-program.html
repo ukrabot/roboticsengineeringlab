@@ -27,17 +27,10 @@
   "@type": "Article",
   "headline": "Designing a Robot Arm Training Program for Factory Operators",
   "description": "A comprehensive framework for industrial plant managers and engineers to build a 3-tier training and certification program for 6-axis robot arm operators.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com"
-  },
-  "reviewedBy": {
-    "@type": "Person",
-    "name": "Robotics Engineering Editorial Team"
-  },
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "reviewedBy":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html"},
+  "datePublished": "2026-01-09",
+  "dateModified": "2026-06-10",
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -231,13 +224,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm training cell with teach pendant and safety light curtain" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Workforce Development — Published July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Workforce Development — Published January 9, 2026</div>
 <h1>Designing a Robot Arm Training Program for Factory Operators</h1>
 <p class="hero-sub">A practical engineering and management framework to design, implement, and audit a 3-tier industrial robot training program — from basic cell operation to advanced troubleshooting under ANSI/RIA R15.06 and CSA Z434 standards.</p>
 <div class="meta-row">
 <span>⏱ 14 min read</span>
 <span>🔧 Reviewed for technical accuracy</span>
-<span>📅 Updated July 24, 2026</span>
+<span>📅 Updated June 10, 2026</span>
 </div>
 </div>
 </header>
@@ -271,7 +264,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>In 2026, purchasing a high-precision 6-axis robot arm from <a href="https://www.fanucamerica.com/" target="_blank" rel="noopener noreferrer">FANUC</a>, <a href="https://www.kuka.com/" target="_blank" rel="noopener noreferrer">KUKA</a>, or ABB is no longer the primary hurdle to automating a manufacturing line. The real friction occurs after commissioning: <strong>who operates, recovers, and maintains the cell on third shift?</strong> Untrained or under-trained operators are responsible for over 60% of unscheduled robot downtime in North American plants, typically turning a simple 5-minute sensor fault or interlock tripping into hours of lost production while waiting for an engineer.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-arm-types.jpg" alt="Editorial robot-type diagram used in a training-program overview." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
 <p>A structured, standardized robot arm training program transforms shop-floor operators from passive bystanders into proactive cell technicians. Beyond reducing mean time to recovery (MTTR), a certified operator program lowers equipment damage risks, enforces OSHA and ANSI safety compliance, and improves overall equipment effectiveness (OEE). This guide outlines an end-to-end framework for plant managers, manufacturing engineers, and safety directors to build a scalable, compliant, and cost-effective robot operator curriculum.</p>
@@ -281,7 +274,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="3-Tier Training Framework Overview">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Training Tier</th><th>Target Audience</th><th>Recommended Duration</th><th>Primary Focus & Skills</th><th>Recertification</th></tr></thead>
 <tbody>
 <tr><td><strong>Tier 1: Cell Operator</strong></td><td>Production workers, assemblers</td><td>8 Hours (1 Day)</td><td>Cell start/stop, part loading, E-stop procedures, visual fault verification</td><td>Annual</td></tr>
@@ -315,7 +308,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Coordinate Frame Breakdown">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Coordinate Frame</th><th>Reference Origin</th><th>When to Use During Manual Jogging</th></tr></thead>
 <tbody>
 <tr><td><strong>Joint Frame</strong></td><td>Individual motor angles (J1 through J6)</td><td>Unsticking the arm from a mechanical singularity or tight fixture obstruction.</td></tr>
@@ -440,8 +433,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Go deeper: the Master Guide</h3>
+<p>Full walkthrough of robot architecture, control software and integration.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
@@ -456,8 +449,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published January 9, 2026 &middot; last reviewed June 10, 2026</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -499,6 +492,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

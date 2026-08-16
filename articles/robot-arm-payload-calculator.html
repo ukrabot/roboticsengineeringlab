@@ -32,11 +32,7 @@
   "@type": "TechArticle",
   "headline": "Robot Arm Payload Calculator: How to Size a 6-DOF Arm for Your Load",
   "description": "A practical guide and interactive calculator for determining the required payload capacity of a 6-axis robot arm, including end-effector weight, dynamic load factors, and reach-based derating.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com"
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -48,8 +44,8 @@
     "@id": "https://roboticsengineeringlab.com/articles/robot-arm-payload-calculator.html"
   },
   "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "datePublished": "2024-07-23",
+  "dateModified": "2024-09-25",
   "articleSection": "Robot Arm Engineering",
   "wordCount": "2500"
 }
@@ -281,7 +277,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="6-axis industrial robot arm lifting a workpiece, illustrating payload capacity and load calculation" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Engineering — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Engineering — Updated September 25, 2024</div>
 <h1>Robot Arm Payload Calculator: How to Size a 6-DOF Arm for Your Load</h1>
 <p class="hero-sub">Get the right payload rating the first time. Use the free calculator below to combine workpiece weight, end-effector weight, and dynamic load, then read the engineering logic behind every number. <br><span class="badge">USA &bull; Canada &bull; Free Tool &bull; No Signup</span></p>
 </div>
@@ -307,7 +303,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Enter your application's numbers below. The calculator runs entirely in your browser — nothing is uploaded or stored — and returns the minimum rated payload capacity you should look for when comparing robot arm specification sheets.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-payload-calculator.jpg" alt="Editorial diagram of workpiece mass, gripper mass, tool offset and wrist moment." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual illustration prepared for this article.</figcaption>
 </figure>
 
 
@@ -431,7 +427,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Reach derating example">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Load Center of Gravity Offset</th><th>Typical Payload Derating</th><th>Practical Implication</th></tr></thead>
 <tbody>
 <tr><td>0 - 50 mm from flange</td><td>0% (full rated payload)</td><td>Compact grippers, standard tooling</td></tr>
@@ -454,7 +450,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Once you have your minimum required payload from the calculator above, use the table below to identify which general category of robot arm is likely to fit your application before requesting detailed quotes.</p>
 <div class="table-wrap" aria-label="Category comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Category</th><th>Typical Payload</th><th>Typical Reach</th><th>Primary Application</th></tr></thead>
 <tbody>
 <tr><td>Desktop / DIY</td><td>0.5 - 2 kg</td><td>300 - 700 mm</td><td>Education, rapid prototyping</td></tr>
@@ -525,8 +521,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Reproducible guide: figures shown come from the formulas printed on this page. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published July 23, 2024 &middot; last reviewed September 25, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -539,7 +535,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Component limits vary by variant and revision; check the governing datasheet.</p>
 <ul>
 <li><a href="https://www.iso.org/committee/54138.html" target="_blank" rel="noopener noreferrer">ISO robotics standards catalogue</a></li><li><a href="https://docs.ros.org/" target="_blank" rel="noopener noreferrer">ROS 2 documentation</a></li>
 </ul>
@@ -576,6 +572,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

@@ -32,11 +32,7 @@
   "@type": "TechArticle",
   "headline": "Noise Reduction Techniques for 6-DOF Robot Arms: Gears, Belts & Dampers",
   "description": "A practical engineering guide to reducing noise from 6-axis robot arms, covering gear selection, belt tension, vibration dampers, acoustic enclosure design, and OSHA noise exposure compliance.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com"
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -48,8 +44,8 @@
     "@id": "https://roboticsengineeringlab.com/articles/robot-arm-noise-reduction.html"
   },
   "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "datePublished": "2025-08-23",
+  "dateModified": "2025-10-07",
   "articleSection": "Robot Arm Engineering",
   "wordCount": "2600"
 }
@@ -234,7 +230,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="6-axis industrial robot arm joint mechanism illustrating gear noise and vibration reduction techniques" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Engineering — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Robot Arm Engineering — Updated October 7, 2025</div>
 <h1>Noise Reduction Techniques for 6-DOF Robot Arms: Gears, Belts & Dampers</h1>
 <p class="hero-sub">Where robot arm noise actually comes from, and the specific gear, belt, and enclosure changes that reduce it — without sacrificing cycle time or repeatability. <br><span class="badge">USA &bull; Canada &bull; OSHA 1910.95 &bull; Practical Engineering</span></p>
 </div>
@@ -262,7 +258,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Robot arm noise gets dismissed as a cosmetic issue until it becomes a compliance problem, a collaborative workspace blocker, or an early warning sign of mechanical wear. A robot cell installed next to an office, a quality inspection station, or a collaborative assembly area where operators work in close proximity has real acoustic requirements that a standard industrial-grade arm was never designed to meet out of the box.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-transmissions.jpg" alt="Editorial transmission diagram relevant to gear and belt noise." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 <p>Beyond comfort, noise is diagnostic. A robot that was quiet at commissioning and has gotten progressively louder over months of operation is very often telling you something concrete: increasing backlash in a gearbox, a belt that has stretched out of tolerance, or bearing wear that will eventually show up as a positioning accuracy problem before it shows up as a mechanical failure. Treating noise reduction as pure acoustics misses half the value — it's also a maintenance indicator.</p>
@@ -271,7 +267,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Before choosing a fix, it helps to know which joint or component is generating the noise. In a typical 6-axis arm, noise sources break down into a few distinct categories, each with a different root cause and a different fix:</p>
 <div class="table-wrap" aria-label="Noise source breakdown">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Noise Source</th><th>Typical Cause</th><th>Character of the Sound</th></tr></thead>
 <tbody>
 <tr><td>Gear mesh noise</td><td>Spur gear tooth engagement, backlash, wear</td><td>Whining or grinding, increases with speed</td></tr>
@@ -315,7 +311,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Even a robot with well-selected gearing and properly tensioned belts will generate some level of structural vibration, particularly during high-acceleration moves. Left unmanaged, this vibration transmits through the robot's base and mounting structure into the surrounding floor and equipment, amplifying perceived noise well beyond what the robot itself produces.</p>
 <div class="table-wrap" aria-label="Damper types">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Comparison compiled for this article. Confirm figures with the manufacturer before specifying.</caption>
 <thead><tr><th>Damping Method</th><th>Where It's Used</th><th>Typical Benefit</th></tr></thead>
 <tbody>
 <tr><td>Rubber isolation mounts</td><td>Base mounting plate to floor/frame interface</td><td>Reduces structure-borne vibration transfer</td></tr>
@@ -418,8 +414,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 23, 2025 &middot; last reviewed October 7, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -432,7 +428,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Confirm every safety-relevant limit in the current documentation before you rely on it.</p>
 <ul>
 <li><a href="https://www.cdc.gov/niosh/noise/" target="_blank" rel="noopener noreferrer">NIOSH occupational noise resources</a></li>
 </ul>
@@ -469,6 +465,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

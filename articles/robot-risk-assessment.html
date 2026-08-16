@@ -24,9 +24,9 @@
   "@type": "TechArticle",
   "headline": "Robot Arm Risk Assessment: ISO 12100 Method, PLr Determination & Worksheet",
   "description": "How to conduct a robot arm risk assessment using the ISO 12100 methodology, including hazard identification, severity/probability scoring, and PLr determination per ISO 13849-1.",
-  "author": {"@type":"Organization","name":"Robotics Engineering"},
-  "datePublished":"2026-07-18",
-  "dateModified":"2026-07-18",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished":"2025-07-09",
+  "dateModified":"2025-11-07",
   "publisher": {"@type":"Organization","name":"Robotics Engineering"},
   "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/robot-risk-assessment.html"},
   "image":"../robotic_arm_hero.jpg"
@@ -37,9 +37,9 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Who is legally allowed to perform a robot arm risk assessment?","acceptedAnswer":{"@type":"Answer","text":"ANSI/RIA R15.06 and CSA Z434 both require risk assessments to be conducted by a competent person with knowledge of the robot system, the application, and relevant safety standards. This does not have to be a licensed engineer in every case, but for complex installations, many facilities engage a certified functional safety engineer or qualified safety consultant to conduct or validate the assessment, particularly where the output determines required Performance Level (PLr)."},
-    {"@type":"Question","name":"What's the difference between Performance Level (PL) and Category in safety-rated robot systems?","acceptedAnswer":{"@type":"Answer","text":"Category (B, 1, 2, 3, 4) describes the structural architecture of a safety function — for example, whether it uses a single channel or redundant dual channels with diagnostics. Performance Level (a through e) is a broader measure of the safety function's ability to reduce risk, calculated from the category plus factors like component reliability (MTTFd), diagnostic coverage, and common cause failure protection. A Category 3 architecture with good diagnostics can achieve PL d or PL e depending on component-level data."},
-    {"@type":"Question","name":"Do collaborative robots still need a formal risk assessment?","acceptedAnswer":{"@type":"Answer","text":"Yes. ISO/TS 15066 explicitly requires a risk assessment for collaborative applications, and removing a physical guard does not eliminate hazards — it changes which hazards apply. Power and force limiting still requires assessing whether contact forces stay under biomechanical limits for the specific body region and contact type involved in that application, which is application-specific and cannot be assumed from the robot's general cobot certification alone."},
+    {"@type":"Question","name":"Who is legally allowed to perform a robot arm risk assessment?","acceptedAnswer":{"@type":"Answer","text":"ANSI/RIA R15.06 and CSA Z434 both require risk assessments to be conducted by a competent person with knowledge of the robot system, the application, and relevant safety standards. This does not have to be a licensed engineer in every case, but for complex installations, many facilities engage a certified functional safety engineer or qualified safety consultant to conduct or validate the assessment, particularly where the output determines required Performance Level (PLr)."}},
+    {"@type":"Question","name":"What's the difference between Performance Level (PL) and Category in safety-rated robot systems?","acceptedAnswer":{"@type":"Answer","text":"Category (B, 1, 2, 3, 4) describes the structural architecture of a safety function — for example, whether it uses a single channel or redundant dual channels with diagnostics. Performance Level (a through e) is a broader measure of the safety function's ability to reduce risk, calculated from the category plus factors like component reliability (MTTFd), diagnostic coverage, and common cause failure protection. A Category 3 architecture with good diagnostics can achieve PL d or PL e depending on component-level data."}},
+    {"@type":"Question","name":"Do collaborative robots still need a formal risk assessment?","acceptedAnswer":{"@type":"Answer","text":"Yes. ISO/TS 15066 explicitly requires a risk assessment for collaborative applications, and removing a physical guard does not eliminate hazards — it changes which hazards apply. Power and force limiting still requires assessing whether contact forces stay under biomechanical limits for the specific body region and contact type involved in that application, which is application-specific and cannot be assumed from the robot's general cobot certification alone."}},
     {"@type":"Question","name":"How often should a robot arm risk assessment be updated?","acceptedAnswer":{"@type":"Answer","text":"Whenever the application changes in any way that could introduce a new hazard or change an existing one: a new end-effector, a change in payload, a change in cycle/task sequence, a change in who has access to the cell, or any modification to safeguarding. Most safety standards also recommend periodic review even without a known change, since assumptions made during the original assessment can become outdated as the process evolves."}}
   ]
 }
@@ -136,6 +136,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Robot Arm Risk Assessment: ISO 12100 Method & PLr Determination",
+   "item": "https://roboticsengineeringlab.com/articles/robot-risk-assessment.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -153,9 +179,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Industrial robot arm cell requiring a documented risk assessment" loading="eager" />
+<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Industrial robot arm cell requiring a documented risk assessment" loading="eager" / width="1024" height="1536">
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Compliance Engineering — Updated July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Compliance Engineering — Updated November 7, 2025</div>
 <h1>Robot Arm Risk Assessment: <em>ISO 12100 Method & PLr Determination</em></h1>
 <p class="hero-sub">The actual methodology behind a compliant risk assessment — task-based hazard identification, severity and probability scoring, and how Performance Level requirements (PLr) get determined before you ever pick a safeguard.</p>
 </div>
@@ -171,7 +197,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>ISO 12100 defines risk assessment as an iterative loop, not a one-time form: identify hazards, estimate and evaluate the risk for each one, reduce the risk using a required hierarchy of measures, then re-assess whether the residual risk is acceptable. If it isn't, you go through the loop again. A common mistake is treating a risk assessment as paperwork completed once after installation — in reality, it should be revisited whenever the task, tooling, payload, or personnel access to the cell changes.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-safety-cell.jpg" alt="Editorial top-down layout of a guarded robot cell with light curtain, scanner and e-stops." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Schematic for explanation only; not a layout or drawing package.</figcaption>
 </figure>
 
 
@@ -190,7 +216,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Rather than assessing "the robot" as a single hazard source, ISO 10218-2 and CSA Z434 both require a <strong>task-based</strong> approach: list every task a person performs around the cell across its full lifecycle, then identify the hazards specific to that task. This catches hazards that a general walkthrough misses.</p>
 <div class="table-wrap" aria-label="Task-based hazard identification example">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative values only; the governing figure is the one in the current product documentation.</caption>
 <thead><tr><th>Task</th><th>Who Performs It</th><th>Hazard(s) Present</th></tr></thead>
 <tbody>
 <tr><td>Normal automatic cycle (guards closed)</td><td>No one inside cell</td><td>Generally low — verify guard interlocking is functioning</td></tr>
@@ -208,7 +234,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>ISO 12100 doesn't mandate one specific scoring scale, but the widely used structure (also reflected in ISO 13849-1's risk graph for determining PLr) uses three parameters instead of a simple two-axis matrix:</p>
 <div class="table-wrap" aria-label="Risk parameters">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Exact numbers vary by variant, option package and revision.</caption>
 <thead><tr><th>Parameter</th><th>Levels</th><th>What It Represents</th></tr></thead>
 <tbody>
 <tr><td><strong>S</strong> — Severity of injury</td><td>S1: slight (reversible) &nbsp;|&nbsp; S2: serious (irreversible, including death)</td><td>Worst credible outcome if the hazard is realized</td></tr>
@@ -226,7 +252,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <h2>Common Category/PL Combinations by Standard</h2>
 <div class="table-wrap" aria-label="Standards and typical Performance Level context">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead><tr><th>Standard</th><th>Scope</th><th>Typical Context</th></tr></thead>
 <tbody>
 <tr><td><a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a></td><td>USA industrial robot safety (based on ISO 10218)</td><td>Category 3 / PL d commonly required for perimeter safeguarding e-stop and gate interlock circuits</td></tr>
@@ -245,7 +271,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>A functional worksheet — whether in a spreadsheet or dedicated safety software — should carry each hazard through the full loop, not just record an initial score:</p>
 <div class="table-wrap" aria-label="Worksheet column structure">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption>
 <thead><tr><th>Column</th><th>Purpose</th></tr></thead>
 <tbody>
 <tr><td>Task / Life-cycle phase</td><td>Which activity exposes a person to this hazard</td></tr>
@@ -319,15 +345,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </ul>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Continue with the Master Guide</h3>
+<p>How the topics on this page fit into a complete robot arm build.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published July 9, 2025 &middot; last reviewed November 7, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -369,6 +395,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

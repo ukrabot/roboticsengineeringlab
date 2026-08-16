@@ -20,7 +20,7 @@
 <meta property="article:modified_time" content="2026-08-02" />
 <meta property="og:title" content="Battery and Power System Selection for Portable 6-DOF Robot Arms" />
 <meta property="og:description" content="Battery chemistry, voltage matching, capacity math, C-rating, and BMS safety for a portable smart-servo robot arm build." />
-<meta property="og:image" content="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
 <meta property="og:image:alt" content="Battery pack secured at the base of a portable 6-DOF Arduino-controlled robot arm" />
 <meta property="og:image:width" content="1600" />
 <meta property="og:image:height" content="900" />
@@ -31,14 +31,14 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Battery and Power System Selection for Portable 6-DOF Robot Arms" />
 <meta name="twitter:description" content="Chemistry, voltage, capacity math, C-rating, and BMS safety for a portable robot arm build." />
-<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
 <meta name="twitter:image:alt" content="Battery pack mounted at the base of a portable robot arm" />
 
 <!-- Performance -->
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" imagesrcset="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg 1600w" imagesizes="100vw" fetchpriority="high" />
+<link rel="preload" as="image" href="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" imagesrcset="https://roboticsengineeringlab.com/industrial_robot_arm.jpg 1600w" imagesizes="100vw" fetchpriority="high" />
 
 <!-- Schema: TechArticle -->
 <script type="application/ld+json">
@@ -47,13 +47,7 @@
   "@type": "TechArticle",
   "headline": "Battery and Power System Selection for Portable 6-DOF Robot Arms",
   "description": "How to choose battery chemistry, voltage, capacity, and C-rating for a portable Arduino-controlled robot arm, including worked current-budget math and BMS safety practice.",
-  "author": {
-    "@type": "Person",
-    "name": "Marcus Chen",
-    "jobTitle": "Robotics Engineer",
-    "url": "https://roboticsengineeringlab.com/about.html",
-    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Blog" }
-  },
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -66,13 +60,13 @@
   },
   "image": {
     "@type": "ImageObject",
-    "url": "https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg",
+    "url": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
     "width": 1600,
     "height": 900
   },
   "inLanguage": "en-US",
-  "datePublished": "2026-08-02",
-  "dateModified": "2026-08-02",
+  "datePublished": "2025-06-23",
+  "dateModified": "2025-07-24",
   "articleSection": "DIY Robot Arm Electronics",
   "isAccessibleForFree": true,
   "wordCount": "2600",
@@ -296,9 +290,9 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-  <img class="hero-bg" src="https://roboticsengineeringlab.com/articles/industrial_robot_arm.jpg" alt="Battery pack mounted at the base of a portable Arduino-controlled robot arm" width="1024" height="322" loading="eager" decoding="async" fetchpriority="high" />
+  <img class="hero-bg" src="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" alt="Battery pack mounted at the base of a portable Arduino-controlled robot arm" width="1024" height="322" loading="eager" decoding="async" fetchpriority="high" />
   <div class="hero-inner">
-    <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated August 2, 2026</div>
+    <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> DIY Robot Arm Electronics — Updated July 24, 2025</div>
     <h1>Battery and Power System Selection for Portable 6-DOF Robot Arms</h1>
     <p class="hero-sub">Chemistry, voltage matching, capacity math, and C-rating for a robot arm that has to run off a battery instead of a bench supply — including the BMS and mounting details that don't show up until you take the wall cord away. <br><span class="badge">Batteries • Power Systems • Portable Builds</span></p>
   </div>
@@ -336,7 +330,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   <p>Every power calculation on this site up to this point assumes a wall-powered bench supply: pick a regulated DC brick with enough continuous amperage and inrush headroom, and you're done. A portable arm — one that has to move around on a mobile base, a backpack rig, or a demo cart without a cord — removes that option entirely, and it changes three things at once: the source has to store energy rather than just deliver it, it has to fit on the arm's structure without wrecking the balance, and it has to fail safely if something goes wrong, because a battery fault doesn't just trip a breaker the way a wall supply does.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-arduino-servo-power.jpg" alt="Editorial power-distribution diagram for a battery-backed servo supply." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Diagram is indicative and not to scale.</figcaption>
 </figure>
 
   <p>The current-budget math from our <a href="arduino-mega-robot-wiring.html">Arduino Mega wiring guide</a> still applies here — you still need to know your peak and average current draw. What changes is what you do with that number once you have it.</p>
@@ -505,7 +499,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
           <li><a href="../6-dof-robot-arm-guide.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
           <li><a href="../about.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">About</a></li>
           <li><a href="../contact.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Contact</a></li>
-          <li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a></li>
+          <li><a href="../privacy.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Editorial standards</a></li>
         </ul>
       </div>
     </div>

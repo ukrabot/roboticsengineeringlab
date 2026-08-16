@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+# Ad crawlers
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
 Sitemap: https://roboticsengineeringlab.com/sitemap.xml

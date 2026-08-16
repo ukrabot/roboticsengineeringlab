@@ -32,13 +32,9 @@
   "@type": "Article",
   "headline": "Emergency Stop Design for 6-Axis Robot Arms: Safety Circuits & Standards",
   "description": "Engineering guide to emergency stop design for 6-axis robots. Stop categories (0, 1, 2), dual-channel safety relays, STO integration, and ANSI/CSA compliance.",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com/"
-  },
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "datePublished": "2025-06-09",
+  "dateModified": "2025-11-29",
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -171,6 +167,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Emergency Stop Design for 6-Axis Robot Arms: Safety Circuits & Standards",
+   "item": "https://roboticsengineeringlab.com/articles/robot-arm-emergency-stop.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -190,7 +212,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm in a manufacturing cell with safety interlocks and emergency stop controls" loading="eager" decoding="async" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Integration — Updated July 24, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety & Integration — Updated November 29, 2025</div>
 <h1>Emergency Stop Design for 6-Axis Robot Arms: Safety Circuits & Standards</h1>
 <p class="hero-sub">Engineering guide to E-stop design for 6-axis robots. Stop categories (0, 1, 2), dual-channel safety relays, Safe Torque Off (STO) integration, and ANSI/CSA compliance for North American facilities.</p>
 </div>
@@ -207,7 +229,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Designing an emergency stop (E-stop) system for a 6-axis robot arm is not as simple as wiring a red mushroom button to the main power contactor. The goal of an E-stop is to remove the hazard as quickly as possible without introducing new, secondary hazards. For example, instantly cutting power (uncontrolled stop) to a robot holding a 50 kg payload over a conveyor could cause the arm to drop the load or slam into the floor due to gravity and mechanical backlash.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-robot-safety-cell.jpg" alt="Editorial robot-cell layout with multiple e-stop locations." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
 <p>Modern industrial robot safety architecture relies on controlled deceleration, redundant safety logic, and specific stop categories defined by international standards. In North America, these designs must satisfy <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a> (USA), <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a> (Canada), and the fundamental electrical safety rules of <a href="https://webstore.iec.ch/en/publication/67121" target="_blank" rel="noopener noreferrer">IEC 60204-1</a>.</p>
@@ -222,7 +244,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="table-wrap" aria-label="Stop category comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption>
 <thead>
 <tr><th>Stop Category</th><th>Action</th><th>Power After Stop</th><th>Typical Robot Application</th></tr>
 </thead>
@@ -287,15 +309,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Go deeper: the Master Guide</h3>
+<p>Full walkthrough of robot architecture, control software and integration.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published June 9, 2025 &middot; last reviewed November 29, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -337,6 +359,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

@@ -3,51 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us — Robotics Engineering Blog</title>
-  <meta name="description" content="Learn about Robotics Engineering Blog: who writes our tutorials, our editorial standards, and why we cover robot arms, Arduino, ROS 2, and industrial automation." />
+  <title>Editorial Standards &amp; Content Labelling | Robotics Engineering Lab</title>
+  <meta name="description" content="How Robotics Engineering Lab researches, labels and corrects its content: worked examples, engineering explainers and specification notes, plus our sourcing and advertising policy." />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://roboticsengineeringlab.com/about.html" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/editorial-standards.html" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="About Us — Robotics Engineering Blog" />
+  <meta property="og:title" content="Editorial Standards &amp; Content Labelling" />
   <meta property="og:description" content="Learn about Robotics Engineering Blog, our editorial standards, and the practical, project-based tutorials we publish." />
   <meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
-  <meta property="og:url" content="https://roboticsengineeringlab.com/about.html" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/editorial-standards.html" />
   <meta property="og:locale" content="en_US" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "url": "https://roboticsengineeringlab.com/about.html",
-    "name": "About Robotics Engineering Blog",
-    "description": "Editorial background, methodology and team behind Robotics Engineering Blog.",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": "Robotics Engineering Blog",
-      "url": "https://roboticsengineeringlab.com/",
-      "logo": "https://roboticsengineeringlab.com/logo.png",
-      "foundingDate": "2023",
-      "sameAs": [],
-      "founder": {
-          "@type": "Person",
-          "name": "Marcus Chen",
-          "url": "https://roboticsengineeringlab.com/author/marcus-chen.html"
-        },
-        "employee": [
-          {
-            "@type": "Person",
-            "name": "Marcus Chen",
-            "jobTitle": "Robotics Engineer, Founder & Lead Writer",
-            "url": "https://roboticsengineeringlab.com/author/marcus-chen.html"
-          }
-        ]
-    }
-  }
-  </script>
 
   <style>
     :root {
@@ -187,6 +156,24 @@
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Editorial Standards",
+  "url": "https://roboticsengineeringlab.com/editorial-standards.html",
+  "description": "Research method, content labelling, sourcing, corrections and advertising policy for Robotics Engineering Lab.",
+  "publisher": { "@type": "Organization", "name": "Robotics Engineering Lab", "url": "https://roboticsengineeringlab.com/" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/index.html"},
+      {"@type":"ListItem","position":2,"name":"Editorial Standards","item":"https://roboticsengineeringlab.com/editorial-standards.html"}
+    ]
+  }
+}
+</script>
 </head>
 <body>
 
@@ -197,98 +184,65 @@
         <a href="/index.html">Home</a>
         <a href="/articles/index.html">Tutorials</a>
         <a href="/6-dof-robot-arm-guide.html">Guide</a>
-        <a href="/about.html" aria-current="page">About</a>
+        <a href="/about.html">About</a>
         <a href="/contact.html">Contact</a>
       </nav>
     </div>
   </header>
 
   <section class="page-hero">
-    <span class="section-label">About</span>
-    <h1>About Robotics Engineering Blog</h1>
-    <p class="sub">Practical, project-based robotics tutorials for engineers, makers, and students across the USA and Canada.</p>
-    <p class="updated">Founded 2023 · Last updated <time datetime="2026-07-31">July 31, 2026</time></p>
+    <span class="section-label">Editorial</span>
+    <h1>Editorial standards and content labelling</h1>
+    <p class="sub">How this site researches technical material, what each category of page can and cannot be used for, how we source numbers, and how corrections and advertising are handled.</p>
+    <p class="updated">Maintained by <a href="/author/marcus-chen.html">Marcus Chen</a> &middot; Last reviewed July 31, 2026</p>
   </section>
 
   <main class="legal-content">
 
-    <h2>What this site is</h2>
-    <p>Robotics Engineering Lab is a small independent editorial site about 6-DOF robot arms. The useful part of the library is practical: Arduino and servo power, inverse kinematics, ROS 2 control, grippers, and how a robot cell talks to a PLC. The industrial brand pages exist so a buyer can read payload, reach and safety context in one place — they are not substitute datasheets and they are not lab reviews.</p>
-    <p>We publish in English for readers in the USA and Canada, because the safety citations we use most often are ANSI/RIA R15.06, CSA Z434 and ISO 10218.</p>
+    <h2>1. The three content categories</h2>
+    <p>Every article on Robotics Engineering Lab belongs to exactly one of the following categories. The category determines how much weight the page can carry in an engineering decision.</p>
 
-    <h2>What we cover</h2>
-    <p>The <a href="/articles/index.html">tutorial library</a> is grouped into eight topics:</p>
+    <h3>Worked examples</h3>
+    <p>Arduino and ESP32 sketches, wiring procedures, kinematics derivations, and the two browser calculators. These are written to be reproduced. Code published here has been compiled, and any worked number shown in the text was produced by the formula printed alongside it. If you follow the steps with the stated parts, you should reach the stated result.</p>
+
+    <h3>Engineering explainers</h3>
+    <p>Safeguarding, materials, transmissions, grippers, cooling, cable management and similar topics. These synthesise published standards and documented manufacturer practice into design guidance. They are educational. <strong>They are not a risk assessment, a certification, or a substitute for a qualified integrator.</strong> Where an explainer touches a safety function, it points to the governing standard rather than paraphrasing it as if it were the requirement itself.</p>
+
+    <h3>Specification notes</h3>
+    <p>Pages covering FANUC, ABB, KUKA, Universal Robots, Standard Bots and comparable industrial hardware. Values are transcribed from the manufacturer&rsquo;s own product documentation, with the access date recorded in the page. <strong>We do not own these machines and have not bench-tested them.</strong> No page in this category should be read as an independent review, and none of them is a substitute for the current datasheet or a written quotation.</p>
+
+    <h2>2. Sourcing rules</h2>
     <ul>
-      <li><strong>Arduino and embedded control</strong> — microcontroller wiring, servo buses, encoders and sensors.</li>
-      <li><strong>ROS 2, kinematics and software</strong> — ros2_control, inverse kinematics and simulation.</li>
-      <li><strong>Industrial automation and safety</strong> — PLC integration, e-stops, light curtains and North American standards.</li>
-      <li><strong>Mechanical design and materials</strong> — printed parts, aluminum links, belts, gears and cable routing.</li>
-      <li><strong>End effectors</strong> — jaws, vacuum and magnetic tools.</li>
-      <li><strong>Maintenance, calibration and vision</strong> — upkeep and sensing around a cell.</li>
-      <li><strong>Specification notes</strong> — buying notes compiled from manufacturer documentation.</li>
-      <li><strong>Business tools</strong> — including the <a href="/articles/robot-arm-roi-calculator.html">ROI calculator</a> and <a href="/articles/robot-arm-payload-calculator.html">payload calculator</a>.</li>
+      <li>Hardware figures come from the manufacturer&rsquo;s current product page or datasheet, not from resellers, aggregators or other blogs.</li>
+      <li>Safety requirements are attributed to the governing document &mdash; ISO 10218, ANSI/RIA R15.06, CSA Z434, IEC 61496 &mdash; and readers are told to obtain the current edition. Standards are revised; an article summary is never authoritative.</li>
+      <li>Where a widely repeated figure is wrong, we name it and explain why rather than silently omitting it. Several specification notes on this site explicitly flag incorrect payload, reach, cycle-time and MTBF numbers that circulate in aggregated content.</li>
+      <li>Prices are treated as indicative only. We do not publish a single &ldquo;street price&rdquo; for industrial equipment that is always quoted per configuration.</li>
+      <li>Calculations shown on the site state their assumptions. If an assumption is not stated, treat the result as unusable.</li>
     </ul>
 
-    <h2>How we label content</h2>
-    <p>We do not pretend every page was run on a $30,000 industrial arm. Pages fall into three buckets, and the page itself should make the bucket obvious:</p>
+    <h2>3. Images and diagrams</h2>
+    <p>Photographs of industrial equipment are editorial illustrations unless the caption identifies a specific machine. Diagrams are conceptual: they show relationships and sequence, not dimensioned geometry. Neither is a substitute for a drawing package, a layout study, or a safety review of your actual cell.</p>
+
+    <h2>4. What this site cannot do for you</h2>
     <ul>
-      <li><strong>Worked examples</strong> — Arduino sketches, wiring steps, kinematics math and the two browser calculators. These are meant to be reproduced.</li>
-      <li><strong>Engineering explainers</strong> — safety, materials, grippers, cooling, cabling. They cite standards or manufacturer practice. They are not a certified risk assessment.</li>
-      <li><strong>Specification notes</strong> — FANUC, ABB, KUKA, Universal Robots, Standard Bots and similar pages. These start with a research-method note. We have not independently lab-tested those machines.</li>
+      <li>It cannot approve a robot cell. Only a risk assessment carried out for your installation can do that.</li>
+      <li>It cannot confirm that a specific robot fits your part. The load diagram, wrist moment and inertia limits in the manufacturer&rsquo;s documentation govern that, not a headline payload figure.</li>
+      <li>It cannot tell you what a machine will cost. Request an itemised quotation covering arm, controller, tooling, guarding, integration, training and service.</li>
+      <li>It cannot replace the manufacturer&rsquo;s current documentation, which changes without notice.</li>
     </ul>
-    <p>Photographs of factory robots are editorial illustrations unless a caption says otherwise. Original diagrams on this site are conceptual; they are not a substitute for a drawing package or a safety review.</p>
 
-    <h2>Editorial independence</h2>
-    <p>The site may show display advertising through Google AdSense after it is approved. Advertising does not choose which brands appear and does not change a payload number. We are not paid by robot manufacturers for coverage. See the <a href="/privacy.html">Privacy Policy</a>
-        <a href="/editorial-standards.html">Editorial standards</a> for cookies and advertising.</p>
+    <h2>5. Corrections policy</h2>
+    <p>Errors are corrected on the published page rather than quietly deleted, and the modified date is updated when a substantive change is made. To report one, email <a href="mailto:contact@roboticsengineeringlab.com">contact@roboticsengineeringlab.com</a> naming the page, or use the <a href="/contact.html">contact form</a> and choose &ldquo;Tutorial correction&rdquo;. Readers who report an error are credited on request.</p>
 
-    <h2>Who edits the site</h2>
-    <p>Pages are written and edited by <a href="/author/marcus-chen.html">Marcus Chen</a>, a robotics engineer who founded this site in 2023. He is responsible for the technical accuracy of every guide and for keeping specification notes labelled as such.</p>
+    <h2>6. Advertising and independence</h2>
+    <p>No manufacturer pays for coverage here. There are no sponsored placements and no paid product endorsements. Display advertising through Google AdSense, where it runs, is served by Google; advertisers have no input into which hardware is covered, how it is assessed, or what any specification says. Cookie and advertising details are in the <a href="/privacy.html">Privacy Policy</a>.</p>
 
-    <div class="team-card">
-      <div aria-hidden="true" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#1a1408;">MC</div>
-      <div>
-        <h3><a href="/author/marcus-chen.html" style="color:inherit;">Marcus Chen</a></h3>
-        <div class="role">Robotics Engineer, Founder &amp; Editor</div>
-        <p>Marcus builds and debugs 6-DOF robot arms &mdash; Arduino and ESP32 firmware, inverse kinematics, ROS 2 integration, and the PLC and safeguarding work around an industrial cell. He writes the educational guides and checks that industrial pages stay labelled as specification notes rather than hands-on reviews. For a question about a specific article, use the contact form and name the page.</p>
-        <p style="margin-top:10px;"><a href="/author/marcus-chen.html">Full profile, background and contact &rarr;</a></p>
-      </div>
-    </div>
+    <h2>7. Who is responsible</h2>
+    <p>Pages are written and edited by <a href="/author/marcus-chen.html">Marcus Chen</a>, who is responsible for the accuracy of the technical content and for keeping specification notes labelled as such. Questions about a specific page should name that page so the source used can be re-checked.</p>
 
-    <h2>Corrections and Feedback</h2>
-    <p>We get things wrong sometimes — a miswired pin, an outdated ROS 2 package name, a part that's since been discontinued. If you spot an error in a tutorial, please tell us. We correct published articles promptly and credit readers who flag mistakes, if they'd like to be credited.</p>
-
-    <h2>Get in Touch</h2>
-    <div class="contact-grid">
-      <div class="contact-item">
-        <div class="label">Email</div>
-        <p><a href="mailto:contact@roboticsengineeringlab.com">contact@roboticsengineeringlab.com</a></p>
-      </div>
-      <div class="contact-item">
-        <div class="label">Corrections & tips</div>
-        <p>Found an error or have a topic suggestion? Use the same email address with "Correction" or "Suggestion" in the subject line.</p>
-      </div>
-      <div class="contact-item">
-        <div class="label">More ways to reach us</div>
-        <p>Visit our <a href="/contact.html">Contact page</a> for a direct message form.</p>
-      </div>
-    </div>
-
-  
-    <section class="section" id="editorial-methodology" aria-label="Editorial methodology">
-      <h2>How we research and label technical content</h2>
-      <p>We distinguish between three types of material: documented specifications, calculations or examples prepared for the article, and hands-on observations from a clearly identified build. A manufacturer specification is not presented as an independent test, and an illustrative calculation is not presented as a measured result.</p>
-      <ul>
-        <li><strong>Primary sources first:</strong> manufacturer documentation, standards bodies and project repositories are preferred for specifications.</li>
-        <li><strong>Traceable claims:</strong> important figures should have a nearby source or a clear explanation of the calculation used.</li>
-        <li><strong>Clear limits:</strong> prices, safety requirements and performance depend on configuration, region and date; readers should confirm them before making a purchase or building a machine.</li>
-        <li><strong>Corrections:</strong> if a source changes or a reader identifies an error, we update the article and explain the correction where it affects the recommendation.</li>
-      </ul>
-      <p>Diagrams marked as editorial illustrations explain a concept; they are not photographs, certification evidence or a substitute for an engineering review.</p>
-    </section>
   </main>
 
-  <footer aria-label="Site footer">
+<footer aria-label="Site footer">
     <div class="footer-inner">
       <div class="footer-brand">
         <a href="/index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
@@ -314,7 +268,6 @@
           <h4>Legal</h4>
           <ul>
             <li><a href="/privacy.html">Privacy Policy</a></li>
-            <li><a href="/editorial-standards.html">Editorial standards</a></li>
             <li><a href="/terms.html">Terms &amp; Conditions</a>
             </li>
           </ul>

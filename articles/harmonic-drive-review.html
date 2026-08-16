@@ -27,9 +27,9 @@
       "@type": "Article",
       "headline": "Harmonic Drives in 6-DOF Robot Arms: How Strain Wave Gearing Works & How to Select One",
       "description": "A technical guide to strain wave gearing (harmonic drives) for robot arm joints: mechanism, reduction ratio math, stiffness and lost motion, efficiency, fatigue life, and selection criteria versus planetary and cycloidal drives.",
-      "author": {"@type":"Organization","name":"Robotics Engineering"},
-      "datePublished":"2026-07-18",
-      "dateModified":"2026-07-23",
+      "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+      "datePublished":"2025-03-23",
+      "dateModified":"2025-05-26",
       "publisher": {"@type":"Organization","name":"Robotics Engineering"},
       "mainEntityOfPage": {"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/harmonic-drive-review.html"},
       "image":"../industrial_robot_arm.jpg"
@@ -160,6 +160,32 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Home",
+   "item": "https://roboticsengineeringlab.com/index.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Tutorials",
+   "item": "https://roboticsengineeringlab.com/articles/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Harmonic Drives in 6-DOF Robot Arms: How Strain Wave Gearing Actually Works",
+   "item": "https://roboticsengineeringlab.com/articles/harmonic-drive-review.html"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 
@@ -177,7 +203,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm hero image" loading="eager" />
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Harmonic drive gear unit installed in the joint of a six-axis industrial robot arm" loading="eager" / width="1024" height="322">
 <div class="hero-inner">
 <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — July 23, 2026</div>
 <h1>Harmonic Drives in 6-DOF Robot Arms: How Strain Wave Gearing Actually Works</h1>
@@ -192,7 +218,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 
 <div class="article-img" style="margin:32px 0 48px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
-<img src="../arduino_arm_tutorial.jpg" alt="Robot arm wrist joint assembly showing a compact gear reduction stage" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" />
+<img src="../arduino_arm_tutorial.jpg" alt="Robot arm wrist joint assembly showing a compact gear reduction stage" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" / width="1536" height="1024" loading="lazy" decoding="async">
 <div style="padding:14px 16px; font-size:0.82rem; color:#77736e; background:#181b21; border-top:1px solid rgba(255,255,255,0.06);">Editorial photography: robot arm joint and gearing detail</div>
 </div>
 
@@ -226,7 +252,7 @@ This is why a single strain-wave stage can reach ratios that would need two or t
 <h2>Specification Categories That Actually Matter</h2>
 <p>When comparing harmonic drive components or gearheads for a joint design, these are the parameters worth lining up side by side — not a generic robot-arm payload table, but the numbers specific to the reducer itself:</p>
 <div class="table-wrap" aria-label="Harmonic drive specification categories"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Parameter</th><th>What it tells you</th><th>Typical range (component sets)</th></tr></thead><tbody>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Summary for orientation &mdash; verify against the datasheet for the configuration you are quoting.</caption><thead><tr><th>Parameter</th><th>What it tells you</th><th>Typical range (component sets)</th></tr></thead><tbody>
 <tr><td>Reduction ratio</td><td>Single-stage ratio available in a catalog series</td><td>~30:1 to 160:1, with some specialty series extending higher</td></tr>
 <tr><td>Lost motion / hysteresis</td><td>Angular deflection near zero torque — the real precision limit</td><td>Roughly 1 arc-minute or less for precision grades</td></tr>
 <tr><td>Rated output torque</td><td>Continuous torque the flexspline can sustain at rated life</td><td>Scales with frame size; consult the specific series datasheet</td></tr>
@@ -248,7 +274,7 @@ This is why a single strain-wave stage can reach ratios that would need two or t
 <h2>Harmonic Drive vs. Planetary vs. Cycloidal: A Real Comparison</h2>
 <p>None of these three reducer types is universally "better" — they solve different parts of the joint-design problem, which is exactly why a single 6-DOF arm often uses more than one type across its own joints.</p>
 <div class="table-wrap" aria-label="Comparison of harmonic, planetary, and cycloidal drives"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption><thead><tr><th>Characteristic</th><th>Harmonic (strain wave)</th><th>Planetary</th><th>Cycloidal (e.g. Nabtesco RV-type)</th></tr></thead><tbody>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from published documentation; re-check any figure you intend to design against.</caption><thead><tr><th>Characteristic</th><th>Harmonic (strain wave)</th><th>Planetary</th><th>Cycloidal (e.g. Nabtesco RV-type)</th></tr></thead><tbody>
 <tr><td>Single-stage ratio</td><td>High (tens to low hundreds : 1)</td><td>Low (typically single digits to ~10:1 per stage)</td><td>High, comparable to harmonic</td></tr>
 <tr><td>Backlash / lost motion</td><td>Near-zero tooth backlash; small elastic lost motion</td><td>Noticeable unless specifically preloaded (adds cost)</td><td>Very low, often lower than harmonic under load</td></tr>
 <tr><td>Shock / overload tolerance</td><td>Comparatively limited — flexspline is a fatigue-critical part</td><td>Good — conventional rigid gear teeth</td><td>Excellent — a defining strength of the cycloidal principle</td></tr>
@@ -304,15 +330,15 @@ This is why a single strain-wave stage can reach ratios that would need two or t
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore joint design, control architecture, and buyer guidance across the full robot arm series.</p>
+<h3>Go deeper: the Master Guide</h3>
+<p>Full walkthrough of robot architecture, control software and integration.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Specification note: values come from the vendor&rsquo;s published datasheet, not from our own testing. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published March 23, 2025 &middot; last reviewed May 26, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -325,7 +351,7 @@ This is why a single strain-wave stage can reach ratios that would need two or t
 
 <section class="editorial-sources" aria-label="Primary sources" style="margin:48px 0 24px;padding:22px 24px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.12);border-radius:12px;">
 <h2 style="margin-top:0;">Primary sources and further reading</h2>
-<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Product ratings, safety requirements and component limits must be checked against the current documentation for the exact configuration.</p>
+<p style="font-size:.9rem;color:#aaa;">These references support the general engineering concepts in this guide. Confirm every safety-relevant limit in the current documentation before you rely on it.</p>
 <ul>
 <li><a href="https://www.harmonicdrive.net/technology" target="_blank" rel="noopener noreferrer">Harmonic Drive strain-wave gearing technology</a></li>
 </ul>
@@ -362,6 +388,7 @@ This is why a single strain-wave stage can reach ratios that would need two or t
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>

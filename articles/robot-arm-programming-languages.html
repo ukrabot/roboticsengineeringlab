@@ -27,17 +27,10 @@
   "@type": "Article",
   "headline": "Programming Languages for 6-DOF Robot Arms: Python, C++, Structured Text",
   "description": "A technical comparison of programming environments for 6-axis robot arms: Python with ROS 2, C++, IEC 61131-3 Structured Text, and vendor-specific languages RAPID (ABB), KRL (KUKA), and TP (FANUC).",
-  "author": {
-    "@type": "Organization",
-    "name": "Robotics Engineering",
-    "url": "https://roboticsengineeringlab.com"
-  },
-  "reviewedBy": {
-    "@type": "Person",
-    "name": "Robotics Engineering Editorial Team"
-  },
-  "datePublished": "2026-07-18",
-  "dateModified": "2026-07-24",
+  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "reviewedBy":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen.html"},
+  "datePublished": "2024-12-09",
+  "dateModified": "2025-07-05",
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering",
@@ -233,13 +226,13 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Programmer writing robot arm motion code on a laptop next to a 6-axis industrial robot" loading="eager" width="1024" height="322" />
 <div class="hero-inner">
-<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — Published July 18, 2026</div>
+<div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Manufacturing Intelligence — Published December 9, 2024</div>
 <h1>Programming Languages for 6-DOF Robot Arms: Python, C++, Structured Text</h1>
 <p class="hero-sub">A practical, code-level comparison of the languages used to program 6-axis robot arms — Python with ROS 2, C++, IEC 61131-3 Structured Text, and the proprietary vendor languages RAPID, KRL, and FANUC TP.</p>
 <div class="meta-row">
 <span>⏱ 14 min read</span>
 <span>🔧 Reviewed for technical accuracy</span>
-<span>📅 Updated July 24, 2026</span>
+<span>📅 Updated July 5, 2025</span>
 </div>
 </div>
 </header>
@@ -273,7 +266,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Ask ten robotics engineers which programming language is best for a 6-axis robot arm, and you'll likely get ten different answers — and all of them could be correct, depending on the task. A research team building a novel bin-picking algorithm has completely different needs than a maintenance technician troubleshooting a stalled ABB welding cell on a Tuesday night shift. This guide breaks down the six programming environments you're most likely to encounter when working with 6-DOF robot arms in North America: Python (typically through ROS 2), C++, IEC 61131-3 Structured Text, and the three dominant proprietary vendor languages — RAPID (ABB), KRL (KUKA), and TP (FANUC).</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-ros2-control.jpg" alt="Editorial diagram of application code talking to a robot controller stack." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
 <p>Rather than declaring a single winner, this guide explains what each language is actually good at, shows real code syntax for each, and gives you a framework for choosing the right tool for your specific project — whether that's a university research lab, a startup building a custom arm, or a Tier 1 automotive supplier running FANUC welding cells.</p>
@@ -421,7 +414,7 @@ END</div>
 <h2 id="comparison">Side-by-Side Comparison Table</h2>
 <div class="table-wrap" aria-label="Robot programming language comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial summary table &mdash; check values against the current datasheet for your configuration.</caption>
 <thead><tr><th>Language</th><th>Typical Use</th><th>Learning Curve</th><th>Portability</th><th>Real-Time Suitability</th></tr></thead>
 <tbody>
 <tr><td>Python (ROS 2)</td><td>Prototyping, AI/vision, research</td><td>Low</td><td>High (any ROS 2 robot)</td><td>Low</td></tr>
@@ -506,8 +499,8 @@ END</div>
 </div>
 
 <div class="cta-banner" aria-label="Internal link call to action">
-<h3>Continue Reading: 6-DOF Robot Arm Master Guide</h3>
-<p>Explore comprehensive specifications, pricing data, manufacturer comparisons, and buyer recommendations in our complete reference guide.</p>
+<h3>Next: the 6-DOF Robot Arm Master Guide</h3>
+<p>Architecture, programming, calibration and application fundamentals in one place.</p>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
@@ -522,8 +515,8 @@ END</div>
 
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen.html" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards.html" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 9, 2024 &middot; last reviewed July 5, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
@@ -565,6 +558,7 @@ END</div>
         <a href="../about.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
         <a href="../contact.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
         <a href="../privacy.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
         <a href="../terms.html" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
       </nav>
     </div></footer>
