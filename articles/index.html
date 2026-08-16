@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial library — Robotics Engineering Lab</title>
+  <meta name="description" content="All Robotics Engineering Lab guides in one library: Arduino and ROS 2 tutorials, safety notes, calculators, and specification-based industrial buying notes." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/articles/" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Tutorial library — Robotics Engineering Lab" />
+  <meta property="og:description" content="Arduino, ROS 2, safety, calculators and specification notes for 6-DOF robot arms." />
+  <meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/articles/" />
+  <meta property="og:locale" content="en_US" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#0c0e14; --surface-card:#161820; --text-primary:#f5f3ee; --text-secondary:#b5b0a6; --text-muted:#6e677a; --accent:#e4c07a; --accent-2:#6fa3d8; --border:rgba(255,255,255,0.06); }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.6; -webkit-font-smoothing:antialiased; }
+    .site-header { position:sticky; top:0; z-index:100; background:rgba(12,14,20,0.75); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); padding:14px 0; }
+    .nav-inner { max-width:1200px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .logo { font-family:'DM Serif Display',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; }
+    .logo span { color:var(--accent); font-style:italic; }
+    .nav-links { display:flex; gap:20px; flex-wrap:wrap; }
+    .nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] { color:var(--text-primary); }
+    .page-hero { max-width:1200px; margin:0 auto; padding:80px 24px 36px; border-bottom:1px solid var(--border); }
+    .section-label { font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:10px; }
+    h1 { font-family:'DM Serif Display',Georgia,serif; font-weight:400; font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-0.03em; max-width:800px; }
+    .sub { margin-top:16px; max-width:680px; color:var(--text-secondary); font-weight:300; }
+    .note { margin-top:22px; max-width:760px; color:var(--text-secondary); font-size:0.92rem; background:var(--surface-card); border:1px solid var(--border); border-radius:16px; padding:18px 20px; }
+    main { max-width:1200px; margin:0 auto; padding:48px 24px 100px; }
+    .cat { margin-bottom:42px; }
+    .cat h2 { font-family:'DM Serif Display',Georgia,serif; font-weight:400; font-size:1.35rem; margin-bottom:6px; }
+    .cat p { color:var(--text-muted); font-size:0.82rem; margin-bottom:14px; }
+    .cat ul { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:10px 20px; }
+    .cat a { color:var(--text-secondary); text-decoration:none; font-size:0.92rem; display:block; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--surface-card); }
+    .cat a:hover { color:var(--accent); border-color:rgba(228,192,122,0.25); }
+    footer { border-top:1px solid var(--border); padding:36px 24px 48px; }
+    .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+    .footer-inner p, .footer-inner a { color:var(--text-muted); font-size:0.82rem; text-decoration:none; }
+    .footer-inner nav { display:flex; gap:18px; flex-wrap:wrap; }
+    @media (max-width:700px){ .nav-links{gap:12px;} }
+  </style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="../index.html" class="logo">Robotics <span>Engineering</span></a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="../index.html">Home</a>
+        <a href="index.html" aria-current="page">Tutorials</a>
+        <a href="../6-dof-robot-arm-guide.html">Guide</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="section-label">Library</div>
+    <h1>All tutorials, in one place</h1>
+    <p class="sub">Arduino and ROS 2 guides, safety explainers, two browser calculators, and specification notes for industrial arms. Nothing here is a substitute for a manufacturer datasheet or a formal risk assessment.</p>
+    <p class="note"><strong>How labels work:</strong> Arduino, kinematics and calculator pages are worked examples. FANUC, ABB, KUKA, UR and Standard Bots pages are compiled from public manufacturer documentation — not independent lab tests.</p>
+  </section>
+
+  <main>
+    <section class="cat">
+      <h2>Arduino &amp; embedded control</h2>
+      <p>Wiring, power and sensors for educational arms.</p>
+      <ul>
+        <li><a href="arduino-robot-arm-tutorial.html">Build a 6-DOF robot arm with Arduino</a></li>
+        <li><a href="arduino-mega-robot-wiring.html">Arduino Mega wiring guide</a></li>
+        <li><a href="esp32-robot-controller.html">ESP32 as a robot-arm controller</a></li>
+        <li><a href="smart-servo-robot-arm.html">Smart servos for robot arms</a></li>
+        <li><a href="joint-encoders-robot-arm.html">Joint encoders</a></li>
+        <li><a href="force-torque-sensors-robot.html">Force-torque sensors</a></li>
+        <li><a href="robot-arm-battery-power.html">Battery power for robot arms</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>ROS 2, kinematics &amp; software</h2>
+      <p>Control software, inverse kinematics and simulation.</p>
+      <ul>
+        <li><a href="ros2-robot-arm-control.html">ROS 2 control for robot arms</a></li>
+        <li><a href="robot-arm-inverse-kinematics.html">Inverse kinematics for 6-DOF arms</a></li>
+        <li><a href="kinematic-solver-code.html">Inverse-kinematics solver code</a></li>
+        <li><a href="robot-arm-simulation-software.html">Simulation software compared</a></li>
+        <li><a href="robot-arm-programming-languages.html">Programming languages</a></li>
+        <li><a href="robot-arm-controller-comparison.html">Controller comparison</a></li>
+        <li><a href="types-of-robotic-arms.html">Types of robotic arms</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>Industrial automation &amp; safety</h2>
+      <p>PLC integration and North American safeguarding context.</p>
+      <ul>
+        <li><a href="industrial-plc-robotics.html">PLC programming for robotics</a></li>
+        <li><a href="robot-arm-plc-integration.html">Integrating robot arms with PLCs</a></li>
+        <li><a href="robot-risk-assessment.html">Risk assessment guide</a></li>
+        <li><a href="robot-light-curtain-integration.html">Light-curtain integration</a></li>
+        <li><a href="robot-arm-emergency-stop.html">Emergency-stop systems</a></li>
+        <li><a href="robot-arm-safety-usa-canada.html">Safety standards (USA &amp; Canada)</a></li>
+        <li><a href="robot-arm-welding.html">Welding applications</a></li>
+        <li><a href="collaborative-assembly-arm.html">Collaborative assembly</a></li>
+        <li><a href="palletizing-robot-arm.html">Palletizing cells</a></li>
+        <li><a href="robot-area-scanner.html">Area scanners</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>Mechanical design &amp; materials</h2>
+      <p>Links, transmissions, prints and cable routing.</p>
+      <ul>
+        <li><a href="3d-printed-robot-arm-parts.html">3D-printed robot-arm parts</a></li>
+        <li><a href="best-3d-printer-robot-parts.html">3D printers for robot parts</a></li>
+        <li><a href="aluminum-robot-frame.html">Aluminum robot frames</a></li>
+        <li><a href="carbon-fiber-robot-parts.html">Carbon-fiber parts</a></li>
+        <li><a href="belt-drive-vs-gear-drive.html">Belt drive vs gear drive</a></li>
+        <li><a href="harmonic-drive-review.html">Harmonic-drive notes</a></li>
+        <li><a href="cable-management-robot.html">Cable management</a></li>
+        <li><a href="robot-arm-cooling.html">Motor cooling</a></li>
+        <li><a href="robot-arm-dust-protection.html">Dust and IP protection</a></li>
+        <li><a href="robot-arm-noise-reduction.html">Noise reduction</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>End effectors</h2>
+      <p>How the arm holds the part.</p>
+      <ul>
+        <li><a href="robot-arm-gripper-design.html">Gripper design basics</a></li>
+        <li><a href="vacuum-gripper-robot.html">Vacuum grippers</a></li>
+        <li><a href="magnetic-gripper-robot.html">Magnetic grippers</a></li>
+        <li><a href="robot-end-effector-selection.html">Selecting an end effector</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>Maintenance, calibration &amp; vision</h2>
+      <p>Keeping a cell accurate and inspectable.</p>
+      <ul>
+        <li><a href="robot-arm-calibration.html">Calibration guide</a></li>
+        <li><a href="robot-arm-maintenance.html">Maintenance schedule</a></li>
+        <li><a href="robot-arm-vision-system.html">Vision systems</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>Specification notes</h2>
+      <p>Compiled from manufacturer documentation. Not independent lab tests.</p>
+      <ul>
+        <li><a href="fanuc-robot-arm-review.html">FANUC LR Mate 200iD specs</a></li>
+        <li><a href="abb-robot-arm-review.html">ABB IRB 2600 specs</a></li>
+        <li><a href="kuka-robot-arm-review.html">KUKA KR 20 R1810 specs</a></li>
+        <li><a href="universal-robots-ur20.html">Universal Robots UR20 specs</a></li>
+        <li><a href="standard-bots-ro1.html">Standard Bots RO1 specs</a></li>
+        <li><a href="collaborative-robot-arm-2026.html">Collaborative arms compared</a></li>
+        <li><a href="future-6-dof-robot-arms.html">Where 6-DOF arms are heading</a></li>
+      </ul>
+    </section>
+
+    <section class="cat">
+      <h2>Business tools</h2>
+      <p>Estimators that run in your browser. They do not store numbers.</p>
+      <ul>
+        <li><a href="robot-arm-roi-calculator.html">ROI and payback calculator</a></li>
+        <li><a href="robot-arm-payload-calculator.html">Payload calculator</a></li>
+        <li><a href="robot-arm-leasing-buying.html">Leasing vs buying</a></li>
+        <li><a href="6-axis-robot-market-2026.html">How to read market claims</a></li>
+        <li><a href="robot-arm-training-program.html">Training-program outline</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; 2023&ndash;2026 Robotics Engineering Lab. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+        <a href="../privacy.html">Privacy Policy</a>
+        <a href="../terms.html">Terms</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

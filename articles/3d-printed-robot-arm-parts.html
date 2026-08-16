@@ -200,8 +200,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <a href="../index.html" class="logo" aria-label="Back to home">Robotics <span>Engineering</span></a>
 <div class="nav-links">
       <a href="../index.html">Home</a>
+      <a href="index.html">Tutorials</a>
       <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../index.html#categories">Articles</a>
       <a href="../about.html">About</a>
       <a href="../contact.html">Contact</a>
     </div>
@@ -211,7 +211,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <header class="hero-article" aria-label="Article hero">
 <img class="hero-bg" src="../arduino_arm_tutorial.jpg" alt="3D-printed robot arm components and open-source hardware on a workbench" loading="eager" />
 <div class="hero-inner">
-<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#categories">Articles</a> / 3D-Printed Robot Arm Components</nav>
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Tutorials</a> / 3D-Printed Robot Arm Components</nav>
 <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Maker Resources — Updated February 3, 2025</div>
 <h1>3D-Printed Robot Arm Components: Open-Source STL Files</h1>
 <p class="hero-sub">A curated guide to real, actively maintained open-source repositories: Thor (AngelLM), PAROL6 (PCrnjak), dARM (JesseDarr), and Faze4. Material comparisons (PLA, PETG, ABS, resin) and print-setting references for makers in the USA and Canada. <br><span class="badge">USA &bull; Canada &bull; 6-DOF &bull; Open Source</span></p>
@@ -226,6 +226,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <h2>Open-Source Robot Arm Projects Worth Knowing About</h2>
 <p>Plenty of pages promise "verified" hardware without ever linking to a real source. This guide takes a narrower approach: it covers <strong>four open-source robot arm projects</strong> that have public repositories, identifiable authors, and documentation you can check yourself.</p>
+<figure class="editorial-illustration" style="margin:28px 0 40px;">
+  <img src="diagram-3d-printing-robot-parts.jpg" alt="Editorial diagram of 3D-printed robot-arm parts and print orientation." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+</figure>
+
 
 <ul>
 <li><a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">Thor (Ángel L.M.)</a> — originally a university final-degree project started around 2015, open-source from the start, with a build community that has grown across multiple countries over the years.</li>
@@ -244,7 +249,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>The table below lists the repositories referenced in this article, the file formats available, and the specifications documented by each project's creator. These are links to the original source pages — not affiliate or resold links.</p>
 
 <div class="table-wrap" aria-label="Open-source robot arm repositories"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Project / Component</th><th>Source URL</th><th>Author</th><th>License</th><th>Documented Specs</th></tr></thead>
 <tbody>
 <tr><td>Thor — 6-DOF Open Source Arm (STL + STEP)</td><td><a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">github.com/AngelLM/Thor</a></td><td>Ángel L.M.</td><td>Open Source</td><td>~625 mm height; ~750 g payload (per project docs); 6 DOF; designed with FreeCAD / KiCAD / GRBL</td></tr>
@@ -274,7 +279,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>The choice between PLA, PETG, ABS, and resin affects structural performance, not just appearance. The table below compares manufacturer-published datasheet values — actual part strength also depends heavily on print orientation, infill, and layer adhesion, which datasheets don't fully capture.</p>
 
 <div class="table-wrap" aria-label="Material properties for 3D printed robot arm components"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Material</th><th>Layer Height (typical)</th><th>Infill (structural)</th><th>Tensile Strength (manufacturer datasheet)</th><th>Best Component</th></tr></thead>
 <tbody>
 <tr><td>PLA (e.g. Prusament, Hatchbox)</td><td>0.2 mm (0.1 mm for detailed joints)</td><td>~30% gyroid, 4 walls</td><td>~35 MPa per <a href="https://www.astm.org/d0638-22.html" target="_blank" rel="noopener noreferrer">ASTM D638</a> test method</td><td>Non-load links, cosmetic covers, prototype joints</td></tr>
@@ -290,7 +295,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Each open-source repository documents its own recommended print settings. The table below is a consolidated reference drawn from the authors' published build guides — treat it as a starting point for your first print, then tune based on your own printer's calibration.</p>
 
 <div class="table-wrap" aria-label="Print settings referenced by open-source robot arm repositories"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Parameter</th><th>PLA</th><th>PETG</th><th>ABS</th><th>Resin (high-detail joints)</th></tr></thead>
 <tbody>
 <tr><td>Layer Height</td><td>0.2 mm</td><td>0.2 mm</td><td>0.2 mm (0.15 mm detail)</td><td>0.025 mm</td></tr>
@@ -332,7 +337,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>The right manufacturing method depends heavily on batch size and how many design iterations you expect to make. The table below gives an approximate, order-of-magnitude comparison rather than fixed pricing — actual costs vary by region, supplier, and material choice.</p>
 
 <div class="table-wrap" aria-label="Cost comparison for robot arm components"><table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://github.com/AngelLM/Thor" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Component / Method</th><th>3D Printed (PETG/PLA)</th><th>CNC Aluminum (6061-T6)</th><th>Injection Mold (100+ units)</th></tr></thead>
 <tbody>
 <tr><td>Link (each), approximate range</td><td>Low single-digit to ~$10</td><td>~$60–$120 (machined + finish)</td><td>~$10–$20 (amortized mold)</td></tr>
@@ -394,6 +399,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+</aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
 <a href="robot-end-effector-selection.html" class="back-link" aria-label="Previous article">← Previous: End Effector Selection Guide</a>
@@ -445,8 +455,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use cookies to run this site and, with your consent, to show personalized ads through Google AdSense.
-        You can decline and still read everything. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>

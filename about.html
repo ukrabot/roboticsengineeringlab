@@ -190,6 +190,7 @@
       <a href="/index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="/index.html">Home</a>
+        <a href="/articles/index.html">Tutorials</a>
         <a href="/6-dof-robot-arm-guide.html">Guide</a>
         <a href="/about.html" aria-current="page">About</a>
         <a href="/contact.html">Contact</a>
@@ -206,45 +207,46 @@
 
   <main class="legal-content">
 
-    <h2>Our Story</h2>
-    <p>Robotics Engineering Blog started as a set of personal build notes. Every time we designed a robot arm, wired a servo controller, or debugged a ROS 2 launch file, we wrote down what actually worked — the wiring that didn't match the datasheet, the calibration step no one mentions, the PLC fault code that took an afternoon to track down. Those notes turned into full tutorials, and the tutorials turned into this site.</p>
-    <p>We started it because most robotics content online falls into one of two extremes: marketing pages that never show real code, or academic papers that assume you already have a lab full of equipment. We wanted something in between — content written by people who actually build the thing, for people who are about to build it themselves.</p>
+    <h2>What this site is</h2>
+    <p>Robotics Engineering Lab is a small independent editorial site about 6-DOF robot arms. The useful part of the library is practical: Arduino and servo power, inverse kinematics, ROS 2 control, grippers, and how a robot cell talks to a PLC. The industrial brand pages exist so a buyer can read payload, reach and safety context in one place — they are not substitute datasheets and they are not lab reviews.</p>
+    <p>We publish in English for readers in the USA and Canada, because the safety citations we use most often are ANSI/RIA R15.06, CSA Z434 and ISO 10218.</p>
 
-    <h2>What We Cover</h2>
-    <p>Our focus is deliberately narrow so we can go deep instead of wide. Every article on this site falls into one of four areas:</p>
+    <h2>What we cover</h2>
+    <p>The <a href="/articles/index.html">tutorial library</a> is grouped into eight topics:</p>
     <ul>
-      <li><strong>Robot arm design and kinematics</strong> — 6-DOF arm builds, inverse kinematics, servo selection, and 3D-printed mechanical design.</li>
-      <li><strong>Arduino and embedded control</strong> — microcontroller programming, motor drivers, sensor integration, and low-level control loops.</li>
-      <li><strong>ROS 2 and software robotics</strong> — ros2_control, navigation stacks, simulation, and deployment to real hardware.</li>
-      <li><strong>Industrial automation</strong> — PLC programming, FANUC and Siemens integration, safety systems, and factory-floor deployment.</li>
+      <li><strong>Arduino and embedded control</strong> — microcontroller wiring, servo buses, encoders and sensors.</li>
+      <li><strong>ROS 2, kinematics and software</strong> — ros2_control, inverse kinematics and simulation.</li>
+      <li><strong>Industrial automation and safety</strong> — PLC integration, e-stops, light curtains and North American standards.</li>
+      <li><strong>Mechanical design and materials</strong> — printed parts, aluminum links, belts, gears and cable routing.</li>
+      <li><strong>End effectors</strong> — jaws, vacuum and magnetic tools.</li>
+      <li><strong>Maintenance, calibration and vision</strong> — upkeep and sensing around a cell.</li>
+      <li><strong>Specification notes</strong> — buying notes compiled from manufacturer documentation.</li>
+      <li><strong>Business tools</strong> — including the <a href="/articles/robot-arm-roi-calculator.html">ROI calculator</a> and <a href="/articles/robot-arm-payload-calculator.html">payload calculator</a>.</li>
     </ul>
 
-    <h2>How We Write Our Tutorials</h2>
-    <p>Every guide we publish is built around an actual project run on a bench or in a test cell, not a rewrite of a datasheet. Before publishing, we hold each tutorial to the same checklist:</p>
+    <h2>How we label content</h2>
+    <p>We do not pretend every page was run on a $30,000 industrial arm. Pages fall into three buckets, and the page itself should make the bucket obvious:</p>
     <ul>
-      <li>The build or code sample has been run and tested, not just described in theory.</li>
-      <li>Part numbers, wiring diagrams, and code are specific enough to reproduce — no vague placeholders.</li>
-      <li>Where a topic touches physical safety (industrial arms, high-voltage drivers, pinch points), we reference the relevant safety standard rather than skip the subject.</li>
-      <li>Articles are revisited and updated when hardware, firmware, or software versions change enough to make the original steps outdated.</li>
+      <li><strong>Worked examples</strong> — Arduino sketches, wiring steps, kinematics math and the two browser calculators. These are meant to be reproduced.</li>
+      <li><strong>Engineering explainers</strong> — safety, materials, grippers, cooling, cabling. They cite standards or manufacturer practice. They are not a certified risk assessment.</li>
+      <li><strong>Specification notes</strong> — FANUC, ABB, KUKA, Universal Robots, Standard Bots and similar pages. These start with a research-method note. We have not independently lab-tested those machines.</li>
     </ul>
+    <p>Photographs of factory robots are editorial illustrations unless a caption says otherwise. Original diagrams on this site are conceptual; they are not a substitute for a drawing package or a safety review.</p>
 
-    <h2>Editorial Independence</h2>
-    <p>This site is supported by display advertising through Google AdSense. Advertising revenue keeps every tutorial free to read and does not influence which hardware we recommend or how we evaluate it. When we mention a specific brand — Arduino, FANUC, Siemens, ABB, or any other — it's because it's what we used or tested, not because of a sponsorship. We are not paid by hardware manufacturers to feature their products, and we do not accept payment in exchange for favorable coverage.</p>
-    <p>See our <a href="/privacy.html">Privacy Policy</a> for details on how advertising cookies are used on this site.</p>
+    <h2>Editorial independence</h2>
+    <p>The site may show display advertising through Google AdSense after it is approved. Advertising does not choose which brands appear and does not change a payload number. We are not paid by robot manufacturers for coverage. See the <a href="/privacy.html">Privacy Policy</a> for cookies and advertising.</p>
 
-    <h2>Who's Behind This Site</h2>
-    <p>Robotics Engineering Blog is written and maintained by a small team with hands-on backgrounds in mechanical design, embedded firmware, and industrial controls.</p>
+    <h2>Who edits the site</h2>
+    <p>Pages are edited under the Robotics Engineering Lab byline. Marcus Chen is the named editor for the Arduino, ROS 2 and mechanical-design guides.</p>
 
     <div class="team-card">
       <div aria-hidden="true" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#1a1408;">MC</div>
       <div>
         <h3>Marcus Chen</h3>
-        <div class="role">Founder &amp; Lead Writer, Robotics Engineer</div>
-        <p>Marcus founded Robotics Engineering Blog after several years building and calibrating robot arms and automation cells for prototyping and STEM training. He writes most of the hands-on Arduino and ROS 2 tutorials on this site.</p>
+        <div class="role">Editor</div>
+        <p>Marcus edits the educational robot-arm guides and checks that industrial pages stay labeled as specification notes rather than hands-on reviews. For a question about a specific article, use the contact form and name the page.</p>
       </div>
     </div>
-
-    <p>Most tutorials are published under the site byline reflecting shared editorial review, but the author of each article is credited individually at the top of the post. If you'd like to know who worked on a specific article, contact us and we'll tell you.</p>
 
     <h2>Corrections and Feedback</h2>
     <p>We get things wrong sometimes — a miswired pin, an outdated ROS 2 package name, a part that's since been discontinued. If you spot an error in a tutorial, please tell us. We correct published articles promptly and credit readers who flag mistakes, if they'd like to be credited.</p>
@@ -318,8 +320,7 @@
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use cookies to run this site and, with your consent, to show personalized ads through Google AdSense.
-        You can decline and still read everything. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>

@@ -9,14 +9,14 @@
   <meta name="description" content="Practical tutorials on 6-DOF robot arms: Arduino wiring, ROS 2 control, industrial PLC integration, grippers, materials, and buying guidance for the USA and Canada." />
   <meta name="author" content="Marcus Chen" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <link rel="canonical" href="https://roboticsengineeringlab.com/index.html" />
+  <link rel="canonical" href="https://roboticsengineeringlab.com/" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Robotics Engineering Blog — Arduino, ROS 2 & Robot Arm Tutorials" />
   <meta property="og:description" content="Practical tutorials on building and deploying 6-DOF robot arms — Arduino, ROS 2, industrial automation, and buying guidance." />
   <meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
-  <meta property="og:url" content="https://roboticsengineeringlab.com/index.html" />
+  <meta property="og:url" content="https://roboticsengineeringlab.com/" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="Robotics Engineering Blog" />
 
@@ -307,21 +307,20 @@
     <div class="nav-inner">
       <a href="index.html" class="logo" aria-label="Robotics Engineering Blog home">Robotics <span>Engineering</span></a>
       <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#latest">Tutorials</a>
-        <a href="#categories">Categories</a>
+        <a href="articles/index.html">Tutorials</a>
+        <a href="6-dof-robot-arm-guide.html">Guide</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="#newsletter">Subscribe</a>
       </nav>
     </div>
   </header>
 
   <section class="hero" aria-label="Hero cover">
-    <img class="hero-bg" src="robotic_arm_hero.jpg" alt="Modern 6-axis industrial robotic arm in a manufacturing environment" loading="eager" fetchpriority="high" />
+    <img class="hero-bg" src="industrial_robot_arm.jpg" alt="Editorial photograph of a six-axis industrial robot arm in a factory setting" loading="eager" fetchpriority="high" />
     <div class="hero-inner" id="main">
       <div class="hero-badge" aria-label="Category and date">
         <span class="line" aria-hidden="true"></span>
-        Robotics &amp; Automation Editorial · Updated <time datetime="2026-08-05">Aug 5, 2026</time>
+        Independent robotics editorial · Updated <time datetime="2026-08-16">Aug 16, 2026</time>
       </div>
       <h1>Learn <em>Robotics Engineering</em> Through Practical Tutorials</h1>
       <p class="sub">From Arduino prototypes to ROS 2 control and industrial PLC integration. Hands-on tutorials, hardware comparisons based on manufacturer documentation, and buying guidance for engineers, makers, and students in the USA and Canada.</p>
@@ -334,10 +333,10 @@
 
   <section class="stats" aria-label="Site statistics">
     <div class="stats-inner">
-      <div class="stat"><h3>53</h3><p>Published Guides</p></div>
-      <div class="stat"><h3>8</h3><p>Core Categories</p></div>
-      <div class="stat"><h3>2023</h3><p>Publishing Since</p></div>
-      <div class="stat"><h3>USA · Canada</h3><p>Market Focus</p></div>
+      <div class="stat"><h3>53</h3><p>Guides in the library</p></div>
+      <div class="stat"><h3>2</h3><p>Browser calculators</p></div>
+      <div class="stat"><h3>8</h3><p>Topic groups</p></div>
+      <div class="stat"><h3>USA · Canada</h3><p>Standards focus</p></div>
     </div>
   </section>
 
@@ -349,8 +348,8 @@
     <p class="section-sub">The three core tutorials that anchor this site — design and wire a robot arm with Arduino, control it with ROS 2, and integrate it into an industrial PLC workflow.</p>
 
     <div class="editorial-note" aria-label="Editorial approach">
-      <p><strong>About this site:</strong> Robotics Engineering Blog is a small, independent editorial project focused on 6-DOF robot arms — Arduino and ROS 2 control, mechanical design, and industrial automation. Tutorials that involve physical builds (Arduino wiring, 3D-printed parts, gripper design) are based on hands-on prototyping. Manufacturer hardware reviews (FANUC, ABB, KUKA, etc.) are clearly labeled as specification-based editorial comparisons, since we do not have physical access to $30,000+ industrial robot arms for independent lab testing — we say so explicitly in each of those articles rather than implying hands-on testing that didn't happen.</p>
-      <p>We link directly to primary sources — manufacturer datasheets, open-source repositories, and safety standards bodies (ANSI, CSA, ISO) — wherever a specific number or claim is made. If you spot an error or an outdated figure, please <a href="contact.html">let us know</a>.</p>
+      <p><strong>How to read this site:</strong> Robotics Engineering Lab is an independent editorial project about 6-DOF robot arms. Arduino, wiring and kinematics pages include worked examples and code you can reproduce. Pages about FANUC, ABB, KUKA, Universal Robots and similar industrial hardware are <em>specification-based buying notes</em>, not lab tests — we do not have those machines on a bench, and those articles say so at the top.</p>
+      <p>Numbers come from manufacturer documentation, standards bodies (ANSI, CSA, ISO) or a calculation shown on the page. If a figure is wrong or outdated, <a href="contact.html">send a correction</a>.</p>
     </div>
 
     <div class="cards" aria-label="Tutorial cards">
@@ -365,7 +364,7 @@
       </a>
 
       <a href="articles/ros2-robot-arm-control.html" class="card" aria-label="ROS 2 Robot Arm Control Tutorial">
-        <img src="ros2_robot_control.jpg" alt="A collaborative robot arm interacting with a touchscreen HMI showing ROS 2 data" loading="lazy" width="640" height="210" />
+        <img src="articles/diagram-ros2-control.jpg" alt="Editorial flowchart of the ROS 2 control stack for a robot arm" loading="lazy" width="640" height="210" />
         <div class="card-body">
           <div class="card-tag">ROS 2</div>
           <h3>ROS 2 Control Framework for Robot Arms</h3>
@@ -388,8 +387,8 @@
     <div class="home-author" aria-label="Author information">
       <div aria-hidden="true" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408;">MC</div>
       <div>
-        <h3>Written and maintained by Marcus Chen</h3>
-        <p>Marcus writes and maintains the tutorials on this site, covering Arduino and ROS 2 robot arm control, mechanical transmission design, and industrial automation basics. Manufacturer hardware reviews are researched from official datasheets and public case studies rather than independent lab testing — this is disclosed on every review page.</p>
+        <h3>Edited by Marcus Chen</h3>
+        <p>Marcus edits the Arduino, ROS 2 and mechanical-design guides. Industrial hardware pages are compiled from official datasheets and public standards, not from a lab that owns FANUC, ABB or KUKA arms. That limit is stated on those pages.</p>
         <div class="author-links">
           <a href="about.html">Full bio →</a>
         </div>
@@ -408,19 +407,19 @@
         <p>Analytical solutions, Euler angles, and worked Arduino and ROS 2 code examples for solving 6-DOF inverse kinematics.</p>
       </a>
       <a href="articles/fanuc-robot-arm-review.html" class="lite-card">
-        <div class="card-tag">Hardware Comparison</div>
-        <h4>FANUC Robot Arm Review</h4>
-        <p>Specifications, pricing guidance, and a specs-based comparison against direct competitors for FANUC's industrial 6-axis robot arms.</p>
+        <div class="card-tag">Specs guide</div>
+        <h4>FANUC LR Mate 200iD notes</h4>
+        <p>Payload, reach and integration notes transcribed from FANUC documentation — not a hands-on product test.</p>
       </a>
       <a href="articles/robot-arm-safety-usa-canada.html" class="lite-card">
         <div class="card-tag">Safety</div>
         <h4>Robot Arm Safety Standards (USA &amp; Canada)</h4>
         <p>ANSI/RIA R15.06, CSA Z434, light curtains, and risk assessments explained for North American deployments.</p>
       </a>
-      <a href="articles/universal-robots-ur20.html" class="lite-card">
-        <div class="card-tag">Hardware Comparison</div>
-        <h4>Universal Robots UR20 Review</h4>
-        <p>Payload, reach, and integration notes for one of the most widely deployed collaborative robot arms, based on manufacturer documentation.</p>
+      <a href="articles/robot-arm-payload-calculator.html" class="lite-card">
+        <div class="card-tag">Free tool</div>
+        <h4>Robot arm payload calculator</h4>
+        <p>Add workpiece, gripper and dynamic factor in the browser before you trust a catalogue payload number.</p>
       </a>
       <a href="articles/robot-arm-roi-calculator.html" class="lite-card">
         <div class="card-tag">Business</div>
@@ -444,7 +443,7 @@
 
       <div class="cat-block">
         <h3>Arduino &amp; Embedded Control</h3>
-        <span class="cat-count">6 tutorials</span>
+        <span class="cat-count">7 tutorials</span>
         <ul>
           <li><a href="articles/arduino-robot-arm-tutorial.html">Build a 6-DOF Robot Arm with Arduino</a></li>
           <li><a href="articles/arduino-mega-robot-wiring.html">Arduino Mega Wiring Guide for Robot Arms</a></li>
@@ -452,24 +451,27 @@
           <li><a href="articles/smart-servo-robot-arm.html">Smart Servos for Robot Arms</a></li>
           <li><a href="articles/joint-encoders-robot-arm.html">Joint Encoders for Robot Arm Feedback</a></li>
           <li><a href="articles/force-torque-sensors-robot.html">Force-Torque Sensors for Robot Arms</a></li>
+          <li><a href="articles/robot-arm-battery-power.html">Battery Power for Robot Arms</a></li>
         </ul>
       </div>
 
       <div class="cat-block">
         <h3>ROS 2, Kinematics &amp; Software</h3>
-        <span class="cat-count">5 tutorials</span>
+        <span class="cat-count">7 tutorials</span>
         <ul>
           <li><a href="articles/ros2-robot-arm-control.html">ROS 2 Control Framework for Robot Arms</a></li>
           <li><a href="articles/robot-arm-inverse-kinematics.html">Inverse Kinematics for 6-DOF Robot Arms</a></li>
           <li><a href="articles/kinematic-solver-code.html">Inverse Kinematics Solver Code</a></li>
           <li><a href="articles/robot-arm-simulation-software.html">Robot Arm Simulation Software Compared</a></li>
           <li><a href="articles/robot-arm-programming-languages.html">Programming Languages for Robot Arms</a></li>
+          <li><a href="articles/robot-arm-controller-comparison.html">Robot Arm Controller Comparison</a></li>
+          <li><a href="articles/types-of-robotic-arms.html">Types of Robotic Arms</a></li>
         </ul>
       </div>
 
       <div class="cat-block">
         <h3>Industrial Automation &amp; Safety</h3>
-        <span class="cat-count">8 tutorials</span>
+        <span class="cat-count">9 tutorials</span>
         <ul>
           <li><a href="articles/industrial-plc-robotics.html">PLC Programming for Robotics</a></li>
           <li><a href="articles/robot-arm-plc-integration.html">Integrating Robot Arms with PLCs</a></li>
@@ -479,6 +481,7 @@
           <li><a href="articles/robot-arm-safety-usa-canada.html">Robot Arm Safety Standards (USA &amp; Canada)</a></li>
           <li><a href="articles/robot-arm-welding.html">Robot Arms for Welding Applications</a></li>
           <li><a href="articles/collaborative-assembly-arm.html">Collaborative Robots for Assembly Lines</a></li>
+          <li><a href="articles/palletizing-robot-arm.html">Palletizing with a Robot Arm</a></li>
         </ul>
       </div>
 
@@ -548,27 +551,15 @@
       </div>
 
     </div>
+    <p style="margin-top:28px;"><a href="articles/index.html" style="color:var(--accent-2);font-weight:600;">Open the full tutorial library →</a></p>
   </section>
-
-  <!-- 
-    AdSense ad unit placeholder — insert your <ins class="adsbygoogle"> block here
-    once your site has been approved. Example:
-
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7032484018692343"
-         data-ad-slot="YOUR_AD_SLOT_ID"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  -->
 
   </main>
 
   <section aria-label="Newsletter subscription" id="newsletter" class="newsletter">
     <div class="newsletter-inner">
-      <h2>Questions about a robot-arm project?</h2>
-      <p>Send us a question or correction and we will review it for a future update.</p>
+      <h2>Questions or a correction?</h2>
+      <p>There is no mailing list. If a wiring step, spec or standard citation is wrong, write to us and we will update the page.</p>
       <div class="form-row" aria-label="Newsletter contact">
         <a class="btn btn-primary" href="contact.html">Contact us for updates</a>
       </div>
@@ -618,8 +609,7 @@
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use cookies to run this site and, with your consent, to show personalized ads through Google AdSense.
-        You can decline and still read everything. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>

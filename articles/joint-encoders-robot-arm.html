@@ -159,8 +159,8 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <a href="../index.html" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 <div class="nav-links">
       <a href="../index.html">Home</a>
+      <a href="index.html">Tutorials</a>
       <a href="../6-dof-robot-arm-guide.html">Guide</a>
-      <a href="../index.html#categories">Articles</a>
       <a href="../about.html">About</a>
       <a href="../contact.html">Contact</a>
     </div>
@@ -180,6 +180,11 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <h2>Why Joint Position Feedback Is the Foundation of Robot Arm Precision</h2>
 <p>A 6-axis robot arm doesn't know where its tool center point is in space — it calculates it. The controller reads the angle of each of the six joints, runs that data through forward kinematics, and derives the position of the end-effector. If a single joint's angle reading is wrong by even a fraction of a degree, that error compounds through the kinematic chain and shows up as a positioning mistake at the tool, often magnified several times over by the length of the downstream links.</p>
+<figure class="editorial-illustration" style="margin:28px 0 40px;">
+  <img src="diagram-6dof-kinematics.jpg" alt="Editorial diagram of joint frames on a six-axis robot arm." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram — not a photograph of a specific product or a lab test.</figcaption>
+</figure>
+
 <p>This is why the encoder — not the motor, not the gearbox — is often the component that ultimately limits a robot's repeatability. Two arms with identical motors and identical harmonic drives can have very different repeatability specs purely because of encoder resolution and mounting quality.</p>
 
 <h2>Absolute Encoders: Knowing Position Without Moving</h2>
@@ -204,7 +209,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 <h2>Absolute vs. Incremental vs. Magnetic: Direct Comparison</h2>
 <div class="table-wrap" aria-label="Encoder type comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://www.heidenhain.com/" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Property</th><th>Optical Absolute</th><th>Optical Incremental</th><th>Magnetic (AMR/Hall)</th></tr></thead>
 <tbody>
 <tr><td>Position known at power-on</td><td>Yes, immediately</td><td>No — requires homing</td><td>Yes, immediately</td></tr>
@@ -225,7 +230,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 <p>Raw encoder signals rarely travel far on their own — modern servo drives use digital bus protocols that combine position data, temperature, and diagnostics on a small number of wires. Understanding these matters when integrating third-party encoders or troubleshooting a joint fault.</p>
 <div class="table-wrap" aria-label="Encoder bus comparison">
 <table>
-<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Primary reference: <a href="https://www.heidenhain.com/" target="_blank" rel="noopener noreferrer">open source documentation</a>. Verify each row against the current revision and exact configuration.</caption>
+<caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Editorial table. Verify each row against the current manufacturer documentation and the exact configuration you are buying.</caption>
 <thead><tr><th>Protocol</th><th>Wiring</th><th>Typical Update Rate</th><th>Common Use</th></tr></thead>
 <tbody>
 <tr><td>SSI (Synchronous Serial Interface)</td><td>4 wires (clock + data, differential)</td><td>Up to ~2 Mbit/s</td><td>Legacy industrial absolute encoders</td></tr>
@@ -317,6 +322,11 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
 <a href="../6-dof-robot-arm-guide.html" class="btn">Read Full Guide →</a>
 </div>
 
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+  <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">RE</div>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;"><strong style="color:#f5f3ee;">Robotics Engineering Lab editorial</strong><br>Edited by Marcus Chen. Industrial hardware pages are researched from manufacturer documentation, not independent lab tests. <a href="../about.html" style="color:#6fa3d8;">Editorial standards →</a></p>
+</aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>
 <a href="force-torque-sensors-robot.html" class="back-link" aria-label="Previous article">← Previous: Force and Torque Sensors for 6-DOF Robot Arms</a>
@@ -367,8 +377,7 @@ With x4 quadrature:  360° ÷ (2,500×4)  = 0.036° per count</div>
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use cookies to run this site and, with your consent, to show personalized ads through Google AdSense.
-        You can decline and still read everything. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="../privacy.html" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
