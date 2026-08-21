@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Arm Base Mounting: Anchors, Leveling &amp; Safety</title>
+<meta name="description" content="A practical robot arm base mounting guide: foundation stiffness, anchor selection, leveling, bolt torque, installation checks and safety limits." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-base-mounting" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Arm Base Mounting: Anchors, Leveling &amp; Safety" />
+<meta property="og:description" content="A practical robot arm base mounting guide: foundation stiffness, anchor selection, leveling, bolt torque, installation checks and safety limits." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
+<meta property="og:image:alt" content="Industrial robot arm on a rigid mounting base in a factory cell" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-21" />
+<meta property="article:modified_time" content="2026-08-21" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-base-mounting" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Arm Base Mounting: Anchors, Leveling &amp; Safety" />
+<meta name="twitter:description" content="A practical robot arm base mounting guide: foundation stiffness, anchor selection, leveling, bolt torque, installation checks and safety limits." />
+<meta name="twitter:image:alt" content="Industrial robot arm on a rigid mounting base in a factory cell" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-arm-base-mounting#article",
+  "headline": "Robot Arm Base Mounting: Anchors, Leveling & Safety",
+  "description": "A practical robot arm base mounting guide: foundation stiffness, anchor selection, leveling, bolt torque, installation checks and safety limits.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-21",
+  "dateModified": "2026-08-21",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-base-mounting"
+  },
+  "image": "https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-arm-base-mounting",
+  "inLanguage": "en-US",
+  "wordCount": 2566,
+  "articleSection": "Mechanical Design & Installation",
+  "keywords": "robot arm base mounting, robot foundation design, robot arm anchors, robot pedestal, robot base plate, robot arm installation"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why must a robot arm base be anchored?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Anchoring transfers the robot’s weight, acceleration, emergency-stop reactions, and overturning moment into a designed support. It also prevents sliding or tipping when the robot changes direction. The required anchor type, size, spacing, and torque must come from the robot and anchor manufacturers and the foundation design."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I bolt a robot arm directly to a concrete floor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can only do so when the floor, concrete condition, reinforcement, edge distance, anchors, and robot reaction loads meet the manufacturer’s and engineer’s requirements. A generic concrete slab may be too thin, cracked, close to a joint, or unable to carry the specified moment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How flat should a robot arm mounting surface be?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The exact flatness is model-specific. For example, an ABB product manual cited in this guide gives a flatness value of 0.1 mm over 500 mm for its referenced robot. Do not apply that number to another arm; use the current product manual and measure after the final preload is applied."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use chemical anchors or wedge anchors for a robot base?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Neither is automatically correct. The choice depends on concrete condition, cracked or uncracked design, embedment, spacing, edge distance, seismic demand, corrosion, installation access, and the anchor’s published evaluation data. A qualified engineer should select and approve the system."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need dowel pins on a robot arm base?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Dowel or positioning pins can establish a repeatable shear datum when the manufacturer provides pin holes and tolerances. They do not replace the specified bolts or clamp preload. Use the robot manual’s pin size, material, fit, and installation method rather than adding arbitrary pins."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I check before the first robot motion?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Verify fastener torque records, anchor installation, flatness, level, support stiffness, mounting orientation, tool load, cable routing, work envelope, guarding, emergency stop, protective stops, and the complete risk assessment. Run the first motion at restricted speed with qualified personnel outside the hazard zone."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Robot Arm Base Mounting: Anchors, Leveling & Safety",
+      "item": "https://roboticsengineeringlab.com/articles/robot-arm-base-mounting"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="Industrial robot arm on a rigid mounting base in a factory cell" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Mechanical Design &amp; Installation — Updated August 21, 2026</div>
+<h1>Robot Arm Base Mounting: Anchors, Leveling &amp; Safety</h1><p class="hero-sub">How to select a rigid support, read the manufacturer’s mounting drawing, anchor the base, control flatness, and verify the installation before the first powered motion.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../robotic_arm_hero.jpg" alt="Industrial robot arm on a rigid mounting base in a factory cell" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1024" height="322" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,.06);">Editorial illustration. Verify the exact geometry, model, or software version against the linked source documentation.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Safety boundary:</strong> This article explains the engineering decisions behind a robot base support. It does not size a structural foundation or approve an anchor installation. The robot manufacturer’s installation manual, a qualified mechanical/structural engineer, the site risk assessment, and local building requirements govern the final design.</p>
+</div>
+
+<h2>Start with the robot manual, not the anchor catalogue</h2>
+<p>Robot arm base mounting is often treated as a drilling task: copy the bolt pattern, drill a few holes, tighten the nuts, and power up. That sequence ignores the load path. A robot base must transfer the arm’s weight, acceleration forces, emergency-stop reactions, tool loads, and overturning moment into a support that remains stiff and stable. If the support flexes or shifts, the controller may still report the same joint positions while the tool moves differently in space.</p>
+<p>The first document to obtain is the current product manual for the exact robot model, payload variant, mounting orientation, and controller. Manufacturer drawings specify bolt-hole diameter and pattern, base dimensions, allowable orientations, tightening torque, locating pins, foundation flatness, reaction loads, and sometimes a minimum concrete grade or reinforcement arrangement. A generic M-size bolt recommendation is not a substitute for those values.</p>
+<p>Universal Robots, for example, lists different base interfaces for different models: its published table shows M8 bolts at 20 N·m for several smaller arms and six M10 bolts at 45 N·m for the UR20. Those values belong to those interfaces and should not be copied to a FANUC, ABB, KUKA, or custom arm. The UR20 user manual also warns that unstable mounting can result in injury. The lesson is simple: identify the interface first, then design the support around the specified load and fastener system.</p>
+
+<h2>What the base must resist</h2>
+<p>Four load categories should be considered together. The static vertical load includes the robot mass, pedestal, tooling, workpiece, and any mounted cable carrier. The overturning moment comes from the centre of mass being offset from the support plane. Horizontal shear comes from acceleration, deceleration, process forces, and emergency stops. Vibration and cyclic loading can loosen or fatigue a connection even when a one-time static calculation looks acceptable.</p>
+<p>Manufacturers may publish forces and moments in a coordinate system attached to the base. Copy those directions carefully. A force marked <code>Fz</code> may be vertical for one mounting orientation and horizontal for another. A moment is not the same as payload torque at the wrist. The base load table is the source for the foundation and anchors; the payload diagram is the source for the tool and workpiece limits.</p>
+<p><strong>Illustrative scenario — not a Robotics Engineering Lab test:</strong> Imagine a 250 kg arm mounted on a steel pedestal. A simplified design check uses a 2.45 kN weight and a hypothetical 6 kN·m overturning moment from the manufacturer’s load table. If four anchors share the tension evenly, the simple lever estimate is not enough to determine the most highly loaded anchor because the bolt spacing, base-plate stiffness, concrete edge distance, grout contact, and load direction all matter. The correct conclusion is to send the manufacturer’s reactions and the support geometry to a qualified engineer, not to declare that each anchor carries 1.5 kN.</p>
+<p>For a small desktop arm, the same principles appear at a different scale. A thin acrylic base can be adequate for slow educational motion but twist under fast reversal. A 6 mm plate may be rigid enough for one arm and too flexible for another. Repeatability claims are meaningful only when the mounting surface, fasteners, tool, payload, and calibration state match the conditions under which the claim was specified.</p>
+
+<h2>Choose the support architecture</h2>
+<h3>Direct floor mounting</h3>
+<p>Direct mounting is appropriate when the concrete slab, embedded steel, and cell layout can carry the specified reactions. It minimizes the number of interfaces and usually gives the best stiffness-to-height ratio. The installer still needs to locate reinforcement, utilities, joints, cracks, edge distances, and slab thickness before drilling. A “concrete floor” is not automatically a suitable structural foundation.</p>
+<h3>Steel base plate or adapter plate</h3>
+<p>An adapter plate translates the robot’s bolt pattern to an existing floor or pedestal. Its thickness and ribbing must resist bending between robot and anchors. The plate should have a defined datum, machined or controlled contact surface, compatible hole tolerances, and a corrosion treatment suited to the environment. Slotting holes can make alignment easier, but slots change load transfer and should not be used casually in a high-cycle cell.</p>
+<h3>Pedestal, riser, or mobile platform</h3>
+<p>A riser can place the robot in a better work envelope or move the inner-workspace singularity away from the task. It also raises the centre of mass and increases overturning demand. A mobile platform adds casters, leveling feet, welds, bolted joints, and possible floor irregularity. The platform must be secured in its production position and, when required, interlocked so the robot cannot operate while the base is not locked.</p>
+<p>For a collaborative arm or a small educational arm, a commercially designed base may be useful because its interface and locating method are documented. An indicative 2026 example is the <a href="https://robotis.us/base-plate-01/" target="_blank" rel="noopener noreferrer">ROBOTIS Base Plate-01</a>, listed at US$688.62 on the manufacturer’s US site. That price is a reference for a specific small-manipulator accessory, not a universal industrial base price. Industrial risers and large welded skids can cost thousands of dollars before installation and engineering.</p>
+
+<h2>Flatness, level, stiffness, and repeatable location</h2>
+<p>Level and flatness are related but not identical. Level describes orientation relative to gravity. Flatness describes how much the mounting surface departs from a plane. A robot controller can often compensate for a permitted mounting angle, but it cannot make a flexible or rocking base rigid. A surface can be level yet locally warped under one foot, or flat enough for a plate but not stiff enough for the robot’s reaction moment.</p>
+<p>Manufacturer requirements vary. An ABB product manual example specifies foundation flatness of 0.1 mm over 500 mm for the referenced robot model and notes that a flat foundation helps preserve resolver calibration. Kawasaki’s CX Series installation manual gives its own installation dimensions, high-tension bolt requirements, levelness information, and a steel-plate/concrete arrangement. These values are examples from specific manuals, not a generic tolerance for all arms.</p>
+<p>Use a calibrated straightedge, feeler gauges, precision level, or survey method appropriate to the required tolerance. Do not pull a warped plate flat by over-tightening one corner; that can preload the robot base and distort the structure. Where the manufacturer permits shims or liners, use a defined material and thickness, support the full load path, and document the final condition. Non-shrink grout may be appropriate under a designed base, but its use, gap, cure time, and installation process must be specified rather than improvised.</p>
+<p>For repeatable relocation, separate the functions of load transfer and location. High-strength bolts clamp the interface; dowel or positioning pins can establish the repeatable shear datum. Universal Robots recommends positioning-pin features for accurate re-mounting on several interfaces. Pins are not a reason to reduce the required bolt preload, and they must be sized and toleranced for the actual plate and robot holes.</p>
+
+<h2>Anchor selection: expansion, screw, or cast-in</h2>
+<p>Anchor selection depends on concrete strength, cracked or uncracked condition, edge distance, embedment, seismic demand, corrosion, installation access, and the design tension and shear. An expansion wedge anchor is not automatically interchangeable with a screw anchor or a cast-in bolt. Follow the anchor manufacturer’s evaluation report and installation instructions, including drill diameter, hole cleaning, embedment, minimum spacing, torque, and inspection.</p>
+<p><strong>Indicative 2026 hardware reference:</strong> a Home Depot listing showed a Hilti 3/4 in × 10 in Kwik Bolt TZ2 carbon-steel wedge-anchor ten-pack at US$235.48 when checked for this article. The same listing showed a Simpson Strong-Tie 3/4 in × 10 in Strong-Bolt at US$11.68 for a single anchor. These are retail reference prices, not a design recommendation, and prices, availability, tax, and delivery change. Anchor capacity cannot be inferred from price or diameter alone.</p>
+<p>For a retrofit, a qualified engineer may choose a post-installed anchor system after checking the concrete and the manufacturer’s published capacities. For a new foundation, cast-in anchors or embedded plates can provide a predictable load path, but their location tolerance and template need to be controlled during concrete work. If the robot will be installed near a slab edge, joint, opening, or existing reinforcement, stop and obtain a structural review before drilling.</p>
+<ul>
+<li style="margin-bottom:10px;">Use a scanner or construction records to locate reinforcing steel, conduits, and post-tensioning before drilling.</li>
+<li style="margin-bottom:10px;">Record the concrete condition and strength assumptions; do not treat an unknown slab as rated concrete.</li>
+<li style="margin-bottom:10px;">Keep the anchor type, embedment, spacing, and edge distance consistent with the evaluation data.</li>
+<li style="margin-bottom:10px;">Clean drilled holes using the anchor manufacturer’s stated sequence. Dust left in a hole can reduce installation quality.</li>
+<li style="margin-bottom:10px;">Use a calibrated torque tool and record the final torque, but do not use torque as a substitute for the full capacity check.</li>
+</ul>
+
+<h2>Installation workflow from drawing to dry run</h2>
+<ol style="padding-left:22px;margin:16px 0;color:#b0b0a9;">
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Freeze the configuration.</strong> Record robot model, mounting orientation, payload, tool, workpiece, cable route, and the maximum operating speed before designing the base.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Review the load data.</strong> Obtain base reactions, bolt data, foundation requirements, and lifting instructions from the current manual. Ask the manufacturer when the data does not cover the custom orientation.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Survey the site.</strong> Confirm slab thickness, reinforcement, utilities, edge distances, access, drainage, vibration sources, and the full robot/tool/workpiece envelope.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Fabricate and inspect the support.</strong> Check plate thickness, hole pattern, weld quality, machined datums, corrosion protection, and access for the specified wrench and cable connectors.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Install the anchors and plate.</strong> Follow the selected anchor system’s drilling, cleaning, setting, torque, and cure procedure. Keep the robot supported and out of the drop zone while it is unsecured.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Level without distortion.</strong> Use the permitted shims or grout method, tighten in the stated pattern, and recheck flatness after preload is applied.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Configure the controller.</strong> Set mounting orientation, gravity, tool load, centre of gravity, frames, and any calibration data required by the manufacturer.</li>
+<li style="margin-bottom:12px;"><strong style="color:#f2f0eb;">Commission at restricted speed.</strong> Test emergency stop, protective stop, limits, cables, clearances, and the entire reachable envelope before enabling production speed.</li>
+</ol>
+<p>Lockout/tagout applies during drilling, anchoring, wiring, lifting, and mechanical adjustment. A robot can move when a program restarts, when power is restored, or when a stored joint position is called. The integrator must identify stored energy, gravity-driven motion, pinch points, suspended loads, and the response of the complete cell. ANSI/RIA R15.06, CSA Z434, ISO 10218, and local workplace requirements may apply depending on the installation and jurisdiction.</p>
+
+<h2>Commissioning checks that catch loose bases</h2>
+<p>Before the first automatic cycle, inspect each fastener, dowel, shim, weld, anchor, leveling foot, and cable strain relief. Mark fasteners only after the specified tightening method is complete, so a witness mark can help identify later movement. Verify that the robot does not contact its pedestal, cable, guard, fixture, or nearby machine at all programmed poses.</p>
+<p>Run a low-speed repeatability check at several orientations, including positions that produce high base reactions. If the TCP moves after a direction reversal, compare the result with the joint and base frame data. A shifting base, loose tool, bad mastering, elastic deflection, or collision can produce similar symptoms. The site’s <a href="robot-arm-calibration">robot arm calibration guide</a> explains why absolute accuracy and repeatability should not be confused.</p>
+<p>After an initial thermal and operating period, recheck accessible fasteners and the support for settling, grout damage, fretting, paint witness movement, or cracks. The interval should follow the manufacturer and site maintenance plan rather than a universal “retorque after one week” rule. Add the support to the <a href="robot-arm-maintenance">robot arm maintenance schedule</a>, and include base movement as a specific inspection item.</p>
+
+<h2>Common base-mounting mistakes</h2>
+<ul>
+<li style="margin-bottom:10px;"><strong>Copying bolt torque from another robot.</strong> Torque is determined by the fastener, interface, lubrication, grade, clamp requirement, and manufacturer design.</li>
+<li style="margin-bottom:10px;"><strong>Mounting to a thin sheet or unbraced table.</strong> The robot may appear stable at low speed and deflect at production acceleration.</li>
+<li style="margin-bottom:10px;"><strong>Ignoring the riser’s centre of mass.</strong> A taller stand changes overturning demand and can introduce a rocking mode.</li>
+<li style="margin-bottom:10px;"><strong>Drilling through a slab joint or reinforcement.</strong> The hole may be physically possible and structurally unsuitable.</li>
+<li style="margin-bottom:10px;"><strong>Using slots without a shear datum.</strong> A slotted plate can allow creep unless the designed clamp and locating features carry the load.</li>
+<li style="margin-bottom:10px;"><strong>Assuming controller compensation fixes a flexible base.</strong> Calibration can correct measured geometry; it cannot guarantee a structure that changes under load.</li>
+</ul>
+<p>For the complete cell context, use the site’s <a href="robot-arm-safety-usa-canada">robot safety standards guide</a> and the master guide linked from the article footer. A base is a mechanical safety component as well as a precision component: if it can tip, slide, or detach, the cell is not ready for production.</p>
+
+<h2>Sources and methodology</h2>
+<p>Technical requirements in this article are deliberately model-specific. Universal Robots sources provide documented base bolt sizes, torques, and locating-pin guidance for named models. ABB and Kawasaki installation manuals demonstrate how different manufacturers state flatness, foundation, bolt, and installation requirements. Retail prices are included only as reference examples checked August 21, 2026; they are not Robotics Engineering Lab inventory or a quotation.</p>
+<ul>
+<li><a href="https://www.universal-robots.com/developer/hardware-and-motion/mounting-installation-robot-arm/" target="_blank" rel="noopener noreferrer">Universal Robots: Mounting &amp; Installation</a> — base interfaces and recommended torques; accessed August 21, 2026.</li>
+<li><a href="https://www.universal-robots.com/manuals/EN/HTML/SW5_23/Content/prod-usr-man/complianceUR20/H_g5_sections/mechanical_interface_g5/mounting_descrip.htm" target="_blank" rel="noopener noreferrer">Universal Robots UR20 mounting description</a> — six M10 bolts, 45 N·m, and secure mounting warning; accessed August 21, 2026.</li>
+<li><a href="https://cdn.pennair.com/media/2023/11/3HAC052983-PM-IRB-14000-en.pdf" target="_blank" rel="noopener noreferrer">ABB IRB 14000 product manual</a> — installation personnel, foundation flatness, and calibration context; accessed August 21, 2026.</li>
+<li><a href="https://robotics.kawasaki.com/userAssets1/productPDF/CX_Series-Installation_and_Connection_Manual-E.pdf" target="_blank" rel="noopener noreferrer">Kawasaki CX Series installation and connection manual</a> — foundation, high-tension bolts, steel plate, and installation workflow; accessed August 21, 2026.</li>
+<li><a href="https://www.homedepot.com/p/Hilti-3-4-in-x-10-in-Kwik-Bolt-TZ2-Carbon-Steel-Zinc-Plated-Hex-Nut-Concrete-Wedge-Anchor-10-Pack-2210172/318723693" target="_blank" rel="noopener noreferrer">Home Depot Hilti anchor listing</a> — indicative retail reference price; accessed August 21, 2026.</li>
+<li><a href="https://robotis.us/base-plate-01/" target="_blank" rel="noopener noreferrer">ROBOTIS Base Plate-01</a> — manufacturer listing and indicative accessory price; accessed August 21, 2026.</li>
+</ul>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>Why must a robot arm base be anchored?</h4><p>Anchoring transfers the robot’s weight, acceleration, emergency-stop reactions, and overturning moment into a designed support. It also prevents sliding or tipping when the robot changes direction. The required anchor type, size, spacing, and torque must come from the robot and anchor manufacturers and the foundation design.</p></div>
+<div class="faq-item"><h4>Can I bolt a robot arm directly to a concrete floor?</h4><p>You can only do so when the floor, concrete condition, reinforcement, edge distance, anchors, and robot reaction loads meet the manufacturer’s and engineer’s requirements. A generic concrete slab may be too thin, cracked, close to a joint, or unable to carry the specified moment.</p></div>
+<div class="faq-item"><h4>How flat should a robot arm mounting surface be?</h4><p>The exact flatness is model-specific. For example, an ABB product manual cited in this guide gives a flatness value of 0.1 mm over 500 mm for its referenced robot. Do not apply that number to another arm; use the current product manual and measure after the final preload is applied.</p></div>
+<div class="faq-item"><h4>Should I use chemical anchors or wedge anchors for a robot base?</h4><p>Neither is automatically correct. The choice depends on concrete condition, cracked or uncracked design, embedment, spacing, edge distance, seismic demand, corrosion, installation access, and the anchor’s published evaluation data. A qualified engineer should select and approve the system.</p></div>
+<div class="faq-item"><h4>Do I need dowel pins on a robot arm base?</h4><p>Dowel or positioning pins can establish a repeatable shear datum when the manufacturer provides pin holes and tolerances. They do not replace the specified bolts or clamp preload. Use the robot manual’s pin size, material, fit, and installation method rather than adding arbitrary pins.</p></div>
+<div class="faq-item"><h4>What should I check before the first robot motion?</h4><p>Verify fastener torque records, anchor installation, flatness, level, support stiffness, mounting orientation, tool load, cable routing, work envelope, guarding, emergency stop, protective stops, and the complete risk assessment. Run the first motion at restricted speed with qualified personnel outside the hazard zone.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. This page is a sourced engineering explainer; it is not a claim of hands-on testing unless explicitly stated. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 21, 2026 &middot; last reviewed August 21, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
+```

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>MoveIt 2 Setup Assistant: Configure a Robot Arm</title>
+<meta name="description" content="Use the MoveIt 2 Setup Assistant to turn a robot URDF into a planning package with groups, collisions, kinematics, controllers and launch files." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="MoveIt 2 Setup Assistant: Configure a Robot Arm" />
+<meta property="og:description" content="Use the MoveIt 2 Setup Assistant to turn a robot URDF into a planning package with groups, collisions, kinematics, controllers and launch files." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-ros2-control.jpg" />
+<meta property="og:image:alt" content="ROS 2 control architecture diagram for a MoveIt 2 robot arm planning package" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-21" />
+<meta property="article:modified_time" content="2026-08-21" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="MoveIt 2 Setup Assistant: Configure a Robot Arm" />
+<meta name="twitter:description" content="Use the MoveIt 2 Setup Assistant to turn a robot URDF into a planning package with groups, collisions, kinematics, controllers and launch files." />
+<meta name="twitter:image:alt" content="ROS 2 control architecture diagram for a MoveIt 2 robot arm planning package" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-ros2-control.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm#article",
+  "headline": "MoveIt 2 Setup Assistant: Configure a Robot Arm",
+  "description": "Use the MoveIt 2 Setup Assistant to turn a robot URDF into a planning package with groups, collisions, kinematics, controllers and launch files.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-21",
+  "dateModified": "2026-08-21",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-ros2-control.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm",
+  "inLanguage": "en-US",
+  "wordCount": 2588,
+  "articleSection": "ROS 2 & Software",
+  "keywords": "MoveIt 2 Setup Assistant, MoveIt 2 robot arm setup, ROS 2 robot arm configuration, SRDF, MoveIt planning group, ros2_control MoveIt"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the MoveIt 2 Setup Assistant generate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It helps generate a MoveIt configuration package containing semantic robot data such as an SRDF, planning groups, kinematics and joint-limit settings, controller mappings, RViz configuration, and launch files. It does not replace a hardware driver, safety PLC, risk assessment, or robot manufacturer commissioning procedure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which file should I load into the MoveIt 2 Setup Assistant?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Load the URDF or Xacro description that correctly represents the robot’s links, joints, axes, limits, collision geometry, and frame relationships. If the description needs Xacro arguments, use the values documented by the robot package. Do not continue with a model that has unexplained scale, joint, or transform warnings."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a virtual joint for a fixed-base robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A fixed virtual joint connecting the robot base link to the world frame is a common semantic configuration for a stationary arm, although the exact setup depends on the application package. It does not replace mechanical anchoring, controller mounting-orientation settings, or the TF tree used by the real cell."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What planning group and IK solver should I choose?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a six-axis arm, define the arm as a kinematic chain from the base link to the tool flange and choose a solver supported by the installed ROS 2 and MoveIt 2 distribution. KDL is a common general-purpose choice; IKFast or another plugin is appropriate only when it has been generated and validated for the exact robot geometry."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I connect a generated MoveIt package to ros2_control?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Match the MoveIt controller mapping to the controller manager that is actually running. Confirm the controller name, joint order, FollowJointTrajectory action interface, command interfaces, and feedback state interfaces. Test with mock or simulated hardware before connecting a real robot."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the robot appear in RViz but refuse to execute?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "RViz can display and plan from a model without a working hardware bridge. Check whether the controller is active, whether its name matches the MoveIt mapping, whether the action interface is available, and whether joint names and zero conventions match the driver. Then verify the vendor’s external-control mode and commissioning requirements."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "MoveIt 2 Setup Assistant: Configure a Robot Arm",
+      "item": "https://roboticsengineeringlab.com/articles/moveit-2-setup-assistant-robot-arm"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-ros2-control.jpg" alt="ROS 2 control architecture diagram for a MoveIt 2 robot arm planning package" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> ROS 2 &amp; Software — Updated August 21, 2026</div>
+<h1>MoveIt 2 Setup Assistant: Configure a Robot Arm</h1><p class="hero-sub">A configuration-first tutorial for turning a URDF or Xacro description into a MoveIt 2 package, validating the self-collision matrix, defining planning groups, and connecting trajectory execution without confusing planning with hardware control.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-ros2-control.jpg" alt="ROS 2 control architecture diagram for a MoveIt 2 robot arm planning package" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1024" height="322" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,.06);">Editorial illustration. Verify the exact geometry, model, or software version against the linked source documentation.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Version note:</strong> ROS 2 and MoveIt 2 package APIs evolve. The commands below use the current ROS 2 style and the official MoveIt Setup Assistant workflow. Confirm package names and launch arguments for the distribution installed on your machine before connecting a real arm.</p>
+</div>
+
+<h2>What the Setup Assistant actually creates</h2>
+<p>The MoveIt 2 Setup Assistant is not a motor driver, a robot controller, or a safety PLC. It is a configuration tool that takes a robot description and helps generate the semantic and planning files MoveIt needs. The result commonly includes an SRDF, kinematics configuration, joint limits, planning pipeline settings, controller mappings, RViz configuration, and launch files. These files tell MoveIt what the robot means and how to plan for it; they do not automatically make an unconfigured hardware interface safe.</p>
+<p>The central separation is worth keeping visible. A URDF or Xacro describes links, joints, geometry, inertial data, and limits. The SRDF adds semantic information such as the arm planning group, gripper group, virtual joint, named poses, end effectors, and disabled self-collision pairs. MoveIt plans a trajectory from that model. `ros2_control` exposes command and state interfaces to controllers. A hardware plugin or vendor driver then communicates with the physical robot.</p>
+<p>This separation explains a common failure: the robot appears correctly in RViz, MoveIt produces a green trajectory, and the real arm does not move. The model and planning package may be correct while the controller name, action interface, joint order, or hardware driver is wrong. Treat planning validation and hardware commissioning as separate gates.</p>
+
+<h2>Prerequisites: URDF, Xacro, and a clean workspace</h2>
+<p>Start with a robot description that loads without warnings. The root link, six revolute joints, parent-child order, axis vectors, origin transforms, limits, and visual/collision meshes need to be internally consistent. For a real arm, use the manufacturer’s supported ROS 2 description or a reviewed package. For a custom arm, validate link frames against measured dimensions and the controller’s joint order.</p>
+<p>Create or select a ROS 2 workspace that already builds the description package. A typical layout is:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>~/robot_ws/src/robot_arm_description/
+~/robot_ws/src/robot_arm_bringup/
+~/robot_ws/src/robot_arm_moveit_config/
+</code></pre>
+<p>Build the workspace and source it before launching the assistant. The exact dependency command depends on the ROS 2 distribution and operating system; use the official installation instructions for that distribution. The MoveIt documentation starts the assistant with:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>ros2 launch moveit_setup_assistant setup_assistant.launch.py</code></pre>
+<p>If the command is not found, do not copy a random package from an old ROS 1 tutorial. Confirm that the MoveIt 2 packages for your ROS 2 distribution are installed, source the correct setup file, and check the official documentation. The Setup Assistant’s UI and generated files have changed across releases.</p>
+
+<h2>Step 1 — Load the robot model and inspect frames</h2>
+<p>Choose <strong>Create New MoveIt Configuration Package</strong>, then load the URDF or Xacro file. If the description requires Xacro arguments, provide them exactly as the vendor package expects. Wait for the model to render and inspect the link tree before configuring anything else. A missing mesh is mostly a presentation problem; a wrong joint origin or axis changes the kinematics and must be fixed in the description package.</p>
+<p>Check units and conventions at this point. Revolute joint positions are expressed in radians in ROS interfaces, while link dimensions are normally in metres. A mesh exported in millimetres but interpreted as metres can make the arm appear enormous and invalidate every collision and reach result. Confirm that the visual and collision meshes have compatible origins and scales.</p>
+<p><strong>Checkpoint:</strong> the robot should have one connected tree, each actuated joint should have the intended parent and child, and the default pose should not contain impossible joint values. Do not continue by hiding a broken link or accepting a warning you do not understand.</p>
+
+<h2>Step 2 — Generate and review the self-collision matrix</h2>
+<p>The assistant can sample robot configurations and identify link pairs that are never in collision for the tested model. Those pairs can be disabled in the SRDF so the planning scene does not perform unnecessary checks. This improves planning performance, but it is not permission to disable a pair that can collide with a tool, cable, payload, fixture, or a different joint limit configuration.</p>
+<p>Review the generated matrix rather than treating it as a final safety analysis. Self-collision geometry must be conservative enough for the model’s accuracy, mesh simplification, and attached tooling. If a mesh is missing or a joint limit is wrong during sampling, the matrix can be misleading. Regenerate it after meaningful model changes and document any manually disabled pair.</p>
+<p>MoveIt collision checking also differs from a safety-rated protective system. The planning scene predicts geometry from a model; it does not measure a person in the cell or replace a safety scanner, guard, interlock, or risk assessment. The existing <a href="robot-arm-safety-usa-canada">robot safety standards guide</a> explains why a planning scene should not be described as safeguarding.</p>
+
+<h2>Step 3 — Define virtual joints and planning groups</h2>
+<p>A fixed-base six-axis arm commonly uses a fixed virtual joint connecting the robot’s base link to the world frame. A mobile manipulator may need a planar, floating, or other virtual-joint relationship depending on how the base is represented. For a stationary arm, the virtual joint expresses the semantic connection to the world; it does not replace the real mechanical base mounting or the TF configuration used by the application.</p>
+<p>Planning groups are the names MoveIt uses for meaningful sets of joints or links. Create an arm group as a kinematic chain from the base link to the tool flange. If the arm has a gripper, create a separate gripper group and, when appropriate, an arm-with-gripper group. Avoid selecting joints by visual order alone. Confirm the chain’s first and last links, joint order, and whether fixed joints are being included as links rather than commanded variables.</p>
+<p>Choose a kinematics solver supported by the installed distribution and robot. KDL is a common general-purpose choice. IKFast or another plugin may be appropriate when a verified solver exists for the exact geometry. Pick a search resolution and timeout that match the task; a larger timeout can help a difficult pose but also increases latency. Record the values in version control so a later change is reviewable.</p>
+
+<h2>Step 4 — Add named poses and the end effector</h2>
+<p>Named poses such as <code>home</code>, <code>ready</code>, or <code>stowed</code> are semantic starting points for applications and demonstrations. They are not automatically safe positions. Choose joint values inside the documented limits, verify the pose in RViz, and consider cable twist, singularity proximity, tool clearance, and the cell’s actual guarded space.</p>
+<p>When a gripper is represented as a group, label it as an end effector and connect it to the correct parent link. This lets MoveIt reason about attached objects and grasping workflows. Confirm that the parent link is the tool flange or the documented mounting link, not a convenient visual mesh name. If the tool is mechanically offset, represent the transform accurately and configure the controller’s tool data separately.</p>
+<p>A useful <strong>Example calculation — not a test result</strong> is to check the tool transform: if the gripper TCP is 120 mm along the tool Z axis and the mesh origin is 35 mm behind the flange, the model should show a 0.155 m total transform only if those offsets are in the same frame and direction. Do not add distances that are already included in a mesh origin. A wrong TCP can look like a planning failure even when the SRDF is correct.</p>
+
+<h2>Step 5 — Configure ros2_control without guessing names</h2>
+<p>The Setup Assistant can generate or help add controller configuration, but the generated controller name must match the controller manager that actually runs. The ROS 2 joint trajectory controller accepts trajectories with joint names, positions, velocities, accelerations, and timing. The interface and joint order must match the hardware or simulation controller, and the state interfaces must publish feedback at a rate appropriate to the application.</p>
+<p>A minimal controller configuration may look like this, but the joint names and interfaces are placeholders that must be replaced:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>arm_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+</code></pre>
+<p>The package generated for MoveIt commonly contains a second mapping that tells MoveIt which controller exposes the `FollowJointTrajectory` action. The name must match the running ROS 2 controller. A mismatch can produce a successful plan followed by an execution error. Inspect the active controller list and action topics rather than changing names until the error disappears.</p>
+<p>The official `ros2_control` documentation describes hardware components, command interfaces, and state interfaces. The official joint trajectory controller documentation describes the controller’s expected trajectory and interface behaviour. Use those references for the installed distribution; the site’s <a href="ros2-robot-arm-control">ros2_control architecture guide</a> provides broader context but does not replace the distribution documentation.</p>
+
+<h2>Step 6 — Generate the package and test in RViz</h2>
+<p>Generate the configuration package into the workspace’s <code>src</code> directory with a descriptive name such as <code>robot_arm_moveit_config</code>. Inspect the generated files before building. At minimum, review the SRDF, kinematics YAML, joint limits YAML, planning pipeline configuration, controller mapping, RViz configuration, and launch files. Commit the generated package only after removing machine-specific paths and confirming that the maintainer and license metadata are correct for your project.</p>
+<p>Build and source again. Launch the generated demo or planning configuration with mock hardware if the package provides it. In RViz, confirm that the planning group is selectable, the start state matches the robot state, the goal marker can be moved, collisions are visualized, and the planned trajectory stays inside joint limits. Move the slider through each trajectory and look for sudden wrist flips, self-collisions, frame jumps, and implausible velocities.</p>
+<p><strong>Checkpoint:</strong> a valid plan must be reproducible from a clean terminal using documented source commands. If it only works after manually exporting an undeclared path or opening a different workspace, the package is not ready for another engineer or a deployment pipeline.</p>
+
+<h2>Step 7 — Connect execution in layers</h2>
+<p>Do not connect the real arm immediately after RViz planning succeeds. First run with a fake or simulated controller, then with a hardware driver in a restricted mode, and only then perform a controlled motion under the manufacturer’s commissioning procedure. Use the lowest practical speed and acceleration, keep the hazard zone controlled, and verify the emergency stop and protective stop functions independently of MoveIt.</p>
+<p>For a real robot, identify the vendor driver’s supported ROS 2 distribution, controller mode, network interface, joint naming, calibration state, and command interface. Some drivers expose a trajectory action; others require a vendor controller or teach-pendant mode before accepting external commands. MoveIt should be the high-level planner, not the only layer deciding whether a machine may move.</p>
+<p>Use the <a href="robot-arm-simulation-software">robot simulation software comparison</a> when selecting a validation environment. If the path approaches a singularity, inspect the kinematic assumptions in the existing <a href="robot-arm-inverse-kinematics">inverse kinematics guide</a> and sample the full trajectory, not only the goal pose. Simulation can identify a bad model or path; it cannot certify the actual cell.</p>
+
+<h2>Failure diagnosis by layer</h2>
+<div class="table-wrap" aria-label="MoveIt 2 failure diagnosis table"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">A diagnostic map for separating description, planning, controller, and hardware faults.</caption><thead><tr><th>Symptom</th><th>Likely layer</th><th>First check</th></tr></thead><tbody>
+<tr><td>Model is invisible or huge</td><td>URDF/Xacro or mesh</td><td>Units, mesh path, root link, and Xacro arguments</td></tr>
+<tr><td>Planning group is empty</td><td>SRDF</td><td>Chain endpoints, joint selection, and generated package</td></tr>
+<tr><td>RViz refuses a goal</td><td>Limits, collisions, or kinematics</td><td>Joint limits, self-collision matrix, solver, and frames</td></tr>
+<tr><td>Plan succeeds but execution fails</td><td>Controller bridge</td><td>Controller name, action interface, joint order, and active controller state</td></tr>
+<tr><td>Robot moves the wrong joint</td><td>Hardware mapping</td><td>Joint names, sign conventions, zero offsets, and driver configuration</td></tr>
+<tr><td>Real arm drifts from RViz</td><td>Calibration or model</td><td>TCP, base frame, mastering, payload, and measured joint state</td></tr>
+</tbody></table></div>
+<p>A “successful build” proves only that the package compiled. A “successful plan” proves that the software found a path through its model. A “successful execution” still does not prove that the cell is safe. Keep those claims separate in documentation and in the commissioning checklist.</p>
+
+<h2>Version control and reproducibility</h2>
+<p>Save the ROS 2 distribution, MoveIt version, robot description commit, generated package commit, controller configuration, and launch command in a README next to the package. Record any manually edited Setup Assistant output. If the model is a Xacro file with arguments, document the values used to generate the configuration. A package that depends on an undocumented local path is difficult to maintain and dangerous to hand over.</p>
+<p>After changing a mesh, joint limit, tool, controller, or mounting transform, regenerate or review the affected files. A changed collision mesh can invalidate the self-collision matrix. A changed joint order can invalidate both the controller and the SRDF. A changed tool can alter payload, reach, singularity proximity, and collision geometry. Treat the package as an engineering configuration, not a disposable RViz demo.</p>
+
+<h2>Sources and methodology</h2>
+<p>This tutorial follows the official MoveIt Setup Assistant sequence and keeps the planning, description, controller, and safety layers separate. Commands are shown in current ROS 2 syntax, but package names and generated YAML can change between distributions. The examples are configuration illustrations, not a report of a Robotics Engineering Lab hardware test.</p>
+<ul>
+<li><a href="https://moveit.picknik.ai/main/doc/examples/setup_assistant/setup_assistant_tutorial.html" target="_blank" rel="noopener noreferrer">MoveIt 2 Setup Assistant official tutorial</a> — model loading, virtual joints, planning groups, robot poses, end effectors, controllers, and package generation; accessed August 21, 2026.</li>
+<li><a href="https://control.ros.org/jazzy/doc/ros2_control/doc/index.html" target="_blank" rel="noopener noreferrer">ROS 2 control documentation</a> — hardware and interface architecture; accessed August 21, 2026.</li>
+<li><a href="https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html" target="_blank" rel="noopener noreferrer">ROS 2 joint trajectory controller documentation</a> — trajectory and interface requirements; accessed August 21, 2026.</li>
+<li><a href="https://docs.universal-robots.com/Universal_Robots_ROS2_Documentation/doc/ur_tutorials/my_robot_cell/doc/build_moveit_config.html" target="_blank" rel="noopener noreferrer">Universal Robots ROS 2: Build the MoveIt config</a> — vendor integration example and controller boundary; accessed August 21, 2026.</li>
+<li><a href="https://moveit.picknik.ai/main/doc/examples/realtime_servo/realtime_servo_tutorial.html" target="_blank" rel="noopener noreferrer">MoveIt 2 Realtime Servo</a> — singularity and collision checking limits; accessed August 21, 2026.</li>
+</ul>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>What does the MoveIt 2 Setup Assistant generate?</h4><p>It helps generate a MoveIt configuration package containing semantic robot data such as an SRDF, planning groups, kinematics and joint-limit settings, controller mappings, RViz configuration, and launch files. It does not replace a hardware driver, safety PLC, risk assessment, or robot manufacturer commissioning procedure.</p></div>
+<div class="faq-item"><h4>Which file should I load into the MoveIt 2 Setup Assistant?</h4><p>Load the URDF or Xacro description that correctly represents the robot’s links, joints, axes, limits, collision geometry, and frame relationships. If the description needs Xacro arguments, use the values documented by the robot package. Do not continue with a model that has unexplained scale, joint, or transform warnings.</p></div>
+<div class="faq-item"><h4>Do I need a virtual joint for a fixed-base robot arm?</h4><p>A fixed virtual joint connecting the robot base link to the world frame is a common semantic configuration for a stationary arm, although the exact setup depends on the application package. It does not replace mechanical anchoring, controller mounting-orientation settings, or the TF tree used by the real cell.</p></div>
+<div class="faq-item"><h4>What planning group and IK solver should I choose?</h4><p>For a six-axis arm, define the arm as a kinematic chain from the base link to the tool flange and choose a solver supported by the installed ROS 2 and MoveIt 2 distribution. KDL is a common general-purpose choice; IKFast or another plugin is appropriate only when it has been generated and validated for the exact robot geometry.</p></div>
+<div class="faq-item"><h4>How do I connect a generated MoveIt package to ros2_control?</h4><p>Match the MoveIt controller mapping to the controller manager that is actually running. Confirm the controller name, joint order, FollowJointTrajectory action interface, command interfaces, and feedback state interfaces. Test with mock or simulated hardware before connecting a real robot.</p></div>
+<div class="faq-item"><h4>Why does the robot appear in RViz but refuse to execute?</h4><p>RViz can display and plan from a model without a working hardware bridge. Check whether the controller is active, whether its name matches the MoveIt mapping, whether the action interface is available, and whether joint names and zero conventions match the driver. Then verify the vendor’s external-control mode and commissioning requirements.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. This page is a sourced engineering explainer; it is not a claim of hands-on testing unless explicitly stated. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 21, 2026 &middot; last reviewed August 21, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
+```
