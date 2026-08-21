@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Arm Singularity: Detection &amp; Avoidance Guide</title>
+<meta name="description" content="Learn how to detect robot arm singularities, diagnose wrist, elbow and shoulder cases, and plan safer paths with Jacobian and MoveIt 2 checks." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Arm Singularity: Detection &amp; Avoidance Guide" />
+<meta property="og:description" content="Learn how to detect robot arm singularities, diagnose wrist, elbow and shoulder cases, and plan safer paths with Jacobian and MoveIt 2 checks." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:image:alt" content="Six-axis robot arm posed near an illustrative singularity analysis diagram" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-21" />
+<meta property="article:modified_time" content="2026-08-21" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Arm Singularity: Detection &amp; Avoidance Guide" />
+<meta name="twitter:description" content="Learn how to detect robot arm singularities, diagnose wrist, elbow and shoulder cases, and plan safer paths with Jacobian and MoveIt 2 checks." />
+<meta name="twitter:image:alt" content="Six-axis robot arm posed near an illustrative singularity analysis diagram" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide#article",
+  "headline": "Robot Arm Singularity: Detection & Avoidance Guide",
+  "description": "Learn how to detect robot arm singularities, diagnose wrist, elbow and shoulder cases, and plan safer paths with Jacobian and MoveIt 2 checks.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-21",
+  "dateModified": "2026-08-21",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide"
+  },
+  "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide",
+  "inLanguage": "en-US",
+  "wordCount": 2551,
+  "articleSection": "Motion Planning & Kinematics",
+  "keywords": "robot arm singularity, singularity avoidance, robot singularity detection, wrist singularity, Jacobian singularity, MoveIt 2 singularity"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a robot arm singularity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A robot arm singularity is a kinematic configuration where the manipulator loses one or more independent Cartesian motion directions. A small tool motion can then require very high joint speeds, or a Cartesian path can become impossible or unstable. The exact pose depends on the robot geometry and controller."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I tell if a 6-axis arm is near a singularity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Look for rapid wrist or elbow rotation, a Cartesian path that fails while joint interpolation works, a sudden joint-speed increase, or a controller singularity warning. Confirm the diagnosis by checking the robot model, joint limits, TCP, and a Jacobian condition metric along the full trajectory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a wrist singularity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A wrist singularity occurs when wrist axes become aligned or nearly aligned, so two axes lose independent authority over tool orientation. On some six-axis arms it is associated with the fifth axis near zero or 180 degrees, but the joint numbering and exact angle depend on the manufacturer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can MoveIt 2 avoid robot arm singularities?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MoveIt 2 Servo can monitor Jacobian conditioning and scale down or halt motion near configured singularity thresholds. Planned paths still require model validation, suitable thresholds, collision checking, and commissioning. MoveIt 2 is not a substitute for the robot manufacturer’s limits, safeguarding, or a cell risk assessment."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use MoveJ or MoveL near a singularity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use joint interpolation only when the tool path and orientation can safely follow an arc, because it often gives the controller more freedom than a straight Cartesian move. Use a linear move when the process requires it, but redesign the approach, add waypoints, or change the fixture so the path does not cross the singularity."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a robot arm singularity the same as a collision?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A singularity is a kinematic loss of motion authority; a collision is physical contact or an unsafe proximity condition. They can occur together, but deleting collision geometry will not fix a singularity and may remove a necessary protective check."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Robot Arm Singularity: Detection & Avoidance Guide",
+      "item": "https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Six-axis robot arm posed near an illustrative singularity analysis diagram" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Motion Planning &amp; Kinematics — Updated August 21, 2026</div>
+<h1>Robot Arm Singularity: Detection &amp; Avoidance Guide</h1><p class="hero-sub">A practical engineering guide to recognizing wrist, elbow and shoulder singularities, measuring proximity with Jacobian metrics, and changing a path before joint speed or accuracy becomes a problem.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../industrial_robot_arm.jpg" alt="Six-axis robot arm posed near an illustrative singularity analysis diagram" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1024" height="322" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,.06);">Editorial illustration. Verify the exact geometry, model, or software version against the linked source documentation.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Editorial scope:</strong> This is an engineering explainer, not a manufacturer-specific operating procedure. Robot geometry, controller behaviour, alarm names, and safe speed limits vary by model. Verify every limit against the current robot manual and the completed risk assessment for the cell.</p>
+</div>
+
+<h2>The symptom is not the diagnosis</h2>
+<p>A robot arm that hesitates, swings a wrist quickly, reports an inverse-kinematics failure, or refuses a straight-line move may be near a singularity. It may also be hitting a joint limit, a collision boundary, an acceleration limit, an invalid tool frame, or a controller-specific workspace restriction. Treating every failed motion as a singularity leads to bad fixes: raising speed limits, deleting collision geometry, or forcing a new IK solution can make the cell less safe.</p>
+<p>A <strong>robot arm singularity</strong> is a kinematic configuration in which the manipulator loses the ability to create arbitrary instantaneous motion in Cartesian space. In practical terms, one or more independent directions of tool motion collapse. A small requested tool velocity can then require a very large joint velocity, or the controller can find several joint solutions that are locally indistinguishable. The arm has not necessarily broken, and the pose may still be reachable. The problem is the relationship between the requested motion and the current geometry.</p>
+<p>That distinction matters for both industrial arms and six-degree-of-freedom maker projects. Joint-space motion can pass through a pose that is awkward for Cartesian interpolation. A command that says “move each joint to these angles” is a different problem from “keep the tool travelling in a straight line while changing its orientation.” The second request places a stronger demand on the Jacobian and is where singularity symptoms usually become visible.</p>
+
+<h2>What the Jacobian tells the controls engineer</h2>
+<p>Forward kinematics maps joint positions to a tool pose. The Jacobian maps small joint-rate changes to the corresponding tool twist, which combines linear and angular velocity. In compact form, the relationship is <code>ẋ = J(q) q̇</code>, where <code>q</code> is the joint vector, <code>J(q)</code> is the Jacobian at the current pose, and the dot notation means a rate. Away from a singularity, the controller can use an inverse or pseudoinverse of <code>J</code> to find reasonable joint rates for a requested tool motion.</p>
+<p>At a singularity, the Jacobian loses rank. At least one singular value approaches zero, the inverse becomes ill-conditioned, and the mapping from tool motion to joint motion becomes numerically fragile. The determinant is useful for a square Jacobian in a carefully defined problem, but it is not a universal “singularity meter” for every robot. A practical implementation should inspect a singular-value decomposition, the smallest singular value, or the condition number, and should state the units and scaling used for the Jacobian.</p>
+<p>Two metrics are especially useful. The manipulability measure is often written as <code>w = √det(JJᵀ)</code> for a suitable six-dimensional task Jacobian; it trends toward zero as available motion collapses. The condition number, commonly written <code>κ = σmax / σmin</code>, grows as the largest and smallest singular values become more unequal. Neither metric has a universal pass/fail threshold across all robots. A threshold depends on the robot model, units, task, controller update rate, and whether translational and rotational Jacobian columns have been scaled consistently.</p>
+<div class="pullquote"><blockquote>A singularity is not a point on a “bad robot.” It is a relationship between a robot configuration and the direction of motion requested from it.</blockquote><cite>Engineering interpretation for this guide</cite></div>
+
+<h2>Three singularity families in a six-axis arm</h2>
+<p>Names differ between manufacturers, but three geometric families appear often in six-axis serial arms. They are convenient diagnostic labels, not a substitute for the model-specific manual.</p>
+<h3>Wrist or wrist-alignment singularity</h3>
+<p>A wrist singularity occurs when two wrist axes become aligned or nearly aligned. On many spherical-wrist designs this is associated with the fifth axis approaching a straight or zero-angle condition, but the exact joint numbering and angle convention vary. The controller may need axes four and six to rotate rapidly in opposite directions to produce a modest change in tool orientation. A straight tool move can therefore produce a sudden wrist spin even though the TCP path looks simple.</p>
+<p>Typical clues are a rapidly changing wrist angle, a large change in axes 4 and 6 for a small orientation command, or a linear-motion alarm that disappears when the same endpoints are connected with joint interpolation. Do not infer that every J5 angle of zero is dangerous on every arm. Use the manufacturer’s singularity diagram and verify the actual tool orientation, not only the joint number.</p>
+<h3>Elbow or arm-stretch singularity</h3>
+<p>An elbow singularity occurs when the upper-arm and forearm links approach a straight line or a folded configuration that removes a radial direction of motion. The arm can still reach a point, but moving the TCP radially may require a large shoulder or elbow rate. It is common near the outer edge of a recommended work envelope, where the difference between “maximum reach” and “usable reach” becomes important.</p>
+<p>Payload, tool length, and acceleration can make an elbow-singularity approach more consequential. A controller may preserve the commanded path mathematically while the motors approach their velocity or torque limits. For a production cell, the useful boundary is therefore not only the geometric reach limit. It is the region where the programmed path retains margin for speed, load, cable routing, and stopping behaviour.</p>
+<h3>Shoulder or inner-workspace singularity</h3>
+<p>A shoulder singularity is associated with the wrist centre lying on or close to the base axis, or with a configuration in which the base rotation loses a useful direction. Universal Robots describes a restricted inner workspace directly above and below the base on several models. Other manufacturers describe the same phenomenon with different terminology. A tool can appear close to the target while the base joint would have to rotate extremely fast to maintain a straight Cartesian path.</p>
+<p>Layout often solves this class better than software. Moving the fixture a small distance away from the base centre, changing the approach direction, or mounting the arm in a permitted orientation can create more usable clearance than adding retries to the planner. Any change in mounting orientation requires the controller’s gravity and base-frame settings to be configured according to the robot manual.</p>
+
+<h2>A repeatable diagnosis workflow</h2>
+<p>Start with the smallest reproducible motion. Record the robot model, controller software, tool definition, payload and centre of gravity, base frame, active work object, joint positions, requested path type, speed, acceleration, and the exact alarm text. Save a low-speed simulation or dry-run trace if the manufacturer permits it. A screenshot of the pose without the joint values is rarely enough to reproduce the fault.</p>
+<ol style="padding-left:22px;margin:16px 0;color:#b0ab9f;">
+<li style="margin-bottom:10px;"><strong style="color:#f2f0eb;">Check the frame and TCP first.</strong> A wrong tool length or rotated tool frame can make an ordinary path look like a singularity. Confirm the active TCP and work object against the setup sheet.</li>
+<li style="margin-bottom:10px;"><strong style="color:#f2f0eb;">Separate path type from endpoint reachability.</strong> Test the same endpoints with joint interpolation and then with Cartesian interpolation at a low speed. A failure only in the Cartesian case points toward kinematic conditioning, constraints, or a path obstacle.</li>
+<li style="margin-bottom:10px;"><strong style="color:#f2f0eb;">Inspect joint rates and limits.</strong> If one or two joints spike while the tool command remains small, calculate or log a Jacobian metric and check joint velocity margins. A joint-limit alarm is not automatically a singularity, but the two can appear together.</li>
+<li style="margin-bottom:10px;"><strong style="color:#f2f0eb;">Check the three geometric families.</strong> Look at wrist-axis alignment, arm extension/folding, and the wrist centre near the base axis. Compare the pose with the vendor’s workspace and singularity diagrams.</li>
+<li style="margin-bottom:10px;"><strong style="color:#f2f0eb;">Change one variable.</strong> Alter approach direction, tool orientation, fixture offset, or path type one at a time. If five settings change at once, the root cause is lost.</li>
+</ol>
+<p><strong>Illustrative scenario — not a Robotics Engineering Lab test:</strong> A six-axis arm must carry a 0.8 kg camera tool along a 100 mm straight approach. Near the endpoint, the planned TCP speed is 0.10 m/s, but the local Jacobian analysis shows a directional amplification factor of 12. A simplified estimate gives a joint-rate demand around 1.2 rad/s, or about 69 degrees per second, before controller filtering and other joints are considered. The number is not a robot rating; it demonstrates why a modest tool speed can exceed a wrist-axis limit near a singularity.</p>
+
+<h2>How to change a path without hiding the fault</h2>
+<p>The most reliable mitigation is to avoid making the task pass through the problematic configuration. Move the fixture, rotate the part, change the tool approach vector, or add a waypoint that keeps the wrist and elbow in a comfortable region. A five- or ten-degree orientation change may be enough for a camera or gripper task, but a machining or welding process may not tolerate that change. Treat the task requirement as a design constraint and document the allowed deviation.</p>
+<p>Use joint interpolation when the tool does not need a straight line. A MoveJ-style move can allow the robot to choose a smoother joint-space route around a singular configuration. It can also move the tool through an unexpected arc, so check clearance and workpiece orientation in simulation. Do not replace a required straight-line process with joint motion merely to make an alarm disappear.</p>
+<p>For Cartesian paths, break a long move into segments and approach the workpiece from a direction that leaves wrist rotation margin. Lowering speed and acceleration can reduce peak joint demand, but it does not remove the singularity. It is a commissioning measure and possibly a production constraint, not proof that the path is geometrically robust.</p>
+<p>If the robot is redundant, a null-space objective can bias the extra degree of freedom away from poor conditioning while preserving the primary tool motion. A common numerical approach is damped least squares, where the pseudoinverse is regularized with a damping term. The damping parameter must be selected and validated for the robot and task; excessive damping can create path error, sluggish response, or a large deviation from the commanded pose.</p>
+
+<h2>Using MoveIt 2 for monitoring and recovery</h2>
+<p>MoveIt 2 provides several useful layers, but it does not turn an arbitrary robot model into a certified safety function. The Realtime Arm Servo documentation describes singularity checking, collision checking, and enforcement of joint position and velocity limits. Its implementation exposes a lower singularity threshold at which motion can decelerate and a hard-stop threshold at which motion can halt. Those values are controller parameters, not universal engineering limits, and the package version and branch must be checked before copying them.</p>
+<p>In the current MoveIt 2 API, Servo reports statuses such as deceleration while approaching a singularity, halting for a singularity, and deceleration while leaving one. The API documentation also describes the condition number of the Jacobian as the quantity used by the singularity logic. This is useful for diagnostics and controlled teleoperation, but the final robot cell still needs independent safeguarding, a risk assessment, and a verified stop response.</p>
+<p>For a planned trajectory, sample joint positions along the path and compute a model-consistent metric at each sample. Flag points where the condition number rises, manipulability falls, or a joint approaches its configured velocity and position margin. Plot the metric against path progress. A single endpoint check is inadequate because the singularity may occur between waypoints.</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code># Pseudocode: the threshold is application-specific, not a universal value
+for point in trajectory:
+    J = robot_model.jacobian(point.joint_positions)
+    singular_values = svd(J, compute_uv=False)
+    condition = singular_values[0] / max(singular_values[-1], 1e-12)
+    if condition &gt; warning_limit:
+        flag(point, "near-singularity")
+</code></pre>
+<p>Do not use the pseudocode as a safety-rated stop. It is an offline analysis pattern. The model must match the robot’s joint order, link frames, units, tool frame, and configuration. Validate the result in a simulator and then through the manufacturer’s controlled commissioning process at restricted speed.</p>
+
+<h2>Planning checklist for production cells</h2>
+<ul>
+<li>Define the required Cartesian directions and orientation tolerances before choosing a path type.</li>
+<li>Keep fixture approaches away from the robot’s documented inner and outer singularity zones where possible.</li>
+<li>Use a correct URDF or manufacturer robot model, including joint limits, tool geometry, and frame conventions.</li>
+<li>Sample the entire trajectory, not only the start and end poses.</li>
+<li>Record a warning threshold and a hard stop policy separately; never treat a warning as a safety-rated protective function.</li>
+<li>Test with the real tool mass, centre of gravity, hoses, cables, and workpiece, because these change the physical and stopping behaviour.</li>
+<li>Confirm that a recovery move travels away from the singularity without entering a collision, joint limit, or pinch point.</li>
+</ul>
+<p>For background on the mathematical inverse problem, see the existing <a href="robot-arm-inverse-kinematics">inverse kinematics guide</a>. For ROS 2 hardware interfaces, the <a href="ros2-robot-arm-control">ros2_control article</a> explains the separation between planning and low-level control. If a controller has suffered a collision or mechanical change, compare the result with the site’s <a href="robot-arm-calibration">robot arm calibration guide</a> before assuming a software-only cause.</p>
+
+<h2>Sources and methodology</h2>
+<p>This article separates geometry, numerical conditioning, and safety. The singularity terminology and examples were checked against the Universal Robots and Doosan Robotics user documentation. The MoveIt 2 behaviour described here is based on the official Realtime Servo documentation and API references linked below. The illustrative velocity calculation uses stated assumptions and is not a test result.</p>
+<ul>
+<li><a href="https://moveit.picknik.ai/main/doc/examples/realtime_servo/realtime_servo_tutorial.html" target="_blank" rel="noopener noreferrer">MoveIt 2 Realtime Servo documentation</a> — singularity checking, collision checking, and joint limits; accessed August 21, 2026.</li>
+<li><a href="https://moveit.picknik.ai/main/api/html/namespacemoveit__servo.html" target="_blank" rel="noopener noreferrer">MoveIt 2 Servo API reference</a> — condition-number thresholds and status codes; accessed August 21, 2026.</li>
+<li><a href="https://www.universal-robots.com/articles/ur/application-installation/what-is-a-singularity/" target="_blank" rel="noopener noreferrer">Universal Robots, What is a singularity?</a> — workspace, inner-workspace, and wrist-alignment examples; accessed August 21, 2026.</li>
+<li><a href="https://manual.doosanrobotics.com/en/user-manual/3.2.2/2.-A-Series/overview-of-singularity" target="_blank" rel="noopener noreferrer">Doosan Robotics, Overview of Singularity</a> — wrist, shoulder, and elbow terminology; accessed August 21, 2026.</li>
+</ul>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>What is a robot arm singularity?</h4><p>A robot arm singularity is a kinematic configuration where the manipulator loses one or more independent Cartesian motion directions. A small tool motion can then require very high joint speeds, or a Cartesian path can become impossible or unstable. The exact pose depends on the robot geometry and controller.</p></div>
+<div class="faq-item"><h4>How can I tell if a 6-axis arm is near a singularity?</h4><p>Look for rapid wrist or elbow rotation, a Cartesian path that fails while joint interpolation works, a sudden joint-speed increase, or a controller singularity warning. Confirm the diagnosis by checking the robot model, joint limits, TCP, and a Jacobian condition metric along the full trajectory.</p></div>
+<div class="faq-item"><h4>What is a wrist singularity?</h4><p>A wrist singularity occurs when wrist axes become aligned or nearly aligned, so two axes lose independent authority over tool orientation. On some six-axis arms it is associated with the fifth axis near zero or 180 degrees, but the joint numbering and exact angle depend on the manufacturer.</p></div>
+<div class="faq-item"><h4>Can MoveIt 2 avoid robot arm singularities?</h4><p>MoveIt 2 Servo can monitor Jacobian conditioning and scale down or halt motion near configured singularity thresholds. Planned paths still require model validation, suitable thresholds, collision checking, and commissioning. MoveIt 2 is not a substitute for the robot manufacturer’s limits, safeguarding, or a cell risk assessment.</p></div>
+<div class="faq-item"><h4>Should I use MoveJ or MoveL near a singularity?</h4><p>Use joint interpolation only when the tool path and orientation can safely follow an arc, because it often gives the controller more freedom than a straight Cartesian move. Use a linear move when the process requires it, but redesign the approach, add waypoints, or change the fixture so the path does not cross the singularity.</p></div>
+<div class="faq-item"><h4>Is a robot arm singularity the same as a collision?</h4><p>No. A singularity is a kinematic loss of motion authority; a collision is physical contact or an unsafe proximity condition. They can occur together, but deleting collision geometry will not fix a singularity and may remove a necessary protective check.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. This page is a sourced engineering explainer; it is not a claim of hands-on testing unless explicitly stated. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 21, 2026 &middot; last reviewed August 21, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
+```
