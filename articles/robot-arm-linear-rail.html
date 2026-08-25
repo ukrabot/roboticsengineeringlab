@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Arm Linear Rail: 7th Axis Selection &amp; Sizing</title>
+<meta name="description" content="Robot arm linear rail guide: size a seventh axis by moment load, travel, drive type, foundation and controls, and read a rail quotation line by line." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-linear-rail" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Arm Linear Rail: 7th Axis Selection &amp; Sizing" />
+<meta property="og:description" content="Robot arm linear rail guide: size a seventh axis by moment load, travel, drive type, foundation and controls, and read a rail quotation line by line." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-linear-rail.jpg" />
+<meta property="og:image:alt" content="Editorial diagram of a robot arm on a floor-mounted seventh-axis linear rail with travel dimensions and tilting moments" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-25" />
+<meta property="article:modified_time" content="2026-08-25" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-linear-rail" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Arm Linear Rail: 7th Axis Selection &amp; Sizing" />
+<meta name="twitter:description" content="Robot arm linear rail guide: size a seventh axis by moment load, travel, drive type, foundation and controls, and read a rail quotation line by line." />
+<meta name="twitter:image:alt" content="Editorial diagram of a robot on a seventh-axis linear rail with loads and dimensions" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-linear-rail.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-arm-linear-rail#article",
+  "headline": "Robot Arm Linear Rail: 7th Axis Selection & Sizing",
+  "description": "Robot arm linear rail guide: size a seventh axis by moment load, travel, drive type, foundation and controls, and read a rail quotation line by line.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-25",
+  "dateModified": "2026-08-25",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-linear-rail"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-linear-rail.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-arm-linear-rail",
+  "inLanguage": "en-US",
+  "wordCount": 3530,
+  "articleSection": "Mechanical Design & Systems",
+  "keywords": "robot arm linear rail, 7th axis robot, seventh axis, robot transfer unit, robot track, external axis, rack and pinion rail, robot rail foundation"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does a seventh axis do for a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A seventh axis is a motorized linear track that carries the whole robot between workstations, multiplying the work envelope along one direction. One arm can then serve several machines, presses, or weld stations in sequence, or reach along parts longer than its own reach. The rail is driven by a servo axis, either coordinated inside the robot controller as an extra joint or positioned separately by a PLC with a handshake."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I size a robot linear rail?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Size from four numbers: the vertical load (robot, riser, and payload weights), the tilting moments about the travel axis and across it with the arm fully extended, the travel length between hard stops, and the duty profile of speed and acceleration. Compare the calculated loads to the manufacturer capacity tables with a safety margin, typically at least two on moments, because the arm posture changes constantly during real cycles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How fast can a robot travel on a seventh axis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Published manufacturer data for floor tracks commonly reaches about 2 to 3 meters per second, with accelerations up to about 4 meters per second squared on smaller sizes. Güdel's TMF-2 tables list 150 meters per minute (2.5 m/s) at 9,000 N payload and 90 meters per minute at 25,000 N, and Rollon documents speeds up to 3 m/s for steel transfer units. Real cells usually run slower than the catalog maximum to control carriage dynamics and wear."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Rack and pinion or belt drive for a robot rail?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Rack and pinion suits long, heavy, high-duty tracks: strokes are extendable by joining rack segments, and it carries robot-scale masses. Belt drives are quieter, cleaner, and cheaper but stretch under high duty and are usually limited to lighter cobot-class tracks. Ball screws fit short, very stiff, high-precision strokes but not multi-meter robot travel, because screw length limits speed and critical speed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a robot on a rail need a special foundation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually yes. A floor track fastens to a leveled, grouted, and anchored foundation strip sized for the carriage mass plus dynamic loads, following the rail manufacturer's installation drawing for flatness, anchor type, and torque. Thin slabs often need a new footing. The preparation follows the same load-path discipline as robot base mounting: reaction loads must reach soil or structure without bending the rail."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does a seventh axis cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Robot tracks are configured products priced by travel, capacity, protection, and controls scope, so treat any single number as unreliable: quote required. A quotation should itemize rail sections and joining kits, carriage and riser, servo motor, gearbox, and rack, the measuring system, energy chain, covers, lubrication unit, external-axis integration in the robot controller, installation, and commissioning. Budget the controls and integration line explicitly, because it is a large share of the installed cost."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Robot Arm Linear Rail: 7th Axis Selection & Sizing",
+      "item": "https://roboticsengineeringlab.com/articles/robot-arm-linear-rail"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-linear-rail.jpg" alt="Editorial diagram of a six-axis robot arm mounted on a floor-level seventh-axis linear rail with travel and moment annotations" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Mechanical &amp; Systems — Updated August 25, 2026</div>
+<h1>Robot Arm Linear Rail: Seventh-Axis Selection and Sizing</h1><p class="hero-sub">A constraint-by-constraint specification guide for seventh-axis robot tracks: carriage moments, travel and speed, drive types, foundations, environment, controls integration, and the line items a rail quotation must contain.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-linear-rail.jpg" alt="Editorial diagram of a robot transfer unit: carriage on a rack-and-pinion floor rail with energy chain, foundation anchors, and tilting moment arrows" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration. Conceptual diagram of loads and layout, not dimensioned geometry. Always size from the manufacturer datasheet for your robot mass and travel.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Editorial disclosure:</strong> Robotics Engineering Lab has not purchased, installed, or measured any seventh-axis track. This is a specification-based selection guide built from manufacturer documentation (Güdel, Rollon, IPR), public standards, and stated-assumption calculations. Prices are quote-dependent and labelled as such.</p>
+</div>
+
+<h2>What a robot arm linear rail changes in a robot cell</h2>
+<p>A robot arm linear rail — a seventh axis, robot track, or robot transfer unit — carries the entire robot along a motorized guideway, turning one fixed work envelope into a chain of them. The canonical use is one arm serving several machines in a row: a machine-tending cell where a single 20 kg-class arm tends three lathes, or a spot-welding line where the arm follows a body side. The rail converts robot reach from a circle into a rectangle, and it does so for less cost than adding a second robot, provided the cycle timing closes.</p>
+<p>The engineering trade is real, though. A rail adds a servo axis, a foundation strip, an energy chain, lubrication, covers, and a guarding extension along the whole travel. It adds failure modes that a fixed robot does not have — rack wear, carriage bearing wear, cable-chain fatigue, position drift between stations — and it extends the safeguarded envelope, so safety design and risk assessment must cover the swept volume at both ends and everywhere between. In the USA and Canada that integration falls under <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a> and <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a>, which adopt the integration requirements of <a href="https://www.iso.org/standard/73927" target="_blank" rel="noopener noreferrer">ISO 10218-2</a> for the cell as a system.</p>
+<p>This guide is organized the way the selection actually proceeds: six constraints in order, then the published manufacturer landscape, then quotation structure and commissioning. Each constraint has a number you can compute before ever talking to a supplier.</p>
+
+<h2>Constraint 1: the carriage load is a moment problem</h2>
+<p>The first mistake in rail selection is reading "robot mass" from a datasheet and matching it to a "maximum payload" line. The rail does not carry a centered mass; it carries a tall, articulated mass that constantly changes shape. The robot's center of gravity sits several hundred millimeters above the carriage, and when the arm stretches horizontally, that CG moves sideways of the travel axis. The rail sees a vertical load plus two tilting moments — about the travel axis (Mx) when the arm reaches sideways, and across it (My) during acceleration and deceleration.</p>
+<div class="pullquote">
+<blockquote>Example calculation — illustrative scenario, not a report of a Robotics Engineering Lab installation.</blockquote>
+<cite>All assumptions stated; recompute for your robot and posture before specifying.</cite>
+</div>
+<p>Take a 250 kg industrial arm (mass from the robot datasheet) on a 60 kg riser, tending parts with a 30 kg combined wrist load. Assumptions: robot CG 0.35 m above the carriage top plane; arm horizontal at 1.2 m from the carriage centerline during the worst pose; maximum rail acceleration 3 m/s².</p>
+<ul>
+<li><strong>Vertical load:</strong> (250 + 60 + 30) kg × 9.81 m/s² ≈ 3,335 N (750 lbf).</li>
+<li><strong>Static tilting moment about the travel axis:</strong> the 250 kg robot at a 0.35 m CG height gives 250 × 9.81 × 0.35 ≈ 860 N·m; the 60 kg riser at 0.1 m adds ≈ 59 N·m; the 30 kg wrist load at a 1.2 m lateral offset adds 30 × 9.81 × 1.2 ≈ 353 N·m; total ≈ 1,272 N·m (938 lbf·ft).</li>
+<li><strong>Dynamic addition:</strong> decelerating 310 kg moving mass (robot + riser + carriage, say 40 kg) at 3 m/s² produces a horizontal force of ≈ 930 N acting roughly 0.4 m above the guideway, adding ≈ 372 N·m to My.</li>
+<li><strong>Design moment:</strong> the posture-dependent peaks combine to roughly 1.3–1.4 kN·m static plus dynamics, so a design value near 1.7 kN·m per bending axis is a defensible planning number — before any safety factor.</li>
+</ul>
+<p>Applying a factor of 2 on moments (postures vary; integrators commonly plan well clear of capacity tables), this cell needs a track whose tables allow about 3.4 kN·m of tilting moment and 3.3 kN of vertical load. That lands in the light-to-mid range of manufacturer catalogs — but only the manufacturer's own moment-load diagram for your robot mass can confirm it. IPR's published seventh-axis data, for example, brackets its aluminum range at up to 7,000 N load and 9,000 N·m tilting moment, with steel and concrete ranges climbing to 150,000 N and 355,000 N·m.</p>
+
+<h2>Constraint 2: travel, speed, and acceleration</h2>
+<p>Travel is not rail length. Usable travel = total rail length − carriage length − hard-stop and bumper allowance at both ends − the clearance your guarding requires. When stations sit 2.2 m apart and you need three stations plus a home position with re-switch zone, the arithmetic adds up quickly; write the station map before the rail length.</p>
+<p>Speed and acceleration decide whether one robot can serve N stations. For a trapezoidal velocity profile, move time over distance s at cruise speed v with acceleration a is approximately t = s/v + v/a (valid when the profile is trapezoidal, not triangular).</p>
+<p><strong>Example calculation (stated assumptions):</strong> stations 6.0 m apart, cruise speed 2.0 m/s, acceleration 3.0 m/s². Move time ≈ 6.0/2.0 + 2.0/3.0 = 3.0 + 0.67 ≈ 3.7 s each way. At a derated 1.5 m/s cruise: 4.0 + 0.5 = 4.5 s. Whether 0.8 s matters depends entirely on the cutting or process cycle being served — in a 95-second lathe cycle it is noise; between two press strokes it is the whole business case. Published catalog ceilings are higher than most cells use: Güdel's TMF-2 tables list 150 m/min (2.5 m/s) at 9,000 N and 90 m/min (1.5 m/s) at 25,000 N, with accelerations of 4 and 1.5 m/s² respectively; Rollon documents up to 3 m/s on steel units. Sustained maximum-speed duty also drives lubrication intervals and rack wear, so a rail sized "at catalog max all shift" is a maintenance plan, not a design.</p>
+
+<h2>Constraint 3: belt, rack and pinion, or ball screw drive</h2>
+<p>The drive type is the main architectural fork in a rail project, and it maps cleanly onto travel, mass, and duty.</p>
+
+<div class="table-wrap" aria-label="Seventh axis drive comparison"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Drive comparison compiled from manufacturer documentation (Rollon, Güdel, IPR) accessed August 25, 2026. Confirm limits for the specific size.</caption>
+<thead><tr><th>Drive type</th><th>Typical fit</th><th>Strengths</th><th>Limits</th></tr></thead>
+<tbody>
+<tr><td>Rack and pinion</td><td>Industrial arms, multi-meter travel, high duty</td><td>Joinable rack for long and extendable strokes; handles robot-scale masses; robust in dirty environments with covers</td><td>Lubrication and wear management; more noise; pinion preload adjustment</td></tr>
+<tr><td>Belt (open or sealed)</td><td>Cobot-class masses, shorter travel, cleaner floors</td><td>Quiet, low maintenance, clean; sealed versions for dirty environments (Rollon offers covered belt versions)</td><td>Tension maintenance and stretch under heavy duty; payload ceilings around cobot scale on published aluminum units</td></tr>
+<tr><td>Ball screw</td><td>Short, stiff, precision strokes</td><td>High stiffness and positioning accuracy; simple</td><td>Length limited by critical speed; not for multi-meter robot travel</td></tr>
+</tbody>
+</table>
+</div>
+<p>For 6-axis arms on factory floors, rack and pinion is the default for a reason: strokes extend by bolting on another machined rack segment, and Güdel's and Rollon's seventh-axis ranges are built around it. Belt drives make sense under 3 to 4 m with light carriages. Ball screws belong in short-stroke positioning, not robot transfer. Repeatability across all three is far better than robot repeatability — published figures run from ±0.02 mm (Güdel dealer listings for small TMF units) through ±0.04 mm (Rollon steel RTU) to ±0.1 mm (IPR catalog) — so the drive choice is rarely decided by accuracy; it is decided by travel, mass, duty, and environment.</p>
+
+<h2>Constraint 4: structure, foundation, and flatness</h2>
+<p>A rail is a machine frame, and it obeys the same rule as a robot base: stiffness first. The manufacturer installation drawing specifies foundation depth, anchor type and pattern, grouting, and the flatness and level tolerance of the mounting surface over the full travel — commonly fractions of a millimeter per meter. A rail bolted to a thin, unreinforced slab will print floor waves directly into the guideway, and the symptom appears later as carriage bearing wear and station-to-station position offsets.</p>
+<p>Plan four items with the civil work: a leveled strip footing or verified slab capacity for the carriage mass plus dynamic loads; shims and grout for flatness; anchor hardware per the drawing (not per the hardware store); and a repeatable mechanical reference — dowel pins or a machined datum edge — so the rail can be re-aligned after maintenance. Our <a href="robot-arm-base-mounting">robot arm base mounting guide</a> covers the load-path discipline in detail, and every one of its flatness, torque-record, and commissioning arguments applies to a rail, just multiplied by travel length.</p>
+<p>One structural point specific to tracks: joining. Long rails ship in sections with machined joints and joining kits. Section joints concentrate loads and are the first place to check when a rail develops vibration or repeatability drift at one station. Keep the joint torque record with the machine documentation.</p>
+
+<h2>Constraint 5: environment, covers, and lubrication</h2>
+<p>Seventh axes live on factory floors, and floors are full of what rails hate: abrasive dust, chips, weld spatter, coolant mist, and washdown water. The protection hierarchy is simple. Open rails suit clean, dry enclosures. Covered rails — telescopic way covers or a covered-belt design — suit machining and general industry; Rollon, for example, lists covered-belt versions of its aluminum transfer units specifically for dirty environments. Bellows-protected and purged designs suit the worst cases, and several manufacturers offer washdown-rated variants for food-grade floors.</p>
+<p>Lubrication is the recurring cost that buyers skip. Rack-and-pinion drives need periodic grease on the rack — automated lubrication units controlled by the cell PLC are a standard option and pay for themselves on any multi-shift cell. Guideway carriages have wipers and lube points; IPR and Rollon both document single-point lubrication distribution as a design feature. Write the lubrication and inspection tasks into the cell maintenance schedule from day one, alongside the robot's own intervals; a dry rack wears silently until station positions drift outside the robot's re-mastering compensation.</p>
+
+<h2>Constraint 6: controls — coordinated external axis or discrete positioning</h2>
+<p>There are two control architectures for a seventh axis, and they change both the hardware list and the way the cell is programmed.</p>
+<ul>
+<li><strong>Coordinated external axis.</strong> The rail servo is configured in the robot controller as an additional axis (joint 7). The controller coordinates rail and arm motion, can couple the rail to linear tracking moves, and shares the controller's safety functions and mastering. This is the standard for machine tending and welding. Budget for the external-axis hardware and software option on the robot controller, motor-to-cabinet cabling over the full travel, and per-station calibration.</li>
+<li><strong>Independently positioned axis.</strong> A servo drive — often in a PLC-controlled cabinet — moves the carriage between fixed stations and hands the robot a "in position" signal through a handshake. Simpler in some retrofits, but every motion program must treat rail moves as discrete steps, and the safety concept must cover a carriage that can move without the robot controller commanding it.</li>
+</ul>
+<p>Either way, three engineering items recur. Per-station base-frame calibration: the robot must re-establish its world frame at each station, typically with reference marks plus mastering, so TCP accuracy at station four does not inherit rail straightness error — our <a href="robot-arm-calibration">calibration guide</a> covers the underlying accuracy-versus-repeatability logic. Home and reference switches: the rail needs its own homing routine, reference switch, and over-travel handling. And safety: emergency stop must remove power from the rail drive as well as the robot; enabling devices, safe-stop functions, and access interlocks must consider the whole swept envelope, which is why the risk assessment belongs to the integrated cell under ANSI/RIA R15.06, CSA Z434, and ISO 10218-2 rather than to the rail catalogue. Signal wiring between rail drive, robot controller, and cell PLC follows the same fieldbus choices as any other industrial cell — our <a href="robot-arm-plc-integration">PLC integration guide</a> maps those options for North American panels.</p>
+
+<h2>The manufacturer landscape, from published data</h2>
+<p>Seventh axes are a specialist product category dominated by a handful of makers who publish capacity tables. The comparison below uses only figures published by the manufacturers themselves, accessed August 25, 2026; ranges summarize families, not one SKU.</p>
+
+<div class="table-wrap" aria-label="Published seventh-axis manufacturer data"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from Güdel, Rollon, and IPR product documentation, August 2026. Capacity depends on carriage count, riser, and stroke; always select from the current datasheet.</caption>
+<thead><tr><th>Maker / family</th><th>Body concept</th><th>Published capacity highlights</th><th>Notes from documentation</th></tr></thead>
+<tbody>
+<tr><td>Güdel TrackMotion Floor (TMF)</td><td>Steel beam floor track, rack and pinion</td><td>TMF-2 tables: 9,000 N payload at 150 m/min and 4 m/s²; 25,000 N at 90 m/min and 1.5 m/s²; larger TMF sizes scale to heavy robots</td><td>Carriage and drive data published per stroke class; servo sizing tables included</td></tr>
+<tr><td>Rollon RTU (aluminum)</td><td>Extruded aluminum transfer unit, belt or rack and pinion</td><td>Robots up to 1,500 kg; covered-belt versions for dirty environments; joinable, self-centering rack inserts for long strokes</td><td>Supplied with cable carrier, gearbox, automated rack lubrication as turnkey scope</td></tr>
+<tr><td>Rollon RTU steel / RTUn</td><td>Steel body, rack and pinion</td><td>Speeds up to 3 m/s; repeatability 0.040 mm (± 0.020 mm)</td><td>Washdown, cleanroom, risers, multi-saddle options documented</td></tr>
+<tr><td>IPR seventh axes</td><td>Aluminum, steel, and concrete-infill ranges</td><td>Loads 2,000 N up to 150,000 N; tilting moments to 355,000 N·m; speeds up to 3 m/s; accelerations up to 4 m/s²; repeatability ±0.1 mm</td><td>2024 catalog PDF brackets classes by load and moment; walk-on versions available</td></tr>
+</tbody>
+</table>
+</div>
+<p>Read this table as orientation, not selection. Within one family the permitted robot mass depends on speed, acceleration, carriage count, riser height, and posture — exactly the moment calculation from Constraint 1. Robot manufacturers also bless specific track pairings for their arms, and integrators assemble the rest; a machine-tending cell combining one arm, two lathes, and a rail is exactly the architecture our <a href="robot-machine-tending">machine tending guide</a> analyzes from the timing side.</p>
+
+<h2>What a rail quotation must contain</h2>
+<p>Because tracks are configured to travel, load, and robot model, pricing is quote-dependent by nature; a single "typical price" would be false precision, so this section defines the line items instead. <strong>Quote required</strong> — and expect the quotation to show:</p>
+<ul>
+<li><strong>Mechanics:</strong> rail sections to the ordered stroke, joining kits, carriage with rollers or guideway blocks, riser or pedestal to your robot's bolt pattern, hard stops and dampers.</li>
+<li><strong>Drive train:</strong> servo motor, gearbox, pinion, and rack (or belt set), sized for your duty, with motor cable lengths over the full travel.</li>
+<li><strong>Measuring and switching:</strong> position feedback (encoder scale or motor encoder with reference and limit switches) and over-travel handling.</li>
+<li><strong>Energy chain and services:</strong> cable carrier, connectors, hoses, and the robot's own service loops so the dress pack survives years of travel — see our <a href="cable-management-robot">cable management guide</a> for the bend-radius and fill rules that apply.</li>
+<li><strong>Protection:</strong> covers or bellows, wipers, and any purging or washdown option.</li>
+<li><strong>Lubrication:</strong> manual or automatic rack and carriage lubrication unit, with PLC control where specified.</li>
+<li><strong>Controls:</strong> external-axis drive cabinet, robot-controller option, cabling, per-station calibration, and the integrator's engineering to close the handshake and safety concept.</li>
+<li><strong>Delivery, installation, commissioning:</strong> section delivery schedule, foundation interface drawing, alignment, runoff criteria, spare parts list, and warranty terms as defined by the supplier.</li>
+</ul>
+<p>Published industrial pricing for complete tracks is scarce by design; the only honest numbers are the components' list prices where a maker publishes them and the installed-cell ranges that integrators quote for whole projects. Treat any forum price as anecdote. For Canadian buyers, rail sections ship as oversize freight with cross-border implications — another reason the quotation, not a catalog price, is the real unit of information here.</p>
+
+<h2>Installation and commissioning checkpoints</h2>
+<p>A rail project is won or lost in alignment and calibration. The checkpoints below catch the failures that surface later as drift, vibration, or guarding gaps.</p>
+<ul>
+<li><strong>Foundation acceptance:</strong> verify slab or footing, flatness over the full strip, and anchor layout against the manufacturer drawing before any rail section is set.</li>
+<li><strong>Section alignment:</strong> straightness over total travel, joint gaps and torque, and level recorded at defined intervals — with a written record, not a verbal OK.</li>
+<li><strong>Drive commissioning:</strong> servo tuning with the real robot mass aboard, acceleration limits set to the design value from Constraint 2, and over-travel tested gently.</li>
+<li><strong>Switch and homing proof:</strong> reference switch repeatability, hard-stop behavior, and home routine after power cycle.</li>
+<li><strong>Per-station calibration:</strong> master the robot at each station, record TCP check results, and verify that station-to-station error stays inside the process tolerance.</li>
+<li><strong>Dress-pack endurance:</strong> run full-travel cycles and inspect the energy chain, service loops, and connectors for rubbing — the highest-frequency maintenance item on any track.</li>
+<li><strong>Safety validation:</strong> e-stop verified to stop rail and arm; guarding or scanner zones proven along the entire travel, including both end positions; documented in the cell risk assessment.</li>
+</ul>
+
+<div class="pullquote">
+<blockquote>Typical reader question: “Can I put a cobot on a belt-driven track and skip the foundation work?”</blockquote>
+<cite>Answered from published capacity data, not from an installation we performed.</cite>
+</div>
+<p>Often yes for the rail itself — cobot-scale masses (an arm under 50 kg) sit comfortably inside published belt-drive transfer-unit ranges, and some suppliers sell exactly this package for machine tending. But "lighter rail" does not mean "no foundation logic." The track still needs a flat, rigid, anchored mounting surface over its full length; a belt track on an uneven slab loses its published ±0.1 mm-class repeatability in the first month. What you usually skip with a cobot track is poured concrete — not the flatness survey. Run the Constraint 1 moment check with the cobot's mass and riser; the numbers are smaller but the method is identical.</p>
+
+<h2>Sources and methodology</h2>
+<p>Capacity, speed, drive, and protection statements are drawn from manufacturer documentation accessed August 25, 2026: Güdel's TrackMotion Floor (TMF) product pages including the published TMF-2 stroke and drive tables; Rollon's RTU aluminum and steel robot transfer unit pages; and IPR's 2024 seventh-axis product information PDF. Standards context references ANSI/RIA R15.06, CSA Z434, and ISO 10218-2 as linked. The moment and move-time calculations are original worked examples with assumptions stated inline; they are planning arithmetic, not measurements, and Robotics Engineering Lab has not installed or tested any track. Foundation and commissioning practice synthesizes the installation requirements stated in the linked manufacturer documentation and general machine-installation engineering practice.</p>
+
+<div class="faq-item"><h4>What does a seventh axis do for a robot arm?</h4><p>A seventh axis is a motorized linear track that carries the whole robot between workstations, multiplying the work envelope along one direction. One arm can then serve several machines, presses, or weld stations in sequence, or reach along parts longer than its own reach. The rail is driven by a servo axis, either coordinated inside the robot controller as an extra joint or positioned separately by a PLC with a handshake.</p></div>
+<div class="faq-item"><h4>How do I size a robot linear rail?</h4><p>Size from four numbers: the vertical load (robot, riser, and payload weights), the tilting moments about the travel axis and across it with the arm fully extended, the travel length between hard stops, and the duty profile of speed and acceleration. Compare the calculated loads to the manufacturer capacity tables with a safety margin, typically at least two on moments, because the arm posture changes constantly during real cycles.</p></div>
+<div class="faq-item"><h4>How fast can a robot travel on a seventh axis?</h4><p>Published manufacturer data for floor tracks commonly reaches about 2 to 3 meters per second, with accelerations up to about 4 meters per second squared on smaller sizes. Güdel's TMF-2 tables list 150 meters per minute (2.5 m/s) at 9,000 N payload and 90 meters per minute at 25,000 N, and Rollon documents speeds up to 3 m/s for steel transfer units. Real cells usually run slower than the catalog maximum to control carriage dynamics and wear.</p></div>
+<div class="faq-item"><h4>Rack and pinion or belt drive for a robot rail?</h4><p>Rack and pinion suits long, heavy, high-duty tracks: strokes are extendable by joining rack segments, and it carries robot-scale masses. Belt drives are quieter, cleaner, and cheaper but stretch under high duty and are usually limited to lighter cobot-class tracks. Ball screws fit short, very stiff, high-precision strokes but not multi-meter robot travel, because screw length limits speed and critical speed.</p></div>
+<div class="faq-item"><h4>Does a robot on a rail need a special foundation?</h4><p>Usually yes. A floor track fastens to a leveled, grouted, and anchored foundation strip sized for the carriage mass plus dynamic loads, following the rail manufacturer's installation drawing for flatness, anchor type, and torque. Thin slabs often need a new footing. The preparation follows the same load-path discipline as robot base mounting: reaction loads must reach soil or structure without bending the rail.</p></div>
+<div class="faq-item"><h4>How much does a seventh axis cost?</h4><p>Robot tracks are configured products priced by travel, capacity, protection, and controls scope, so treat any single number as unreliable: quote required. A quotation should itemize rail sections and joining kits, carriage and riser, servo motor, gearbox, and rack, the measuring system, energy chain, covers, lubrication unit, external-axis integration in the robot controller, installation, and commissioning. Budget the controls and integration line explicitly, because it is a large share of the installed cost.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. This page is a sourced engineering explainer; it is not a claim of hands-on testing unless explicitly stated. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 25, 2026 &middot; last reviewed August 25, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>

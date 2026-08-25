@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Machine Tending Robots: CNC Cell Design &amp; Cost Guide</title>
+<meta name="description" content="Machine tending robots: size a CNC loading cell, choose a cobot or a fenced arm, plan part flow and signals, and budget the integration." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-machine-tending" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Machine Tending Robots: CNC Cell Design &amp; Cost Guide" />
+<meta property="og:description" content="Machine tending robots: size a CNC loading cell, choose a cobot or a fenced arm, plan part flow and signals, and budget the integration." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-machine-tending.jpg" />
+<meta property="og:image:alt" content="Editorial diagram of a robotic CNC machine-tending cell with robot, lathe, staging and safeguarded zones" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-25" />
+<meta property="article:modified_time" content="2026-08-25" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-machine-tending" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Machine Tending Robots: CNC Cell Design &amp; Cost Guide" />
+<meta name="twitter:description" content="Machine tending robots: size a CNC loading cell, choose a cobot or a fenced arm, plan part flow and signals, and budget the integration." />
+<meta name="twitter:image:alt" content="Editorial diagram of a robotic CNC machine-tending cell layout" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-machine-tending.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-machine-tending#article",
+  "headline": "Machine Tending Robots: CNC Cell Design & Cost Guide",
+  "description": "Machine tending robots: size a CNC loading cell, choose a cobot or a fenced arm, plan part flow and signals, and budget the integration.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-25",
+  "dateModified": "2026-08-25",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-machine-tending"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-machine-tending.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-machine-tending",
+  "inLanguage": "en-US",
+  "wordCount": 3806,
+  "articleSection": "Applications & Integration",
+  "keywords": "machine tending robots, CNC machine tending, robot lathe tending, machine tending cobot, lights-out machining, robot machine cell"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What size robot do I need for machine tending?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Size the robot from the total wrist load, not just part weight. Add the part, the gripper, any dual-gripper bracket, and the reach needed to cross the machine door and reach the chuck or fixture. A common single-gripper lathe cell with parts under 5 kg uses a 7 to 20 kg class arm, while longer reaches into horizontal machining centers push the selection toward 20 to 50 kg class arms. Verify the wrist moment and inertia limits against the manufacturer payload diagram before buying."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a collaborative robot tend a CNC machine without fencing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sometimes, but only after a documented risk assessment. A cobot can remove the operator from the machine door, yet the hazard is not only the arm: the machine tool, sharp chips, coolant mist, ejected parts, and hot workpieces remain. Many cobot tending cells still need area scanning, interlocked access, or partial guarding. Collaborative operation does not remove the need to comply with ANSI/RIA R15.06 in the USA or CSA Z434 in Canada."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is machine tending viable in a low-mix job shop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, when the cell is designed for changeover rather than for one part number. The practical requirements are a gripper that spans the part family or quick-change fingers, re-teachable staging positions, and a part program interface that an operator can update without a programmer. Cells that need a new fixture and new code for every job usually stall after the first few parts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What signals must pass between the robot and the machine tool?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At minimum: cycle complete, door open and closed, part or chuck clamped confirmation, cycle start request, robot clear of the machine, and a fault or e-stop state shared both ways. Most integrators implement this as a discrete I/O handshake or as fieldbus messages over PROFINET or EtherNet/IP, with safety-rated signals kept on a safety controller rather than the standard PLC program."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does a machine tending cell cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Published 2026 integrator estimates place a basic single-machine cell around 150,000 to 250,000 US dollars, and multi-machine cells with a linear rail and gauging around 300,000 to 500,000 US dollars, while cobot-based packages have been advertised from roughly 60,000 to 150,000 US dollars. These are reference ranges from public sources, not quotations. A firm price depends on part weight, machine interfaces, staging hardware, guarding, and commissioning scope, so request itemized quotes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when the machine faults during unattended running?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The cell should fail to a defined safe state: the robot stops clear of the machine, the cycle start is inhibited, and the cell reports an alarm to a phone, monitoring system, or MES. The handshake design must cover every abnormal exit, including a door that only half opens, a part stuck in the chuck, and a machine stop mid-cycle. Lights-out reliability comes from handling these faults explicitly, not from hoping they do not occur."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Machine Tending Robots: CNC Cell Design & Cost Guide",
+      "item": "https://roboticsengineeringlab.com/articles/robot-machine-tending"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-machine-tending.jpg" alt="Editorial diagram of a robotic CNC machine-tending cell with a six-axis robot, lathe, infeed staging and outfeed conveyor" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Applications &amp; Integration — Updated August 25, 2026</div>
+<h1>Machine Tending Robots: Designing a CNC Loading Cell</h1><p class="hero-sub">A specification-based engineering guide to robotic machine tending: sizing the arm, choosing between a cobot and a fenced industrial robot, planning part presentation and signals, and reading an integration quotation.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-machine-tending.jpg" alt="Editorial diagram of a machine-tending cell: robot on a pedestal between a CNC lathe, infeed drawers and an outfeed conveyor inside a safeguarded zone" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration. Conceptual cell layout, not a specific installed system. Verify machine interfaces with your integrator and machine-tool builder.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Editorial disclosure:</strong> Robotics Engineering Lab does not own or operate a machine-tending cell. This is a specification-based application guide compiled from manufacturer documentation, published integrator material, and public standards for readers in the USA and Canada. Cost figures are labelled published reference ranges, not quotations and not inventory.</p>
+</div>
+
+<h2>What a machine tending cell actually has to do</h2>
+<p>Machine tending is the most common first automation project in North American machine shops, and it is also the one most often underspecified. The robot's job looks trivial — put a blank in, take a finished part out — but the cell is really a coordination problem between three machines: the robot, the machine tool, and the part-presentation hardware. A cell that only works when everything is perfect will not run unattended.</p>
+<p>The cycle the robot must execute is longer than most buyers estimate. In a typical lathe cell it includes: confirming the machine has finished, waiting for the spindle to stop, opening the automatic door, reaching across the doorway, opening the chuck, extracting the finished part, clearing chips and coolant from the jaws, inserting the next blank, closing and verifying the chuck, retreating behind the door plane, closing the door, and requesting cycle start. Each of those steps can fail independently, and a cell designed only for the happy path stops the first time a chip sticks in a jaw.</p>
+<p><a href="https://www.fanucamerica.com/applications/machine-tending" target="_blank" rel="noopener noreferrer">FANUC America's machine-tending application pages</a> describe the pattern that defines the application: the robot exists to raise spindle uptime and free operators for higher-value work, and the same arm can service secondary tasks such as deburring, gauging, cleaning, and inspection while the machine cuts. Universal Robots makes the same point in its <a href="https://www.universal-robots.com/applications/machine-tending/" target="_blank" rel="noopener noreferrer">machine tending application documentation</a>, noting that tending is one of the most common cobot applications because the payload and reach requirements are modest and the cycle is repetitive. Those two manufacturer positions frame the central decision in this article: collaborative arm or fenced industrial arm.</p>
+<p>This guide is organized around that decision and the constraints that drive it. It is a specification-based comparison: every number is either a worked calculation with stated assumptions or a published figure with a source and date.</p>
+
+<h2>The interfaces that size the robot before payload does</h2>
+<p>Buyers usually start with part weight, and part weight matters, but three interface constraints usually dominate the arm selection in real cells.</p>
+<ul>
+<li><strong>Reach across the door plane.</strong> The arm must cross the machine doorway and reach the back of the chuck or the far vise. On a lathe with a 250 mm chuck, the deepest grasp point can sit 700 to 900 mm (28 to 35 in) behind the door face. Short arms solve this by reaching through the door at an angle, which costs cycle time and wrist capacity.</li>
+<li><strong>Wrist load, not part mass.</strong> The wrist carries the gripper, a bracket, often a second offset gripper for raw and finished parts, and sometimes an air-blast nozzle. A 2 kg part can easily ride on a 12 kg tool. Size the arm from the combined payload and its center of gravity using the manufacturer's payload diagram, and check wrist moment and inertia limits the same way our <a href="robot-end-effector-selection">end effector selection guide</a> explains for the ISO 9409-1 flange.</li>
+<li><strong>Speed and duty.</strong> A tending arm earns its keep during short windows: the unload-load exchange while the spindle waits. That means aggressive accelerations, thousands of orient changes per shift, and a duty profile closer to pick-and-place than to welding. Verify that the repeatability and path style you need (joint moves with blending, not linear Cartesian paths through the door) are natural for the arm.</li>
+</ul>
+<p>A practical specification habit: write down the two extreme grasp points — deepest chuck grasp and highest staging-drawer grasp — plus the door plane, and check all three against the candidate arm's work envelope at the required wrist orientation. An arm that can reach the chuck only at full extension is a singularity-prone, slow cell. The same envelope reasoning that drives our payload calculator applies here, but with the door geometry added.</p>
+
+<h2>Cobot or fenced industrial arm: a decision matrix</h2>
+<p>The cobot-versus-industrial-arm question is not about which technology is better. It is about part weight, floor space, changeover frequency, and how much of the risk assessment the collaborative mode can actually carry. The matrix below is the core of this guide. It reflects published manufacturer capability ranges and the integration consequences of each choice.</p>
+
+<div class="table-wrap" aria-label="Cobot versus fenced industrial arm decision matrix"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Decision matrix compiled for this article from manufacturer documentation. Values are typical class ranges, not any single product. Verify against current datasheets.</caption>
+<thead><tr><th>Decision factor</th><th>Collaborative arm (UR, FANUC CRX class)</th><th>Fenced industrial arm (LR Mate, IRB 1100/2600 class)</th><th>What tips the choice</th></tr></thead>
+<tbody>
+<tr><td>Part plus gripper mass</td><td>Typically up to 20–30 kg payload class</td><td>7–50 kg and beyond in the same floor space</td><td>Parts above the cobot class, or heavy dual grippers, decide immediately</td></tr>
+<tr><td>Cycle time per exchange</td><td>Slower joint speeds; speed- and force-limited near people</td><td>Faster moves; full speed permitted inside guarding</td><td>Target exchange windows under ~20 s usually need an industrial arm</td></tr>
+<tr><td>Changeover frequency</td><td>Designed for frequent reteach by operators</td><td>Changeover is possible but more often engineered per family</td><td>Job shops with daily part changes favor cobots</td></tr>
+<tr><td>Floor space and guarding</td><td>Often no full fence; area scanner or no guarding after risk assessment</td><td>Perimeter fence or scanner-defined envelope required</td><td>Small shops with no space for a fence lean cobot</td></tr>
+<tr><td>Coolant and chip exposure</td><td>Needs protective planning; see the maintenance section below</td><td>Standard IP67 wrists and dress protection available</td><td>Heavy coolant mist argues for industrial arms or hardened cobot setups</td></tr>
+<tr><td>Reach into the machine</td><td>Typically 500–1,300 mm class reaches</td><td>Wider reach catalog; riser and rail options</td><td>Deep chucks and multi-machine layouts favor industrial arms</td></tr>
+<tr><td>Integration effort</td><td>Low for one machine; kit ecosystem</td><td>Higher; integrator project with guarding and safety design</td><td>Internal capability decides as much as the hardware</td></tr>
+<tr><td>Multi-machine expansion</td><td>Possible but reach and speed limited</td><td>Industrial arms pair naturally with a <a href="robot-arm-linear-rail">linear seventh axis</a></td><td>Three or more machines usually move to a rail-mounted industrial arm</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Read the matrix with one warning: the collaborative column is not automatically the safe column. A cobot tending an open machine inherits the machine's hazards — chips, coolant, a closing door, a hot finished part — and the risk assessment must treat the combined cell, not the arm alone. Conversely, a fenced industrial cell can be the lower-risk option precisely because access is controlled. Safety follows the risk assessment, not the marketing category, a point our <a href="robot-arm-safety-usa-canada">USA and Canada robot safety standards guide</a> covers in detail.</p>
+
+<h2>Part presentation: drawers, conveyors, trays, and bins</h2>
+<p>The second matrix in a tending project is part presentation — how raw blanks arrive and finished parts leave. This choice is driven by part mix and volume more than by the robot.</p>
+<ul>
+<li><strong>Staging drawers and trays.</strong> The operator loads a matrix of blanks into a drawer; the robot picks positions in a taught grid. This is the default for low-mix job shops because the hardware is cheap and re-teaching a grid is fast. The gripper must tolerate small position variation, or the tray needs nests.</li>
+<li><strong>Infeed and outfeed conveyors.</strong> Better for higher volumes of one part family. Conveyors decouple the operator from the cycle but add sensors, and the cell needs a strategy for parts that arrive rotated or overlapping.</li>
+<li><strong>Vision bin picking.</strong> Removes the need for organized presentation, at the cost of a 3D vision system, more integration effort, and cycle-time penalties. It suits families of durable castings and forgings more than finished-machined surfaces that must not be scratched.</li>
+<li><strong>Palletized finished goods.</strong> When parts are boxed or palletized after machining, the tending cell starts to resemble a palletizing cell, and stacking logic, layer patterns, and pallet change become part of the same project.</li>
+</ul>
+<p>The engineering rule that survives every project: presentation determines uptime. A robot that tends the machine in 25 seconds but waits 90 seconds for an operator to reorganize a drawer has gained nothing. Count operator touches per shift as honestly as robot cycles.</p>
+
+<h2>Machine-side integration: doors, chucks, clamps, and signals</h2>
+<p>The machine tool side of the cell is where integration effort hides. Four items need explicit engineering.</p>
+<p><strong>Automatic doors.</strong> A servo or pneumatic door controlled by the handshake removes the robot from door duty and cuts several seconds per cycle. Retrospective door automation kits exist for common machine models, but confirm the door controller accepts remote open/close and reports a closed state, not just a commanded state.</p>
+<p><strong>Chuck and fixture state.</strong> The cell must confirm the chuck is open before the gripper enters and clamped before the door closes. Air-pressure switches on chuck lines are the minimum; some machines expose chuck status on the fieldbus interface. Never infer clamp state from the cycle-start signal.</p>
+<p><strong>Chip and coolant management.</strong> Chips pack chuck jaws and fixture seats. Most cells add an air blast or coolant rinse at the load position; some add a part-presence check. Budget the plumbing and the extra seconds.</p>
+<p><strong>The handshake itself.</strong> The signal set is the contract between robot and machine. The table below is the minimum set our readers should expect to see on an integration drawing.</p>
+
+<div class="table-wrap" aria-label="Robot to machine tool handshake signal set"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Minimum practical handshake for a tending cell. Safety-rated signals belong on the safety controller, not the standard PLC program.</caption>
+<thead><tr><th>Signal</th><th>Direction</th><th>Meaning and failure handling</th></tr></thead>
+<tbody>
+<tr><td>Cycle complete</td><td>Machine → robot</td><td>Spindle stopped, door may open; must be a real state, not a relay guess</td></tr>
+<tr><td>Door open / closed</td><td>Machine ↔ robot</td><td>Two discrete states; a half-open door must read as not-closed</td></tr>
+<tr><td>Chuck or fixture open / clamped</td><td>Machine → robot</td><td>Pressure-switch or fieldbus confirmed; robot inhibited when ambiguous</td></tr>
+<tr><td>Cycle start request</td><td>Robot → machine</td><td>Latched request with robot-clear precondition</td></tr>
+<tr><td>Robot clear of machine</td><td>Robot → machine</td><td>Maintained signal dropped by position or speed zone monitoring</td></tr>
+<tr><td>Fault / e-stop shared state</td><td>Both ways</td><td>Any e-stop stops both; the cell restarts from a defined state, not mid-motion</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Whether those signals are wired discretely or carried over PROFINET or EtherNet/IP is an architecture choice our <a href="robot-arm-plc-integration">PLC integration guide</a> treats in depth. The rule that does not change: standard PLC signals sequence the cell; safety functions — door interlocks, e-stop, mode selection — run through safety-rated hardware and software appropriate to the risk assessment.</p>
+
+<h2>Example calculation: can one robot tend two machines?</h2>
+<div class="pullquote">
+<blockquote>Example calculation — illustrative scenario, not a report of a Robotics Engineering Lab installation.</blockquote>
+<cite>Assumptions stated inline; verify timing against your machines before committing hardware.</cite>
+</div>
+<p>Consider a small turning cell: two CNC lathes, 2.4 m (7.9 ft) apart, each cutting a family of 2.1 kg steel blanks on a 95-second cutting cycle. The candidate robot is a 20 kg-class industrial arm. Question: can one arm keep both spindles loaded, and what spindle utilization results?</p>
+<p>Assumptions (all stated, all adjustable): door open/close 4 s each way; robot unload move to handoff 8 s; chuck clean with air blast 3 s; load blank 8 s; robot retreat behind door plane 4 s; robot travel between machines 4 s average; gripper carries dual fingers so raw and finished parts move in one exchange.</p>
+<p>Tending time per machine visit: 4 (door) + 8 (unload) + 3 (clean) + 8 (load) + 4 (retreat) + 4 (door) = 31 s. Two machines per cutting cycle: 2 × 31 s + 4 s transfer = 66 s of robot work per 95-second cut window. The arm has 29 s of slack — enough for a gauging stop or staging pickup, not enough for a second process. The timing closes.</p>
+<p>Spindle utilization per machine: the spindle waits only during its own 31-second tending window, so utilization ≈ 95 / (95 + 31) = 77.9%. With one machine the same cell yields the same 77.9% and strands the robot for 95 s per part; the second machine nearly doubles output for the price of a second door interface and 4 s of transfer time. This arithmetic — not vendor claims — is what should enter an ROI model such as the one in our <a href="robot-arm-roi-calculator">robot arm ROI calculator</a>. If the cutting cycle were 45 s instead of 95 s, the same robot could no longer serve two machines (66 s of work does not fit a 45 s window), and the honest options become a faster exchange, a second robot, or one machine only.</p>
+
+<h2>Coolant, chips, and the environment nobody budgets for</h2>
+<p>Machine-tending robots live in coolant mist, and coolant is the quiet reliability problem of the application. <a href="https://www.universal-robots.com/articles/ur/robot-care-maintenance/recommendations-for-cnc-tending-applications/" target="_blank" rel="noopener noreferrer">Universal Robots publishes maintenance recommendations for CNC tending</a> that state the issue directly: long-term exposure to cutting fluid can reduce cobot performance, and UR recommends path planning that limits exposure plus chemical-resistant joint lid upgrades for continuously exposed machines. FANUC similarly offers washproof variants of its small arms for wet machining environments.</p>
+<p>Three practices follow for any arm class. First, plan paths that enter and leave the machine envelope quickly rather than dwelling in the mist zone; every second of dwell is exposure. Second, treat dress packs, connectors, and gripper wiring as consumables — coolant wicks into cable strain reliefs long before joints fail. Third, add scheduled wiping and seal inspection to the preventive maintenance plan; our 6-axis maintenance schedule gives the inspection framework, and tending cells typically tighten the interval rather than relax it.</p>
+<p>Chips are the second environmental load. Stringy chips wrap around chuck jaws and gripper fingers; cast-iron dust contaminates linear guides if the cell later adds a rail. Specify wipers, covers, and an air-blast as part of the cell, not as a retrofit after the first jam.</p>
+
+<h2>Safety responsibilities at the machine boundary</h2>
+<p>A tending cell is an integrated robot system, and in both the USA and Canada that integration — not the arm alone — is what standards regulate. In the USA, <a href="https://www.ansi.org/standards/and_more/standards/ria/" target="_blank" rel="noopener noreferrer">ANSI/RIA R15.06</a> adopts the international requirements of <a href="https://www.iso.org/standard/73927" target="_blank" rel="noopener noreferrer">ISO 10218-2</a> for the integration of the robot into the cell; in Canada the applicable document is <a href="https://www.csagroup.org/article/standards-and-codes/csa-z434-industrial-robots-and-robot-systems/" target="_blank" rel="noopener noreferrer">CSA Z434</a>. The machine tool itself is guarded under machine-tool safety practice in the ANSI B11 series and occupational rules; <a href="https://www.osha.gov/robotics" target="_blank" rel="noopener noreferrer">OSHA's robotics technical manual</a> is the practical starting point for US employers, with provincial regulators playing the equivalent role in Canada.</p>
+<p>Four boundaries recur in tending risk assessments. Access to the machine envelope: operators must be able to clear a jammed part, which usually means an interlocked gate or scanner zone that stops the cell safely rather than a locked door that invites defeat. Teach and manual modes: door-open jogging for setup must be speed-limited and controlled. Restart after fault: the cell must resume from a defined state with the machine and robot agreeing on where the part is. And servicing: lockout/tagout applies to machine, robot, and any powered staging hardware before anyone reaches into either envelope. These are educational summaries, not a risk assessment; use a qualified integrator or controls engineer and the current editions of the standards for any real cell.</p>
+
+<div class="pullquote">
+<blockquote>Typical reader question: “My lathe door is manual. Do I have to automate the door before I can use a robot?”</blockquote>
+<cite>Answered from integration practice, not from one project.</cite>
+</div>
+<p>Not necessarily, but the robot must be able to open it. Two workable patterns exist. In the first, the robot itself operates the manual door with a dedicated door tool or hook grasp — cheap, but it costs 6 to 10 seconds per cycle and consumes wrist capacity. In the second, a door automation kit converts the door to servo or pneumatic operation under handshake control — faster and cleaner, at the cost of a machine modification that should be approved by the machine-tool builder. What does not work long-term is a cell whose door state is inferred from a timer.</p>
+
+<h2>What a machine tending quotation should contain</h2>
+<p>Machine tending is a configured system, so pricing is quote-dependent by nature. Rather than publishing a fake street price, this section defines what a defensible quotation must itemize, then lists the published reference ranges we could verify.</p>
+<ul>
+<li><strong>Robot package:</strong> arm, controller, teach pendant, cable length, and the payload/reach class you specified.</li>
+<li><strong>End of arm tooling:</strong> gripper, fingers or fixtures across the stated part family, part-presence sensing, and quick-change options.</li>
+<li><strong>Machine interfaces:</strong> door automation, chuck sensing, handshake I/O or fieldbus modules at each machine.</li>
+<li><strong>Part presentation:</strong> drawers, trays, conveyors, or vision hardware and its integration.</li>
+<li><strong>Safeguarding:</strong> fence or scanner hardware, safety controller, interlocks, and the verification activities for them.</li>
+<li><strong>Controls and software:</strong> PLC or safety PLC program, robot program with fault handling, HMI, and any machine-side programming by the machine-tool builder.</li>
+<li><strong>Engineering, commissioning, and runoff:</strong> hours stated explicitly, with acceptance criteria — cycle time, uptime over a trial run, fault recovery demonstrated.</li>
+<li><strong>Training, spares, and warranty terms:</strong> as defined by the integrator's contract.</li>
+</ul>
+<p>Published reference ranges, with sources and dates: a US integrator's 2026 application page places a typical single-machine CNC tending cell with a FANUC robot, conveyor staging, and basic gauging at approximately 150,000 to 250,000 USD, and multi-machine cells with rail systems and advanced gauging at 300,000 to 500,000 USD, with payback quoted at 8 to 16 months on two-shift operations. Cobot-oriented suppliers have published 2026 guides advertising complete lights-out setups in the 60,000 to 150,000 USD range. Treat all of these as <em>Indicative 2026 reference ranges from public sources, not quotations</em> — they vary with part weight, machine count, guarding, and labor market, and none of them is Robotics Engineering Lab inventory. For Canadian projects, budget the same ranges in USD plus import, duty, and installer travel, and request CAD pricing from integrators directly; we do not publish a CAD conversion because exchange rates move.</p>
+
+<h2>Commissioning checkpoints before the first unattended cycle</h2>
+<p>Acceptance is where tending projects are won. The checkpoints below turn “it ran a demo” into “it runs a shift.”</p>
+<ul>
+<li><strong>Handshake proof, signal by signal:</strong> force each abnormal state (half-open door, unclamped chuck, dropped part-present sensor) and confirm the cell stops in the designed safe state, every time.</li>
+<li><strong>Timing closure:</strong> measure the real tending window against the calculation. If the measured exchange exceeds the planned window by more than about 10%, revisit door speed, blending, and approach poses before adding machines.</li>
+<li><strong>Changeover rehearsal:</strong> change to a second part from the stated family and measure changeover time with the actual operator, not the integrator's engineer.</li>
+<li><strong>Failure-mode walk-through:</strong> intentionally jam a blank, stick a chip, and fault the machine mid-cycle; the cell should recover or fail safely and report, not collide.</li>
+<li><strong>Endurance runoff:</strong> a defined shift-length or longer run with uptime logged against the acceptance criterion agreed in the quotation.</li>
+<li><strong>Safety verification and documentation:</strong> the risk assessment, validation report, and operating instructions delivered and reviewed with the operators who will run it — the human-factors layer our operator training guide develops.</li>
+</ul>
+
+<h2>Sources and methodology</h2>
+<p>Application capabilities, cobot maintenance guidance, and cell-configuration patterns are drawn from manufacturer and integrator documentation accessed August 25, 2026: FANUC America's machine-tending application pages, Universal Robots' machine tending application page and CNC tending maintenance recommendations, and published 2026 integrator cost pages (AMD Machines; Graba Robot) used only for clearly labelled reference ranges. Safety boundaries summarize ANSI/RIA R15.06, CSA Z434, ISO 10218-2, and OSHA's robotics technical manual as linked above; consult the current editions — the 2025 revision cycle of the ISO 10218 series is rolling into national adoptions — and a qualified integrator for any real deployment. The two-machine timing example is an original illustrative calculation with all assumptions stated in the text; it is not a measurement from an installed cell. Robotics Engineering Lab has not purchased, installed, or tested any of the equipment named in this article.</p>
+
+<div class="faq-item"><h4>What size robot do I need for machine tending?</h4><p>Size the robot from the total wrist load, not just part weight. Add the part, the gripper, any dual-gripper bracket, and the reach needed to cross the machine door and reach the chuck or fixture. A common single-gripper lathe cell with parts under 5 kg uses a 7 to 20 kg class arm, while longer reaches into horizontal machining centers push the selection toward 20 to 50 kg class arms. Verify the wrist moment and inertia limits against the manufacturer payload diagram before buying.</p></div>
+<div class="faq-item"><h4>Can a collaborative robot tend a CNC machine without fencing?</h4><p>Sometimes, but only after a documented risk assessment. A cobot can remove the operator from the machine door, yet the hazard is not only the arm: the machine tool, sharp chips, coolant mist, ejected parts, and hot workpieces remain. Many cobot tending cells still need area scanning, interlocked access, or partial guarding. Collaborative operation does not remove the need to comply with ANSI/RIA R15.06 in the USA or CSA Z434 in Canada.</p></div>
+<div class="faq-item"><h4>Is machine tending viable in a low-mix job shop?</h4><p>Yes, when the cell is designed for changeover rather than for one part number. The practical requirements are a gripper that spans the part family or quick-change fingers, re-teachable staging positions, and a part program interface that an operator can update without a programmer. Cells that need a new fixture and new code for every job usually stall after the first few parts.</p></div>
+<div class="faq-item"><h4>What signals must pass between the robot and the machine tool?</h4><p>At minimum: cycle complete, door open and closed, part or chuck clamped confirmation, cycle start request, robot clear of the machine, and a fault or e-stop state shared both ways. Most integrators implement this as a discrete I/O handshake or as fieldbus messages over PROFINET or EtherNet/IP, with safety-rated signals kept on a safety controller rather than the standard PLC program.</p></div>
+<div class="faq-item"><h4>How much does a machine tending cell cost?</h4><p>Published 2026 integrator estimates place a basic single-machine cell around 150,000 to 250,000 US dollars, and multi-machine cells with a linear rail and gauging around 300,000 to 500,000 US dollars, while cobot-based packages have been advertised from roughly 60,000 to 150,000 US dollars. These are reference ranges from public sources, not quotations. A firm price depends on part weight, machine interfaces, staging hardware, guarding, and commissioning scope, so request itemized quotes.</p></div>
+<div class="faq-item"><h4>What happens when the machine faults during unattended running?</h4><p>The cell should fail to a defined safe state: the robot stops clear of the machine, the cycle start is inhibited, and the cell reports an alarm to a phone, monitoring system, or MES. The handshake design must cover every abnormal exit, including a door that only half opens, a part stuck in the chuck, and a machine stop mid-cycle. Lights-out reliability comes from handling these faults explicitly, not from hoping they do not occur.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. This page is a sourced engineering explainer; it is not a claim of hands-on testing unless explicitly stated. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 25, 2026 &middot; last reviewed August 25, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
