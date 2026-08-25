@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>micro-ROS on ESP32: Robot Arm Node Tutorial</title>
+<meta name="description" content="micro-ROS on ESP32: build a ROS 2 node on the microcontroller, run the XRCE-DDS agent, wire bus servos, and commission feedback checkpoints." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="micro-ROS on ESP32: Robot Arm Node Tutorial" />
+<meta property="og:description" content="micro-ROS on ESP32: build a ROS 2 node on the microcontroller, run the XRCE-DDS agent, wire bus servos, and commission feedback checkpoints." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-microros-esp32.jpg" />
+<meta property="og:image:alt" content="Editorial diagram of the micro-ROS stack: ESP32 client over serial or Wi-Fi to an XRCE-DDS agent and the ROS 2 graph" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-25" />
+<meta property="article:modified_time" content="2026-08-25" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="micro-ROS on ESP32: Robot Arm Node Tutorial" />
+<meta name="twitter:description" content="micro-ROS on ESP32: build a ROS 2 node on the microcontroller, run the XRCE-DDS agent, wire bus servos, and commission feedback checkpoints." />
+<meta name="twitter:image:alt" content="Editorial diagram of the micro-ROS client, agent and ROS 2 graph architecture" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-microros-esp32.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm#article",
+  "headline": "micro-ROS on ESP32: Robot Arm Node Tutorial",
+  "description": "micro-ROS on ESP32: build a ROS 2 node on the microcontroller, run the XRCE-DDS agent, wire bus servos, and commission feedback checkpoints.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-25",
+  "dateModified": "2026-08-25",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-microros-esp32.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm",
+  "inLanguage": "en-US",
+  "wordCount": 3178,
+  "articleSection": "ROS 2 & Software",
+  "keywords": "micro-ROS, micro-ROS ESP32, ROS 2 microcontroller, XRCE-DDS agent, ESP32 ROS 2 node, rclc tutorial, ESP32 robot arm ROS 2"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is micro-ROS used for on a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Micro-ROS runs real ROS 2 nodes on a microcontroller, so an ESP32 can publish joint states, subscribe to joint commands, and appear in ros2 node list like any Linux node. Typical arm uses are sensor aggregation, low-level joint supervision, small mobile or bench arms, and bridging bus servos into a ROS 2 system without dedicating a Linux computer to each microcontroller."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does micro-ROS need the agent program running?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The microcontroller runs only the client; a Micro XRCE-DDS Agent process on a Linux computer translates the DDS-XRCE protocol into the full DDS data space used by ROS 2. If the agent stops, the client loses its ROS 2 connectivity, so design the arm to hold its last safe state and keep local interlocks working when the agent is down."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can an ESP32 run MoveIt 2 or ros2_control?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. MoveIt 2 and ros2_control are Linux-framework components; micro-ROS does not port them to the microcontroller. The ESP32 node is a peer ROS 2 node that publishes and subscribes. Keep planning on a Linux computer, and put real-time hardware management in ros2_control or the vendor driver, as our ros2_control guide explains. The ESP32 is best at field IO, supervision, and small arms."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use serial or Wi-Fi transport for micro-ROS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use serial USB for commissioning: it is deterministic, needs no network, and isolates faults. Switch to Wi-Fi UDP when the arm must move untethered, and accept jitter, packet loss, and reconnection logic as part of the design. For closed-loop control at 100 Hz over Wi-Fi, verify delivery statistics on your own network before trusting the loop; many bench arms stay on a cable for exactly this reason."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much RAM does micro-ROS need on an ESP32?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The micro-ROS documentation describes the target as microcontrollers with tens of kilobytes of RAM, and the classic ESP32 offers 520 kB of SRAM, so the stack fits with room for application code. The practical cost is stream buffers: reliable streams, message history depth, and transport MTU sizes allocate static memory pools. Tune history depth and MTU with the official middleware configuration guide rather than increasing buffers blindly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is micro-ROS suitable for industrial robot control?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not as a safety or motion-authority layer. Micro-ROS is a communication stack, with no safety rating and no guarantee of timely delivery over Wi-Fi. Industrial cells keep safety functions on safety-rated hardware and motion authority in the robot controller or a real-time industrial control system. An ESP32 micro-ROS node can supervise and report, but a work cell must fail safely without it."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "micro-ROS on ESP32: Robot Arm Node Tutorial",
+      "item": "https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-microros-esp32.jpg" alt="Editorial diagram of the micro-ROS architecture: ESP32 client connected over serial or Wi-Fi to an XRCE-DDS agent and the ROS 2 graph" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> ROS 2 &amp; Software — Updated August 25, 2026</div>
+<h1>micro-ROS on ESP32: A Robot Arm Node Tutorial</h1><p class="hero-sub">A commissioning tutorial with verifiable checkpoints: run a real ROS 2 node on an ESP32, connect it through the Micro XRCE-DDS agent, publish joint feedback at a fixed rate, and drive a servo from a subscription — with the wiring, budgets, and failure checks that make it repeatable.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-microros-esp32.jpg" alt="Editorial diagram showing an ESP32 micro-ROS client, the DDS-XRCE link, the agent process on a Linux PC, and ROS 2 topic nodes" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the micro-ROS client-agent architecture. Confirm API names against the documentation of the release you install.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Version note and disclosure:</strong> micro-ROS and ROS 2 APIs move between distributions; the workflow below follows the official documentation style, and the firmware is presented as a reference skeleton adapted from the official examples rather than a sketch Robotics Engineering Lab compiled and ran on hardware. Check package names and transport calls for your ROS 2 distribution and library release before connecting motors.</p>
+</div>
+
+<h2>What micro-ROS is, and what it is not</h2>
+<p>micro-ROS puts real ROS 2 nodes on microcontrollers. The client, written in C and built on the standard ROS 2 client support library (rcl) plus convenience extensions (rclc), gives you nodes, publishers, subscriptions, services, parameters, and lifecycle — the same concepts, and nearly the same tooling, as ROS 2 on Linux. After initialization it can run without dynamic memory allocation, which is the property that makes it usable on the kind of small, deterministic microcontrollers robot arms actually carry. The project documentation, now hosted at <a href="https://micro.vulcanexus.org/docs/overview/features/" target="_blank" rel="noopener noreferrer">micro.vulcanexus.org</a>, describes these seven features — MCU-optimized client API, seamless ROS 2 integration, a resource-constrained middleware, multi-RTOS support, permissive licensing, community ecosystem, and long-term maintainability — as the design contract of the stack.</p>
+<p>The equally important statement is what micro-ROS is not. It is not ros2_control on a chip, it is not MoveIt, and it is not a safety system. An ESP32 running micro-ROS is a peer node in the ROS 2 graph — an excellent place for field I/O, joint supervision, and small bench arms, and the wrong place for motion planning or any safety function. Where those boundaries sit is a recurring theme of this tutorial, and our <a href="ros2-robot-arm-control">ros2_control guide</a> covers the Linux side of the same boundary in depth.</p>
+<p>Licensing is worth one paragraph for anyone building products: the micro-ROS client, middleware, and tools are Apache License 2.0, the same permissive license as ROS 2, per the official license overview. The RTOS you build on top of carries its own terms.</p>
+
+<h2>The architecture in one pass: client, agent, DDS-XRCE</h2>
+<p>Everything in micro-ROS follows from one architectural decision: microcontrollers do not speak full DDS. Instead, the MCU runs a lightweight client that speaks the DDS-XRCE protocol (an OMG standard for "extremely resource-constrained environments") to an agent process on a Linux computer, and the agent speaks ordinary DDS to the rest of ROS 2. The middleware implementation is eProsima Micro XRCE-DDS; its <a href="https://micro-xrce-dds.docs.eprosima.com/" target="_blank" rel="noopener noreferrer">official documentation</a> covers both sides.</p>
+<ul>
+<li><strong>Client (ESP32):</strong> your rclc node, static memory pools for streams and messages, and a transport — serial UART, Wi-Fi UDP, Ethernet UDP, or others per the official hardware documentation. No DDS discovery runs on the MCU; the agent owns that.</li>
+<li><strong>Agent (Linux):</strong> the Micro XRCE-DDS Agent, typically built from source or installed as a binary. One agent can serve several clients; each client gets a session keyed by an identifier.</li>
+<li><strong>ROS 2 graph:</strong> once the session is up, the MCU's topics appear as normal topics. <code>ros2 node list</code>, <code>ros2 topic echo</code>, and RViz work with no bridging configuration.</li>
+</ul>
+<p>This split explains both the strength and the classic failure mode of micro-ROS cells. The strength: tiny MCUs join a ROS 2 system without hogging a Linux computer each. The failure mode: if the agent process stops, the client is alone — so the firmware must hold a safe state on its own, which Checkpoint 3 treats explicitly. On the officially supported hardware list, the classic Espressif ESP32 appears with 520 kB of RAM, 4 MB of flash, FreeRTOS as the RTOS, and UART, Wi-Fi UDP, and Ethernet UDP transports — a comfortable fit for a six-joint arm node.</p>
+
+<h2>Hardware and wiring for an ESP32 arm node</h2>
+<p>The electrical plan for a micro-ROS arm node is the same as for any ESP32 servo controller, and our existing <a href="esp32-robot-controller">ESP32 controller guide</a> covers it joint by joint. The micro-ROS additions are modest because the ROS 2 link uses interfaces you already have.</p>
+<ul>
+<li><strong>Board:</strong> a classic ESP32 dev board is the documented baseline. The Adafruit ESP32-S3-DevKitC-1 lists at 15.95 USD (8 MB flash, no PSRAM) and 19.95 USD (with PSRAM) as of August 25, 2026 — Indicative 2026 price from Adafruit's US store; the S3's extra RAM is useful for larger message arrays, but treat S3 support as community territory and confirm it in the Arduino library release notes for the version you install.</li>
+<li><strong>Servo bus:</strong> for a six-axis bench arm, use smart bus servos (Dynamixel or compatible TTL buses) so one UART carries all joint commands and feedback; the bus-wiring rules, termination, and current budgeting in our <a href="arduino-mega-robot-wiring">Arduino Mega wiring guide</a> apply unchanged. If you stay with PWM servos, dedicate an external PWM driver board rather than bit-banging six channels from the ROS callback — see our <a href="smart-servo-robot-arm">servo selection guide</a> for the trade-offs.</li>
+<li><strong>Power:</strong> one supply rail for logic (5 V to the board's regulator or 3.3 V direct), one for servos, common ground, and no servo current through the ESP32 board. A bench arm with six smart servos can pull several amps at stall — size the supply for stall sum, not idle.</li>
+<li><strong>ROS 2 link:</strong> during commissioning, the same USB cable that flashes the board carries the XRCE serial transport. For Wi-Fi later, nothing changes electrically.</li>
+</ul>
+<p>Safety plumbing for a bench arm: a physical power switch on the servo rail and a hardware limit (physical hard stops) that does not depend on software. These are educational bench practices, not industrial safeguarding — nothing on this page constitutes a safety approval.</p>
+
+<h2>Workstation setup: ROS 2 and the Micro XRCE-DDS Agent</h2>
+<p>Install ROS 2 using the official distribution docs for your platform (<a href="https://docs.ros.org/" target="_blank" rel="noopener noreferrer">docs.ros.org</a>); pick a supported distribution and use it consistently on both sides of the link. Then build and install the agent from eProsima's repository — the documented sequence is:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>git clone https://github.com/eProsima/Micro-XRCE-DDS-Agent.git
+cd Micro-XRCE-DDS-Agent
+mkdir build &amp;&amp; cd build
+cmake ..
+make
+sudo make install
+sudo ldconfig      # Linux, so the agent library is found
+</code></pre>
+<p>Run the agent for the serial transport while the board is on USB:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>MicroXRCEAgent serial --dev /dev/ttyACM0 -b 115200
+# later, for the Wi-Fi transport:
+MicroXRCEAgent udp4 --port 8888
+</code></pre>
+<p>The eProsima agent documentation defines these transports and options — including the serial baud default of 115200 — so treat the flags above as the documented interface rather than folklore. On Linux, check your user is in the <code>dialout</code> group if the serial device is permission-denied. Two agent instances can run side by side (one serial, one UDP) while you migrate a project between transports.</p>
+
+<h2>Checkpoint 1: firmware that publishes, and the test that proves it</h2>
+<p>In the Arduino IDE, install the micro-ROS Arduino library release matching your ROS 2 distribution (the library's GitHub repository publishes releases tagged per distribution), select the ESP32 board, and start from the library's publisher example. The reference skeleton below follows that example's structure — it is the pattern to verify against, not a sketch this site compiled on hardware:</p>
+<pre style="overflow:auto;background:#0b0e14;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;color:#d8d4cb;font-size:.82rem;line-height:1.55;"><code>#include &lt;micro_ros_arduino.h&gt;
+#include &lt;rcl/rcl.h&gt;
+#include &lt;rclc/rclc.h&gt;
+#include &lt;rclc/executor.h&gt;
+#include &lt;std_msgs/msg/int32.h&gt;
+
+rcl_publisher_t publisher;
+std_msgs__msg__Int32 msg;
+
+void setup() {
+  Serial.begin(115200);
+  set_microros_serial_transports();   // XRCE over USB serial
+
+  // node, publisher, executor initialization (rclc)
+  // timer-driven publish in loop()
+}
+</code></pre>
+<p>The checkpoint is the verification, not the code. With the agent running and the board flashed, prove each layer in order:</p>
+<ul>
+<li><strong>Transport:</strong> the agent logs the client session creation. No log, no transport — check the device path, baud, and cable before touching firmware.</li>
+<li><strong>Graph:</strong> <code>ros2 node list</code> shows the board's node (the examples use a name like <code>/micro_ros_arduino_node</code>).</li>
+<li><strong>Data:</strong> <code>ros2 topic echo</code> on the example topic shows incrementing values.</li>
+<li><strong>Rate:</strong> <code>ros2 topic hz</code> reports the publish period you coded, not something slower — the first sign of buffer starvation appears here.</li>
+</ul>
+<p>If all four pass, the client-agent-ROS 2 path is proven, and every later failure is your application code or the physical arm — which is exactly the diagnostic value of the checkpoint.</p>
+
+<h2>Checkpoint 2: joint feedback at a fixed rate</h2>
+<p>The first arm-specific upgrade is a joint-state publisher: read the six servo positions from the bus, timestamp them, and publish. In rclc this means initializing a <code>sensor_msgs/msg/JointState</code> with static storage — pre-allocated name and position arrays sized to six — and publishing from a timer callback at a fixed period rather than from <code>loop()</code> as fast as possible. The rclc executor supports spinning with a period, which gives you a periodic control task in the FreeRTOS environment the ESP32 already runs.</p>
+<p>Design decisions that matter more than the code: publish at the rate your consumer needs, not the rate the bus allows; keep joint names identical to your URDF and to the names used on the Linux side (name mismatches are the most common silent failure in joint-state pipelines); and stamp every message, because downstream tools timestamp by header when present. Acceptance for this checkpoint: <code>ros2 topic hz</code> steady at the chosen rate over minutes, joint values in the correct units (radians, if that is what the rest of the system expects), and RViz (with a robot description) showing a stable model.</p>
+
+<h2>Checkpoint 3: a command subscriber that moves one servo</h2>
+<p>Close the loop in the safe direction: commands flow Linux → ESP32, one joint only, small range of motion, arm on blocks. Subscribe to a trajectory- or joint-command topic, and in the callback write one servo goal position and return — no waiting on the bus inside the callback. Acceptance: commanded step, observed motion, published feedback confirms the step, and repeated commands produce repeatable motion.</p>
+<p>Then test the failures deliberately, because this is where a bench arm earns trust:</p>
+<ul>
+<li><strong>Agent killed mid-motion:</strong> the servo must finish its last command and stop; the firmware keeps its last safe state, and joint-state publishing stops or flags stale.</li>
+<li><strong>Wi-Fi drop (after Checkpoint 4):</strong> same expectation. Reconnection should require a session re-establishment, not a silent assumption that data is fresh.</li>
+<li><strong>Garbage command (out-of-range goal):</strong> clamped or rejected at the MCU, never forwarded raw to the servo.</li>
+</ul>
+<p>This checkpoint set is deliberately hostile. A node that passes it degrades the way a supervision layer should: visibly, and toward rest.</p>
+
+<h2>Checkpoint 4: the Wi-Fi transport swap, and what it costs</h2>
+<p>Switching to Wi-Fi is a firmware configuration change — the library provides Wi-Fi transport setup with the agent's address and port (the examples use UDP port 8888) — plus an agent running in UDP mode. The checkpoint is to re-run Checkpoints 1–3 over the air and compare the numbers you recorded on serial: session establishment time, <code>ros2 topic hz</code> mean and jitter, and any dropped messages over a fixed window.</p>
+<p>Expect worse numbers and plan around them. Wi-Fi UDP adds latency and loss; congestion and roaming make it bursty. For telemetry and supervision this is usually irrelevant. For a closed loop that depends on every message arriving, it is a design constraint you measure, not assume — which is why the division-of-labor section below pushes timing-critical control off the Wi-Fi path entirely. Keep the serial transport working as a fallback; it is your commissioning tool every time the network misbehaves.</p>
+
+<h2>Memory, rate, and message budgets</h2>
+<div class="pullquote">
+<blockquote>Example calculation — planning arithmetic with stated assumptions, not a measurement from our bench.</blockquote>
+<cite>Recompute with your own message sizes and rates before committing a design.</cite>
+</div>
+<p>The serial transport budget is simple enough to compute on paper. A 115200 baud 8N1 link moves about 11,520 usable bytes per second. A compact six-joint JointState — header plus six float64 positions, no names — serializes to roughly 60 to 70 bytes, and the XRCE protocol adds framing on top; call it about 90 bytes on the wire per message. That gives a theoretical ceiling near 11,520 / 90 ≈ 128 messages per second, and a practical sustained rate comfortably below it once acknowledgments and session traffic share the stream. A 50 Hz joint-state stream uses under half the link; a 100 Hz stream is marginal at 115200 baud. The fixes are standard: raise the baud rate (the agent flag and the firmware <code>Serial.begin()</code> must match), slim the message, or move to Wi-Fi/Ethernet.</p>
+<p>Memory follows the same discipline. The official hardware documentation describes micro-ROS targets as MCUs with "tens of kilobytes" of RAM, and the classic ESP32's 520 kB leaves room for a six-joint node with buffers to spare — but buffers are configured, not free. Reliable stream history depth, MTU, and per-topic queue depth all allocate static pools at initialization; the middleware configuration tutorial in the micro-ROS docs is the authoritative guide to tuning them down. The failure signature of getting it wrong is publishes that silently block or a <code>ros2 topic hz</code> that sags under load — which is why Checkpoint 1 measures rate before anything else.</p>
+
+<h2>Division of labor: ESP32 node versus ros2_control on Linux</h2>
+<p>Where micro-ROS ends and ros2_control begins is the design decision this tutorial keeps circling, so state it plainly. MoveIt, planners, and the trajectory-execution interface live on Linux. ros2_control — with its controller manager, hardware interfaces, and real-time control loop — also lives on Linux, as our <a href="moveit-2-setup-assistant-robot-arm">MoveIt 2 configuration tutorial</a> shows from the planning side. The ESP32 micro-ROS node is a peer contributor: joint states up, joint commands down, plus whatever field I/O you give it.</p>
+
+<div class="table-wrap" aria-label="ESP32 micro-ROS node versus Linux ros2_control responsibilities"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Responsibility split recommended in this tutorial. A bench arm can blur it; anything heavier should not.</caption>
+<thead><tr><th>Function</th><th>ESP32 micro-ROS node</th><th>Linux ROS 2 computer</th></tr></thead>
+<tbody>
+<tr><td>Joint state publishing</td><td>Yes — bus reads, timestamps, publishes</td><td>Consumes; provides TF and robot state</td></tr>
+<tr><td>Motion planning</td><td>No</td><td>MoveIt 2 or custom planners</td></tr>
+<tr><td>Trajectory execution and interpolation</td><td>Optionally final goal positions only</td><td>Controller manager, FollowJointTrajectory</td></tr>
+<tr><td>Field I/O, grippers, sensors</td><td>Yes — natural fit</td><td>Consumes and sequences</td></tr>
+<tr><td>Safety functions</td><td>Hardware e-stop wiring and hard limits only</td><td>Not here either — safety belongs on safety-rated hardware in industrial cells</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="pullquote">
+<blockquote>Typical reader question: “Why not just publish ROS 2 serial strings from the ESP32 and parse them on the PC?”</blockquote>
+<cite>Answered from the architecture, not from a benchmark we ran.</cite>
+</div>
+<p>You can, and for one fixed message it works — until you add a second message type, a second device, or a field robot. micro-ROS gives you typed topics, QoS, timestamps, discovery, and the standard tools for the same effort: <code>ros2 topic echo</code> just works, RViz just works, and the message contract between MCU and PC is a defined IDL instead of a parser. The cost is the agent process and a stricter build setup. Our advice for readers who already maintain serial-parser firmware: try micro-ROS on one node, measure your Checkpoint 1–4 results, and let the numbers decide.</p>
+
+<h2>Scope and safety limits</h2>
+<p>This tutorial describes a hobby- and education-class setup: an ESP32, bus servos, and open-source middleware, none of which are safety-rated. Keep it that way in writing and in practice. Bench arms should have a reachable power switch, hard mechanical stops, and no humans or fingers inside the motion envelope while testing commands from a network — Wi-Fi-latent command delivery is a real hazard on any arm with enough torque to matter. Do not extend this architecture to industrial duty: industrial robot cells keep safety functions on safety-rated hardware and motion authority in the robot controller, under the risk assessment and integration requirements of ANSI/RIA R15.06 in the USA, CSA Z434 in Canada, and ISO 10218-2 for the integrated system. If your project is heading that way, our the North American robot safety standards guide on this site is the right next read.</p>
+
+<h2>Sources and methodology</h2>
+<p>Architecture, features, licensing, hardware capabilities, and transport statements follow the official micro-ROS documentation (now at micro.vulcanexus.org; the former micro.ros.org site redirects there), accessed August 25, 2026: the features and architecture page, the supported-hardware page listing the ESP32 (520 kB RAM, FreeRTOS, UART/Wi-Fi UDP/Ethernet UDP transports), and the linked memory-tuning tutorial. Agent build steps and transport options follow the eProsima Micro XRCE-DDS documentation and its GitHub repository. ROS 2 installation references docs.ros.org. The board prices are Adafruit US listings accessed August 25, 2026, labelled as indicative. The firmware skeleton is adapted from the official micro-ROS Arduino example pattern and presented as a reference to verify, not as a compiled and executed program; Robotics Engineering Lab did not run this tutorial on hardware before publication.</p>
+
+<div class="faq-item"><h4>What is micro-ROS used for on a robot arm?</h4><p>Micro-ROS runs real ROS 2 nodes on a microcontroller, so an ESP32 can publish joint states, subscribe to joint commands, and appear in ros2 node list like any Linux node. Typical arm uses are sensor aggregation, low-level joint supervision, small mobile or bench arms, and bridging bus servos into a ROS 2 system without dedicating a Linux computer to each microcontroller.</p></div>
+<div class="faq-item"><h4>Does micro-ROS need the agent program running?</h4><p>Yes. The microcontroller runs only the client; a Micro XRCE-DDS Agent process on a Linux computer translates the DDS-XRCE protocol into the full DDS data space used by ROS 2. If the agent stops, the client loses its ROS 2 connectivity, so design the arm to hold its last safe state and keep local interlocks working when the agent is down.</p></div>
+<div class="faq-item"><h4>Can an ESP32 run MoveIt 2 or ros2_control?</h4><p>No. MoveIt 2 and ros2_control are Linux-framework components; micro-ROS does not port them to the microcontroller. The ESP32 node is a peer ROS 2 node that publishes and subscribes. Keep planning on a Linux computer, and put real-time hardware management in ros2_control or the vendor driver, as our ros2_control guide explains. The ESP32 is best at field IO, supervision, and small arms.</p></div>
+<div class="faq-item"><h4>Should I use serial or Wi-Fi transport for micro-ROS?</h4><p>Use serial USB for commissioning: it is deterministic, needs no network, and isolates faults. Switch to Wi-Fi UDP when the arm must move untethered, and accept jitter, packet loss, and reconnection logic as part of the design. For closed-loop control at 100 Hz over Wi-Fi, verify delivery statistics on your own network before trusting the loop; many bench arms stay on a cable for exactly this reason.</p></div>
+<div class="faq-item"><h4>How much RAM does micro-ROS need on an ESP32?</h4><p>The micro-ROS documentation describes the target as microcontrollers with tens of kilobytes of RAM, and the classic ESP32 offers 520 kB of SRAM, so the stack fits with room for application code. The practical cost is stream buffers: reliable streams, message history depth, and transport MTU sizes allocate static memory pools. Tune history depth and MTU with the official middleware configuration guide rather than increasing buffers blindly.</p></div>
+<div class="faq-item"><h4>Is micro-ROS suitable for industrial robot control?</h4><p>Not as a safety or motion-authority layer. Micro-ROS is a communication stack, with no safety rating and no guarantee of timely delivery over Wi-Fi. Industrial cells keep safety functions on safety-rated hardware and motion authority in the robot controller or a real-time industrial control system. An ESP32 micro-ROS node can supervise and report, but a work cell must fail safely without it.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Firmware here is a sourced reference skeleton, not a claim of hardware testing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 25, 2026 &middot; last reviewed August 25, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">← Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction →</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
