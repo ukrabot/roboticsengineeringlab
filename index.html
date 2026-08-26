@@ -305,7 +305,7 @@
   "@type": "ItemList",
   "name": "Robotics Engineering Lab tutorials",
   "url": "https://roboticsengineeringlab.com/articles/",
-  "numberOfItems": 59,
+  "numberOfItems": 62,
   "itemListElement": [
     {
       "@type": "ListItem",
@@ -660,6 +660,24 @@
       "position": 59,
       "url": "https://roboticsengineeringlab.com/articles/microros-esp32-robot-arm",
       "name": "micro-ROS on ESP32: Robot Arm Node Tutorial"
+    },
+    {
+      "@type": "ListItem",
+      "position": 60,
+      "url": "https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting",
+      "name": "Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis"
+    },
+    {
+      "@type": "ListItem",
+      "position": 61,
+      "url": "https://roboticsengineeringlab.com/articles/robot-cell-electrical-design",
+      "name": "Robot Cell Electrical Design: NFPA 79 and IEC 60204-1"
+    },
+    {
+      "@type": "ListItem",
+      "position": 62,
+      "url": "https://roboticsengineeringlab.com/articles/cobot-force-limit-validation",
+      "name": "Cobot Force Limit Validation: ISO 10218-2 Test Plan"
     }
   ]
 }
@@ -699,7 +717,7 @@
 
   <section class="stats" aria-label="Site statistics">
     <div class="stats-inner">
-      <div class="stat"><h3>59</h3><p>Guides in the library</p></div>
+      <div class="stat"><h3>62</h3><p>Guides in the library</p></div>
       <div class="stat"><h3>2</h3><p>Browser calculators</p></div>
       <div class="stat"><h3>8</h3><p>Topic groups</p></div>
       <div class="stat"><h3>USA · Canada</h3><p>Standards focus</p></div>
@@ -776,6 +794,36 @@
           <h3>micro-ROS on ESP32: Robot Arm Nodes</h3>
           <p>Run a real ROS 2 node on an ESP32 through the XRCE-DDS agent, with wiring, agent setup, commissioning checkpoints, and message-rate budgets.</p>
           <div class="card-footer"><time datetime="2026-08-25">Aug 25, 2026</time><span>·</span><span>14 min read</span></div>
+        </div>
+      </a>
+
+      <a href="articles/robot-arm-troubleshooting" class="card" aria-label="Robot Arm Troubleshooting Guide">
+        <img src="industrial_robot_arm.jpg" alt="Industrial 6-axis robot arm on a factory floor, the setting for symptom-to-cause fault diagnosis" loading="lazy" width="1024" height="322" />
+        <div class="card-body">
+          <div class="card-tag">Maintenance</div>
+          <h3>Robot Arm Troubleshooting: Diagnosis</h3>
+          <p>A symptom-to-cause method that separates electrical, software, mechanical and safety faults, with test points, pass criteria and escalation rules.</p>
+          <div class="card-footer"><time datetime="2026-08-26">Aug 26, 2026</time><span>·</span><span>13 min read</span></div>
+        </div>
+      </a>
+
+      <a href="articles/robot-cell-electrical-design" class="card" aria-label="Robot Cell Electrical Design Guide">
+        <img src="articles/diagram-plc-robot-integration.jpg" alt="Blueprint diagram of a robot cell control cabinet with safety PLC, e-stop loop and industrial network, for electrical design" loading="lazy" width="1600" height="900" />
+        <div class="card-body">
+          <div class="card-tag">Industrial</div>
+          <h3>Robot Cell Electrical Design: NFPA 79</h3>
+          <p>Walk the supply path, 24 VDC budget, SCCR, wiring practice and safety circuit of a robot cell under NFPA 79 and IEC 60204-1, with worked calculations.</p>
+          <div class="card-footer"><time datetime="2026-08-26">Aug 26, 2026</time><span>·</span><span>12 min read</span></div>
+        </div>
+      </a>
+
+      <a href="articles/cobot-force-limit-validation" class="card" aria-label="Cobot Force Limit Validation Guide">
+        <img src="articles/diagram-robot-safety-cell.jpg" alt="Blueprint diagram of a safeguarded robot cell used to plan collaborative force-limit validation" loading="lazy" width="1600" height="900" />
+        <div class="card-body">
+          <div class="card-tag">Safety</div>
+          <h3>Cobot Force Limit Validation: Test Plan</h3>
+          <p>Scope contact scenarios, map clamp points, measure force and pressure by body region, and document a PFL validation under ISO 10218-2:2025.</p>
+          <div class="card-footer"><time datetime="2026-08-26">Aug 26, 2026</time><span>·</span><span>12 min read</span></div>
         </div>
       </a>
     </div>
@@ -870,7 +918,7 @@
 
       <div class="cat-block">
         <h3>Industrial Automation &amp; Safety</h3>
-        <span class="cat-count">10 tutorials</span>
+        <span class="cat-count">12 tutorials</span>
         <ul>
           <li><a href="articles/industrial-plc-robotics">PLC Programming for Robotics</a></li>
           <li><a href="articles/robot-arm-plc-integration">Integrating Robot Arms with PLCs</a></li>
@@ -882,6 +930,8 @@
           <li><a href="articles/collaborative-assembly-arm">Collaborative Robots for Assembly Lines</a></li>
           <li><a href="articles/palletizing-robot-arm">Palletizing with a Robot Arm</a></li>
           <li><a href="articles/robot-machine-tending">Machine Tending Robots</a></li>
+          <li><a href="articles/robot-cell-electrical-design">Robot Cell Electrical Design (NFPA 79)</a></li>
+          <li><a href="articles/cobot-force-limit-validation">Cobot Force Limit Validation</a></li>
         </ul>
       </div>
 
@@ -917,12 +967,13 @@
 
       <div class="cat-block">
         <h3>Maintenance, Calibration &amp; Vision</h3>
-        <span class="cat-count">4 tutorials</span>
+        <span class="cat-count">5 tutorials</span>
         <ul>
           <li><a href="articles/robot-arm-calibration">Robot Arm Calibration Guide</a></li>
           <li><a href="articles/robot-arm-maintenance">Robot Arm Maintenance Schedule</a></li>
           <li><a href="articles/robot-arm-vision-system">Computer Vision Systems for Robot Arms</a></li>
           <li><a href="articles/robot-area-scanner">Area Scanners for Robot Cell Safety</a></li>
+          <li><a href="articles/robot-arm-troubleshooting">Robot Arm Troubleshooting</a></li>
         </ul>
       </div>
 
