@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Cell Electrical Design: NFPA 79 & IEC 60204-1</title>
+<meta name="description" content="Robot cell electrical design walkthrough: NFPA 79 and IEC 60204-1 supply path, 24 VDC budget, SCCR, safety circuit wiring and two worked calculations." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-cell-electrical-design" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Cell Electrical Design: NFPA 79 & IEC 60204-1" />
+<meta property="og:description" content="Robot cell electrical design walkthrough: NFPA 79 and IEC 60204-1 supply path, 24 VDC budget, SCCR, safety circuit wiring and two worked calculations." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-plc-robot-integration.jpg" />
+<meta property="og:image:alt" content="Editorial diagram of a robot cell control cabinet with safety PLC, e-stop loop and industrial network" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-26" />
+<meta property="article:modified_time" content="2026-08-26" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-cell-electrical-design" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Cell Electrical Design: NFPA 79 & IEC 60204-1" />
+<meta name="twitter:description" content="Robot cell electrical design walkthrough: NFPA 79 and IEC 60204-1 supply path, 24 VDC budget, SCCR, safety circuit wiring and two worked calculations." />
+<meta name="twitter:image:alt" content="Editorial diagram of a robot cell control cabinet with safety PLC, e-stop loop and industrial network" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-plc-robot-integration.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-cell-electrical-design#article",
+  "headline": "Robot Cell Electrical Design: NFPA 79 & IEC 60204-1",
+  "description": "Robot cell electrical design walkthrough: NFPA 79 and IEC 60204-1 supply path, 24 VDC budget, SCCR, safety circuit wiring and two worked calculations.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-26",
+  "dateModified": "2026-08-26",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-cell-electrical-design"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-plc-robot-integration.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-cell-electrical-design",
+  "inLanguage": "en-US",
+  "wordCount": 2631,
+  "articleSection": "Industrial Automation & Safety",
+  "keywords": "robot cell electrical design, NFPA 79 robot, IEC 60204-1 robot cell, robot cell wiring, SCCR robot control panel, robot cell 24 VDC"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which standard governs a robot cell's electrical system in the USA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "From the machine's supply disconnecting means inward, NFPA 79, the Electrical Standard for Industrial Machinery, with the current edition NFPA 79-2024; the building supply up to that point is governed by the NEC, NFPA 70. Check which edition your authority having jurisdiction enforces, because adoption lags publication."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is SCCR and why does my robot panel need it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The short-circuit current rating is the fault current the electrical equipment can safely withstand. NFPA 79-2024 and UL 508A require the panel and the machine electrical equipment to be rated at or above the available fault current at the line terminals; a panel whose marked SCCR is below the available fault current cannot be released by a UL panel shop."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How big should the 24 VDC control power supply be for a robot cell?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Budget the steady current of the safety logic, controller I/O, valves and indicators, add the worst simultaneous inrush, and load the supply to about 80 percent of rating for heat and future margin. A small cell lands near 3 to 5 A and a valve-heavy cell can need 10 A or a split rail so a field short cannot drag down the safety logic."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are my robot cell's field-bus and encoder readings noisy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually an EMC or grounding fault: motor and drive cabling running parallel to signal cables, encoder shields landed incorrectly, or a grounding scheme with parallel paths. Separate power and signal routes, use shielded feedback cabling per the drive manual, and bond to a single point; IEC 60204-1's EMC provisions and NFPA 79 wiring rules both push this practice."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a robot cell keep a 120 V AC control circuit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NFPA 79 permits 120 V AC control circuits under defined conditions, which is why legacy machinery has them, but modern robot and safety-field devices are 24 V DC devices and IEC 60204-1 prefers low-voltage DC. New robot cells are usually 24 V DC for control and safety, with 120 V AC reserved for outlets and lighting; retrofits decide case by case."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is allowed to commission robot cell electrical work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Qualified persons under the applicable rules: a licensed or qualified electrician for line and branch work, and qualified personnel for energized verification under NFPA 70E and OSHA 1910.333, with lockout/tagout per OSHA 1910.147 for maintenance. The design itself should be sealed by the engineer of record and accepted by the authority having jurisdiction; this article is educational and approves nothing."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Robot Cell Electrical Design: NFPA 79 & IEC 60204-1",
+      "item": "https://roboticsengineeringlab.com/articles/robot-cell-electrical-design"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-plc-robot-integration.jpg" alt="Editorial blueprint diagram of a robot cell electrical system: robot controller, safety PLC, I/O modules, e-stop loop and PROFINET or EtherNet-IP link in a PLC cabinet" loading="eager" decoding="async" width="1600" height="900" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Industrial Automation &amp; Safety — Published August 26, 2026</div>
+<h1>Robot Cell Electrical Design: NFPA 79 and IEC 60204-1 Walkthrough</h1><p class="hero-sub">A design walkthrough from the supply disconnect to the safety circuit: NFPA 79 and IEC 60204-1 architecture, the 24 VDC budget, SCCR, wiring practice, and two worked calculations.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-robot-safety-cell.jpg" alt="Editorial blueprint diagram of a safeguarded robot cell with fixed guarding, interlocked door, light curtain, area scanner and e-stop locations that the electrical design must interlock" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the safeguarding layer a robot cell's electrical design must support. The electrical rules come from the standards cited below, not from this drawing.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is an educational design walkthrough compiled from NFPA 79, IEC 60204-1 and related sources, not an engineered drawing and not a Robotics Engineering Lab installation report. A robot cell is a machine whose electrical system must be designed by a qualified engineer and approved by the authority having jurisdiction; use this page to understand the design, ask better questions, and verify a quotation.</p>
+</div>
+
+<h2>Where the standard starts: NFPA 79 for the machine, NEC for the building</h2>
+<p>The first design decision is jurisdictional, and it is the one most often got wrong. In the United States, the building supply up to the machine's supply point is governed by the National Electrical Code (NFPA 70), while everything from the machine's supply disconnecting means inward — the robot controller, drives, safety circuit, field wiring, operator devices — is governed by NFPA 79, the Electrical Standard for Industrial Machinery. The current edition is NFPA 79-2024, though many jurisdictions still enforce an earlier edition, so the first line of any drawing set should state which edition the authority having jurisdiction (AHJ) enforces. Internationally, and for machines bound for Canada or export, the parallel document is IEC 60204-1:2016+A1:2021 (edition 6.1), and Canada's adoption path for robot cell safety runs through CSA Z434:26, which adopts ISO 10218-1:2025 and ISO 10218-2:2025 with Canadian deviations. Every one of those choices belongs to one coherent robot cell electrical design, and this article walks that design end to end.</p>
+<p>The two documents agree on the architecture and differ in the details a North American panel shop lives by: conductor colors, control-circuit practice, and the certification path. A robot cell electrical design that has to satisfy both a US AHJ and a European customer therefore gets drawn once with two wiring schedules. The method below walks the supply path, the control power budget, wiring practice, and the safety circuit, with two worked calculations, so the structure of a compliant design is visible before the first wire is landed.</p>
+
+<h2>The supply path: disconnect, overcurrent protection, and SCCR</h2>
+<p>Start at the point of connection. NFPA 79 and IEC 60204-1 both require a supply disconnecting means that isolates the entire machine electrical equipment, is lockable in the open position for lockout/tagout, and interrupts the load. For a robot cell this is typically an enclosed, door-interlocked disconnect ahead of the main control cabinet. From there, branch circuits feed the robot controller, the safety circuit supply, the 24 V DC control power, cooling, and any process equipment, each with overcurrent protection sized to the conductor and the load.</p>
+<p>Two numbers size everything downstream: the connected load and the available fault current. The connected load (often given by the robot maker in kVA) sets the full-load current; the available fault current at the panel bus sets the required short-circuit current rating (SCCR). NFPA 79-2024 explicitly addresses SCCR marking for the machine electrical equipment, and a UL 508A panel shop will not release a control panel whose marked SCCR is below the available fault current. The robot vendor's documentation is where the connected load and inrush behaviour come from — treat a missing kVA figure as a "quote required" item, not a guess.</p>
+<div class="pullquote">
+<blockquote>Example calculation — stated assumptions, not a design. Assume an 8 kVA connected load on a 480 V, three-phase supply at 0.85 power factor.</blockquote>
+<cite>Recompute with the robot maker's published kVA and your utility's available fault current.</cite>
+</div>
+<p>Full-load current is I = kVA × 1000 ÷ (√3 × V_LL) = 8000 ÷ (1.732 × 480) ≈ 9.6 A. Overcurrent protection and conductor ampacity are then selected from the applicable tables with their temperature and bundling corrections, and the disconnect and branch devices must carry a rating above the continuous load with margin. The point of the arithmetic is not the 9.6 A; it is that every downstream choice — conductor, breaker, disconnect, and the SCCR coordination — traces back to a connected load and a fault current that must be obtained, not assumed.</p>
+
+<h2>Control power: the 24 VDC budget that keeps the safety circuit honest</h2>
+<p>The most common robot-cell electrical failure we hear described is a 24 V DC supply loaded to its limit, so that a simultaneous brake release and valve strike sags the rail and drops the safety relay or a field device. The fix is a control-power budget, drawn like a current ledger, before the supply is chosen.</p>
+<div class="table-wrap" aria-label="Illustrative 24 volt DC control power budget for a robot cell"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Assumed device currents for illustration; verify each on the datasheet of the device you actually buy.</caption>
+<thead><tr><th>Load</th><th>Assumed current at 24 VDC</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Safety relay / safety PLC logic</td><td>0.2–0.5 A</td><td>Dual-channel, monitored</td></tr>
+<tr><td>Robot controller I/O and field bus</td><td>0.5–1.5 A</td><td>Per controller datasheet</td></tr>
+<tr><td>Solenoid valves, pneumatic package</td><td>0.1 A each</td><td>Multiply by valve count, include inrush</td></tr>
+<tr><td>Stack light, indicators</td><td>0.05–0.2 A</td><td>LED devices are small</td></tr>
+<tr><td>Area scanner / light curtain OSSD load</td><td>Per device datasheet</td><td>Often on a dedicated supply</td></tr>
+</tbody>
+</table>
+</div>
+<p>Sum the steady load, add inrush for the worst simultaneous start, then apply margin — a common practice is to load a switching supply to no more than about 80 percent of rating so it survives ambient heat and future additions. A small cell might land near 3–5 A at 24 V; a larger cell with valves and safety field devices can need 10 A or more, or a split rail so a field short cannot drag down the safety logic. Indicative 2026 reference prices for the supply itself: a Mean Well HDR-60-24 (24 V, 2.5 A) lists at 20.10 USD at DigiKey, while a diagnostic-capable industrial supply such as a Phoenix Contact QUINT4-PS at 2.5 A lists near 193.91 USD at DigiKey — the price gap buys condition monitoring and DC-OK signalling, which is exactly what a fault log wants. Prices are reference ranges from public distributor listings accessed August 26, 2026, not Robotics Engineering Lab inventory.</p>
+
+<h2>Robot cell electrical design wiring practice: conductor colors, grounding, EMC</h2>
+<p>Conductor identification is where NFPA 79 and IEC 60204-1 visibly diverge, and it is a frequent finding on imported machines. NFPA 79 expects black ungrounded line conductors, white or gray for the grounded (neutral) conductor, and green or green/yellow for the equipment grounding conductor; IEC 60204-1 expects brown/black/gray for lines, blue for neutral, and green/yellow for protective earth. The 2024 NFPA 79 edition also identifies DC circuits that remain energized with the main disconnect open as orange with a blue stripe — a small detail that prevents a nasty surprise during lockout. Grounding is a single bonded system: the equipment grounding conductor, the cabinet bonding, and the robot base bond all return to one point, and high-frequency noise problems almost always trace to a grounding scheme that created parallel paths.</p>
+<p>Electromagnetic compatibility is the second silent requirement. IEC 60204-1's EMC provisions and NFPA 79's wiring rules both push the same practice: separate sensitive signal and field-bus cables from motor and drive cabling, use shielded encoder and resolver cables with the shield landed correctly at one or both ends per the drive manual, and keep variable-frequency drive output runs away from the safety circuit. A robot cell is a noisy electrical environment by construction; the cabling plan is what keeps the network and the encoders honest.</p>
+
+<h2>The safety circuit: dual-channel design, PL r, and where the robot controller fits</h2>
+<p>The safety circuit is not part of the standard control system; it rides above it on its own architecture. E-stop chains, interlocked door switches, and area-scanner OSSD outputs feed a safety relay or safety PLC, whose outputs remove drive power or command a safe stop category at the robot controller. The required performance level (PL r) comes from the risk assessment per ISO 13849-1:2023 (or IEC 62061), and the achieved structure — dual-channel with monitored discrepancy, correctly rated contacts, and a defined fault reaction time — is what you verify against it. Our <a href="robot-arm-emergency-stop">e-stop design guide</a> and <a href="robot-light-curtain-integration">light curtain guide</a> cover the device side; the electrical-design point here is that the safety circuit gets its own supply, its own wiring rules, and its own verification test, and it is never the place to economize.</p>
+<p>The robot controller's role is to receive the safety demand and execute the correct stop category — a category 0 removal of power, a category 1 controlled stop with power then removal, or a category 2 controlled stop with power maintained — exactly as the risk assessment specifies. The handshake between the cell safety circuit and the robot controller, and the division of responsibility with a plant PLC, is the subject of our <a href="industrial-plc-robotics">PLC integration guide</a>; electrically, the interface is a defined set of safe inputs and outputs whose wiring and timing must match the robot maker's integration manual word for word.</p>
+
+<h2>Example calculation: voltage drop on a long robot-cell run</h2>
+<div class="pullquote">
+<blockquote>Example calculation — planning arithmetic with stated assumptions; confirm against the ampacity and voltage-drop rules of the edition your AHJ enforces.</blockquote>
+<cite>Uses the dc resistance published in NEC Chapter 9, Table 8 (about 1.93 ohm per 1000 ft for 12 AWG uncoated copper).</cite>
+</div>
+<p>Assume a 20 A, 480 V three-phase branch run of 100 ft to a controller, on 12 AWG copper. Line-to-line drop is approximately √3 × I × R_line, with R_line = 1.93 ohm/kft × 0.1 kft = 0.193 ohm. That gives √3 × 20 × 0.193 ≈ 6.7 V, or about 1.4 percent of 480 V — acceptable against the common 3 percent design target. The same arithmetic shows why long runs at low voltage are the trap: the same 20 A at 24 V DC on a thin conductor is a disaster, which is exactly why 24 V field power is distributed with heavier conductors or localized supplies. Voltage drop is not a code violation by itself in every case, but it is a reliability specification, and a controller that browns out at the end of a long run is an electrical design fault, not a robot fault.</p>
+
+<h2>Typical reader question: can I keep my 120 V AC control circuit?</h2>
+<div class="pullquote">
+<blockquote>Typical reader question: "Our older cells use 120 V AC control circuits. Do we have to convert to 24 V DC for a new robot cell?"</blockquote>
+<cite>Answered from the standards' structure, not from a survey we ran.</cite>
+</div>
+<p>Not automatically. NFPA 79 permits 120 V AC control circuits under defined conditions (typically derived from a control transformer with a grounded side and appropriate overcurrent protection), which is why legacy North American machinery carries them. IEC 60204-1 strongly prefers low-voltage DC control, and modern robot and safety-field-device integration is overwhelmingly 24 V DC because the devices — scanners, curtain OSSDs, safety relays, field bus — are DC devices. The practical answer for a new robot cell is 24 V DC for control and safety, with 120 V AC reserved for convenience outlets and lighting circuits; the conversion question only really arises on retrofits, where the risk assessment and the integration manual decide.</p>
+
+<h2>Commissioning and verification: what an AHJ and a panel shop will look at</h2>
+<p>Verification is where the design becomes evidence. Expect the panel to be marked with its SCCR and the machine supply ratings; expect the disconnect to be lockable and labelled; expect the grounding system to be continuity-tested end to end; expect the safety circuit to be function-tested including a discrepancy fault injected on one channel; and expect the e-stop and interlock functions to be proven by measurement, not by assumption, with stop times recorded against the risk assessment. For a US-listed panel the certification path is typically UL 508A for the control panel plus NFPA 79 for the complete machine electrical system — a listed panel is a major component of compliance but does not by itself certify the machine. Our <a href="robot-arm-plc-integration">PLC integration commissioning checklist</a> covers the controls side of the same visit.</p>
+
+<h2>Scope, safety, and professional boundaries</h2>
+<p>Robot cell electrical work is live-energy work by definition during commissioning and is lockout/tagout work during maintenance; OSHA 29 CFR 1910.147 and 1910.333, and NFPA 70E for arc-flash and shock safety during energized work, govern the people doing it. This page is educational: it does not approve a design, and it does not replace the engineer of record, the AHJ, or the robot maker's integration manual. In Canada, provincial electrical codes and CSA Z434:26 set the parallel requirements. Where any of this touches a safeguarding or safety-rated function, the risk assessment and a qualified professional are the authority, not an article.</p>
+
+<h2>Sources and methodology</h2>
+<p>Architecture and requirements follow NFPA 79-2024 (Electrical Standard for Industrial Machinery) and IEC 60204-1:2016+A1:2021 (edition 6.1), with panel certification per UL 508A; performance levels per ISO 13849-1:2023; Canadian adoption per CSA Z434:26 (adopting ISO 10218-1:2025 and ISO 10218-2:2025) and CSA Z434.1:26; workplace electrical safety per OSHA 29 CFR 1910.147, 1910.333 and NFPA 70E. Conductor resistance from NEC Chapter 9, Table 8. Component reference prices from public DigiKey listings (Mean Well HDR-60-24 at 20.10 USD; Phoenix Contact QUINT4-PS at 24 V/2.5 A near 193.91 USD) and the NFPA 79-2024 printed edition at 139.00 USD from a US standards retailer, all accessed August 26, 2026 and labelled as reference, not quotation. Robotics Engineering Lab did not build or energize a cell for this article; all scenarios and calculations are illustrative with stated assumptions.</p>
+
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>Which standard governs a robot cell's electrical system in the USA?</h4><p>From the machine's supply disconnecting means inward, NFPA 79, the Electrical Standard for Industrial Machinery, with the current edition NFPA 79-2024; the building supply up to that point is governed by the NEC, NFPA 70. Check which edition your authority having jurisdiction enforces, because adoption lags publication.</p></div>
+<div class="faq-item"><h4>What is SCCR and why does my robot panel need it?</h4><p>The short-circuit current rating is the fault current the electrical equipment can safely withstand. NFPA 79-2024 and UL 508A require the panel and the machine electrical equipment to be rated at or above the available fault current at the line terminals; a panel whose marked SCCR is below the available fault current cannot be released by a UL panel shop.</p></div>
+<div class="faq-item"><h4>How big should the 24 VDC control power supply be for a robot cell?</h4><p>Budget the steady current of the safety logic, controller I/O, valves and indicators, add the worst simultaneous inrush, and load the supply to about 80 percent of rating for heat and future margin. A small cell lands near 3 to 5 A and a valve-heavy cell can need 10 A or a split rail so a field short cannot drag down the safety logic.</p></div>
+<div class="faq-item"><h4>Why are my robot cell's field-bus and encoder readings noisy?</h4><p>Usually an EMC or grounding fault: motor and drive cabling running parallel to signal cables, encoder shields landed incorrectly, or a grounding scheme with parallel paths. Separate power and signal routes, use shielded feedback cabling per the drive manual, and bond to a single point; IEC 60204-1's EMC provisions and NFPA 79 wiring rules both push this practice.</p></div>
+<div class="faq-item"><h4>Can a robot cell keep a 120 V AC control circuit?</h4><p>NFPA 79 permits 120 V AC control circuits under defined conditions, which is why legacy machinery has them, but modern robot and safety-field devices are 24 V DC devices and IEC 60204-1 prefers low-voltage DC. New robot cells are usually 24 V DC for control and safety, with 120 V AC reserved for outlets and lighting; retrofits decide case by case.</p></div>
+<div class="faq-item"><h4>Who is allowed to commission robot cell electrical work?</h4><p>Qualified persons under the applicable rules: a licensed or qualified electrician for line and branch work, and qualified personnel for energized verification under NFPA 70E and OSHA 1910.333, with lockout/tagout per OSHA 1910.147 for maintenance. The design itself should be sealed by the engineer of record and accepted by the authority having jurisdiction; this article is educational and approves nothing.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Electrical figures follow NFPA 79, IEC 60204-1 and public listings; nothing on this page is an engineered drawing or a test report. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 26, 2026 &middot; last reviewed August 26, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>

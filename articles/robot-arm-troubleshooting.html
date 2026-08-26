@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis</title>
+<meta name="description" content="Robot arm troubleshooting that separates electrical, software, mechanical and safety faults, with symptom-to-cause tables, test points and pass criteria." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis" />
+<meta property="og:description" content="Robot arm troubleshooting that separates electrical, software, mechanical and safety faults, with symptom-to-cause tables, test points and pass criteria." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:image:alt" content="Editorial photograph-style view of a 6-axis industrial robot arm in a manufacturing facility" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-26" />
+<meta property="article:modified_time" content="2026-08-26" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis" />
+<meta name="twitter:description" content="Robot arm troubleshooting that separates electrical, software, mechanical and safety faults, with symptom-to-cause tables, test points and pass criteria." />
+<meta name="twitter:image:alt" content="Editorial photograph-style view of a 6-axis industrial robot arm in a manufacturing facility" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting#article",
+  "headline": "Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis",
+  "description": "Robot arm troubleshooting that separates electrical, software, mechanical and safety faults, with symptom-to-cause tables, test points and pass criteria.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-26",
+  "dateModified": "2026-08-26",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting"
+  },
+  "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting",
+  "inLanguage": "en-US",
+  "wordCount": 2885,
+  "articleSection": "Maintenance & Diagnostics",
+  "keywords": "robot arm troubleshooting, robot arm fault diagnosis, robot lost mastering, robot arm vibration diagnosis, robot following error, cobot troubleshooting"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the first thing to check when a robot arm will not move?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Read the active fault on the pendant before touching anything, then verify the safety inputs and the 24 V control rail under load. An open e-stop chain, an open interlock or a sagging control rail cause most no-move conditions, and the fault log is your only reliable witness after a reset, so record the exact message first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does a robot lose position after a weekend power-down?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolute encoders hold their position reference on a backup battery while the controller is off. If the battery is low and the controller stays off long enough, the reference is lost and the axes must be re-established and mastering verified. ABB and FANUC both document low-battery warnings that should be treated as urgent, with the swap done while control power is on."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I tell if repeatability drift is mechanical wear or a software problem?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Separate scatter from offset using ISO 9283 definitions. A consistent offset with unchanged scatter points to a datum, TCP or work-object frame change. Grown scatter at a specific pose points to backlash or bearing wear in one joint; converting the angular error to a TCP error by the lever arm tells you whether the magnitude matches drivetrain wear."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What causes following-error faults only at high speed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The drive is being asked for more torque than it can deliver at that speed. Check the tool mass and inertia data first, since a wrong or grown tool load makes every fast move an overload, then look at thermal derating if the fault appears late in a shift, and at binding or an overweight fixture if it is constant."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it safe to bypass a safety input to find an intermittent stop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Bypassing defeats the protection and changes the legal status of the cell. Prove a marginal contact by measuring contact resistance and dual-channel timing, check scanner alignment and lens condition against the manufacturer procedure, and keep the circuit intact while you measure. Nuisance stops are diagnosed with the circuit in service, not defeated."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should troubleshooting stop and a professional take over?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whenever the work requires entering a safeguarded space with energy present, opening a drive cabinet, modifying a safety circuit, or re-mastering an industrial robot that people work near. Those are tasks for a qualified maintenance technician, controls engineer or integrator under lockout/tagout and the site risk assessment; the fault log you build makes that visit faster and cheaper."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Robot Arm Troubleshooting: Symptom-to-Cause Diagnosis",
+      "item": "https://roboticsengineeringlab.com/articles/robot-arm-troubleshooting"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Wide view of a 6-axis industrial robot arm in a manufacturing facility, the kind of cell this diagnostic method applies to" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Maintenance &amp; Diagnostics — Published August 26, 2026</div>
+<h1>Robot Arm Troubleshooting: A Symptom-to-Cause Diagnosis Method</h1><p class="hero-sub">A symptom-to-cause diagnostic method for 6-DOF robot arms: separate electrical, software, mechanical and safety faults, prove each with a measurement, and know when to escalate.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-robot-transmissions.jpg" alt="Editorial blueprint diagram of robot joint transmission elements where mechanical faults such as wear, backlash and lubrication loss originate" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the drivetrain elements where mechanical faults originate. Confirm alarm wording against the controller manual shipped with your robot.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is a diagnostic method, not a report of a Robotics Engineering Lab test bench. We have not reproduced these faults on our own hardware; the alarm behaviour described follows public controller documentation (ABB, FANUC, Universal Robots) and standard practice, and the scenarios are labelled as illustrative. On an industrial cell, fault-finding inside the safeguarded space is maintenance work and must follow your lockout/tagout procedure and the current edition of the applicable standard.</p>
+</div>
+
+<h2>Why robot arm troubleshooting fails without a fault-domain map</h2>
+<p>Most wasted hours in robot arm troubleshooting come from guessing instead of separating. A robot that misses a pick can be wrong in the electrical layer (a sagging 24 V rail), the mechanical layer (worn reduction gearing), the software layer (a retuned controller or a changed tool frame), or the safety layer (a nuisance e-stop or scanner fault). Those four domains produce overlapping symptoms, so the discipline that saves time is to decide which domain you are in before you open a panel or touch a wrench. This article gives you that separation as a method, with a symptom-to-cause table, the measurements that prove each diagnosis, and the pass criteria that tell you when to stop.</p>
+<p>The method is the same one good maintenance teams already use on CNC machines and presses: reproduce the symptom safely, then walk the domains in a fixed order — electrical first, because it is the cheapest to check and the most common cause of intermittent faults; then software and configuration, because a changed parameter masquerades as hardware; then mechanical, because drivetrain wear is slow and shows up as drift; and finally the safety circuit, because a marginal e-stop contact or scanner alignment causes the most confusing intermittent stops.</p>
+<p>Two references anchor the method. For the formal maintenance and verification context of an industrial cell, ISO 10218-2:2025 (and its US adoption ANSI/A3 R15.06-2:2025) places maintenance, periodic verification and information-for-use responsibilities on the integrator and the end user, which is exactly why a documented fault log matters. For the measurement side, ISO 9283:1998 defines how pose accuracy and repeatability are specified and tested, which is the tool we use below to separate a software problem from a mechanical one. Where the work requires live electrical measurement or entry into a guarded cell, OSHA 29 CFR 1910.147 (control of hazardous energy) and your local rules govern, and a qualified electrician or controls engineer should do the work.</p>
+
+<h2>Symptom: the robot will not move — a triage order that never lies</h2>
+<p>Start with the state the controller reports, not the behaviour you assume. Read the active fault, the active mode, and whether any safety input is open. A robot that will not move is almost always telling you the answer on the pendant: an open e-stop chain, an open interlock, a drive-not-ready, or a mastering-not-established condition. Record the exact message before you clear anything, because the fault log is your only reliable witness after the reset.</p>
+<p>Then verify the electrical domain from the outside in. Confirm the incoming supply at the disconnect, the status of the branch protective devices, and the control power rail. A 24 V DC control rail loaded near its limit will sag during a brake release or a valve strike and produce intermittent no-move or drive-fault conditions that disappear when the multimeter is connected. Measure the rail under the worst-case simultaneous load, not at idle, and watch for dips below the device brown-out threshold during the first second after power-up, when brakes and contactors inrush together.</p>
+<ul>
+<li><strong>No power at the pendant:</strong> work back from the controller supply, through the main disconnect and any door interlocks, before suspecting the pendant.</li>
+<li><strong>Power but drive not ready:</strong> check the e-stop chain continuity and the safety relay or safety PLC status indicators; a single open dual-channel contact holds the whole cell.</li>
+<li><strong>Ready but motion faults immediately:</strong> suspect mastering, encoder feedback, or a brake that did not release, in that order.</li>
+</ul>
+<p>The classic electrical failure mode worth knowing by heart is the encoder backup battery. Absolute encoders hold their position reference on a battery while the controller is off. ABB product manuals document a battery-low alert (for example event 38213 on several IRB manuals) and state the battery lifetime depends on how long the robot is powered off — the IRB 6650S product manual gives roughly 36 months with typical weekend shutdowns and about 18 months with long daily off periods. FANUC documents the equivalent as a battery-alarm condition (BZAL) that, if ignored, leads to a lost absolute reference and a required re-establishment step per axis. The practical rule is identical across brands: treat a low-battery alarm as urgent, keep control power on until the swap is complete, and never change batteries with the controller off unless the manual says otherwise.</p>
+
+<h2>Symptom: position drift and lost mastering</h2>
+<p>Position drift splits into two very different faults: the robot is consistently wrong (a datum problem) or the robot is inconsistently wrong (a mechanical or feedback problem). A consistent offset that appeared after a crash, a battery fault, or a motor replacement is a mastering or tool-frame issue, not wear. An inconsistent offset that grows through the day is thermal or mechanical.</p>
+<p>For the datum case, verify mastering against a known physical reference — a mastering fixture, a dowel, or the quick-mastering marks the manufacturer provides — and confirm the tool center point (TCP) and work object frames against the values the cell was commissioned with. A TCP that was re-taught by someone and never documented is a surprisingly common cause of a cell that is "off by a few millimetres everywhere." Our <a href="robot-arm-calibration">calibration guide</a> covers mastering and error correction in depth; here the diagnostic point is simply that a uniform offset points to data, not hardware.</p>
+<p>For the inconsistent case, log position error against time and temperature. Thermal growth in the arm structure and in reduction gearing shifts the real TCP even when the encoders read perfectly. If the drift tracks ambient or duty cycle and recovers after a cool-down, you are looking at thermal behaviour, and the correction belongs in the cycle plan and duty-cycle design (see our <a href="robot-arm-cooling">cooling guide</a> if heat is the driver), not in a re-master that will just move the error.</p>
+
+<div class="pullquote">
+<blockquote>Illustrative scenario — not a report of a Robotics Engineering Lab test. A cell runs fine on Monday, is off over the weekend, and on Monday morning reports a lost absolute reference on two axes.</blockquote>
+<cite>The sequence matches the documented battery-failure path: low-battery warning ignored, weekend power-off, absolute reference lost, axes require re-establishment and a mastering check. The fix is procedural as much as technical.</cite>
+</div>
+
+<h2>Symptom: jitter, vibration and noise under load</h2>
+<p>Vibration that appears under load but not at idle points at the drivetrain: reduction gearing, belts, bearings, or a loose mechanical interface. Vibration that appears at specific Cartesian speeds regardless of load more often points at control tuning or at a singularity region. Our <a href="joint-encoders-robot-arm">encoder guide</a> and our transmission comparisons explain the components; the diagnostic here is to localize the noise by feel and by listening with the cell safe and the robot jogging slowly in each axis individually, so the guilty joint identifies itself.</p>
+<ul>
+<li><strong>Whine that rises with joint speed:</strong> typically gearing or a dry bearing; check lubrication interval against the manufacturer's schedule, which our <a href="robot-arm-maintenance">maintenance guide</a> summarizes.</li>
+<li><strong>Knock or clunk at direction reversal:</strong> backlash in a reduction stage or a loose set-screw / coupling; measure with a dial indicator at the output while holding the input, not by eye.</li>
+<li><strong>Buzz at a fixed frequency at the wrist:</strong> often a resonant fixture or EOAT, not the robot; test by repeating the move with the tool removed.</li>
+</ul>
+<p>A worn harmonic or cycloidal reducer shows up first as lost-motion growth and as vibration under reversing load, long before it shows up as a position alarm. Trending backlash at a fixed inspection interval is therefore one of the highest-value predictive checks a maintenance team can do on an older arm.</p>
+
+<h2>Symptom: following error and thermal faults at speed</h2>
+<p>A following-error or overcurrent fault that appears only at high speed or high acceleration is the controller telling you the demanded torque exceeds what the drive can deliver. The cause is mechanical (a stiff or binding joint, an overweight tool), thermal (a motor or drive derated by heat), or a tuning change. Check the tool data first: a TCP mass or inertia entered wrong, or a real tool that grew heavier than the commissioned value, makes every fast move an overload. Then confirm payload and inertia settings match the actual end effector plus part, using the sizing math in our payload resource if you need it.</p>
+<p>If the fault appears late in a shift and not at the start, thermal derating is likely. Log drive and motor temperature against cycle count; a rising baseline means the cooling path is inadequate for the duty cycle. The fix is either a slower cycle, a longer dwell, better airflow, or a robot with more thermal margin — not a higher current limit, which trades an alarm today for a burned winding tomorrow.</p>
+
+<h2>Symptom: safety circuit faults and nuisance stops</h2>
+<p>Nuisance e-stops and scanner faults are electrical in origin but safety in consequence, so they get their own domain. The signature is an intermittent open on a dual-channel circuit: the safety relay sees a channel mismatch and holds the stop until reset, or a scanner reports a fault on vibration or a dirty window. Check the e-stop chain contact by contact, because a single marginal contact produces a fault that no software log explains, and verify scanner alignment and lens cleanliness against the manufacturer's procedure. Our <a href="robot-arm-emergency-stop">e-stop design guide</a> explains the dual-channel architecture you are measuring. Never bypass a safety input to "prove" it is the cause; the proof comes from measuring contact resistance and channel timing, not from defeating the circuit.</p>
+
+<h2>Example calculation: is the repeatability drift mechanical or software?</h2>
+<div class="pullquote">
+<blockquote>Example calculation — planning arithmetic with stated assumptions, not a measurement from our bench.</blockquote>
+<cite>Use ISO 9283:1998 test methods and your own laser tracker or ball-bar data before acting on the conclusion.</cite>
+</div>
+<p>Suppose a cell was commissioned at pose repeatability of ±0.05 mm and now a quality check reports ±0.18 mm at one pose but ±0.05 mm everywhere else. ISO 9283 defines repeatability as the closeness of agreement between repeated poses under the same conditions, so the first separation is repeatability (scatter) versus accuracy (offset). If the pose is consistently offset by 0.13 mm with the same scatter as before, the datum or tool frame moved — a software/data fault. If the scatter itself grew, something physical changed in that joint's path — gearing, bearing, or a loose interface.</p>
+<p>Now localize with a simple moment argument. Assume the affected pose fully extends joint 3, whose output carries the forearm at about 0.6 m. A backlash growth of only 0.0002 rad (about 0.011 degrees) at that joint produces roughly 0.6 m × 0.0002 rad ≈ 0.12 mm of TCP scatter — exactly the observed growth. A sub-arcminute change in lost motion is entirely plausible for a worn reduction stage, which is why the calculation points at the mechanical domain and a dial-indicator backlash check, not at re-tuning. The numbers are assumptions for illustration, but the method — convert an angular error at a joint to a linear error at the TCP by the lever arm — is the correct way to decide whether a repeatability complaint is drivetrain wear.</p>
+
+<h2>A fault log that pays for itself</h2>
+<p>The difference between a cell that is diagnosed in minutes and one that is diagnosed in hours is almost always documentation. Keep a per-cell fault log with the exact controller message, the domain it mapped to, the measurement taken, the value found, and the fix. Log battery voltages and dates, backlash measurements with dates, and any TCP or frame re-teach with the author and the reason. Over a year this log becomes the single most valuable asset in the maintenance program, because intermittent electrical faults are only visible as a pattern across events.</p>
+<div class="table-wrap" aria-label="Symptom to cause diagnostic table for 6-axis robot arms"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Work in the listed domain order; stop and escalate when a safety boundary is crossed.</caption>
+<thead><tr><th>Symptom</th><th>First domain</th><th>Likely cause</th><th>Test / evidence</th><th>Pass criterion</th></tr></thead>
+<tbody>
+<tr><td>Will not move</td><td>Electrical / safety</td><td>Open e-stop or interlock, drive not ready, dead control rail</td><td>Read active fault; measure 24 V rail under load</td><td>All safety inputs closed; rail within device spec at inrush</td></tr>
+<tr><td>Lost position after power-off</td><td>Electrical</td><td>Encoder backup battery discharged</td><td>Battery voltage and alarm history</td><td>Battery above threshold; reference re-established; mastering verified</td></tr>
+<tr><td>Uniform offset everywhere</td><td>Software / data</td><td>TCP or work object frame changed; mastering datum wrong</td><td>Compare frames to commissioning record; check against fixture</td><td>Offset removed without mechanical change</td></tr>
+<tr><td>Scatter grows at one pose</td><td>Mechanical</td><td>Backlash / bearing wear at a specific joint</td><td>Dial indicator backlash; ISO 9283 repeatability trend</td><td>Scatter within commissioned band after repair</td></tr>
+<tr><td>Thermal or overcurrent fault late in shift</td><td>Software / thermal</td><td>Wrong tool inertia; inadequate cooling for duty cycle</td><td>Tool data audit; drive temperature trend</td><td>No derate over a full shift at production rate</td></tr>
+<tr><td>Intermittent stop, channel mismatch</td><td>Safety circuit</td><td>Marginal e-stop contact; scanner misalignment</td><td>Contact resistance; scanner alignment check</td><td>No mismatch over a fixed observation window</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>When to stop: escalation and the qualified professional</h2>
+<p>Robot arm troubleshooting has a hard boundary. Anything that requires entering the safeguarded space with energy present, opening a drive cabinet, modifying a safety circuit, or re-mastering an industrial robot that people work near is work for a qualified maintenance technician, controls engineer, or integrator under the site's lockout/tagout and risk-assessment controls. The diagnostic method in this article is for understanding the fault, gathering evidence, and communicating precisely with the professional who will fix it — a fault log with measurements turns a service visit from a guessing exercise into a scoped repair. On hobby and educational benches the same method applies at bench scale, with a physical power switch and hard stops, and nothing here constitutes a safety approval of any cell.</p>
+
+<h2>Sources and methodology</h2>
+<p>The fault-domain method follows standard industrial maintenance practice. Encoder battery behaviour follows ABB product manual wording (for example the IRB 6650S product manual 3HAC020993-001, "Replacing the SMB battery," including the 36/18-month lifetime figures and the 38213 battery-low event) and FANUC's documented battery-alarm and pulse-not-established sequence; verify exact alarm wording in the manual edition shipped with your controller. Performance separation of accuracy and repeatability follows ISO 9283:1998. Maintenance and verification responsibilities follow ISO 10218-2:2025 and ANSI/A3 R15.06-2:2025; end-user use follows ANSI/A3 R15.06-3-2025; lockout/tagout follows OSHA 29 CFR 1910.147. Sources accessed August 26, 2026. Robotics Engineering Lab did not reproduce these faults on hardware before publication; scenarios are illustrative and labelled.</p>
+
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>What is the first thing to check when a robot arm will not move?</h4><p>Read the active fault on the pendant before touching anything, then verify the safety inputs and the 24 V control rail under load. An open e-stop chain, an open interlock or a sagging control rail cause most no-move conditions, and the fault log is your only reliable witness after a reset, so record the exact message first.</p></div>
+<div class="faq-item"><h4>Why does a robot lose position after a weekend power-down?</h4><p>Absolute encoders hold their position reference on a backup battery while the controller is off. If the battery is low and the controller stays off long enough, the reference is lost and the axes must be re-established and mastering verified. ABB and FANUC both document low-battery warnings that should be treated as urgent, with the swap done while control power is on.</p></div>
+<div class="faq-item"><h4>How can I tell if repeatability drift is mechanical wear or a software problem?</h4><p>Separate scatter from offset using ISO 9283 definitions. A consistent offset with unchanged scatter points to a datum, TCP or work-object frame change. Grown scatter at a specific pose points to backlash or bearing wear in one joint; converting the angular error to a TCP error by the lever arm tells you whether the magnitude matches drivetrain wear.</p></div>
+<div class="faq-item"><h4>What causes following-error faults only at high speed?</h4><p>The drive is being asked for more torque than it can deliver at that speed. Check the tool mass and inertia data first, since a wrong or grown tool load makes every fast move an overload, then look at thermal derating if the fault appears late in a shift, and at binding or an overweight fixture if it is constant.</p></div>
+<div class="faq-item"><h4>Is it safe to bypass a safety input to find an intermittent stop?</h4><p>No. Bypassing defeats the protection and changes the legal status of the cell. Prove a marginal contact by measuring contact resistance and dual-channel timing, check scanner alignment and lens condition against the manufacturer procedure, and keep the circuit intact while you measure. Nuisance stops are diagnosed with the circuit in service, not defeated.</p></div>
+<div class="faq-item"><h4>When should troubleshooting stop and a professional take over?</h4><p>Whenever the work requires entering a safeguarded space with energy present, opening a drive cabinet, modifying a safety circuit, or re-mastering an industrial robot that people work near. Those are tasks for a qualified maintenance technician, controls engineer or integrator under lockout/tagout and the site risk assessment; the fault log you build makes that visit faster and cheaper.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. The fault method here follows public controller documentation and standards; scenarios are illustrative, not a Robotics Engineering Lab test report. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 26, 2026 &middot; last reviewed August 26, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>

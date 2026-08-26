@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Cobot Force Limit Validation: ISO 10218-2 Test Plan</title>
+<meta name="description" content="Cobot force limit validation under ISO 10218-2:2025: scope contact scenarios, map clamp points, measure force and pressure, and document a defensible report." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/cobot-force-limit-validation" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Cobot Force Limit Validation: ISO 10218-2 Test Plan" />
+<meta property="og:description" content="Cobot force limit validation under ISO 10218-2:2025: scope contact scenarios, map clamp points, measure force and pressure, and document a defensible report." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-robot-safety-cell.jpg" />
+<meta property="og:image:alt" content="Editorial diagram of a safeguarded robot cell relevant to collaborative force-limit validation" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-26" />
+<meta property="article:modified_time" content="2026-08-26" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/cobot-force-limit-validation" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Cobot Force Limit Validation: ISO 10218-2 Test Plan" />
+<meta name="twitter:description" content="Cobot force limit validation under ISO 10218-2:2025: scope contact scenarios, map clamp points, measure force and pressure, and document a defensible report." />
+<meta name="twitter:image:alt" content="Editorial diagram of a safeguarded robot cell relevant to collaborative force-limit validation" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-robot-safety-cell.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/cobot-force-limit-validation#article",
+  "headline": "Cobot Force Limit Validation: ISO 10218-2 Test Plan",
+  "description": "Cobot force limit validation under ISO 10218-2:2025: scope contact scenarios, map clamp points, measure force and pressure, and document a defensible report.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-26",
+  "dateModified": "2026-08-26",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/cobot-force-limit-validation"
+  },
+  "image": "https://roboticsengineeringlab.com/articles/diagram-robot-safety-cell.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/cobot-force-limit-validation",
+  "inLanguage": "en-US",
+  "wordCount": 2615,
+  "articleSection": "Safety & Standards",
+  "keywords": "cobot force limit validation, power and force limiting, ISO 10218-2 collaborative, ISO/TS 15066 force limits, PFL validation, cobot force testing"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is ISO/TS 15066 still the standard for cobot force limits?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Its content now lives inside ISO 10218-1:2025 and ISO 10218-2:2025, published in February 2025; ISO/TS 15066:2016 remains listed as published and under revision toward ISO/AWI 15066-1. New documentation should cite the 2025 ISO 10218 editions and the national adoption, keeping ISO/TS 15066 as historical context for cells commissioned against it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between quasi-static and transient contact?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A quasi-static contact clamps a body part between the robot and a fixed object so the force is sustained; a transient contact is a brief impact or brush. The limits differ, and the validation must test both wherever the geometry allows a clamp, because a point that is harmless in transient contact can be hazardous if a person can be trapped there."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the end effector matter for a PFL validation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Collaboration is a property of the application, not the robot. The tool and part bring the edges, corners, pinch points and mass that actually contact a person, so a force-limited robot carrying a sharp or heavy tool is not a collaborative application. The validation measures the tool and part geometry, not just the robot's smooth surfaces."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many times should each contact point be measured?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enough to be statistical, with the result recorded alongside robot speed, force setting and tool configuration so it is reproducible. A single hit is an anecdote; a defensible report repeats each measurement, states the instrument uncertainty and calibration, and compares peaks against the body-region threshold for the region that point can reach."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What voids a cobot force validation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any change to the validated configuration: the tool, the part, the speed or force settings, the layout, or the robot software. The report is a snapshot of that configuration, so the cell's change-control procedure should treat any of those changes as a trigger for at least a targeted re-validation before collaborative operation resumes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who should perform a PFL validation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A qualified integrator or third-party validator under a risk assessment led by competent personnel, using the current standard for the jurisdiction, ISO 10218-2:2025, ANSI/A3 R15.06-2025 or CSA Z434:26. The measurement system needs traceable calibration and stated uncertainty. This article explains the structure so you can scope and read the report; it does not approve a cell."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.ad-box { background:linear-gradient(135deg,rgba(201,169,110,0.06),rgba(95,142,216,0.05)); border:1px dashed rgba(255,255,255,0.12); border-radius:16px; padding:28px 24px; text-align:center; margin:40px 0; }
+.ad-box .ad-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; font-weight:600; }
+.ad-box .ad-copy { color:var(--text-muted); font-size:0.9rem; }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.cta-banner { background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(95,142,216,0.08)); border:1px solid rgba(201,169,110,0.15); border-radius:16px; padding:32px; margin:44px 0; text-align:center; }
+.cta-banner h3 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.3rem; color:var(--text-primary); margin-bottom:8px; letter-spacing:-0.02em; }
+.cta-banner p { color:var(--text-secondary); font-size:0.92rem; margin-bottom:18px; }
+.cta-banner .btn { display:inline-block; padding:12px 28px; border-radius:999px; background:var(--accent); color:#1a1408; text-decoration:none; font-weight:700; font-size:0.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+.cta-banner .btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(201,169,110,0.35); }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cobot Force Limit Validation: ISO 10218-2 Test Plan",
+      "item": "https://roboticsengineeringlab.com/articles/cobot-force-limit-validation"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../articles/diagram-robot-safety-cell.jpg" alt="Editorial blueprint diagram of a robot cell with guarding, light curtain, area scanner and e-stops, the safeguarding context around a collaborative power-and-force-limited application" loading="eager" decoding="async" width="1600" height="900" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Safety &amp; Standards — Published August 26, 2026</div>
+<h1>Cobot Force Limit Validation: An ISO 10218-2 Test Plan</h1><p class="hero-sub">A validation procedure under the 2025-2026 standards stack: scope contact scenarios, map clamp points, measure force and pressure by body region, and document a defensible report.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-robot-safety-cell.jpg" alt="Editorial blueprint diagram of a robot cell with guarding, light curtain, area scanner and e-stops, illustrating the safeguarding context around a collaborative power-and-force-limited application" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of a safeguarded cell. A collaborative application is validated against the current standards cited below, not against this drawing.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is an educational validation procedure, not a certification and not a report of a Robotics Engineering Lab measurement campaign. Force and pressure limits are legal-adjacent safety requirements; the risk assessment, the integrator, and the current edition of the applicable standard are the authority. We did not run a measurement campaign for this article.</p>
+</div>
+
+<p>Cobot force limit validation is the instrumented proof that a collaborative robot application stays below the biomechanical force and pressure thresholds a person can experience at a contact point. It is the part of a collaborative cell project that turns a brochure claim into a defensible engineering file, and it is the part most often skipped until an integrator, an insurer, or a regulator asks for the numbers. This article is a validation procedure: it follows the standards stack as it stands in 2026, separates the two kinds of contact that must be measured, and ends with the content of a report that survives review.</p>
+
+<h2>What changed in 2025 and 2026: the standards stack for collaborative force limits</h2>
+<p>For nearly a decade the number integrators reached for on collaborative force was ISO/TS 15066:2016. That document still exists — ISO's catalogue lists it as published and under revision, with a successor (ISO/AWI 15066-1) in development — but its practical home has moved. ISO 10218-1:2025 and ISO 10218-2:2025, published in February 2025, absorbed the collaborative-application safety requirements, so the force and pressure limits now live inside the core robot-safety standard rather than in a separate technical specification. In the United States, ANSI/A3 R15.06-2025 (Parts 1 and 2) adopts the ISO 2025 editions, and ANSI/A3 R15.06-3-2025 adds the end-user requirements with no ISO counterpart. In Canada, CSA Z434:26 adopts ISO 10218-1:2025 and ISO 10218-2:2025 with Canadian deviations, alongside CSA Z434.1:26 for end users.</p>
+<p>The practical consequences for a validation file are three. First, new documentation should cite ISO 10218-2:2025 (and the applicable national adoption) as the primary collaborative reference, with ISO/TS 15066:2016 retained as historical context where a cell was commissioned against it. Second, collaboration is now framed as a property of the application, not of the robot: a power-and-force-limited arm carrying a sharp or heavy tool is not a collaborative application no matter what the brochure says. Third, the body-region biomechanical thresholds — the table of force and pressure limits by body area — survive the move essentially unchanged, which is why existing measurement data usually remains valid while the paperwork trail is updated. RIA TR R15.806 remains the US technical report describing how to actually perform power-and-force-limiting contact testing; read its 2018-era terminology against the 2025 renames.</p>
+
+<h2>The four collaborative modes, and why PFL is the one you validate with instruments</h2>
+<p>The standards recognize four collaborative techniques: safety-rated monitored stop, hand guiding, speed and separation monitoring, and power and force limiting. The first three are largely validated by function — the stop works, the enabling device behaves, the separation distance is maintained — and by safeguarding geometry. Power and force limiting (PFL) is different because its safety argument is a number: the force and pressure that a person can experience at a contact point must stay below the biomechanical threshold for the body region that contact can reach. A number that must stay below a limit is a number you must measure, which is why PFL is the mode that produces an instrumented validation report.</p>
+<p>PFL also has the sharpest boundary of the four: it applies to the contact scenarios the risk assessment identifies, including the end effector and the part. The robot may be force-limited, but the application is only collaborative if the tool and part geometry — edges, corners, pinch points, mass — keep the transient and quasi-static contacts within limits. Our <a href="robot-end-effector-selection">end-effector selection guide</a> is where the tool's mass and geometry enter the payload and frame math; here they enter as the thing being pressed against a person.</p>
+
+<h2>Quasi-static versus transient contact: the two cases the test must cover</h2>
+<p>Every PFL contact scenario is classified as either quasi-static or transient, and the limits differ. A quasi-static contact is one in which a body part is clamped between the robot and a fixed object — the robot keeps pushing against a trapped hand, for example — so the limit is a sustained force and pressure the body region can tolerate. A transient contact is a brief impact or brush, where momentum and contact duration matter and higher peak values are permitted for a short time. The validation must consider both for each identified contact location, because a point that is harmless in transient contact can be hazardous if a person can be clamped there.</p>
+<p>The thresholds themselves are organized by body region — head, neck, shoulder, arm, hand, fingers, trunk, leg, and so on — with a force limit in newtons and a pressure limit in newtons per square centimetre for each. The underlying principle published with ISO/TS 15066 is that the allowable values are derived from pain-threshold data with a margin, so the limits are biomechanical, not arbitrary. We do not reproduce the threshold table here, because quoting limit values from memory is exactly how a validation file gets it wrong; the correct move is to read the table in the current standard for the specific body regions your contact map reaches, and to let the measurement system's software apply the right limit per region.</p>
+
+<h2>The test equipment for cobot force limit validation: force and pressure measurement</h2>
+<p>A PFL measurement is made against a body-part surrogate: a spring-loaded, instrumented probe that presents a defined contact area and compliance, so the recorded force and pressure approximate what a human tissue region would experience. Commercial PFL test systems integrate a force sensor and a pressure-sensitive film or matrix with software that captures the peak force, peak pressure, and contact duration for each impact. What matters for a defensible report is not the brand but the metrology: a stated measurement uncertainty, a sampling rate high enough to capture transient peaks, a defined contact area for pressure, and a calibration traceable to a national standard. Rental houses and third-party validation firms exist precisely because a compliant measurement system is a specialized, quote-required purchase rather than a shelf item.</p>
+<p>Plan the mechanical setup before the first hit. The surrogate must be held rigidly at the contact location, oriented normal to the expected contact direction, and the robot must run the real production motion at the real speed and force settings — a validation run at reduced speed proves almost nothing. Where a quasi-static clamp is possible, the test must reproduce the worst-case trapped geometry, including a fixture edge or an adjacent machine, because the clamp partner defines the pressure distribution as much as the robot does.</p>
+
+<h2>Stage 1: scope the contact scenarios from the risk assessment</h2>
+<p>The validation does not start at the robot; it starts in the risk assessment, which our <a href="robot-risk-assessment">risk assessment guide</a> walks through. Extract every task in which a person is intended or reasonably foreseeable to be inside the collaborative workspace — loading, hand-off, clearing a jam, teaching — and for each, list the body regions that can be contacted and whether the contact is transient or can become quasi-static. This list is the test plan. A cell whose risk assessment says "no intended contact" still needs a PFL validation if a foreseeable misjudgment can produce contact, because PFL is also the fallback that keeps an unintended contact from becoming an injury.</p>
+
+<h2>Stage 2: map worst-case contact locations on the robot, tool and fixture</h2>
+<p>For each scenario, mark the contact points on the robot, the end effector, the part, and the surrounding fixtures that could form a clamp. Include the tool's sharpest edge and the part's corners, not just the robot's smooth surfaces, and include the wrist and elbow where the geometry concentrates force. The map is a drawing or photo set annotated with numbered points, and each point carries the body region it can reach and the contact type. This is the stage where most under-scoped validations fail later: a report that measured only the tool face and never the wrist is incomplete the day someone reaches past the wrist.</p>
+
+<h2>Stage 3: measure force and pressure against the body-region thresholds</h2>
+<p>At each mapped point, run the production motion and record peak force and peak pressure, separating transient from quasi-static as the scenario dictates, and compare against the threshold for the body region that point can contact. Repeat enough times to be statistical — a single hit is an anecdote — and record the robot speed, force setting, and tool configuration with every result so the report is reproducible. Any point that exceeds its threshold is a finding, not a footnote: the remedies are lowering speed or force, padding or rounding the geometry, re-positioning the contact out of reach, or re-classifying the application as non-collaborative with added safeguarding.</p>
+<div class="pullquote">
+<blockquote>Illustrative scenario — not a report of a Robotics Engineering Lab test. A 12 kg cobot hands a 1 kg part to an operator at chest height; the risk assessment identifies transient contact at the forearm and a possible quasi-static clamp between the part and a shelf edge.</blockquote>
+<cite>The validation measures both the forearm transient impact and the worst-case clamp at the shelf edge, at production speed, and compares each to the current standard's forearm and hand thresholds.</cite>
+</div>
+
+<h2>Stage 4: document, cap, and re-validate after any change</h2>
+<p>The deliverable is a validation report that ties every measurement to a scenario, a contact point, a body region, a threshold, and a pass/fail, with the measurement uncertainty stated and the instrument calibration referenced. Critically, the report also records the configuration that was validated — robot model and software version, tool, part, speed and force settings — because a PFL validation is a snapshot. Any change to the tool, the part, the speed, the force limit, the layout, or the robot software voids the snapshot and demands at least a targeted re-validation. Write that rule into the cell's change-control procedure so the validation stays true over the cell's life.</p>
+
+<h2>Speed and separation monitoring: the separation-distance calculation</h2>
+<div class="pullquote">
+<blockquote>Example calculation — planning arithmetic with stated assumptions; the current standard gives the exact terms and your risk assessment sets the inputs.</blockquote>
+<cite>Recompute with measured stopping distances and the approach speeds you actually allow.</cite>
+</div>
+<p>Where collaboration is by speed and separation monitoring rather than by force, the protective separation distance S is the sum of contributions: the distance the person covers during the system reaction and stop (S_p and the human approach speed term), the distance the robot travels during its stopping time (S_r, from measured stopping performance), plus allowances for sensing uncertainty and intrusion (C, Z_d, Z_a). As a worked illustration, assume a human approach speed of 1.6 m/s, a robot stopping time of 0.4 s with an average stopping speed that yields about 0.35 m of travel, and combined sensing and intrusion allowances of 0.25 m; with the person's contribution over the same reaction window at roughly 0.65 m, the protective separation distance lands near 0.65 + 0.35 + 0.25 ≈ 1.25 m. The arithmetic is illustrative, but the structure is the point: SSM is validated by measured stopping distance and by the scanner or curtain geometry, and it interacts with PFL because a contact that occurs after the separation is breached falls back onto the force limits.</p>
+
+<h2>What a validation report must contain</h2>
+<p>A defensible report carries the standards and editions cited, the risk-assessment scenarios, the contact-point map with body regions and contact types, the instrument model and calibration certificate, the measured peak force and pressure per point with uncertainty, the thresholds applied per body region, pass/fail with margin, the validated configuration (tool, part, speeds, forces, software versions), and the re-validation triggers. For a US cell, RIA TR R15.806 is the methodological reference; for Canada, CSA Z434:26 and Z434.1:26 set the adoption and end-user context. Our <a href="collaborative-assembly-arm">collaborative assembly guide</a> shows how this validation slots into a cell design and ROI case, and our <a href="robot-arm-safety-usa-canada">North American standards guide</a> gives the wider ANSI/CSA/ISO map this article builds on.</p>
+
+<h2>Professional boundaries: this is not a certification</h2>
+<p>Force and pressure validation is safety engineering with legal weight. The risk assessment must be led by competent personnel, the measurement should be performed by a qualified integrator or third-party validator, and the current edition of the applicable standard — ISO 10218-2:2025, ANSI/A3 R15.06-2025, or CSA Z434:26 as the jurisdiction requires — is the authority for the numbers. This article explains the structure of the task so a buyer, engineer, or student can read a validation report critically and scope the work correctly; it is not a substitute for any of those, and nothing here approves a collaborative cell.</p>
+
+<h2>Sources and methodology</h2>
+<p>Standards status and content: ISO 10218-1:2025 and ISO 10218-2:2025 (published February 2025, absorbing ISO/TS 15066 collaborative content), ISO/TS 15066:2016 (published, confirmed 2022, under revision toward ISO/AWI 15066-1), ANSI/A3 R15.06-2025 Parts 1-3, CSA Z434:26 and CSA Z434.1:26, and RIA TR R15.806 (2018). The four collaborative techniques, the quasi-static/transient distinction, and the body-region threshold structure follow these documents; threshold values are not reproduced and must be read from the current standard. Sources accessed August 26, 2026. The illustrative scenario and separation-distance arithmetic carry stated assumptions and are not measurements; Robotics Engineering Lab did not perform a PFL measurement campaign for this article.</p>
+
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><h4>Is ISO/TS 15066 still the standard for cobot force limits?</h4><p>Its content now lives inside ISO 10218-1:2025 and ISO 10218-2:2025, published in February 2025; ISO/TS 15066:2016 remains listed as published and under revision toward ISO/AWI 15066-1. New documentation should cite the 2025 ISO 10218 editions and the national adoption, keeping ISO/TS 15066 as historical context for cells commissioned against it.</p></div>
+<div class="faq-item"><h4>What is the difference between quasi-static and transient contact?</h4><p>A quasi-static contact clamps a body part between the robot and a fixed object so the force is sustained; a transient contact is a brief impact or brush. The limits differ, and the validation must test both wherever the geometry allows a clamp, because a point that is harmless in transient contact can be hazardous if a person can be trapped there.</p></div>
+<div class="faq-item"><h4>Why does the end effector matter for a PFL validation?</h4><p>Collaboration is a property of the application, not the robot. The tool and part bring the edges, corners, pinch points and mass that actually contact a person, so a force-limited robot carrying a sharp or heavy tool is not a collaborative application. The validation measures the tool and part geometry, not just the robot's smooth surfaces.</p></div>
+<div class="faq-item"><h4>How many times should each contact point be measured?</h4><p>Enough to be statistical, with the result recorded alongside robot speed, force setting and tool configuration so it is reproducible. A single hit is an anecdote; a defensible report repeats each measurement, states the instrument uncertainty and calibration, and compares peaks against the body-region threshold for the region that point can reach.</p></div>
+<div class="faq-item"><h4>What voids a cobot force validation?</h4><p>Any change to the validated configuration: the tool, the part, the speed or force settings, the layout, or the robot software. The report is a snapshot of that configuration, so the cell's change-control procedure should treat any of those changes as a trigger for at least a targeted re-validation before collaborative operation resumes.</p></div>
+<div class="faq-item"><h4>Who should perform a PFL validation?</h4><p>A qualified integrator or third-party validator under a risk assessment led by competent personnel, using the current standard for the jurisdiction, ISO 10218-2:2025, ANSI/A3 R15.06-2025 or CSA Z434:26. The measurement system needs traceable calibration and stated uncertainty. This article explains the structure so you can scope and read the report; it does not approve a cell.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Force-limit content follows the 2025-2026 standards stack; Robotics Engineering Lab performed no measurement campaign. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 26, 2026 &middot; last reviewed August 26, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
