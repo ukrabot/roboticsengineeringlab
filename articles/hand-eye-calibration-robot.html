@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Hand-Eye Calibration for Robot Arms: Step-by-Step Method</title>
+<meta name="description" content="Hand-eye calibration for robot arm vision: eye-in-hand vs eye-to-hand, pose sets, OpenCV AX=XB solvers, residual checks, touch-test pass criteria and faults." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Hand-Eye Calibration for Robot Arms: Step-by-Step Method" />
+<meta property="og:description" content="Hand-eye calibration for robot arm vision: eye-in-hand vs eye-to-hand, pose sets, OpenCV AX=XB solvers, residual checks, touch-test pass criteria and faults." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
+<meta property="og:image:alt" content="A six-axis robot arm on a dark background, representative of the platform a hand-eye calibration is performed on" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-27" />
+<meta property="article:modified_time" content="2026-08-27" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Hand-Eye Calibration for Robot Arms: Five Checkpoints" />
+<meta name="twitter:description" content="Hand-eye calibration for robot arm vision: eye-in-hand vs eye-to-hand, pose sets, OpenCV AX=XB solvers, residual checks, touch-test pass criteria and faults." />
+<meta name="twitter:image:alt" content="A six-axis robot arm on a dark background, representative of the platform a hand-eye calibration is performed on" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/robotic_arm_hero.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot#article",
+  "headline": "Hand-Eye Calibration for Robot Arms: Step-by-Step Method",
+  "description": "Hand-eye calibration for robot arm vision: eye-in-hand vs eye-to-hand, pose sets, OpenCV AX=XB solvers, residual checks, touch-test pass criteria and faults.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot"
+  },
+  "image": "https://roboticsengineeringlab.com/robotic_arm_hero.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot",
+  "inLanguage": "en-US",
+  "wordCount": 3723,
+  "articleSection": "Maintenance, Calibration & Vision",
+  "keywords": "hand eye calibration, robot camera calibration, eye-in-hand calibration, eye-to-hand calibration, calibrateHandEye OpenCV, robot vision calibration"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many poses do I need for a hand-eye calibration?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The mathematical minimum is small, but it is not a working specification. The MoveIt 2 tutorial states the calibration can be estimated from a sequence of five or more poses, that the result improves with a few more samples and typically plateaus after about twelve to fifteen. Capture fifteen to twenty-five, spread the target across the whole image and across a range of distances, and include rotation about at least two axes between consecutive poses. Five samples leave no margin for one bad detection."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between eye-in-hand and eye-to-hand calibration?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In eye-in-hand the camera is rigidly mounted on the flange and moves with the robot, the target stays fixed in the workspace, and you solve for the camera-to-flange transform using cv.calibrateHandEye. In eye-to-hand the camera is fixed to the cell, the target is mounted on the robot, and you solve for the camera-to-base transform, which is better posed as the robot-world problem using cv.calibrateRobotWorldHandEye. The target always goes on the opposite side from the camera, but the transform you get back is different and cannot be used interchangeably."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my hand-eye calibration return a plausible translation but a bad rotation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually because the pose set lacks rotation diversity. If consecutive poses mainly translate, or all rotate about the same axis, the rotation is not uniquely observable and the solver returns whatever fits the noise. The MoveIt documentation is explicit that at least two rotation axes are needed to uniquely solve the calibration. Re-capture with meaningful rotations about two or three axes, with manufacturer guidance commonly recommending end-effector rotations greater than thirty degrees."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate does a hand-eye calibration need to be?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set the budget from the application, then convert it to a rotation tolerance. A rotation error grows with reach while a translation error does not: at a 600 mm reach, 0.30 degrees gives about 3.1 mm, 0.10 degrees about 1.05 mm, and 0.05 degrees about 0.52 mm. So a 0.5 mm placement requirement at that reach needs the hand-eye rotation accurate to roughly 0.05 degrees. Prove it with a touch test at the extremes of the working volume, not only where the target was during capture."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use a chessboard instead of an ArUco or ChArUco board?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, and OpenCV includes the corner detection and subpixel refinement functions for it. The practical difference is robustness: individual markers on an ArUco or ChArUco board are independently identifiable, so the board can be partially occluded or only partly in view and still be resolved, which happens often on a cluttered robot wrist. Either way, measure the printed marker width and separation with calipers and enter the measured values, because printer scaling is wrong more often than it is right."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often should I recalibrate a robot camera?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whenever the mechanical state the calibration measured has changed: the camera is removed or remounted, the bracket is touched or replaced, the lens is changed or refocused, the mount is bumped or loaded differently, the tool or flange interface changes, or the robot is re-mastered or has wrist maintenance. For a production cell, put the touch test on a periodic schedule so drift is detected by a test rather than by a quality escape, and record the touch-test misses alongside every published calibration."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); vertical-align:top; }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.formula { max-width:860px; padding:16px 20px; margin:22px 0; background:#11151d; border:1px solid var(--border); border-radius:10px; color:#e4d5b4; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.88rem; overflow-x:auto; white-space:pre-wrap; }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Hand-Eye Calibration for Robot Arms: Step-by-Step Method",
+      "item": "https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../robotic_arm_hero.jpg" alt="A six-axis robot arm photographed against a dark studio background, the platform used for camera-to-flange calibration" loading="eager" decoding="async" width="1024" height="1536" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Maintenance, Calibration &amp; Vision &mdash; Published August 27, 2026</div>
+<h1>Hand-Eye Calibration for Robot Arms: A Five-Checkpoint Method</h1><p class="hero-sub">A commissioning procedure for robot-camera calibration: choose the mounting, build a pose set with real rotation diversity, solve AX=XB with OpenCV, validate with residuals, and prove it with a touch test.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-6dof-kinematics.jpg" alt="Editorial blueprint diagram of 6-DOF robot arm kinematic frames and transforms" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the link frames a hand-eye calibration connects. Diagram is conceptual and shows relationships, not dimensioned geometry.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is a commissioning procedure, not a report of a Robotics Engineering Lab test. We have not performed this calibration on our own hardware and have not measured the errors described; the method follows the official OpenCV and MoveIt 2 documentation and published manufacturer guidance, with access dates in the sources section. Calculations are worked examples with stated assumptions. Jogging a robot to collect calibration poses is hazardous work: perform it at reduced speed under your site energy-control procedure, and nothing here is a risk assessment, a certification, or an approval of any cell.</p>
+</div>
+
+
+<h2>What hand-eye calibration actually solves: AX = XB</h2>
+<p>A camera knows where things are in the camera frame. A robot knows where its flange is in the base frame. Hand-eye calibration finds the one rigid transformation that connects those two descriptions, and once you have it, a point detected in an image can be expressed in robot coordinates and reached.</p>
+<p>Formally, the problem is written AX = XB, where A and B are the relative motions measured by the robot and by the camera between pairs of poses, and X is the unknown constant transformation between them. OpenCV solves it with <code>cv::calibrateHandEye</code>, which takes arrays of robot gripper-to-base rotations and translations, arrays of target-to-camera rotations and translations from pose estimation, and returns the camera-to-gripper rotation and translation:</p>
+<div class="formula">cv.calibrateHandEye( R_gripper2base, t_gripper2base,
+                     R_target2cam,  t_target2cam,
+                     R_cam2gripper, t_cam2gripper,
+                     method = cv.CALIB_HAND_EYE_TSAI )
+
+Returns R_cam2gripper, t_cam2gripper  &mdash; the transform gTc</div>
+<p>Five solver methods are implemented, and the choice is not cosmetic. Three solve rotation first and then translation (separable solutions): Tsai&ndash;Lenz, Park&ndash;Martin, and Horaud&ndash;Dornaika. Two solve rotation and translation simultaneously: Andreff and Daniilidis, the latter using dual quaternions. In practice you should run at least two of them on the same sample set. If they disagree materially, your data is the problem, not the algorithm &mdash; and that disagreement is the cheapest diagnostic available in this whole procedure.</p>
+
+<h2>Eye-in-hand or eye-to-hand: the choice that determines the whole procedure</h2>
+<p>Everything downstream depends on where the camera is bolted, and the two configurations are not interchangeable.</p>
+<ul>
+<li><strong>Eye-in-hand.</strong> The camera is rigidly attached to the flange or tool and moves with the robot. You solve for the camera-to-flange transform. The calibration target stays fixed in the workspace and its position does not need to be known, but it must not move during the capture. This is the direct form of <code>calibrateHandEye</code> and the case most tutorials document.</li>
+<li><strong>Eye-to-hand.</strong> The camera is fixed to the cell and the target is mounted on the robot. You are solving for the camera-to-base transform. The target&rsquo;s transform relative to the flange stays constant, and the robot provides the base-to-gripper poses. This is the configuration that most often gets implemented incorrectly, because it is usually better posed as the robot-world/hand-eye problem, which OpenCV solves separately with <code>cv::calibrateRobotWorldHandEye</code>, returning the base-to-world and gripper-to-camera transforms simultaneously.</li>
+</ul>
+<p>Pick the configuration before you print anything. The target goes on the opposite side from the camera in both cases, but the transform you get back and the way you use it are different, and mixing them up produces a calibration that looks numerically fine and positions parts in the wrong place.</p>
+<p>If you are still choosing between the two mounting strategies, or comparing camera classes for the cell, our <a href="robot-arm-vision-system">vision system guide</a> covers the eye-in-hand versus eye-to-hand trade-off and camera selection. This article assumes that decision is made.</p>
+
+<h2>Prerequisites: intrinsics, a rigid mount and a repeatable TCP</h2>
+<p>Hand-eye calibration amplifies whatever error is already present in three upstream things. Fix them first or the result is meaningless.</p>
+<p><strong>Camera intrinsics.</strong> The intrinsic matrix and distortion coefficients must come from a proper <code>cv::calibrateCamera</code> run on your lens at your working distance, with the target filling a good fraction of the frame and appearing near all four corners. Intrinsics are a property of the lens and sensor, not of the scene, and a bad intrinsic calibration cannot be corrected downstream. Do not reuse intrinsics published for a different lens, a different resolution, or a different crop.</p>
+<p><strong>A rigid mount.</strong> The whole method assumes the camera-to-flange relationship is constant. A bracket that flexes under acceleration, a camera held by a clamp on a tube, or a cable pulling on the housing will produce a calibration that was true for about four seconds. If you can move the camera by hand pressure after mounting, it is not mounted.</p>
+<p><strong>A known and repeatable TCP.</strong> The robot&rsquo;s tool centre point definition must be correct, because the poses you record are flange or tool poses in the base frame. Our <a href="robot-end-effector-selection">end effector selection guide</a> covers how the TCP is defined and why an undefined TCP propagates into every downstream coordinate. If the TCP is wrong, the hand-eye result absorbs the error and the system works only at the exact pose where you calibrated it.</p>
+<p>Finally, check the frame conventions before you write any code. ROS follows REP 103, where the camera optical frame is right-down-forward and the transform you publish is between defined named frames. Robot controllers report orientation variously as Tait-Bryan XYZ Euler angles, axis-angle, or quaternions, and some report clockwise-positive rotations where the vision library expects counterclockwise. Converting between them incorrectly is one of the most common causes of a hand-eye result that is close but visibly wrong.</p>
+
+<h2>Checkpoint 1: the calibration target and the camera intrinsics</h2>
+<p>Generate the target rather than buying one. OpenCV&rsquo;s object detection modules include ArUco marker boards and ChArUco boards, and marker-based boards have a practical advantage over a plain chessboard: individual markers are independently identifiable, so the board can be partially occluded or only partly in view and still be resolved. Print at a known scale, measure the printed marker width and separation with calipers, and enter the measured values &mdash; not the nominal ones. Printer scaling is off more often than it is right.</p>
+<p>Mount the printed pattern on something flat and stiff. A sheet of paper taped to a table bows; a bow of a couple of millimetres across a 200 mm board is a real pose error. Aluminium plate, glass or a flat cast surface is the standard choice, and for eye-to-hand the board should be bolted to the flange with a rigid bracket.</p>
+<div class="pullquote">
+<blockquote>Checkpoint 1 pass criterion: reprojection error from the intrinsic calibration is stable, the board is flat and measured, and the target does not move when the table is bumped.</blockquote>
+<cite>If reprojection error is high or varies frame to frame, fix exposure, focus and lighting before going further. Everything downstream is bounded by this number.</cite>
+</div>
+
+<h2>Checkpoint 2: the pose set &mdash; rotation diversity is the real requirement</h2>
+<p>This is where most hand-eye calibrations fail, and it fails silently because the solver still returns a number. The MoveIt 2 hand-eye tutorial is explicit about the two constraints that matter: the calibration can be estimated from a sequence of five or more poses, the result typically improves with a few more samples and plateaus after about twelve to fifteen, and each pair of poses must include some rotation &mdash; and not always around the same axis, because at least two rotation axes are needed to uniquely solve the calibration.</p>
+<p>Translated into a procedure for a production arm:</p>
+<ul>
+<li><strong>Capture 15 to 25 samples</strong>, not five. Five is the mathematical minimum, not a working specification, and it leaves no margin for a bad sample.</li>
+<li><strong>Rotate about at least two, preferably three, axes</strong> between consecutive poses, with a meaningful rotation &mdash; manufacturer guidance for eye-to-hand procedures commonly recommends end-effector rotations greater than 30&deg;. A pose set that only translates gives a translation-only solution and an undefined or wild rotation.</li>
+<li><strong>Spread the target across the image</strong>, including the corners. Corners are where distortion is largest, and a target only ever seen near the centre gives you a calibration that is only valid near the centre.</li>
+<li><strong>Vary the working distance</strong> across the range you will actually use, so the depth direction is observable.</li>
+<li><strong>Keep the robot in the same configuration family.</strong> Do not let the arm flip wrist configuration between samples unless you intend to calibrate both configurations separately.</li>
+<li><strong>Settle before each capture.</strong> Vibration and servo settling show up as blur and corner jitter. Dwell briefly, then trigger.</li>
+</ul>
+<div class="pullquote">
+<blockquote>Checkpoint 2 pass criterion: at least 15 samples, rotation about two or more axes between consecutive poses, target observed across the full image and across a range of distances, and every sample detected on the first attempt.</blockquote>
+<cite>Samples that needed retries are samples where something was marginal. Record why.</cite>
+</div>
+
+<h2>Checkpoint 3: recording the sample pairs and solving</h2>
+<p>Each sample is a pair: the robot&rsquo;s pose in the base frame at the moment of capture, and the target&rsquo;s pose in the camera frame from pose estimation. Record both together, timestamped, and record the robot pose from the same instant as the image &mdash; not from a moment later, and not from a pose the robot was still moving towards. On a moving system this single synchronisation error can dominate every other error source.</p>
+<p>Build the two arrays, run the solver, and run it again with a second method:</p>
+<div class="formula">methods = {
+    'Tsai':       cv.CALIB_HAND_EYE_TSAI,
+    'Park':       cv.CALIB_HAND_EYE_PARK,
+    'Horaud':     cv.CALIB_HAND_EYE_HORAUD,
+    'Andreff':    cv.CALIB_HAND_EYE_ANDREFF,
+    'Daniilidis': cv.CALIB_HAND_EYE_DANIILIDIS,
+}
+
+for name, m in methods.items():
+    R, t = cv.calibrateHandEye(R_gb, t_gb, R_tc, t_tc, method=m)
+    print(name, R, t)</div>
+<p>Store every sample set you capture, with the raw robot poses and the raw target poses, not just the final transform. If you later have to re-solve with a different method, or exclude an outlier, or answer a question about why the system drifted, the raw data is the only thing that lets you do it without moving the robot again.</p>
+<div class="pullquote">
+<blockquote>Checkpoint 3 pass criterion: at least two solvers agree to within your accuracy budget, and the returned rotation is a proper rotation matrix (determinant +1, orthonormal columns).</blockquote>
+<cite>A returned matrix that is not a valid rotation means a frame convention error, not a bad calibration.</cite>
+</div>
+
+<h2>Checkpoint 4: residual checks that separate a good solve from a lucky one</h2>
+<p>A solver returning a number is not evidence. Validate with residuals before you trust anything.</p>
+<ul>
+<li><strong>Leave-one-out.</strong> Re-solve N times, each time omitting one sample, and watch how much the result moves. A result that shifts by more than your accuracy budget when any single sample is removed is not converged &mdash; it is being held up by that sample.</li>
+<li><strong>Per-sample consistency.</strong> For each sample, predict the target pose in the base frame using the calibration and compare with the prediction from the other samples. Large outliers point at a bad target detection or a mis-synchronised robot pose; remove them and re-solve.</li>
+<li><strong>Rotation before translation.</strong> Check the rotation agreement between solvers first. Translation is computed from rotation in the separable methods, so a rotation error will show up as a translation error and mislead you if you look at translation first.</li>
+<li><strong>Sanity-check the magnitude.</strong> The translation should be physically plausible: the distance from the flange face to the camera optical centre, in metres. If your camera sits 90 mm in front of the flange and the solver returns 400 mm, the data is wrong, not subtle.</li>
+<li><strong>Watch for degeneracy.</strong> Small rotation between poses makes the rotation solution ill-conditioned. If the condition of your pose set is poor, add rotation, not samples.</li>
+</ul>
+
+<h2>Checkpoint 5: the verification touch test and the pass criterion</h2>
+<p>Residuals tell you the calibration is self-consistent. Only a physical test tells you it is correct. The standard test is a touch test: pick a physical point in the workspace, have the vision system compute its position in robot base coordinates using the calibration, command the robot to move a pointed tool to that position, and measure the miss.</p>
+<p>Run the touch test at the extremes of the working volume, not only where the target was during calibration &mdash; at least five points: near, far, left, right, and one at the maximum reach you intend to use. Record the miss in X, Y and Z at each point. A random scatter within budget means the calibration is good. A consistent offset in one direction means a systematic error, usually the TCP, a frame convention, or a sign error in the rotation conversion.</p>
+<p>Set the pass criterion from the application, not from a rule of thumb. If the process needs 0.5 mm placement accuracy, the touch test must pass at 0.5 mm at every test point, and the calibration is not done until it does. MoveIt 2 can export the result as a static transform publisher, which is the right way to make it reproducible in ROS 2 rather than hard-coding a matrix in a node.</p>
+<div class="pullquote">
+<blockquote>Checkpoint 5 pass criterion: touch-test miss within the application budget at every test point across the working volume, with the error pattern recorded and explained.</blockquote>
+<cite>An unexplained but in-tolerance error is a warning. It usually means the margin is smaller than you think.</cite>
+</div>
+
+<h2>Example calculation: how a small rotation error becomes a millimetre error</h2>
+<div class="pullquote">
+<blockquote>Example calculation &mdash; planning arithmetic with stated assumptions, not a measurement from a Robotics Engineering Lab bench.</blockquote>
+<cite>Use your own reach and your own accuracy budget. The method, not the numbers, is the point.</cite>
+</div>
+<p>A rotation error in the hand-eye transform produces a positioning error that grows with distance, while a translation error does not. For a small angular error &theta; at a lever arm r, the displacement is approximately r&theta; with &theta; in radians.</p>
+<div class="formula">Assume a working reach of r = 0.600 m.
+
+  &theta; = 0.30&deg; = 0.005236 rad  &rarr;  0.600 &times; 0.005236 = 3.14 mm
+  &theta; = 0.10&deg; = 0.001745 rad  &rarr;  0.600 &times; 0.001745 = 1.05 mm
+  &theta; = 0.05&deg; = 0.000873 rad  &rarr;  0.600 &times; 0.000873 = 0.52 mm
+
+A 1.0 mm translation error is 1.0 mm everywhere, independent of r.</div>
+<p>Two conclusions follow, and both change how you spend your calibration effort. First, to hold 0.5 mm at a 600 mm reach, the hand-eye rotation must be accurate to roughly 0.05&deg; &mdash; under one milliradian. Second, rotation error dominates at distance, so the far corner of your working volume is where the calibration is proved or disproved. That is why the touch test must include the maximum reach.</p>
+<p>Is 0.05&deg; achievable? Look at the sensing budget. A machine-vision camera with 3.45 &micro;m pixels behind a 6 mm lens has an angular resolution of roughly arctan(3.45&times;10<sup>&minus;6</sup> / 6&times;10<sup>&minus;3</sup>) &asymp; 0.033&deg; per pixel. With subpixel corner refinement at about one tenth of a pixel, target feature localisation reaches roughly 0.003&deg;, which is an order of magnitude better than the 0.05&deg; budget &mdash; before you account for board flatness, printing scale error, robot repeatability and synchronisation. The sensing chain is not the limiting term in a properly executed calibration; the pose set and the mounting rigidity are.</p>
+
+<h2>Eye-to-hand: what changes, and the robot-world form of the problem</h2>
+<p>For eye-to-hand, the camera is fixed and the target moves with the robot. You can force the problem into the eye-in-hand form by inverting the robot poses and passing base-to-gripper instead of gripper-to-base &mdash; this works and is widely done &mdash; but the cleaner formulation solves for both unknowns at once. OpenCV provides <code>cv::calibrateRobotWorldHandEye</code>, which takes world-to-camera and base-to-gripper pose arrays and returns the base-to-world and gripper-to-camera transforms, with separable (Shah, using the Kronecker product) and simultaneous (Li) solvers.</p>
+<p>The practical differences that catch people out:</p>
+<ul>
+<li><strong>The target must be rigidly and repeatably attached to the flange.</strong> Manufacturer guidance is explicit that the target must not shift relative to the flange or fixture during motion, and recommends rigid mounting brackets. A target held by a gripper jaw is a target that moves.</li>
+<li><strong>The transform you publish is camera-to-base, not camera-to-flange.</strong> Using it as a flange transform is a classic error.</li>
+<li><strong>The base frame must be the same frame the robot reports poses in.</strong> If the robot reports in a user or work-object frame while you assume the base frame, the result absorbs the difference.</li>
+<li><strong>You are also calibrating where the robot is in the world.</strong> That is a genuinely useful by-product for multi-robot or robot-plus-conveyor cells, and it is also a new way to be wrong.</li>
+</ul>
+
+<h2>Failure diagnosis: the six ways a hand-eye calibration goes wrong</h2>
+<div class="table-wrap" aria-label="Hand-eye calibration symptom to cause diagnosis table"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Work down the table; the first test that fails tells you where to look next.</caption>
+<thead><tr><th>Symptom</th><th>Likely cause</th><th>Test that proves it</th></tr></thead>
+<tbody>
+<tr><td>Rotation plausible, translation off by a large constant</td><td>Target moved during capture, or the frame the camera is mounted to is not the frame you recorded</td><td>Re-measure the target position before and after; confirm the flange frame name</td></tr>
+<tr><td>Translation plausible, rotation wild or non-physical</td><td>Insufficient rotation diversity; poses nearly collinear or single-axis</td><td>Re-capture with two or more rotation axes and rotations above 30&deg;</td></tr>
+<tr><td>Result changes materially when you add or remove a sample</td><td>Poorly conditioned pose set, or one outlier sample dominating</td><td>Leave-one-out re-solve; check per-sample reprojection error</td></tr>
+<tr><td>Consistent offset in one direction in the touch test</td><td>Wrong TCP, or a rotation-convention mismatch (Tait-Bryan vs axis-angle, sign of rotation)</td><td>Re-verify the TCP; convert one robot pose by hand and compare</td></tr>
+<tr><td>Accurate near the calibration poses, poor at the edges</td><td>Intrinsics or distortion not modelled across the field; target too small or too far</td><td>Re-do intrinsic calibration with the board in the corners; move the target closer</td></tr>
+<tr><td>Was good, now drifted after a shift</td><td>Camera mount compliance or thermal growth; cable tension on the housing</td><td>Re-run the touch test cold and warm; load-test the bracket by hand</td></tr>
+</tbody>
+</table>
+</div>
+<p>If the symptom is a general accuracy or repeatability problem rather than a vision-specific one, the fault may not be in the calibration at all. Robot kinematic error, lost mastering and thermal growth all present the same way, and separating them is a different exercise &mdash; see our <a href="robot-arm-calibration">robot arm calibration guide</a>, which covers mastering, kinematic calibration and the ISO 9283 definitions of accuracy and repeatability.</p>
+
+<h2>Indicative 2026 prices for the camera and target</h2>
+<div class="table-wrap" aria-label="Indicative 2026 prices for hand-eye calibration hardware"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative 2026 prices, single-unit US list from the named distributor, accessed August 27, 2026. Not Robotics Engineering Lab inventory and not a quotation. Industrial camera systems are commonly configured and quoted, so treat single-unit list prices as a starting point only.</caption>
+<thead><tr><th>Item</th><th>Relevant specification</th><th>Indicative 2026 price (USD)</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Intel RealSense D435i depth camera (82635D435IDK5P)</td><td>Stereo depth with IMU, USB</td><td>$355.00</td><td>DigiKey / Mouser listing</td></tr>
+<tr><td>Intel RealSense D435 depth camera (82635D435IFMP)</td><td>Camera module only</td><td>$322.50</td><td>DigiKey listing</td></tr>
+<tr><td>Teledyne FLIR Blackfly S BFS-U3-31S4M-C</td><td>3.1 MP mono, Sony IMX265, global shutter, 3.45 &micro;m pixels, USB3 Vision, GenICam</td><td>$565.00</td><td>Edmund Optics</td></tr>
+<tr><td>Teledyne FLIR Blackfly S BFS-U3-32S4C-C</td><td>Colour variant, 118 fps, USB3 Vision</td><td>$1,080.30</td><td>Edmund Optics</td></tr>
+<tr><td>Calibration target (ArUco or ChArUco board)</td><td>Pattern generated by OpenCV&rsquo;s object detection module, printed and measured</td><td>Print and rigid backing only &mdash; no verified commercial board price quoted</td><td>OpenCV documentation</td></tr>
+</tbody>
+</table>
+</div>
+<p>The depth-camera route and the industrial 2D route solve different problems. A stereo depth camera gives you range without a separate ranging step and is very effective for close-range bin work and for development, but a global-shutter industrial camera with a fixed focal length lens gives more stable geometry for precise pose estimation, and it is what a production cell will usually end up with. Higher-resolution industrial cameras and lens, lighting and mounting packages are typically configured and quoted by a machine-vision supplier rather than listed at a single price; request a quotation for a production installation. Prices are United States list prices in US dollars; Robotics Engineering Lab did not verify Canadian distributor pricing, so no CAD figure is quoted.</p>
+
+<h2>When to recalibrate, and how to keep the result reproducible</h2>
+<p>A hand-eye calibration is a measurement of a mechanical state, so it expires when that state changes. Recalibrate after any of the following: the camera is removed or remounted; the bracket is touched, repaired or replaced; the lens is changed, refocused or its aperture changed if focus shifts; the camera is bumped or the mount is loaded differently; the tool or flange interface changes; the robot is re-mastered or has significant maintenance on the wrist; or the touch test starts failing. For eye-in-hand on a production cell, put the touch test on a periodic schedule so drift is found by a test rather than by a quality escape.</p>
+<p>Make the result reproducible in three ways. Version-control the sample data and the transform together, so any published calibration can be traced to the poses that produced it. Publish the transform as a named static transform in the ROS 2 graph rather than embedding a matrix in a node, and set the frame names deliberately. And record the pass criteria with the result &mdash; the touch-test misses, the solver used, the sample count and the date &mdash; so the next person knows what the calibration was proved against. Our <a href="moveit-2-setup-assistant-robot-arm">MoveIt 2 Setup Assistant guide</a> covers the frame and configuration discipline this depends on, and our <a href="ros2-robot-arm-control">ros2_control guide</a> covers how the robot state you record during calibration is produced in the first place.</p>
+
+<h2>Safety and scope</h2>
+<p>Hand-eye calibration requires jogging the robot through a set of poses, often near fixtures, with a person initiating motion. That is a hazardous activity. Perform it at reduced speed inside a properly safeguarded cell, under the site&rsquo;s energy-control and lockout/tagout procedure, with the person initiating motion in control of the enabling device and clear of the swept path. Where the robot shares space with people, the applicable robot safety standard and your site risk assessment govern, not this article. Nothing here is a risk assessment, a certification, or an approval of any cell. Have a qualified integrator or controls engineer review the procedure before it runs in production.</p>
+
+<h2>Sources and methodology</h2>
+<p>The <code>calibrateHandEye</code> and <code>calibrateRobotWorldHandEye</code> interfaces, the five hand-eye solver methods and their source papers, and the robot-world solvers are taken from the official <a href="https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html" target="_blank" rel="noopener">OpenCV calib3d documentation</a>, accessed August 27, 2026. That page is the authoritative source for this article because it documents the exact function signatures, the five hand-eye solver enumerators, the input order for the rotation and translation vectors, and the AX = XB problem statement the method below is built on. The underlying methods are R. Tsai and R. Lenz, &ldquo;A New Technique for Fully Autonomous and Efficient 3D Robotics Hand/Eye Calibration&rdquo; (1989); F. Park and B. Martin, &ldquo;Robot Sensor Calibration: Solving AX = XB on the Euclidean Group&rdquo; (1994); R. Horaud and F. Dornaika, &ldquo;Hand-Eye Calibration&rdquo; (1995); N. Andreff, R. Horaud and B. Espiau, &ldquo;On-line Hand-Eye Calibration&rdquo; (1999); and K. Daniilidis, &ldquo;Hand-Eye Calibration Using Dual Quaternions&rdquo; (1998), with the robot-world Kronecker-product method from M. Shah (2013). Sample-count guidance, the plateau behaviour after roughly twelve to fifteen samples, the requirement for rotation about at least two axes, the eye-in-hand frame setup and the static-transform export are from the MoveIt 2 hand-eye calibration tutorial published by Picknik for the Humble and Rolling distributions; the right-down-forward camera optical frame that setup assumes is specified in <a href="https://www.ros.org/reps/rep-0103.html" target="_blank" rel="noopener">ROS REP 103</a>, accessed August 27, 2026, which is the document to check first whenever a calibration result looks like a frame-convention error rather than a measurement error; verify package status in your own distribution before relying on it. The recommendation for end-effector rotations greater than 30&deg;, capture counts of 10 to 20 images, and rigid target mounting follow published robot-manufacturer developer guidance for eye-in-hand and eye-to-hand procedures. Camera specifications and single-unit prices are from Edmund Optics and DigiKey listings accessed August 27, 2026. The rotation-to-linear-error arithmetic and the angular-resolution estimate were computed from the stated assumptions and the cited pixel size, and every assumption appears in the calculation block. Robotics Engineering Lab has not performed a hand-eye calibration on hardware, has not measured the errors described, and does not sell cameras or calibration hardware. The pass criteria are engineering practice, not a standard.</p>
+
+<h2>Frequently asked questions</h2>
+
+<div class="faq-item"><h4>How many poses do I need for a hand-eye calibration?</h4><p>The mathematical minimum is small, but it is not a working specification. The MoveIt 2 tutorial states the calibration can be estimated from a sequence of five or more poses, that the result improves with a few more samples and typically plateaus after about twelve to fifteen. Capture fifteen to twenty-five, spread the target across the whole image and across a range of distances, and include rotation about at least two axes between consecutive poses. Five samples leave no margin for one bad detection.</p></div>
+<div class="faq-item"><h4>What is the difference between eye-in-hand and eye-to-hand calibration?</h4><p>In eye-in-hand the camera is rigidly mounted on the flange and moves with the robot, the target stays fixed in the workspace, and you solve for the camera-to-flange transform using cv.calibrateHandEye. In eye-to-hand the camera is fixed to the cell, the target is mounted on the robot, and you solve for the camera-to-base transform, which is better posed as the robot-world problem using cv.calibrateRobotWorldHandEye. The target always goes on the opposite side from the camera, but the transform you get back is different and cannot be used interchangeably.</p></div>
+<div class="faq-item"><h4>Why does my hand-eye calibration return a plausible translation but a bad rotation?</h4><p>Usually because the pose set lacks rotation diversity. If consecutive poses mainly translate, or all rotate about the same axis, the rotation is not uniquely observable and the solver returns whatever fits the noise. The MoveIt documentation is explicit that at least two rotation axes are needed to uniquely solve the calibration. Re-capture with meaningful rotations about two or three axes, with manufacturer guidance commonly recommending end-effector rotations greater than thirty degrees.</p></div>
+<div class="faq-item"><h4>How accurate does a hand-eye calibration need to be?</h4><p>Set the budget from the application, then convert it to a rotation tolerance. A rotation error grows with reach while a translation error does not: at a 600 mm reach, 0.30 degrees gives about 3.1 mm, 0.10 degrees about 1.05 mm, and 0.05 degrees about 0.52 mm. So a 0.5 mm placement requirement at that reach needs the hand-eye rotation accurate to roughly 0.05 degrees. Prove it with a touch test at the extremes of the working volume, not only where the target was during capture.</p></div>
+<div class="faq-item"><h4>Can I use a chessboard instead of an ArUco or ChArUco board?</h4><p>Yes, and OpenCV includes the corner detection and subpixel refinement functions for it. The practical difference is robustness: individual markers on an ArUco or ChArUco board are independently identifiable, so the board can be partially occluded or only partly in view and still be resolved, which happens often on a cluttered robot wrist. Either way, measure the printed marker width and separation with calipers and enter the measured values, because printer scaling is wrong more often than it is right.</p></div>
+<div class="faq-item"><h4>How often should I recalibrate a robot camera?</h4><p>Whenever the mechanical state the calibration measured has changed: the camera is removed or remounted, the bracket is touched or replaced, the lens is changed or refocused, the mount is bumped or loaded differently, the tool or flange interface changes, or the robot is re-mastered or has wrist maintenance. For a production cell, put the touch test on a periodic schedule so drift is detected by a test rather than by a quality escape, and record the touch-test misses alongside every published calibration.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. The method follows official OpenCV and MoveIt 2 documentation; no calibration was performed or measured by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 27, 2026 &middot; last reviewed August 27, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
