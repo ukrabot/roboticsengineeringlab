@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Stepper Motor Robot Arm: Sizing by Torque and Speed</title>
+<meta name="description" content="Stepper motor robot arm design: size NEMA 17 joints by holding torque, torque-speed curves, microstepping, driver current, thermals and closed-loop options." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Stepper Motor Robot Arm: Sizing by Torque and Speed" />
+<meta property="og:description" content="Stepper motor robot arm design: size NEMA 17 joints by holding torque, torque-speed curves, microstepping, driver current, thermals and closed-loop options." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg" />
+<meta property="og:image:alt" content="A DIY six-DOF robot arm with stepper motors and 3D printed links photographed on a workbench" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-27" />
+<meta property="article:modified_time" content="2026-08-27" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How to Size Stepper Motors for a 6-DOF Robot Arm" />
+<meta name="twitter:description" content="Stepper motor robot arm design: size NEMA 17 joints by holding torque, torque-speed curves, microstepping, driver current, thermals and closed-loop options." />
+<meta name="twitter:image:alt" content="A DIY six-DOF robot arm with stepper motors and 3D printed links photographed on a workbench" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm#article",
+  "headline": "Stepper Motor Robot Arm: Sizing by Torque and Speed",
+  "description": "Stepper motor robot arm design: size NEMA 17 joints by holding torque, torque-speed curves, microstepping, driver current, thermals and closed-loop options.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm"
+  },
+  "image": "https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm",
+  "inLanguage": "en-US",
+  "wordCount": 3921,
+  "articleSection": "Arduino & Embedded Control",
+  "keywords": "stepper motor robot arm, NEMA 17 stepper robot arm, stepper vs servo robot joint, stepper motor torque speed curve, TMC2209 stepper driver, closed loop stepper robot arm"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can a stepper motor hold a robot arm joint in position with the power off?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Holding torque only exists while the phases are energised, so cutting power releases the joint. Detent torque from the permanent magnet is typically only a few percent of holding torque and will not support a link against gravity. If the joint must stay put unpowered, add a brake, use a worm or lead-screw stage with enough friction to self-lock, or fit a mechanical counterbalance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does 1/256 microstepping make a robot arm joint 256 times more accurate?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Microstepping increases commanded resolution and smoothness, but accuracy is limited by torque per microstep, static friction and detent torque. Once the incremental torque of one microstep falls below the friction in the joint, the rotor does not move and the commanded and actual positions diverge. Most hobby-scale arm joints stop gaining real improvement between 1/8 and 1/16 microstepping; beyond that you are buying quieter motion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my stepper lose steps at speed but hold position fine when it is slow?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because phase current cannot reach its set point within the step period. The winding inductance and the motor back-EMF limit how fast current can change, so torque falls off with speed. Raise the supply voltage within the driver rating, lengthen the acceleration ramp, reduce the microstep rate for high-speed moves, and verify against the manufacturer torque-speed curve at your actual bus voltage rather than the holding-torque figure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What supply voltage should a stepper-driven robot arm use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "As high as the driver rating and your thermal budget allow, not the motor rated winding voltage. A Pololu A4988 carrier is rated 8 to 35 V, a DRV8825 carrier 8.2 to 45 V, and a TMC2209 4.75 to 29 V. Higher voltage gives more torque at speed because it forces current into the winding inductance faster, at the cost of more dissipation in the driver and more heat in the motor. Never exceed the driver maximum, and allow headroom for inductive voltage spikes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a closed-loop stepper for a six-DOF robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on what a lost step costs. A pure open-loop joint fails silently: no fault, no alarm, and the arm is wrong until the next homing routine, which is acceptable on a bench arm nothing can collide with. Add sensorless stall detection if you only need homing and a crude collision alarm. Choose a real closed-loop stepper with an encoder when a lost step could drop a part, hit a fixture, or leave the arm in an unrecoverable position."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I size the power supply for six stepper joints?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sum the rated phase current times two phases for every motor, derate by a planning factor of about 0.7 to allow for chopper duty, then apply an 80 percent loading rule to the supply rating. That estimate is optimistic when all axes accelerate together into a high-torque pose, so size for the simultaneous case and confirm with a clamp meter on the DC bus during the worst move in your motion profile."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); vertical-align:top; }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.formula { max-width:860px; padding:16px 20px; margin:22px 0; background:#11151d; border:1px solid var(--border); border-radius:10px; color:#e4d5b4; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.88rem; overflow-x:auto; white-space:pre-wrap; }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Stepper Motor Robot Arm: Sizing by Torque and Speed",
+      "item": "https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../arduino_arm_tutorial.jpg" alt="A desktop six-degree-of-freedom robot arm build with stepper motors and 3D printed links on a workbench" loading="eager" decoding="async" width="1536" height="1024" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Arduino &amp; Embedded Control &mdash; Published August 27, 2026</div>
+<h1>Stepper Motor Robot Arm: How to Size Joints by Torque, Speed and Driver Current</h1><p class="hero-sub">A constraint-by-constraint selection method for stepper-driven 6-DOF arms: gravity torque, torque-speed curves, reflected inertia, microstepping limits, driver current setting, thermal budget and the closed-loop decision.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-arduino-servo-power.jpg" alt="Editorial blueprint diagram of a robot arm power distribution and motor drive architecture" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the motor drive and power distribution architecture a stepper-driven arm needs. Component values shown in the text come from the cited manufacturer datasheets and distributor pages, not from a Robotics Engineering Lab build.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is a specification-based selection guide, not a test report. Robotics Engineering Lab has not bought, wired, measured or bench-tested any of the motors, drivers or power supplies named here. Every specification and price is taken from the manufacturer datasheet or distributor page cited in the sources section, with the access date recorded. Calculations shown are worked examples with stated assumptions, not measurements. Nothing here approves a machine or substitutes for the manufacturer documentation for your specific parts.</p>
+</div>
+
+
+<h2>Where a stepper motor fits in a robot arm drivetrain</h2>
+<p>A hybrid stepper motor is a two-phase permanent-magnet brushless machine with a high pole count. The common 1.8&deg; version has 50 rotor teeth and takes 200 full steps per revolution. The controller energises the two windings in a fixed sequence and the rotor snaps to each detent in turn. There is no position sensor, no error signal and no control loop: the motor is assumed to be exactly where the step count says it is. That assumption is what makes a stepper cheap and what makes it fragile.</p>
+<p>Our <a href="smart-servo-robot-arm">servo motor guide</a> covers the other three actuator families used in robot arms &mdash; PWM hobby servos, digital bus servos and industrial AC servos. A stepper is a fourth family with a different trade. It gives you full continuous rotation (a standard hobby servo is limited to roughly 180&deg;), high torque at zero speed, deterministic open-loop positioning and drivers that cost a few dollars. It takes away torque at speed, silent failure under overload, mid-speed resonance, and continuous copper loss even when the joint is not moving. On an educational or research 6-DOF arm, and on any joint that moves slowly and holds a known load, those trade-offs are usually the right ones.</p>
+<p>The rest of this article works through the selection constraints in the order that actually eliminates candidates. Torque first, because nothing else matters if the joint cannot lift the link. Then speed, then dynamics, then resolution, then the driver, then thermal behaviour, and finally the feedback decision.</p>
+
+<h2>Requirement 1: static holding torque at the worst pose</h2>
+<p>Start with the static case, because it is the only one you can compute without knowing the motion profile. Gravity torque at a revolute joint is the sum of each mass times the perpendicular horizontal distance from the joint axis to that mass&rsquo;s centre of gravity. The worst pose is the one where every link downstream of the joint is horizontal.</p>
+<div class="formula">&tau;_gravity = g &times; &Sigma;( m_i &times; r_i&#8869; )
+
+  g     = 9.81 m/s&sup2;
+  m_i   = mass of link or payload i, in kg
+  r_i&#8869; = horizontal distance from the joint axis to the CG of m_i, in m
+  &tau;   = newton-metres (N&middot;m)
+
+&tau;_required = ( &tau;_gravity + &tau;_friction + &tau;_process ) &times; SF</div>
+<p>Add joint friction, cable and harness drag, and any process force the tool applies. Then apply a service factor. For a slow educational arm with a known, fixed payload, a factor of 1.5 to 2.0 on static torque is normal practice. If a person can push on the arm, if the tool can snag, or if the arm must hold position against an external load for long periods, size for more and prefer closed-loop control.</p>
+<p>Watch the units, because stepper and servo datasheets do not agree. Stepper holding torque is published in N&middot;cm or oz&middot;in; hobby servo torque is published in kg&middot;cm. The conversions are 1 oz&middot;in = 7.0616 mN&middot;m and 1 kg&middot;cm = 98.07 mN&middot;m. A 59 N&middot;cm motor is 0.59 N&middot;m, which is roughly the same as a 6.0 kg&middot;cm servo rating &mdash; not 59 kg&middot;cm. Getting this conversion wrong by a factor of ten is the single most common stepper sizing error we see in reader questions.</p>
+
+<h2>Requirement 2: the torque&ndash;speed curve is the spec that actually sizes the joint</h2>
+<p>Holding torque is measured at standstill, with rated current in the windings and the rotor stationary. It tells you nothing about what the motor can do at 600 rpm. Pull-out torque &mdash; the torque the motor can deliver without losing steps at a given speed &mdash; falls off steeply with speed, and the fall-off is set by the electrical time constant of the winding.</p>
+<div class="formula">&tau;_e = L / R        (electrical time constant, seconds)
+
+Example, Pololu item #2267 (NEMA 17, 1.68 A/phase):
+  L = 3.2 mH, R = 1.65 &Omega;
+  &tau;_e = 0.0032 / 1.65 = 1.94 ms
+
+At 600 rpm motor speed with 1/16 microstepping:
+  600 rpm = 10 rev/s = 2,000 full steps/s = 32,000 microsteps/s
+  period per microstep = 1 / 32,000 = 31 &micro;s
+
+31 &micro;s is far shorter than 1.94 ms, so the phase current can only
+reach its set point if the supply has enough voltage headroom to
+drive it there during the chopping cycle.</div>
+<p>This is why stepper drivers are run at 24 V or 48 V rather than at the motor&rsquo;s rated winding voltage. The #2267 above is rated at 2.8 V per phase; you would never power a robot arm bus at 2.8 V. The driver regulates current by chopping, and the supply voltage is the headroom that forces current into the inductance quickly enough. Higher bus voltage buys torque at speed at the cost of more dissipation in the driver and more heat in the motor. The Pololu DRV8825 carrier is rated 8.2&ndash;45 V and the A4988 carrier 8&ndash;35 V; the ADI/Trinamic TMC2209 is rated 4.75&ndash;29 V.</p>
+<p>The practical consequence for a selection guide is blunt: <strong>never size a robot joint from the holding-torque number alone.</strong> Find the manufacturer&rsquo;s published torque&ndash;speed curve for that motor at the supply voltage you intend to use, and read the torque at the motor speed your gear ratio produces. If the datasheet only shows a curve at 24 V and you plan to run 48 V, treat the published curve as conservative. If it shows only a curve at 12 V and you plan to run 24 V, you can do better but you have no published number, so verify by test.</p>
+
+<h2>Requirement 3: acceleration, rotor inertia and the reflected load</h2>
+<p>Static torque holds the arm. Acceleration torque moves it. The total torque the motor must produce during a move is the acceleration torque plus the gravity torque at that instant:</p>
+<div class="formula">&tau;_motor = [ J_rotor + (J_load / n&sup2;) ] &times; &alpha; &times; (1 / &eta;)  +  ( &tau;_gravity / n ) &times; (1 / &eta;)
+
+  J_rotor = rotor inertia of the motor, kg&middot;m&sup2;
+  J_load  = inertia of the link and payload about the joint axis, kg&middot;m&sup2;
+  n       = gear reduction ratio (dimensionless)
+  &alpha;     = angular acceleration at the motor shaft, rad/s&sup2;
+  &eta;      = transmission efficiency (0.90 typical for a single-stage planetary)</div>
+<p>Two things fall out of that equation and both matter more than the peak torque number. First, reflected load inertia falls with the square of the ratio: a 10:1 reduction divides the load inertia seen by the motor by 100. Second, a stepper does not need inertia matching in the way a closed-loop servo drive does &mdash; there is no loop to destabilise &mdash; but a high reflected inertia with a short acceleration ramp is exactly the condition that produces lost steps. Use a trapezoidal or S-curve velocity profile, keep the acceleration ramp long enough that the demanded torque stays inside the pull-out torque curve, and verify by running the profile with a deliberate overload test.</p>
+<p>Published rotor inertia for a NEMA 17 hybrid stepper is of the order of 10<sup>&minus;6</sup> kg&middot;m&sup2;, but it varies enough between models that you should read the value from the datasheet rather than assume it. Our <a href="belt-drive-vs-gear-drive">belt drive versus gear drive comparison</a> covers the reduction side of this equation, including the backlash penalty each stage adds to joint accuracy.</p>
+
+<h2>Resolution: step angle, microstepping and what microstepping does not do</h2>
+<p>A 1.8&deg; motor gives 200 full steps per revolution. A 0.9&deg; motor gives 400 and buys finer resolution at some cost in holding torque and in inductance. Microstepping then divides each full step by driving the two phase currents as partial sinusoids rather than full on or full off. Pololu describes the mechanism accurately: intermediate step locations are achieved by energising the coils with intermediate current levels.</p>
+<p>Microstepping genuinely improves two things: commanded resolution, and smoothness. It reduces the torque ripple that causes vibration and audible noise, which is why quiet drivers such as the TMC2209 default to fine microstepping. What microstepping does not do is proportionally improve accuracy. Each additional microstep produces a smaller increment of torque. When that increment falls below the joint&rsquo;s static friction plus the motor&rsquo;s detent torque, the rotor simply does not move, and the commanded position and the actual position diverge. Detent torque &mdash; the residual torque present with the phases unpowered &mdash; is typically a few percent of holding torque. In practice, most hobby-scale arm joints stop gaining real positional improvement somewhere between 1/8 and 1/16 microstepping. Beyond that you are buying smoothness, not precision.</p>
+<div class="formula">Commanded resolution at the joint:
+  &theta;_step = step angle / ( microsteps &times; gear ratio )
+
+Example: 1.8&deg; motor, 1/16 microstepping, 10:1 reduction
+  &theta;_step = 1.8 / (16 &times; 10) = 0.01125&deg; per commanded microstep
+
+Linear resolution at a 300 mm lever arm:
+  300 mm &times; 0.01125 &times; &pi; / 180 = 0.059 mm</div>
+<p>The other property people assume a stepper has and it does not: absolute position. A stepper motor does not know where it is at power-up. Every stepper-driven joint needs a homing routine &mdash; an optical or magnetic limit switch, a mechanical hard stop with a deliberate stall, or a sensorless stall-detection reference. Budget the switch, the wiring and the code, and design the mechanism so that homing cannot damage it.</p>
+
+<h2>Choosing the driver: current setting, supply voltage and chopper mode</h2>
+<p>The driver sets the phase current, generates the step sequence and protects the motor. Three widely used families cover almost every hobby and educational arm:</p>
+<div class="table-wrap" aria-label="Common stepper motor driver families for robot arms"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Specifications from Pololu product pages and the Analog Devices / Trinamic TMC2209 datasheet (Rev. 1.03), accessed August 27, 2026. Continuous current figures are for a Pololu carrier board at room temperature without additional cooling.</caption>
+<thead><tr><th>Driver</th><th>Supply voltage</th><th>Current per phase</th><th>Microstepping</th><th>Notable features</th></tr></thead>
+<tbody>
+<tr><td>A4988 carrier (Pololu #1182)</td><td>8&ndash;35 V</td><td>1 A continuous, 2 A peak</td><td>to 1/16</td><td>Cheapest usable option; no stall detection</td></tr>
+<tr><td>DRV8825 carrier (Pololu #2133)</td><td>8.2&ndash;45 V</td><td>1.5 A continuous, 2.2 A peak</td><td>to 1/32</td><td>Higher voltage headroom; drop-in replacement for A4988</td></tr>
+<tr><td>TMC2209 (ADI/Trinamic)</td><td>4.75&ndash;29 V</td><td>2 A RMS, 2.8 A peak</td><td>256 by microPlyer interpolation</td><td>StealthChop2, SpreadCycle, CoolStep, StallGuard4, single-wire UART</td></tr>
+</tbody>
+</table>
+</div>
+<p>Set the current limit from the motor&rsquo;s rated phase current, not from the driver&rsquo;s maximum. For the TMC2209 the datasheet gives the relationship between the reference voltage and the phase current as I<sub>RMS</sub> = [325 mV / (R<sub>SENSE</sub> + 20 m&Omega;)] &times; (1/&radic;2) &times; (V<sub>REF</sub> / 2.5 V). With the 110 m&Omega; sense resistors used on most carrier boards this reduces to I<sub>RMS</sub> = V<sub>REF</sub>/&radic;2 and I<sub>peak</sub> = V<sub>REF</sub>, so a 1.4 V reference sets roughly 1.0 A RMS. Always use the formula printed on the specific carrier you bought, because sense-resistor values differ between boards and an incorrect setting cooks motors.</p>
+<p>Chopper mode matters more than most buyers expect. StealthChop2 is a voltage-mode chopper that makes low-speed motion near-silent; SpreadCycle is a mixed-decay current chopper that is more dynamic but noisier. The TMC2209 can switch between them automatically at a programmable velocity threshold, which is the behaviour you want on an arm joint that dwells slowly and then accelerates hard. CoolStep reduces phase current when the load is light and is the single most effective way to keep a stepper-driven arm from becoming a space heater. StallGuard4 provides sensorless stall detection, usable for homing and for detecting a collision &mdash; but it is sensitive to speed and temperature and must be tuned per axis.</p>
+
+<h2>Thermal and acoustic limits: a motor that runs is not a motor that lasts</h2>
+<p>A stepper dissipates near its rated copper loss continuously, including while holding still with the phases energised. That is the opposite of a servo, which draws current in proportion to load.</p>
+<div class="formula">Standing copper loss, both phases energised:
+  P = 2 &times; I&sup2; &times; R
+
+Example, a 2.0 A/phase NEMA 17 with 1.4 &Omega; per phase:
+  P = 2 &times; (2.0)&sup2; &times; 1.4 = 11.2 W continuous</div>
+<p>Eleven watts in a 42 mm frame is substantial. Most NEMA 17 hybrid steppers are built to insulation class B, rated 130 &deg;C, which protects the winding but says nothing about the surface being safe to touch or about the plastic parts mounted next to it. Measure the case temperature in continuous duty and keep it well below the winding limit; a case above roughly 70&ndash;80 &deg;C in still air is the point to reduce current, add airflow, or move to a larger frame. On the acoustic side, once the driver is in a quiet chopper mode the dominant noise source usually moves downstream to the reduction stage and any belt in the path, not the motor itself.</p>
+<p>Resonance deserves its own note. Hybrid steppers have a resonant band, typically in the low hundreds of rpm at the motor shaft, where vibration and noise spike and step loss becomes likely. The standard mitigations are finer microstepping, higher bus voltage, a mechanically damped mount, and &mdash; most importantly &mdash; motion profiles that accelerate through the band rather than dwelling in it. If your arm spends a lot of time at one constant low speed, expect to find that band and design around it.</p>
+
+<h2>Open loop, sensorless stall detection, or closed loop with an encoder</h2>
+<p>There are three tiers of position assurance available for a stepper-driven joint, and the right choice depends entirely on what a lost step costs you.</p>
+<ul>
+<li><strong>Pure open loop.</strong> Cheapest and simplest. Steps are counted and assumed. A stall produces no fault, no alarm and no recovery &mdash; the arm is simply wrong from that moment until the next homing. Fine for a bench arm that nobody can reach and nothing can collide with.</li>
+<li><strong>Sensorless stall detection.</strong> A driver such as the TMC2209 estimates back-EMF and reports a stall on its DIAG pin. This gives you a homing reference without a switch and a crude collision alarm. It is velocity- and temperature-dependent, needs per-axis tuning, and is not a position measurement. Do not describe it to a reviewer as closed-loop control.</li>
+<li><strong>Closed-loop stepper.</strong> An incremental encoder on the motor shaft closes a position loop inside the driver. Typical hobby-grade kits use a 1000 PPR (4000 CPR) optical encoder. The driver corrects lost steps, reduces holding current when the joint is unloaded, and reports a real fault. This is the tier to choose whenever a lost step has a consequence &mdash; a dropped part, a collision with a fixture, or an unrecoverable position error.</li>
+</ul>
+<p>There is a crossover point, and it arrives sooner than people expect. Once you pay for a closed-loop stepper driver, an encoder and the tuning time, the total cost approaches that of a small brushless servo with an integrated encoder, and the servo will out-torque the stepper at speed. If your joint needs sustained speed, variable load or real dynamic response, stop optimising the stepper and read the servo comparison instead. The <a href="joint-encoders-robot-arm">joint encoder guide</a> explains the absolute, incremental and magnetic feedback options if you go that way.</p>
+
+<h2>Illustrative scenario: sizing one shoulder joint</h2>
+<div class="pullquote">
+<blockquote>Example calculation &mdash; planning arithmetic with stated assumptions, not a measurement from a Robotics Engineering Lab bench.</blockquote>
+<cite>Substitute your own link masses, lever arms and motion profile before selecting a motor.</cite>
+</div>
+<p>Assume a small 6-DOF educational arm. The forearm and everything downstream of joint 2 has a mass of 0.40 kg with its centre of gravity 0.12 m from the joint axis. The end effector plus payload has a mass of 0.25 kg at 0.28 m. Worst pose: both horizontal.</p>
+<div class="formula">&tau;_gravity = 9.81 &times; ( 0.40 &times; 0.12 + 0.25 &times; 0.28 )
+            = 9.81 &times; ( 0.0480 + 0.0700 )
+            = 9.81 &times; 0.1180
+            = 1.16 N&middot;m
+
+Allow for acceleration and friction with a factor of 1.8:
+&tau;_joint = 1.16 &times; 1.8 = 2.08 N&middot;m
+
+Through a 10:1 planetary at 90% efficiency:
+&tau;_motor = 2.08 / ( 10 &times; 0.90 ) = 0.231 N&middot;m = 23.1 N&middot;cm</div>
+<p>Now compare that against real catalogue parts. A NEMA 17 rated at 59 N&middot;cm holding torque gives a standstill margin of about 2.6&times; on the required 23.1 N&middot;cm. That looks comfortable and it is not, because holding torque is a standstill number. At the motor speed this joint will actually run &mdash; 60 rpm at the output through a 10:1 is 600 rpm at the motor &mdash; pull-out torque on a typical NEMA 17 is often close to half the holding value, so the working margin is nearer 1.3&times;. That is a defensible design for a slow educational arm with a known payload. It is not a defensible design if the payload varies, if the arm must hold against a push, or if a lost step would drop a part.</p>
+<p>Notice what the calculation did not need: a part number. The output of joint sizing is a torque requirement at a speed, expressed in N&middot;cm at the motor shaft. Only then do you open a catalogue and read the torque&ndash;speed curve at your chosen supply voltage. Our <a href="robot-arm-payload-calculator">payload calculator</a> does the equivalent arithmetic for industrial arms, where wrist moment limits rather than motor torque become the binding constraint.</p>
+
+<h2>A per-joint starting point for a 6-DOF arm</h2>
+<div class="table-wrap" aria-label="Typical stepper selection by joint for a 6-DOF educational arm"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">A starting point for a small educational arm with a payload under 0.5 kg, not a specification. Compute each joint from your own masses and lever arms.</caption>
+<thead><tr><th>Joint</th><th>Dominant load</th><th>Practical starting choice</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>J1 base rotation</td><td>Full arm inertia about a vertical axis; no gravity moment</td><td>NEMA 17 or NEMA 23 with 3:1&ndash;5:1 reduction</td><td>Inertia-dominated, so acceleration ramp matters more than holding torque</td></tr>
+<tr><td>J2 shoulder</td><td>Full gravity moment of arm plus payload</td><td>NEMA 23, or NEMA 17 with 10:1 or higher</td><td>Highest static torque demand in the arm</td></tr>
+<tr><td>J3 elbow</td><td>Forearm and payload gravity moment</td><td>NEMA 17 with 5:1&ndash;10:1 reduction</td><td>Usually the second-highest static demand</td></tr>
+<tr><td>J4 wrist roll</td><td>Tool inertia about the tool axis</td><td>Small NEMA 17 or NEMA 14</td><td>Low torque, but continuous rotation needs a slip ring or a cable plan</td></tr>
+<tr><td>J5 wrist pitch</td><td>Tool and payload at short lever</td><td>Small NEMA 17 with light reduction</td><td>Speed matters more than torque here</td></tr>
+<tr><td>J6 tool rotation</td><td>Very low torque</td><td>Small NEMA 14 or a bus servo</td><td>Often better served by a smart servo than a stepper</td></tr>
+</tbody>
+</table>
+</div>
+<p>Two structural notes. First, the base joint is the one people oversize: with the axis vertical there is no gravity moment at all, only inertia, so the requirement is acceleration rather than holding torque. Second, continuous-rotation joints (J1 and J6) need a cable strategy before they need a motor. Route the harness through a slip ring or leave a deliberate service loop, and treat that as part of the design rather than something to solve after the arm is built.</p>
+
+<h2>Indicative 2026 component prices (USD)</h2>
+<div class="table-wrap" aria-label="Indicative 2026 prices for stepper motor and driver components"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative 2026 prices, single-unit US list from the named distributor, accessed August 27, 2026. Not Robotics Engineering Lab inventory and not a quotation.</caption>
+<thead><tr><th>Item</th><th>Specification</th><th>Indicative 2026 price (USD)</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Pololu #2267 NEMA 17 stepper</td><td>42&times;38 mm, 1.68 A/phase, 3.7 kg&middot;cm (0.36 N&middot;m) holding, 1.65 &Omega;, 3.2 mH</td><td>$35.12 (qty 1)</td><td>Pololu product page</td></tr>
+<tr><td>Pololu #1200 NEMA 17 stepper</td><td>42&times;48 mm, 1.2 A/phase, 3.2 kg&middot;cm (0.31 N&middot;m) holding, 3.3 &Omega;, 2.8 mH</td><td>$43.12 (qty 1)</td><td>Pololu product page</td></tr>
+<tr><td>Pololu #1182 A4988 driver carrier</td><td>8&ndash;35 V, 1 A continuous per phase</td><td>$8.95 (qty 1)</td><td>Pololu product page</td></tr>
+<tr><td>Pololu #2133 DRV8825 driver carrier</td><td>8.2&ndash;45 V, 1.5 A continuous per phase, 1/32 microstepping</td><td>$15.95 (qty 1)</td><td>Pololu product page</td></tr>
+<tr><td>Closed-loop NEMA 17 kit (StepperOnline 1-CL42T-S05-V41)</td><td>52 N&middot;cm motor with 1000 PPR encoder plus CL42T-V41 driver, 24&ndash;48 VDC, 0&ndash;3.0 A</td><td>$48.86 (qty 1)</td><td>StepperOnline product page</td></tr>
+<tr><td>Mean Well LRS-150-24 supply</td><td>24 V, 6.5 A, 156 W enclosed AC-DC</td><td>Reference range $18&ndash;$24</td><td>Bravoelectro ($18.40) and TRC Electronics ($23.31 for the LRS-150F-24 variant)</td></tr>
+<tr><td>Arduino Mega 2560 Rev3</td><td>ATmega2560, 54 digital I/O, 4 UARTs</td><td>$55.00</td><td>AndyMark product page</td></tr>
+</tbody>
+</table>
+</div>
+<p>These are United States list prices in US dollars. Canadian readers should expect currency conversion, duties and brokerage on cross-border orders, and should confirm the shipping price at checkout; Robotics Engineering Lab did not verify Canadian distributor listings for these parts, so no CAD figure is quoted here. Prices on hobby components move frequently and distributor price breaks are significant &mdash; the Pololu motors above drop roughly 6% at five units and 12% at twenty-five.</p>
+
+<h2>Power budget: how to size the supply for six stepper joints</h2>
+<p>Stepper current draw does not add the way resistive loads do. A chopped constant-current driver draws less average input current than the phase current it delivers, because the chopping duty cycle depends on supply voltage, winding resistance and speed. There is no substitute for measuring, but a defensible planning estimate is:</p>
+<div class="formula">Planning estimate for a multi-axis stepper bus:
+
+  I_bus &asymp; 0.7 &times; &Sigma;( I_phase,rated &times; 2 phases )   [chopper duty assumption]
+  then apply an 80% loading rule to the supply rating.
+
+Example, four NEMA 17 axes at 2.0 A/phase:
+  &Sigma; = 4 &times; 2.0 &times; 2 = 16 A
+  I_bus &asymp; 0.7 &times; 16 = 11.2 A
+  Supply rated for 11.2 / 0.80 = 14 A at 24 V &asymp; 336 W</div>
+<p>The 0.7 factor is a planning assumption, not a measurement, and it is optimistic when all axes accelerate simultaneously into a high-torque pose. Size for the simultaneous case, not the average case, then verify with a clamp meter on the DC bus during the worst move in your motion profile. Use a supply with real short-circuit and over-temperature protection, fuse the DC bus, and keep motor and logic grounds bonded at a single point. Our <a href="arduino-mega-robot-wiring">Arduino Mega wiring guide</a> works through the same method for a bus-servo arm, including wire gauge and termination practice.</p>
+
+<h2>When a stepper motor is the wrong answer for a robot arm</h2>
+<p>Being honest about the boundary is part of the selection. Choose a different actuator when any of the following is true:</p>
+<ul>
+<li><strong>The joint must hold position with power removed.</strong> A stepper holds only while energised. Detent torque is a few percent of holding torque and will not support a link. You need a brake, a worm or lead-screw transmission with enough friction to self-lock, or a counterbalance.</li>
+<li><strong>The joint must run fast, continuously.</strong> Above roughly 1000 rpm at the motor shaft, pull-out torque on a hobby-scale stepper is small and the efficiency is poor. A brushless servo with a reduction is the correct part.</li>
+<li><strong>The payload varies or is unknown.</strong> Open-loop control has no way to notice that the torque margin has vanished. Either close the loop or size for the worst case and accept the cost.</li>
+<li><strong>A lost step has a safety or quality consequence.</strong> Silent failure is a design property of open-loop control, not a bug. If the consequence matters, use closed-loop feedback and treat the fault signal as real.</li>
+<li><strong>The duty cycle is high.</strong> Continuous holding loss makes steppers the least efficient way to hold a static position. Servos and brakes both beat them here.</li>
+<li><strong>The arm is an industrial cell with people near it.</strong> Industrial robot arms use closed-loop AC servos with safety-rated control for a reason. Nothing in this article is guidance for a production cell; that work belongs with a qualified controls engineer or integrator and the current edition of the applicable robot safety standard.</li>
+</ul>
+
+<h2>Sources and methodology</h2>
+<p>Motor and driver specifications and single-unit prices were taken from the Pololu <a href="https://www.pololu.com/category/120/stepper-motor-drivers" target="_blank" rel="noopener">stepper motor driver comparison table</a> and from product pages for items #1200, #2267, #1182 and <a href="https://www.pololu.com/product/2133" target="_blank" rel="noopener">#2133</a>, and from the StepperOnline product page for kit 1-CL42T-S05-V41, all accessed August 27, 2026. The category comparison is the most useful official source here because it prints each driver&rsquo;s continuous current alongside the exact test condition &mdash; on the carrier board, at room temperature, without additional cooling &mdash; which is precisely the condition the current figures in this article assume, and the condition under which a datasheet peak figure would overstate what the board will sustain. TMC2209 electrical specifications, the V<sub>REF</sub>-to-current relationship and the CoolStep, StallGuard4 and StealthChop2 feature set are from the Analog Devices / Trinamic TMC2209 datasheet, Rev. 1.03. Power-supply prices are from Bravoelectro and TRC Electronics listings accessed the same day and are shown as a reference range rather than a single figure. The Arduino Mega 2560 Rev3 price is from AndyMark. Formulas for gravity torque, reflected inertia and resolution are standard mechanics; the electrical time-constant and standing-loss arithmetic shown in this article were computed from the datasheet values printed alongside them, and every assumption is stated in the block. Robotics Engineering Lab has not bench-tested these motors, has not measured the torque&ndash;speed curves, and does not stock or sell any of the components listed. The joint table is a starting point for planning, not a validated specification.</p>
+
+<h2>Frequently asked questions</h2>
+
+<div class="faq-item"><h4>Can a stepper motor hold a robot arm joint in position with the power off?</h4><p>No. Holding torque only exists while the phases are energised, so cutting power releases the joint. Detent torque from the permanent magnet is typically only a few percent of holding torque and will not support a link against gravity. If the joint must stay put unpowered, add a brake, use a worm or lead-screw stage with enough friction to self-lock, or fit a mechanical counterbalance.</p></div>
+<div class="faq-item"><h4>Does 1/256 microstepping make a robot arm joint 256 times more accurate?</h4><p>No. Microstepping increases commanded resolution and smoothness, but accuracy is limited by torque per microstep, static friction and detent torque. Once the incremental torque of one microstep falls below the friction in the joint, the rotor does not move and the commanded and actual positions diverge. Most hobby-scale arm joints stop gaining real improvement between 1/8 and 1/16 microstepping; beyond that you are buying quieter motion.</p></div>
+<div class="faq-item"><h4>Why does my stepper lose steps at speed but hold position fine when it is slow?</h4><p>Because phase current cannot reach its set point within the step period. The winding inductance and the motor back-EMF limit how fast current can change, so torque falls off with speed. Raise the supply voltage within the driver rating, lengthen the acceleration ramp, reduce the microstep rate for high-speed moves, and verify against the manufacturer torque-speed curve at your actual bus voltage rather than the holding-torque figure.</p></div>
+<div class="faq-item"><h4>What supply voltage should a stepper-driven robot arm use?</h4><p>As high as the driver rating and your thermal budget allow, not the motor rated winding voltage. A Pololu A4988 carrier is rated 8 to 35 V, a DRV8825 carrier 8.2 to 45 V, and a TMC2209 4.75 to 29 V. Higher voltage gives more torque at speed because it forces current into the winding inductance faster, at the cost of more dissipation in the driver and more heat in the motor. Never exceed the driver maximum, and allow headroom for inductive voltage spikes.</p></div>
+<div class="faq-item"><h4>Do I need a closed-loop stepper for a six-DOF robot arm?</h4><p>It depends on what a lost step costs. A pure open-loop joint fails silently: no fault, no alarm, and the arm is wrong until the next homing routine, which is acceptable on a bench arm nothing can collide with. Add sensorless stall detection if you only need homing and a crude collision alarm. Choose a real closed-loop stepper with an encoder when a lost step could drop a part, hit a fixture, or leave the arm in an unrecoverable position.</p></div>
+<div class="faq-item"><h4>How do I size the power supply for six stepper joints?</h4><p>Sum the rated phase current times two phases for every motor, derate by a planning factor of about 0.7 to allow for chopper duty, then apply an 80 percent loading rule to the supply rating. That estimate is optimistic when all axes accelerate together into a high-torque pose, so size for the simultaneous case and confirm with a clamp meter on the DC bus during the worst move in your motion profile.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Component values come from manufacturer datasheets and public distributor listings; no part named here was bench-tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 27, 2026 &middot; last reviewed August 27, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>

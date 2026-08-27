@@ -25,6 +25,7 @@
   <url><loc>https://roboticsengineeringlab.com/articles/fanuc-robot-arm-review</loc><lastmod>2026-04-29</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/force-torque-sensors-robot</loc><lastmod>2025-08-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/future-6-dof-robot-arms</loc><lastmod>2026-07-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://roboticsengineeringlab.com/articles/hand-eye-calibration-robot</loc><lastmod>2026-08-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/harmonic-drive-review</loc><lastmod>2025-05-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/industrial-plc-robotics</loc><lastmod>2025-02-06</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/joint-encoders-robot-arm</loc><lastmod>2024-12-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -59,7 +60,9 @@
   <url><loc>https://roboticsengineeringlab.com/articles/ros2-robot-arm-control</loc><lastmod>2024-08-27</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/smart-servo-robot-arm</loc><lastmod>2024-11-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/standard-bots-ro1</loc><lastmod>2026-05-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://roboticsengineeringlab.com/articles/stepper-motor-robot-arm</loc><lastmod>2026-08-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/types-of-robotic-arms</loc><lastmod>2024-05-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://roboticsengineeringlab.com/articles/used-industrial-robot-arm</loc><lastmod>2026-08-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/universal-robots-ur20</loc><lastmod>2026-07-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/vacuum-gripper-robot</loc><lastmod>2025-01-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://roboticsengineeringlab.com/articles/robot-arm-singularity-guide</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>

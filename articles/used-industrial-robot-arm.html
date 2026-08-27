@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Used Industrial Robot Arm: A Buyer's Inspection Guide</title>
+<meta name="description" content="Used industrial robot arm buying: compare as-is, dealer-refurbished and OEM routes, verify controller match, mastering, licences and re-deployment duties." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/used-industrial-robot-arm" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Used Industrial Robot Arm: A Buyer's Inspection Guide" />
+<meta property="og:description" content="Used industrial robot arm buying: compare as-is, dealer-refurbished and OEM routes, verify controller match, mastering, licences and re-deployment duties." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:image:alt" content="A six-axis industrial robot arm in a manufacturing facility, representative of the used industrial robot market" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-27" />
+<meta property="article:modified_time" content="2026-08-27" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/used-industrial-robot-arm" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Buying a Used Industrial Robot Arm: What to Inspect First" />
+<meta name="twitter:description" content="Used industrial robot arm buying: compare as-is, dealer-refurbished and OEM routes, verify controller match, mastering, licences and re-deployment duties." />
+<meta name="twitter:image:alt" content="A six-axis industrial robot arm in a manufacturing facility, representative of the used industrial robot market" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/used-industrial-robot-arm#article",
+  "headline": "Used Industrial Robot Arm: A Buyer's Inspection Guide",
+  "description": "Used industrial robot arm buying: compare as-is, dealer-refurbished and OEM routes, verify controller match, mastering, licences and re-deployment duties.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-27",
+  "dateModified": "2026-08-27",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/used-industrial-robot-arm"
+  },
+  "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/used-industrial-robot-arm",
+  "inLanguage": "en-US",
+  "wordCount": 3517,
+  "articleSection": "Specification Notes & Buying",
+  "keywords": "used industrial robot arm, refurbished industrial robot, used FANUC robot, robot controller generations, robot mastering battery, used robot risk assessment"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do I have to buy the controller that came with a used robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In almost every case yes. Arms and controllers are paired and commissioned at the factory, and the master data and software licensing follow that pairing. Separating them generally means re-mastering, recalibration and in some cases manufacturer involvement to reactivate software, and dealers who work in this market warn that the cost of re-matching a mis-paired unit can approach the price of the robot. Buy the matched arm-and-controller set, and verify that the serial number on the arm matches the one registered in the controller."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much should a used industrial robot cost compared with a new one?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no reliable single ratio, because the discount depends far more on controller generation, hours, completeness and remaining support life than on age. Public 2026 listings for six-axis FANUC arms ranged from $7,500 for a 2001 ARC Mate 120i with a legacy RJ3 controller to $29,500 for a 2013 M-710iC/50 with an R-30iB, pendant, cables and 13,000 hours on the meter. Treat those as a market reference range and get a written quotation for your specific configuration."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I check first when inspecting a used robot in person?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with the paperwork and the pairing, then go to the mechanics. Confirm the arm serial matches the controller, the pendant is the right model, the interconnect cables are present, and the installed software option list covers your application. Then jog each axis slowly through its full range listening for bearing noise, measure backlash at the wrist with a dial indicator, look for oil weeping at the J4 to J6 seals, check the flange face for damage, and ask for an explanation of every stored fault code."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are software options transferable when buying a used robot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not automatically. Application and fieldbus options such as FANUC HandlingTool, ArcTool, PalletTool, iRVision and Dual Check Safety are licensed features, are not included with the controller as standard, and are not automatically transferable to a new owner. Ask the seller for the controller installed options list, verify each option you need is activated on that specific unit rather than supported by the controller family, and confirm the current transfer and re-registration policy with the manufacturer directly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does buying a used robot change my safety obligations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, and this is the part listings never mention. A robot that was safely integrated in its previous cell is not safe in yours, because the safeguarding was designed for a different process and layout. A task-based risk assessment must be performed and documented for your installation and updated whenever the application, tooling, payload or safeguarding changes. In the United States that obligation now sits in ANSI/A3 R15.06-3-2025, and OSHA typically asks for the risk assessment early in an inspection. Canadian users work to CSA Z434 and provincial requirements."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a controller phase-out a reason to avoid a used robot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not by itself, but it changes the horizon you should price. ABB has stated that the IRC5 is being phased out in June 2026 while spare parts and service continue through the operational life of installed robots, so an IRC5 robot remains serviceable but no new IRC5 systems will be supplied and the used spares pool will tighten over time. If your horizon is ten years or more, price the current-generation alternative as well, and get the manufacturer support commitment in writing before you buy."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 0; }
+.nav-inner { max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; line-height:1; }
+.logo span { color:var(--accent); font-style:italic; }
+.nav-links { display:flex; gap:22px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.85rem; font-weight:500; letter-spacing:0.03em; transition:color .2s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:55vh; display:flex; align-items:flex-end; overflow:hidden; }
+.hero-article img.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.45) contrast(1.1); z-index:1; }
+.hero-article::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(11,14,20,0.3) 0%,rgba(11,14,20,0.7) 60%,var(--ink) 100%); z-index:2; pointer-events:none; }
+.hero-inner { position:relative; z-index:3; max-width:1100px; margin:0 auto; padding:100px 24px 80px; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:12px; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:16px; }
+.hero-badge .line { width:28px; height:2px; background:var(--accent); display:block; }
+.hero-inner h1 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:clamp(2rem,5vw,3.8rem); line-height:1.08; letter-spacing:-0.03em; color:#fff; max-width:900px; text-wrap:balance; }
+.hero-inner h1 em { font-style:italic; font-weight:400; color:var(--accent); }
+.hero-sub { margin-top:18px; max-width:720px; color:var(--text-secondary); font-size:1rem; font-weight:300; }
+.article-body { max-width:1100px; margin:0 auto; padding:80px 24px 100px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:300; font-size:1.8rem; line-height:1.15; color:#fff; letter-spacing:-0.025em; margin-top:56px; margin-bottom:18px; }
+.article-body h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:400; font-size:1.15rem; color:var(--text-primary); margin-top:36px; margin-bottom:10px; letter-spacing:-0.015em; }
+.article-body p { color:var(--text-secondary); margin-bottom:20px; }
+.article-body a { color:var(--accent-2); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(95,142,216,0.35); transition:text-decoration-color .2s; }
+.article-body a:hover { text-decoration-color:var(--accent-2); }
+.pullquote { border-left:3px solid var(--accent); padding:20px 24px; margin:36px 0; background:linear-gradient(90deg,rgba(201,169,110,0.06),transparent); border-radius:0 14px 14px 0; }
+.pullquote blockquote { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.25rem; font-weight:300; line-height:1.35; color:var(--text-primary); font-style:italic; }
+.pullquote cite { display:block; margin-top:10px; font-size:0.8rem; color:var(--text-muted); font-style:normal; letter-spacing:0.02em; font-family:'Inter',sans-serif; }
+.table-wrap { overflow-x:auto; margin-top:24px; border-radius:12px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+thead th { background:var(--surface-card); color:var(--text-muted); text-align:left; padding:12px 14px; font-weight:600; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; }
+tbody td { padding:14px; border-top:1px solid var(--border); color:var(--text-secondary); vertical-align:top; }
+tbody tr:hover td { background:var(--surface-card); }
+tbody td:first-child { color:var(--text-primary); font-weight:500; }
+.article-body ul { padding-left:22px; margin-top:14px; color:var(--text-secondary); }
+.article-body li { margin-bottom:10px; }
+.article-body ul li::marker { color:var(--accent); }
+.formula { max-width:860px; padding:16px 20px; margin:22px 0; background:#11151d; border:1px solid var(--border); border-radius:10px; color:#e4d5b4; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.88rem; overflow-x:auto; white-space:pre-wrap; }
+.faq-item { border-bottom:1px solid var(--border); padding:20px 0; }
+.faq-item h4 { font-weight:500; color:var(--text-primary); margin-bottom:8px; font-size:1rem; }
+.faq-item p { color:var(--text-secondary); font-size:0.92rem; }
+.footer-nav { border-top:1px solid var(--border); padding-top:48px; margin-top:60px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; }
+.footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
+.footer-nav .back-link:hover { text-decoration:underline; }
+@media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+</style>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Used Industrial Robot Arm: A Buyer's Inspection Guide",
+      "item": "https://roboticsengineeringlab.com/articles/used-industrial-robot-arm"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="A six-axis industrial robot arm on a factory floor, the class of equipment traded on the secondary market" loading="eager" decoding="async" width="1024" height="322" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Specification Notes &amp; Buying &mdash; Published August 27, 2026</div>
+<h1>Used Industrial Robot Arm: A Buyer's Inspection and Re-Deployment Guide</h1><p class="hero-sub">Compare the four acquisition routes, verify the arm-controller pairing, check mastering, licences and hours, inspect the reducers, and understand why a re-deployed robot needs a new risk assessment.</p></div></header>
+
+<main class="article-body container" aria-label="Main article content">
+<div class="article-img" style="margin:32px 0 48px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+<img src="../articles/diagram-robot-transmissions.jpg" alt="Editorial blueprint diagram of robot joint transmission elements including reducers, the wear points inspected on a used arm" style="width:100%;display:block;filter:brightness(.92) contrast(1.05);" loading="lazy" decoding="async" width="1376" height="768" />
+<div style="padding:14px 16px;font-size:.82rem;color:#77736e;background:#181b21;border-top:1px solid rgba(255,255,255,0.06);">Editorial illustration of the drivetrain elements a used-robot inspection targets: reduction gearing, seals and bearings. Diagram is conceptual and shows relationships, not dimensioned geometry.</div></div>
+
+<div class="editorial-note" style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px;margin:0 0 36px;">
+<p style="margin:0;color:#b5b0a6;font-size:.9rem;"><strong style="color:#f2f0eb;">Disclosure and scope:</strong> this is a specification and market guide, not a hands-on review. Robotics Engineering Lab has not bought, inspected, powered, tested or refurbished any robot described here, has not obtained quotations, and does not sell used equipment. All prices are public listing prices accessed August 27, 2026 and are shown as a reference range. Nothing in this article is a risk assessment, a certification, or legal advice, and it does not approve a robot cell.</p>
+</div>
+
+
+<h2>Why the used robot market is a specification problem, not a bargain problem</h2>
+<p>The secondary market for a <strong>used industrial robot</strong> is deep, liquid and full of genuinely good equipment. It is also the one segment of robot buying where a headline price tells you almost nothing. A used six-axis arm is not a commodity with a known condition; it is a matched mechanical and control system whose value depends on which controller it is paired with, which software options are installed in that controller, whether the zero-point reference is intact, how many hours are on the reducers, and what the previous application did to it. Two listings for the same model at the same price can differ in delivered value by more than the price of the robot.</p>
+<p>This article compares the four realistic acquisition routes, gives you a decision matrix tied to measurable constraints, and then walks the inspection sequence that separates a good used robot from an expensive one. It is written for the buyer, the maintenance lead and the engineer scoping the project &mdash; not as a substitute for a physical inspection or a written quotation.</p>
+<p>Prices quoted below are public listing prices from North American used-equipment marketplaces, accessed August 27, 2026, and are shown so you can see what the market is actually asking. They are not quotations, they are not Robotics Engineering Lab inventory, and they will not be your price.</p>
+
+<h2>The four acquisition routes compared</h2>
+<div class="table-wrap" aria-label="Comparison of the four routes to acquiring a used industrial robot arm"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Route descriptions follow the condition grades used by North American used-robot dealers. Specific warranty terms vary by seller and must be confirmed in writing.</caption>
+<thead><tr><th>Route</th><th>What you get</th><th>What carries the risk</th><th>Best for</th></tr></thead>
+<tbody>
+<tr><td>As-removed / untested</td><td>Arm and sometimes controller, pulled from a decommissioned line, no testing or refurbishment</td><td>Unknown fault history, unknown hours, possibly no matching pendant or cables</td><td>Integrators and buyers with in-house robot technicians who can evaluate and service the unit</td></tr>
+<tr><td>Operational as-is</td><td>Powered on, all axes jog, no known faults disclosed, cosmetic wear, normal service hours</td><td>Wear items and remaining life; no restoration work has been done</td><td>Buyers with technical staff who want a working unit at a lower price and will service it themselves</td></tr>
+<tr><td>Dealer-refurbished</td><td>Inspected, repaired as needed, cycle-tested, faults cleared, usually with a short warranty</td><td>Scope of the refurbishment &mdash; what was actually replaced versus cleaned</td><td>Most first-time used-robot buyers and replacements for a downed production robot</td></tr>
+<tr><td>OEM remanufactured or retrofit</td><td>Restored or re-controlled through the manufacturer or an authorised specialist, with documentation</td><td>Lead time and cost, which narrows the discount against new</td><td>Long-life critical cells, plants that need OEM support and traceable documentation</td></tr>
+</tbody>
+</table>
+</div>
+<p>The distinction that matters commercially is not &ldquo;used versus refurbished&rdquo; in the abstract. It is what testing was performed and what is documented. A dealer that can show you a run-off video, a fault log, a battery replacement record and a written warranty has transferred some risk to itself. A dealer that cannot has transferred it to you, and the price difference between those two listings is usually smaller than the difference in exposure.</p>
+<p>For reference on what the market asks in 2026, here are five public listings accessed August 27, 2026. Note how the same model family spans a wide range depending on generation, controller and completeness:</p>
+<div class="table-wrap" aria-label="Public used industrial robot listings accessed August 27 2026"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Indicative 2026 prices from public North American used-equipment listings, accessed August 27, 2026. Reference range only &mdash; not a quotation and not Robotics Engineering Lab inventory.</caption>
+<thead><tr><th>Listed unit</th><th>Controller / notes</th><th>Asking price (USD)</th><th>Listing source</th></tr></thead>
+<tbody>
+<tr><td>FANUC M-710iC/50 (2013), 50 kg, 2050 mm reach, &plusmn;0.07 mm</td><td>R-30iB, 13,000 h on meter, includes pendant and connection cables</td><td>$29,500</td><td>MachineTools.com (R.A.B. Industries)</td></tr>
+<tr><td>FANUC M-710iC/20L</td><td>R-30iA, described as fully refurbished with warranty</td><td>$24,000</td><td>Machinio (Warren, MI)</td></tr>
+<tr><td>FANUC M-710iC/70 FoundryPro</td><td>R-30iA</td><td>$23,950</td><td>BC Industrial Services</td></tr>
+<tr><td>FANUC M-10iA</td><td>R-30iB</td><td>$19,950</td><td>BC Industrial Services</td></tr>
+<tr><td>FANUC ARC Mate 120i (2001), 16 kg, 1542 mm reach</td><td>RJ3 (legacy generation)</td><td>$7,500</td><td>Surplus Record</td></tr>
+</tbody>
+</table>
+</div>
+<p>The spread between $7,500 and $29,500 for six-axis FANUC arms is not primarily about condition. It is about controller generation, hours, completeness and remaining support life. Reading that spread correctly is most of the buying skill.</p>
+
+<h2>Decision matrix: which route fits which constraint</h2>
+<div class="table-wrap" aria-label="Decision matrix for choosing a used industrial robot acquisition route"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Score each row 1&ndash;5 for your situation and weight it. The route with the highest weighted score is the one to request quotations for.</caption>
+<thead><tr><th>Constraint</th><th>Weight</th><th>As-removed</th><th>Operational as-is</th><th>Dealer-refurbished</th><th>OEM reman / retrofit</th></tr></thead>
+<tbody>
+<tr><td>Lowest capital cost is the binding constraint</td><td>___</td><td>5</td><td>4</td><td>2</td><td>1</td></tr>
+<tr><td>Robot must run within days of delivery</td><td>___</td><td>1</td><td>3</td><td>4</td><td>2</td></tr>
+<tr><td>No in-house robot technician available</td><td>___</td><td>1</td><td>2</td><td>5</td><td>5</td></tr>
+<tr><td>Replacement for a downed production robot</td><td>___</td><td>2</td><td>3</td><td>5</td><td>4</td></tr>
+<tr><td>Controller generation must remain supported for 10+ years</td><td>___</td><td>1</td><td>2</td><td>3</td><td>5</td></tr>
+<tr><td>Application software options (vision, welding, palletizing) required</td><td>___</td><td>1</td><td>2</td><td>4</td><td>5</td></tr>
+<tr><td>Cell must pass a formal customer or insurer audit</td><td>___</td><td>1</td><td>2</td><td>3</td><td>5</td></tr>
+<tr><td>Spare parts availability in the region</td><td>___</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+</tbody>
+</table>
+</div>
+<p>Read the matrix honestly. If you have no robot technician and the answer in the first two columns is high, the discount is illusory &mdash; you are paying for the evaluation and the repair later, at emergency rates. If you do have a technician and the cell is not production-critical, the as-is routes are frequently excellent value.</p>
+
+<h2>Matched pairs: why the arm and controller must be bought together</h2>
+<p>This is the single most expensive mistake in used-robot buying. Robot arms and their controllers are paired and commissioned at the factory. The arm&rsquo;s motor and encoder characteristics, the master data and the software licensing are tied to that pairing. Buying an arm without its original controller, or pairing a mismatched arm and controller, generally requires re-mastering, recalibration and in some cases manufacturer involvement to reactivate software. Dealers who work in this market are blunt that the cost of re-matching a mis-paired unit can approach or exceed the price of the robot itself.</p>
+<p>Before you look at anything else on a listing, verify four things:</p>
+<ul>
+<li><strong>The serial number on the arm matches the serial registered in the controller.</strong> A mismatch means the pair was separated at some point and re-commissioning work is required.</li>
+<li><strong>The controller is the generation the arm shipped with.</strong> Later controllers are usually not retrofittable to older arms without a factory-approved upgrade path, and older controllers cannot run newer software features.</li>
+<li><strong>The teach pendant is the correct model for that controller generation.</strong> On FANUC, the legacy pendant serves the RJ-series and R-30iA controllers while the iPendant is standard on R-30iA, R-30iB and R-30iB Plus. A wrong or missing pendant is a real cost and a real delay.</li>
+<li><strong>The arm-to-controller interconnect cables are included.</strong> Motor and encoder cables are model-specific, long, expensive, and routinely missing from used listings.</li>
+</ul>
+
+<h2>Controller generations and what they cost you later</h2>
+<p>The controller determines what the robot can do, what support is available, and how long the platform will remain serviceable. In the used market the controller is often a larger share of the value than the arm.</p>
+<div class="table-wrap" aria-label="Common used-market industrial robot controller generations by brand"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Compiled from manufacturer announcements and North American used-robot dealer documentation, accessed August 27, 2026. Verify the specific unit&rsquo;s controller and firmware against the manufacturer before purchase.</caption>
+<thead><tr><th>Brand</th><th>Older generations common in the used market</th><th>Current generation</th><th>Support consideration</th></tr></thead>
+<tbody>
+<tr><td>FANUC</td><td>RJ3 / RJ3iB / RJ3iC, R-30iA, R-30iB</td><td>R-30iB Plus; R-50iA announced</td><td>R-30iB is the most common used-market platform with the deepest parts ecosystem; R-30iB Plus adds the higher-resolution iPendant and enhanced safety functions</td></tr>
+<tr><td>ABB</td><td>S4, IRC5</td><td>OmniCore</td><td>ABB has stated the IRC5 is being phased out in June 2026, with spare parts and service continuing through the operational life of installed robots. RAPID code largely carries across both platforms.</td></tr>
+<tr><td>KUKA</td><td>KRC2 (no longer supported), KRC4</td><td>KRC5</td><td>KRC4 is the widely deployed used-market generation with a robust parts ecosystem; KRL programming is consistent across generations</td></tr>
+<tr><td>Yaskawa Motoman</td><td>XRC, DX100</td><td>DX200, YRC1000</td><td>DX100 is plentiful in the secondary market; DX200 added improved safety functions and EtherNet/IP; YRC1000 is the current compact generation</td></tr>
+</tbody>
+</table>
+</div>
+<p>The ABB row is the one that most changes a 2026 purchase decision. A phase-out date is not the same as abandonment &mdash; the manufacturer has committed to spare parts and service for the life of installed robots &mdash; but it does mean that no new IRC5-based systems will be supplied after the phase-out, that the used-market pool of IRC5 spares will gradually tighten, and that a buyer planning a ten-year horizon should price the OmniCore alternative as well. If you are buying an IRC5 robot in 2026 at a discount, make sure the discount reflects that horizon and confirm the manufacturer&rsquo;s current support commitment in writing.</p>
+
+<h2>Software options and licences: the line item that erases the discount</h2>
+<p>Application capability on an industrial robot is licensed, not standard. On a FANUC controller, material handling requires HandlingTool, arc welding requires ArcTool, palletizing requires PalletTool, vision guidance requires iRVision, and safety-rated motion monitoring is provided by the Dual Check Safety (DCS) option. Process and fieldbus options &mdash; the Ethernet option for Allen-Bradley communication, for example &mdash; are separately licensed as well. These are not automatically included with the controller and they are not automatically transferable to a new owner.</p>
+<p>The used-robot implication is severe and routinely missed. A used robot that has the right arm, the right controller and a working pendant is still, without its options, an arm that moves. Repurchasing the option set for a welding or vision application can consume a large share of &mdash; in some cases more than &mdash; the discount that made the used unit attractive.</p>
+<p>Before purchase, ask the seller for the controller&rsquo;s installed options list, and verify it against your own application requirement line by line. Every major controller family stores a list of activated software and hardware options in the controller software; a reputable seller can produce it and a seller who cannot should be treated as selling a unit without those options. Also ask whether the manufacturer will re-register the controller in your company&rsquo;s name, because registration is what makes manufacturer technical support reachable when you need it. Confirm the current transfer policy with the manufacturer directly rather than relying on the seller&rsquo;s description, since transfer rules change and differ by option.</p>
+
+<h2>Mastering, batteries and the hour meter</h2>
+<p>Three small items decide whether a used robot is a plug-in replacement or a commissioning project.</p>
+<p><strong>Mastering.</strong> Mastering is the zero-point reference that ties each axis&rsquo;s internal position count to a known physical position. It is maintained by a battery-backed memory in the controller while power is off. If those batteries die and stay dead, the master reference is lost and all six axes must be re-established. Re-mastering a six-axis industrial robot requires the correct procedure, usually a mastering fixture or the manufacturer&rsquo;s quick-master reference, and real time. Ask for the mastering record and the date, and ask when the controller batteries were last replaced. A controller still running its original decade-old batteries is worth less than one with a documented recent replacement, and the battery should be replaced with control power on unless the manual states otherwise.</p>
+<p><strong>The hour meter.</strong> Ask for the recorded hours and treat the number as a wear indicator rather than a verdict. One public listing for a 2013 FANUC M-710iC/50 discloses 13,000 hours on the meter against a 560 kg machine &mdash; useful context, because hours let you compare two otherwise similar listings. Hours alone do not tell you whether those hours were light assembly at 20% of rated payload or continuous foundry duty near the payload limit, which is why the previous application question matters as much as the meter.</p>
+<p><strong>The backup.</strong> Ask whether a controller system image or backup file is included. A current backup is what turns a board failure into a restoration instead of a rebuild, and it is missing surprisingly often.</p>
+<p>For what mastering and calibration actually involve, and how accuracy and repeatability are defined and measured, see our <a href="robot-arm-calibration">robot arm calibration guide</a>. The maintenance intervals that a used robot inherits &mdash; lubrication, reducer service, battery replacement &mdash; are in our <a href="robot-arm-maintenance">maintenance schedule guide</a>, and a used unit with no service history should start at the earliest interval rather than the longest.</p>
+
+<h2>Mechanical inspection: reducers, seals, backlash and crash history</h2>
+<p>The mechanical inspection is where a physical visit pays for itself. Work through it in this order, with the machine de-energised and locked out except for the specific powered tests you are performing:</p>
+<ul>
+<li><strong>Backlash at every axis.</strong> Excessive play, particularly at the wrist, indicates worn reduction gearing. Hold the input and measure at the output with a dial indicator; do not judge by hand.</li>
+<li><strong>Wrist seals.</strong> Oil weeping around the J4&ndash;J6 seals is a common wear point on an arm with high hours and is an early indicator of reducer condition.</li>
+<li><strong>Collision and crash evidence.</strong> Look for witness marks, bent flanges, weld repairs, and repaint that does not match the rest of the arm. Ask directly whether the robot has been in a collision, crash or overload event, and ask what was replaced afterwards.</li>
+<li><strong>Tool flange condition.</strong> The flange face must be flat and undamaged; a dented or bowed flange will show up as a TCP error you cannot calibrate away.</li>
+<li><strong>Powered motion test.</strong> With power applied, jog each axis slowly through its full range, individually. Listen for bearing noise on each axis, feel for cogging or binding, and confirm the pendant communicates and that no fault codes are active. Ask for an explanation of every stored fault, not just the active ones.</li>
+<li><strong>Controller interior.</strong> Open the cabinet and look for dust loading on boards and heat sinks, and confirm the cooling fans turn freely. Fine conductive dust from grinding or casting environments settles on boards and is a common cause of intermittent faults on used controllers.</li>
+<li><strong>Cable dressing.</strong> Inspect the arm-to-controller harness for crushed sections, repaired splices and missing strain relief. Damaged cable bundles are an integration cost that is easy to miss in photographs.</li>
+</ul>
+
+<h2>What a used industrial robot should ship with, and what it almost never does</h2>
+<div class="table-wrap" aria-label="What is normally included with a used industrial robot and what is normally stripped"><table><caption style="caption-side:bottom;text-align:left;font-size:.75rem;color:#888;padding-top:8px;">Inclusion practice varies by seller. Confirm every line in writing on the purchase order.</caption>
+<thead><tr><th>Usually included</th><th>Frequently missing &mdash; budget for it</th></tr></thead>
+<tbody>
+<tr><td>Robot arm (mechanical unit)</td><td>End-of-arm tooling, grippers, welding guns &mdash; usually stripped at decommission</td></tr>
+<tr><td>Matching controller cabinet, same generation</td><td>Base plate, riser, or floor bolt-pattern template</td></tr>
+<tr><td>Teach pendant and pendant cable</td><td>External axes: positioners, tracks, servo welders</td></tr>
+<tr><td>Arm-to-controller motor and encoder cables</td><td>Safeguarding: fencing, light curtains, area scanners</td></tr>
+<tr><td>Controller battery (functional, recently replaced)</td><td>PLC or cell controller &mdash; the robot is normally sold standalone</td></tr>
+<tr><td>Activated software option list</td><td>Disconnect, control panel and cell electrical</td></tr>
+<tr><td>System backup or image on USB or SD card</td><td>Air supply and pneumatic lines for tooling</td></tr>
+<tr><td>Mastering or zero-point calibration record</td><td>OEM manual set: mechanical, electrical, controller</td></tr>
+</tbody>
+</table>
+</div>
+<p>Read the right-hand column as your integration budget. A $29,500 robot delivered without a base, without safeguarding, without a disconnect and without tooling is not a $29,500 project, and the sellers who are most useful are the ones who tell you that before you ask.</p>
+
+<h2>Total cost of acquisition: what a quotation must contain</h2>
+<p>Industrial robots are configuration- and quotation-dependent, and used robots more so. Rather than a street price, build your budget from these categories and require each one to appear as a separate line in any quotation you receive:</p>
+<ul>
+<li><strong>Robot hardware:</strong> arm, matched controller, teach pendant, interconnect cables, base hardware.</li>
+<li><strong>Software:</strong> application options, fieldbus options, safety options, and confirmation of what is already activated on this specific controller.</li>
+<li><strong>Registration and documentation:</strong> manufacturer re-registration in your name, manual set, electrical schematics, I/O signal list, backup image.</li>
+<li><strong>Refurbishment scope, if any:</strong> written list of what was inspected, replaced and tested &mdash; not the word &ldquo;refurbished&rdquo;.</li>
+<li><strong>Warranty:</strong> duration, what it covers, and whether it is in service or on parts only.</li>
+<li><strong>Freight, rigging and packaging:</strong> a 560 kg arm is a rigging job, not a parcel.</li>
+<li><strong>Electrical work:</strong> disconnect, overcurrent protection, control power, wiring to the existing panel, and any re-verification required under the applicable electrical standard for machines.</li>
+<li><strong>Safeguarding and validation:</strong> guarding, interlocks, safeguarding devices, and the task-based risk assessment for the new installation.</li>
+<li><strong>Integration engineering:</strong> program development, fieldbus configuration, I/O mapping, commissioning and run-off.</li>
+<li><strong>Training and spares:</strong> operator training, teach pendant, batteries, filters, and a minimum spares set.</li>
+</ul>
+<div class="pullquote">
+<blockquote>Example calculation &mdash; planning arithmetic on a stated assumption, not a quotation and not a Robotics Engineering Lab purchase.</blockquote>
+<cite>Replace the percentage with your own integrator&rsquo;s quotation before you commit a budget.</cite>
+</div>
+<p>Take the verified public listing of the 2013 FANUC M-710iC/50 with matched R-30iB at $29,500. If the delivered, safeguarded, integrated cell ends up with the robot at 40% of total project cost, the project is roughly $73,750. If the robot is 25% of the total, the project is roughly $118,000. Those percentages are planning assumptions, not measured data, but they illustrate the point that matters: on a used-robot project the robot price is often the smallest single number in the budget, and optimising it hardest is how projects go wrong. Separately, if you buy as-removed rather than dealer-refurbished, a defensible contingency is 15&ndash;25% of the hardware price &mdash; about $4,400 to $7,400 on a $29,500 unit &mdash; to cover faults that only appear once the robot is powered and loaded. That contingency band is a general used-equipment planning assumption; Robotics Engineering Lab has not obtained quotations to verify it.</p>
+
+<h2>Re-deployment is a new installation: your obligations do not transfer</h2>
+<p>This is the part of a used-robot purchase that no listing will tell you, and it is where buyers get exposed. A robot that was safely integrated in its previous cell is not safe in yours. The safeguarding was designed around a different machine, a different process, a different part, a different operator population and a different maintenance routine.</p>
+<p>Under the current United States framework, the user of a robot system carries defined responsibilities, and those responsibilities were elevated from guidance to requirements in the 2025 revision of the ANSI/A3 R15.06 family. Part 3 of that standard, ANSI/A3 R15.06-3-2025, incorporates the content of two earlier technical reports &mdash; TR R15.506 on handling changes to existing robot cells and TR R15.706 on user responsibilities &mdash; and states them as requirements rather than recommendations. A robot being installed in a new cell, doing a new task, is exactly the situation those documents address.</p>
+<p>In practical terms that means: a task-based risk assessment must be performed for your installation and documented; the risk assessment must be reviewed and updated whenever the application, tooling, payload, program or safeguarding changes; safeguarding devices must be selected and positioned for your cell; and the results must be retained as a record. OSHA&rsquo;s Technical Manual, Section IV, Chapter 4 on industrial robot systems, sets out the same expectation and notes that a risk assessment is typically among the first documents requested during an inspection. The electrical side is a separate discipline: a re-deployed robot connected into your panel must comply with the applicable electrical standard for machines, which our <a href="robot-cell-electrical-design">robot cell electrical design guide</a> walks through under NFPA 79 and IEC 60204-1. Canadian readers work to CSA Z434 and the applicable provincial occupational health and safety requirements.</p>
+<p>Our <a href="robot-risk-assessment">risk assessment guide</a> covers the ISO 12100 method and PL<sub>r</sub> determination. Nothing in this article is a risk assessment, a certification, or legal advice, and none of it approves a cell. Engage a qualified system integrator, controls engineer or electrician for the installation itself.</p>
+
+<h2>Fieldbus and I/O compatibility: check it before you buy, not after</h2>
+<p>A used robot must talk to your existing PLC. Most controllers from the major manufacturers support EtherNet/IP and PROFINET through hardware options or software licences, but the specific option must be present on the unit you are evaluating &mdash; support by the controller family is not the same as presence on this controller. Ask for the installed options list, confirm the fieldbus option is activated, check the available I/O point count and voltage levels, and confirm the safe-stop input architecture is compatible with your safety system.</p>
+<p>Then do the cheapest test available: simulate the cell offline with the robot model and the intended path before you commit. Reach problems, collisions and cycle-time shortfalls are all visible in simulation, and an offline check costs nothing compared with discovering a reach limit after delivery. Our <a href="robot-arm-plc-integration">PLC integration guide</a> covers the handshake signal set and the I/O mapping that this check is meant to validate.</p>
+
+<h2>Sources and methodology</h2>
+<p>Listing prices and unit details were taken from public North American used-equipment marketplaces &mdash; MachineTools.com (R.A.B. Industries), Machinio, BC Industrial Services and Surplus Record &mdash; accessed August 27, 2026, and are presented as a reference range for what the market is asking. They are not quotations, they are not offers, and they are not Robotics Engineering Lab inventory. Controller generation information is from FANUC America&rsquo;s public controller pages and from North American used-robot dealer documentation accessed the same day; the ABB IRC5 phase-out in June 2026, with continued spare parts and service through the operational life of installed robots, follows ABB&rsquo;s public announcement as reported by Robotics 24/7. FANUC software option names and the fact that they are separately licensed come from FANUC HandlingTool product literature and from integrator documentation. The standards statements reference ANSI/A3 R15.06-3-2025 and the A3 announcement that it incorporates TR R15.506-2014 and TR R15.706-2019 content as requirements, OSHA <a href="https://www.osha.gov/otm/section-4-safety-hazards/chapter-4" target="_blank" rel="noopener">Technical Manual Section IV Chapter 4</a> &mdash; worth reading directly, because it is the reference OSHA compliance officers actually work from and it is the clearest public statement that the risk assessment must be performed and documented for your installation rather than inherited from the cell the robot was pulled out of &mdash; ISO 10218-2, ISO 12100, IEC 60204-1 / NFPA 79, and CSA Z434. Standards are revised; obtain the current edition enforced in your jurisdiction. Robotics Engineering Lab has not bought, inspected, powered, tested or refurbished any robot described in this article, has not obtained quotations, and does not sell used equipment. The inspection sequence and contingency percentages are compiled from dealer practice and general used-equipment experience and are labelled as assumptions where they are assumptions.</p>
+
+<h2>Frequently asked questions</h2>
+
+<div class="faq-item"><h4>Do I have to buy the controller that came with a used robot arm?</h4><p>In almost every case yes. Arms and controllers are paired and commissioned at the factory, and the master data and software licensing follow that pairing. Separating them generally means re-mastering, recalibration and in some cases manufacturer involvement to reactivate software, and dealers who work in this market warn that the cost of re-matching a mis-paired unit can approach the price of the robot. Buy the matched arm-and-controller set, and verify that the serial number on the arm matches the one registered in the controller.</p></div>
+<div class="faq-item"><h4>How much should a used industrial robot cost compared with a new one?</h4><p>There is no reliable single ratio, because the discount depends far more on controller generation, hours, completeness and remaining support life than on age. Public 2026 listings for six-axis FANUC arms ranged from $7,500 for a 2001 ARC Mate 120i with a legacy RJ3 controller to $29,500 for a 2013 M-710iC/50 with an R-30iB, pendant, cables and 13,000 hours on the meter. Treat those as a market reference range and get a written quotation for your specific configuration.</p></div>
+<div class="faq-item"><h4>What should I check first when inspecting a used robot in person?</h4><p>Start with the paperwork and the pairing, then go to the mechanics. Confirm the arm serial matches the controller, the pendant is the right model, the interconnect cables are present, and the installed software option list covers your application. Then jog each axis slowly through its full range listening for bearing noise, measure backlash at the wrist with a dial indicator, look for oil weeping at the J4 to J6 seals, check the flange face for damage, and ask for an explanation of every stored fault code.</p></div>
+<div class="faq-item"><h4>Are software options transferable when buying a used robot?</h4><p>Not automatically. Application and fieldbus options such as FANUC HandlingTool, ArcTool, PalletTool, iRVision and Dual Check Safety are licensed features, are not included with the controller as standard, and are not automatically transferable to a new owner. Ask the seller for the controller installed options list, verify each option you need is activated on that specific unit rather than supported by the controller family, and confirm the current transfer and re-registration policy with the manufacturer directly.</p></div>
+<div class="faq-item"><h4>Does buying a used robot change my safety obligations?</h4><p>Yes, and this is the part listings never mention. A robot that was safely integrated in its previous cell is not safe in yours, because the safeguarding was designed for a different process and layout. A task-based risk assessment must be performed and documented for your installation and updated whenever the application, tooling, payload or safeguarding changes. In the United States that obligation now sits in ANSI/A3 R15.06-3-2025, and OSHA typically asks for the risk assessment early in an inspection. Canadian users work to CSA Z434 and provincial requirements.</p></div>
+<div class="faq-item"><h4>Is a controller phase-out a reason to avoid a used robot?</h4><p>Not by itself, but it changes the horizon you should price. ABB has stated that the IRC5 is being phased out in June 2026 while spare parts and service continue through the operational life of installed robots, so an IRC5 robot remains serviceable but no new IRC5 systems will be supplied and the used spares pool will tighten over time. If your horizon is ten years or more, price the current-generation alternative as well, and get the manufacturer support commitment in writing before you buy.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Prices are public listing references accessed August 27, 2026; no robot described here was inspected or tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 27, 2026 &middot; last reviewed August 27, 2026</span></p></aside>
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</main>
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="arduino-robot-arm-tutorial" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Arduino Arm</a></li>
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
