@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>EtherCAT Robot Arm Control: Real-Time Multi-Axis Master</title>
+<meta name="description" content="EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/ethercat-robot-arm" />
+<meta name="theme-color" content="#0b0e14" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="EtherCAT Robot Arm Control: Real-Time Multi-Axis Master" />
+<meta property="og:description" content="EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/ros2_robot_control.jpg" />
+<meta property="og:image:alt" content="An industrial robot arm controller running a real-time EtherCAT master network connected to multi-axis servo drives" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-30" />
+<meta property="article:modified_time" content="2026-08-30" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/ethercat-robot-arm" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How to Build an EtherCAT Real-Time Master for Robot Arms" />
+<meta name="twitter:description" content="EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring." />
+<meta name="twitter:image:alt" content="An industrial robot arm controller running a real-time EtherCAT master network connected to multi-axis servo drives" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/ros2_robot_control.jpg" />
+
+<!-- Structured Data: Article -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/ethercat-robot-arm#article",
+  "headline": "EtherCAT Robot Arm Control: Real-Time Multi-Axis Master",
+  "description": "EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Robotics Engineering Lab"
+    }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://roboticsengineeringlab.com/logo.png"
+    }
+  },
+  "datePublished": "2026-08-30",
+  "dateModified": "2026-08-30",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/ethercat-robot-arm"
+  },
+  "image": "https://roboticsengineeringlab.com/ros2_robot_control.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/ethercat-robot-arm",
+  "inLanguage": "en-US",
+  "wordCount": 4350,
+  "articleSection": "Industrial automation & safety",
+  "keywords": "ethercat robot arm, ethercat motion control robot, cia 402 cyclic synchronous position, real-time linux rt-preempt ethercat, ethercat servo drive wiring, soem ethercat ros2"
+}
+</script>
+
+<!-- Structured Data: FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is EtherCAT preferred over standard CANopen for 6-axis robot arms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard CANopen operates at a maximum bus speed of 1 Mbit/s, which creates a communication bottleneck when transmitting high-frequency position commands and status feedback for six or more axes. Refreshing six drives with standard CANopen PDOs typically takes 5 to 10 milliseconds, which is too slow for dynamic trajectory tracking. EtherCAT uses 100BASE-TX Ethernet at 100 Mbit/s and process data on-the-fly, allowing a master to update position, velocity, and torque for six axes in under 15 microseconds with sub-microsecond clock synchronization."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between Cyclic Synchronous Position (CSP) and Profile Position Mode (PPM)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Profile Position Mode (PPM), the controller sends target coordinates and target velocities to the drive, and the drive calculates its own internal trajectory interpolation. In a multi-axis robot arm, this causes coordinate synchronization failure because each drive reaches its target independently without coordinated trajectory interpolation. In Cyclic Synchronous Position (CSP) mode (CiA 402 mode 8), the central kinematics planner computes the coordinated Cartesian-to-joint trajectory and injects new position setpoints into every drive synchronously every 1 millisecond, ensuring perfect multi-axis coordination."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a dedicated real-time operating system like VxWorks or QNX to run an EtherCAT master?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A standard Linux kernel patched with the RT-PREEMPT patch set (such as Ubuntu 24.04 LTS or 22.04 LTS with real-time kernel) delivers deterministic loop jitter under 15 microseconds on standard x86 industrial PCs and ARM64 single-board computers like the Raspberry Pi 5 or NVIDIA Jetson. This provides sufficient deterministic performance for 1 kHz (1 millisecond) and 2 kHz (500 microsecond) robot control loops without expensive proprietary RTOS licenses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is Distributed Clocks (DC) synchronization critical for robot joint drives?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Without Distributed Clocks (DC), each servo drive samples its position command and executes its current loop at the moment it receives the Ethernet packet, which varies due to software jitter and network latency. This causes phase jitter between joint axes, resulting in path ripple and high-frequency acoustic noise. Distributed Clocks synchronizes all slave clocks to a reference clock (typically the first DC-capable slave) with sub-microsecond precision, firing the internal drive control loops simultaneously across all six joints."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when an EtherCAT network cable is disconnected during robot motion?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When the EtherCAT master detects a missed cyclic frame or a broken link, the master and slave watchdog timers expire within the configured watchdog period (typically 5 to 10 milliseconds). The CiA 402 state machine in each servo drive transitions immediately to Fault Reaction Active, applies deceleration according to the configured Quick Stop ramp, trips the mechanical motor brake, and de-energizes the inverter stage into a safe torque off (STO) state."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I choose between the SOEM and IgH EtherCAT Master stacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SOEM (Simple Open EtherCAT Master) is an embeddable, user-space C library that integrates cleanly with custom C++ control applications, ROS 2 ros2_control hardware interfaces, and microcontrollers. IgH EtherCAT Master (EtherLab) is a kernel-space Linux driver that replaces standard network drivers with native real-time NIC drivers for lower CPU overhead in high-axis-count industrial controllers. For most 6-DOF robot arm projects in ROS 2, SOEM provides faster integration and easier debugging."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Structured Data: Breadcrumbs -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://roboticsengineeringlab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tutorials",
+      "item": "https://roboticsengineeringlab.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "EtherCAT Robot Arm Control: Real-Time Multi-Axis Master",
+      "item": "https://roboticsengineeringlab.com/articles/ethercat-robot-arm"
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+::selection { background:rgba(201,169,110,0.25); color:#fff; }
+.container { max-width:1100px; margin:0 auto; padding:0 24px; }
+.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 24px; }
+.nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; font-weight:600; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; }
+.logo span { color:var(--accent); font-weight:300; }
+.nav-links { display:flex; gap:24px; align-items:center; }
+.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.15s; }
+.nav-links a:hover { color:var(--text-primary); }
+.hero-article { position:relative; min-height:440px; display:flex; align-items:flex-end; padding:64px 24px 48px; border-bottom:1px solid var(--border); overflow:hidden; }
+.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; filter:brightness(0.32); z-index:0; }
+.hero-inner { position:relative; z-index:1; max-width:820px; margin:0 auto; width:100%; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:16px; font-weight:600; }
+.hero-badge .line { width:24px; height:1px; background:var(--accent); }
+.hero-article h1 { font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(2rem,4.5vw,3.1rem); font-weight:400; line-height:1.15; color:var(--text-primary); margin-bottom:16px; letter-spacing:-0.02em; }
+.hero-sub { font-size:1.05rem; color:var(--text-secondary); font-weight:300; line-height:1.55; max-width:680px; margin-bottom:24px; }
+.hero-meta { display:flex; gap:20px; align-items:center; font-size:0.8rem; color:var(--text-muted); flex-wrap:wrap; }
+.hero-meta time { color:var(--text-secondary); }
+.article-container { max-width:820px; margin:0 auto; padding:48px 24px 80px; }
+.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.85rem; font-weight:400; color:var(--text-primary); margin:48px 0 16px; letter-spacing:-0.01em; border-bottom:1px solid var(--border); padding-bottom:8px; }
+.article-body h3 { font-size:1.15rem; font-weight:600; color:var(--text-primary); margin:32px 0 12px; }
+.article-body p { margin-bottom:20px; color:var(--text-secondary); font-size:0.98rem; font-weight:300; }
+.article-body strong { color:var(--text-primary); font-weight:500; }
+.article-body ul, .article-body ol { margin:0 0 24px 20px; color:var(--text-secondary); font-size:0.95rem; font-weight:300; }
+.article-body li { margin-bottom:8px; }
+.article-body a { color:var(--accent-2); text-decoration:none; border-bottom:1px solid rgba(95,142,216,0.3); transition:border-color 0.15s; }
+.article-body a:hover { border-color:var(--accent-2); }
+.article-body code { font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:0.88em; background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:var(--accent); }
+.article-body pre { background:var(--surface-card); border:1px solid var(--border); border-radius:8px; padding:18px 20px; overflow-x:auto; margin:0 0 24px; font-size:0.85rem; line-height:1.5; color:#d6d3cb; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
+.callout { background:var(--surface-card); border-left:3px solid var(--accent); padding:20px 24px; margin:28px 0; border-radius:0 8px 8px 0; }
+.callout.warn { border-left-color:#e06c75; }
+.callout.info { border-left-color:var(--accent-2); }
+.callout h4 { font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:8px; }
+.callout p { margin:0; font-size:0.9rem; color:var(--text-secondary); }
+.table-wrap { overflow-x:auto; margin:28px 0; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; font-size:0.88rem; text-align:left; }
+th { background:var(--surface-card); color:var(--text-primary); font-weight:500; padding:12px 16px; border-bottom:1px solid var(--border); }
+td { padding:12px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+tr:last-child td { border-bottom:none; }
+.faq-item { background:var(--surface-card); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px; }
+.faq-item h4 { color:var(--text-primary); font-size:0.95rem; font-weight:600; margin-bottom:8px; }
+.faq-item p { margin:0; font-size:0.9rem; color:var(--text-secondary); line-height:1.55; }
+.footer-nav { display:flex; justify-content:space-between; margin-top:40px; padding-top:20px; border-top:1px solid var(--border); }
+.back-link { color:var(--accent-2); text-decoration:none; font-size:0.88rem; }
+</style>
+</head>
+
+<body>
+<nav class="site-nav" aria-label="Site navigation">
+<div class="nav-inner">
+<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+<div class="nav-links">
+<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero-article" aria-label="Article hero">
+<img class="hero-bg" src="../ros2_robot_control.jpg" alt="An industrial robot arm controller running a real-time EtherCAT master network connected to multi-axis servo drives" loading="eager" decoding="async" width="1536" height="1024" />
+<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Industrial Automation &amp; Safety &mdash; Published August 30, 2026</div>
+<h1>EtherCAT Multi-Axis Robot Arm Control: Real-Time Master Setup &amp; CiA 402 Commissioning</h1><p class="hero-sub">A step-by-step commissioning tutorial for configuring an RT-PREEMPT Linux master, CiA 402 Cyclic Synchronous Position (CSP) mode, Distributed Clocks synchronization, and multi-axis servo drive integration for 6-DOF robot arms.</p>
+<div class="hero-meta"><time datetime="2026-08-30">August 30, 2026</time><span>&middot;</span><span>18 min read</span><span>&middot;</span><span>By Marcus Chen</span></div>
+</div></header>
+
+<main class="article-container">
+<div class="article-body">
+
+<div class="callout info">
+<h4>Editorial Disclosure &amp; Scope Notice</h4>
+<p>This technical commissioning guide is an educational engineering resource. Values, register maps, and timing budgets presented below derive from published EtherCAT Technology Group (ETG) standards, CiA 402 drive profile specifications, and manufacturer datasheets (Beckhoff, Leadshine, Inovance, Copley Controls). Robotics Engineering Lab did not build a turnkey production cell for this specific article. Commissioning high-power servo drives on industrial manipulators presents serious mechanical pinch, crushing, and electrical shock hazards. Always follow lockout/tagout procedures, verify safe torque off (STO) functionality, and work under the supervision of a licensed controls engineer or qualified system integrator.</p>
+</div>
+
+<h2>The Multi-Axis Motion Bottleneck in 6-DOF Robot Arms</h2>
+<p>When designing or retrofitting a six-degree-of-freedom (6-DOF) articulated manipulator, coordinating six servo drives with microsecond-level synchronization is the single most critical electrical control challenge. In an articulated arm, the kinematic position of the Tool Center Point (TCP) is a highly non-linear function of all six joint angles. If one joint drive receives its position setpoint even 200 microseconds later than the other five joints, the physical trajectory of the end effector deviates from the planned Cartesian path. This introduces velocity ripple, path tracking errors, and high-frequency structural vibration that degrades surface finish in dispensing, welding, and high-speed pick-and-place operations.</p>
+
+<p>Traditional hobbyist and educational robotic platforms frequently rely on asynchronous serial protocols (such as UART, USB-to-serial converters, or I2C) or multi-drop RS-485 busses. While adequate for desktop educational arms operating under 50 Hz update rates, these interfaces fail completely in dynamic multi-axis industrial motion. Even standard CANopen (operating over ISO 11898 CAN 2.0B at 1 Mbit/s) hits a hard throughput limit: updating cyclic Process Data Objects (PDOs) for six servo drives consumes 5 to 10 milliseconds of bus time, making a true 1 kHz (1,000 Hz) closed-loop trajectory update impossible.</p>
+
+<p><strong>EtherCAT (Ethernet for Control Automation Technology)</strong> solves this multi-axis bottleneck by transforming standard 100BASE-TX Fast Ethernet into a deterministic, ultra-low-latency fieldbus. Rather than transmitting discrete addressed packets to each drive sequentially, the EtherCAT master transmits a single Ethernet frame that passes through every slave node along a physical daisy chain. Each slave's dedicated EtherCAT Slave Controller (ESC) hardware reads its output setpoints and writes its input status feedback on-the-fly with a hardware pass-through delay of less than 1 microsecond per node. By combining this on-the-fly processing with hardware-level <strong>Distributed Clocks (DC)</strong>, an <strong>ethercat robot arm</strong> network achieves 1 kHz to 4 kHz update rates across six joints with less than 15 nanoseconds of clock jitter between joint inverters.</p>
+
+<div class="callout">
+<h4>Key Performance Metrics: Bus Protocol Comparison for 6-Axis Manipulators</h4>
+<p>The table below summarizes the practical communication characteristics of common motion buses when controlling six servo drives with 64-bit cyclic feedback (position, velocity, torque, statusword) and 64-bit commands (target position, controlword, target torque):</p>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Bus Protocol</th>
+<th>Physical Layer</th>
+<th>Maximum Bus Speed</th>
+<th>6-Axis Cyclic Update Period</th>
+<th>Master-to-Drive Jitter</th>
+<th>Synchronization Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>EtherCAT (ETG.1000)</strong></td>
+<td>100BASE-TX / M12</td>
+<td>100 Mbit/s (Full Duplex)</td>
+<td>0.25 ms to 1.0 ms (1–4 kHz)</td>
+<td>&lt; 20 ns (Hardware DC)</td>
+<td>Distributed Clocks (SYNC0/SYNC1)</td>
+</tr>
+<tr>
+<td><strong>CANopen (CiA 301/402)</strong></td>
+<td>RS-485 / CAN PHY</td>
+<td>1.0 Mbit/s</td>
+<td>5.0 ms to 10.0 ms (100–200 Hz)</td>
+<td>&plusmn; 50 &micro;s to 200 &micro;s</td>
+<td>SYNC message broadcast</td>
+</tr>
+<tr>
+<td><strong>Modbus RTU</strong></td>
+<td>RS-485 (Half Duplex)</td>
+<td>115.2 kbps to 1 Mbps</td>
+<td>25.0 ms to 80.0 ms (12–40 Hz)</td>
+<td>&gt; 5 ms (Software polling)</td>
+<td>None (Asynchronous request/reply)</td>
+</tr>
+<tr>
+<td><strong>PROFINET IRT</strong></td>
+<td>100BASE-TX (ASIC)</td>
+<td>100 Mbit/s</td>
+<td>0.5 ms to 1.0 ms (1–2 kHz)</td>
+<td>&lt; 1 &micro;s (Hardware IEEE 1588)</td>
+<td>Time-slotted domain reservation</td>
+</tr>
+<tr>
+<td><strong>Serial USB (CDC-ACM)</strong></td>
+<td>USB 2.0 Full/High Speed</td>
+<td>12 Mbps / 480 Mbps</td>
+<td>10.0 ms to 20.0 ms</td>
+<td>&plusmn; 1 ms to 5 ms (OS stack jitter)</td>
+<td>None (Host OS scheduled)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p>To implement an industrial-grade EtherCAT communication network for a 6-DOF manipulator, controls engineers follow a structured six-checkpoint commissioning sequence. This guide walks through each checkpoint, from physical layer shielding to CiA 402 state-machine handling and integration with the <a href="ros2-robot-arm-control">ROS 2 ros2_control framework</a>.</p>
+
+<h2>Checkpoint 1: Hardware Topology, Shielding &amp; PHY Grounding</h2>
+<p>The physical layer of an EtherCAT motion network is standard IEEE 802.3 100BASE-TX, but the industrial electrical environment inside a robot cell requires stringent mechanical and electromagnetic protection. Pulse-width modulated (PWM) inverter switching inside AC servo drives produces severe common-mode high-frequency electrical noise (dv/dt spikes exceeding 5 kV/&micro;s). If noise couples into the Ethernet physical layer, it corrupts frame preambles and causes cyclic frame loss, triggering drive watchdog timeouts and emergency stops.</p>
+
+<h3>Bus Topology: Daisy-Chain vs. Junction Slaves</h3>
+<p>EtherCAT utilizes a logical ring topology over a physical line (daisy-chain). The master transmits frames out of its primary Network Interface Card (NIC) port. The frame enters the <code>IN</code> port of Slave 1 (Joint 1 / Base), exits its <code>OUT</code> port, travels to the <code>IN</code> port of Slave 2 (Joint 2 / Shoulder), and proceeds up the arm linkage through Joint 6 (Wrist 3). The ESC at the final slave automatically detects the open port and loops the frame back through the reverse channel of the physical pair, returning the completed packet to the master.</p>
+
+<p>For modular articulated robots with separate base controllers and tool-flange electronics, engineers often place an EtherCAT junction slave (e.g., Beckhoff EK1122 or custom ESC junction hub) at the base. This allows branching dedicated lines to the arm joints and end-effector sensors while preserving the deterministic ring logic.</p>
+
+<h3>Industrial Cabling &amp; Connector Specifications</h3>
+<p>Standard commercial Cat5e patch cables with molded plastic RJ45 clips are unacceptable for robotic arms. Dynamic flexing at articulated joints will fatigue stranded copper conductors, while unshielded jackets allow motor drive PWM noise to induce packet-corrupting CRC errors. The following wiring specifications must be enforced:</p>
+
+<ul>
+<li><strong>Cable Type:</strong> Category 5e or Category 6 S/FTP (Shielded/Foiled Twisted Pair) or SF/UTP featuring a braided copper outer shield plus individual foil shields around each pair. Conductors must use high-strand-count bare copper (minimum 26 AWG / 19 strands per conductor) rated for continuous flex and torsional duty (&gt; 5 million flexing cycles, &plusmn;180&deg;/m torsion).</li>
+<li><strong>Connectors:</strong> For stationary internal panel wiring, use shielded metal-bodied RJ45 connectors with 360-degree shield crimping. For external arm routing exposed to coolant, oil, or mechanical movement, use IP67-rated M12 D-coded 4-pin female/male industrial circular connectors (IEC 61076-2-101 standard).</li>
+<li><strong>Grounding Architecture:</strong> The shield of each EtherCAT cable must maintain 360-degree metal-to-metal continuity with the connector shell and the metallic chassis of each servo drive. The drive chasses must bond directly to the central robot ground busbar via short, flat copper braided grounding straps (&ge; 6 mm&sup2;) to minimize high-frequency impedance. Never rely on the Ethernet shield as a protective earth (PE) path.</li>
+<li><strong>Physical Separation:</strong> Inside the robot arm internal cable tracks and link conduits, maintain a minimum physical clearance of 50 mm (2 inches) between high-voltage motor power leads (U, V, W, PE) carrying 230V/480V PWM currents and low-voltage EtherCAT signaling lines. If cables must cross, route them at strict 90-degree right angles to minimize inductive coupling, as detailed in our guide to <a href="robot-cell-electrical-design">robot cell electrical design standards</a>.</li>
+</ul>
+
+<h2>Checkpoint 2: Real-Time Linux Master Environment (RT-PREEMPT Kernel)</h2>
+<p>An EtherCAT master must execute its cyclic transmission loop at an unvarying period (e.g., exactly every 1,000,000 nanoseconds). A standard, out-of-the-box desktop Linux kernel (Ubuntu or Debian) cannot guarantee this determinism. Background kernel tasks, interrupt handlers (IRQs), CPU power-state transitions (C-states), and file system caching introduce random scheduling latencies that can delay a user-space control loop by 2 to 50 milliseconds. A single 2-millisecond delay causes the EtherCAT slave drives to miss their cyclic sync window, tripping error code <code>0x87A0</code> (Sync Manager Watchdog Error) and halting the manipulator.</p>
+
+<h3>Installing and Benchmarking the RT-PREEMPT Kernel</h3>
+<p>To achieve deterministic microsecond scheduling, the Linux kernel must be patched with the <strong>RT-PREEMPT</strong> real-time patch set. RT-PREEMPT converts all in-kernel locking primitives to sleepable priority-inheritance mutexes, forces device driver interrupt handlers into dedicated real-time kernel threads, and allows user-space threads with <code>SCHED_FIFO</code> or <code>SCHED_RR</code> scheduling policies to preempt any non-real-time kernel operation.</p>
+
+<p>On modern Ubuntu LTS installations (such as Ubuntu 22.04 or 24.04 LTS), Canonical provides pre-compiled real-time kernels via Ubuntu Pro. Alternatively, you can compile the mainline kernel with <code>CONFIG_PREEMPT_RT=y</code>. After booting into the real-time kernel, verify real-time capabilities and measure worst-case latency using the standard <code>cyclictest</code> benchmark utility from the <code>rt-tests</code> suite:</p>
+
+<pre><code># Install real-time benchmarking utilities
+sudo apt-get update &amp;&amp; sudo apt-get install -y rt-tests build-essential
+
+# Execute a 1-hour cyclictest under artificial CPU and memory load
+# -p98 : Real-time priority 98 (SCHED_FIFO)
+# -m   : Lock all current and future memory pages into RAM (mlockall)
+# -n   : Use clock_nanosleep for high-resolution timing
+# -i1000 : 1000 microsecond (1 kHz) cycle interval
+# -d0  : Run across all available CPU cores
+sudo cyclictest -p98 -m -n -i1000 -l3600000 -h100 -q</code></pre>
+
+<div class="callout info">
+<h4>Acceptance Criteria for Real-Time EtherCAT Master</h4>
+<p>For a 1 kHz (1,000 &micro;s) robot control loop, the maximum recorded latency (<code>Max Latencies</code> in cyclictest output) must not exceed <strong>25 microseconds</strong> under full system stress (disk I/O, graphical rendering, and network traffic generated via <code>stress-ng</code>). Typical performance on modern x86 hardware (Intel Core i5/i7/Xeon or AMD Ryzen Embedded) with proper tuning is 5 to 12 &micro;s maximum latency.</p>
+</div>
+
+<h3>Kernel &amp; BIOS Tuning Parameters for Deterministic Latency</h3>
+<p>Achieving sub-20 &micro;s worst-case latency requires specific low-level system configuration:</p>
+
+<ol>
+<li><strong>CPU Isolation (<code>isolcpus</code>):</strong> Dedicate specific CPU cores exclusively to the real-time EtherCAT thread by adding kernel boot parameters in <code>/etc/default/grub</code>:
+<pre><code>GRUB_CMDLINE_LINUX_DEFAULT="quiet splash isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3 processor.max_cstate=0 intel_idle.max_cstate=0 idle=poll"</code></pre>
+This isolates cores 2 and 3 from the general Linux task scheduler, disables timer ticks (tickless kernel), and prevents the CPU from entering energy-saving sleep states that introduce wake-up latency.</li>
+<li><strong>Memory Locking (<code>mlockall</code>):</strong> The EtherCAT master application must call <code>mlockall(MCL_CURRENT | MCL_FUTURE)</code> immediately upon startup. This locks all code, data, and stack pages into physical RAM, preventing page faults and swap-to-disk delays during cyclic execution.</li>
+<li><strong>Network Interface Card (NIC) Selection:</strong> Use dedicated Intel Gigabit Ethernet controllers (such as Intel I210, I225, or I350 PCIe controllers). Avoid low-end USB-to-Ethernet adapters or Realtek integrated chipsets, which use heavy software-based interrupt throttling and exhibit unpredictable packet transmission delays.</li>
+</ol>
+
+<h2>Checkpoint 3: EtherCAT Master Stack Selection &amp; Bus Topology Scanning</h2>
+<p>With a real-time OS environment established, the next checkpoint is deploying the software master stack that compiles, transmits, and parses EtherCAT telegrams over the physical network interface. Two primary open-source master stacks dominate industrial robotics development:</p>
+
+<h3>SOEM vs. IgH EtherCAT Master (EtherLab)</h3>
+<ul>
+<li><strong>SOEM (Simple Open EtherCAT Master):</strong> A lightweight, user-space C library created by rt-labs. SOEM connects directly to the network interface using raw Linux socket descriptors (<code>AF_PACKET</code> / <code>SOCK_RAW</code>) or PCAP. Because it runs purely in user space, SOEM is easy to cross-compile for ARM/RISC-V architectures, embeds seamlessly into C++ robot controller nodes, and is the standard backend for ROS 2 <code>ethercat_driver_ros2</code> plugins.</li>
+<li><strong>IgH EtherCAT Master (EtherLab):</strong> A robust kernel-space Linux driver stack. IgH provides modified, native real-time device drivers for specific Intel/Realtek NICs (e.g., <code>ec_e1000e</code>, <code>ec_r8169</code>), completely bypassing the Linux network stack for minimal CPU overhead. It provides a rich command-line diagnostic toolset (<code>ethercat slaves</code>, <code>ethercat sdo</code>) and is widely used in heavy industrial motion control cabinets.</li>
+</ul>
+
+<div class="callout">
+<h4>Illustrative Scenario: Scanning Slaves with SOEM</h4>
+<p>When powering on a 6-axis manipulator for the first time, initialize the network interface in promiscuous raw mode and execute an automated slave inventory scan. The master sends an Auto-Increment Broadcast Read (APRD) telegram to enumerate every connected drive.</p>
+</div>
+
+<p>The following C++ listing demonstrates how a real-time SOEM master initializes the network adapter, scans for connected drives, and transitions them into the <strong>Pre-Operational (PRE-OP)</strong> state where Mailbox communication over CoE (CANopen over EtherCAT) becomes active:</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include "soem/ethercat.h"
+
+bool initialize_ethercat_master(const char* ifname) {
+    // 1. Initialize SOEM context on the specified network adapter
+    if (ec_init(ifname) &lt;= 0) {
+        std::cerr &lt;&lt; "[FATAL] Failed to initialize SOEM on interface: " &lt;&lt; ifname &lt;&lt; std::endl;
+        return false;
+    }
+    std::cout &lt;&lt; "[INFO] SOEM initialized on interface: " &lt;&lt; ifname &lt;&lt; std::endl;
+
+    // 2. Discover and enumerate all slave devices on the physical bus
+    int slave_count = ec_config_init(FALSE);
+    if (slave_count &lt; 6) {
+        std::cerr &lt;&lt; "[ERROR] Expected 6 joint servo drives, but found only " 
+                  &lt;&lt; slave_count &lt;&lt; " slaves!" &lt;&lt; std::endl;
+        ec_close();
+        return false;
+    }
+    std::cout &lt;&lt; "[INFO] Successfully discovered " &lt;&lt; slave_count &lt;&lt; " EtherCAT slaves." &lt;&lt; std::endl;
+
+    // 3. Inspect slave identities (Vendor ID, Product Code, Revision)
+    for (int i = 1; i &lt;= slave_count; ++i) {
+        std::cout &lt;&lt; "  Joint " &lt;&lt; i &lt;&lt; " Slave Name: " &lt;&lt; ec_slave[i].name
+                  &lt;&lt; " | Vendor ID: 0x" &lt;&lt; std::hex &lt;&lt; ec_slave[i].eep_man
+                  &lt;&lt; " | Product Code: 0x" &lt;&lt; ec_slave[i].eep_id &lt;&lt; std::dec &lt;&lt; std::endl;
+    }
+
+    // 4. Request transition of all slaves to Pre-Operational (PRE-OP) state
+    ec_statecheck(0, EC_STATE_PRE_OP, EC_TIMEOUTSTATE);
+    if (ec_slave[0].state != EC_STATE_PRE_OP) {
+        std::cerr &lt;&lt; "[ERROR] Could not transition all slaves to PRE-OP state. Current state: "
+                  &lt;&lt; ec_slave[0].state &lt;&lt; std::endl;
+        ec_close();
+        return false;
+    }
+    std::cout &lt;&lt; "[INFO] All 6 joint drives successfully transitioned to PRE-OP." &lt;&lt; std::endl;
+    return true;
+}</code></pre>
+
+<h2>Checkpoint 4: CiA 402 Drive Profile &amp; CSP PDO Mapping</h2>
+<p>EtherCAT servo drives communicate their motion data and control commands using the standardized <strong>CiA 402 Device Profile for Drives and Motion Control</strong> (IEC 61800-7-201). CiA 402 defines a rigorous object dictionary and a finite state machine that governs power delivery to the motor windings.</p>
+
+<h3>CiA 402 Finite State Machine</h3>
+<p>A servo drive will not accept target position commands or energize its power stage until the master transitions it through a strict sequence of states by writing specific bit patterns to the <code>Controlword</code> (Object <code>0x6040</code>) and verifying the response in the <code>Statusword</code> (Object <code>0x6041</code>):</p>
+
+<ol>
+<li><strong>Not Ready to Switch On (State 0):</strong> Drive powering up, self-tests running.</li>
+<li><strong>Switch On Disabled (State 1):</strong> High-voltage DC bus charged, inverter disabled. Statusword mask: <code>0x004F == 0x0040</code>. Command: Master writes Controlword <code>0x0006</code> (Shutdown command) &rarr; transitions to State 2.</li>
+<li><strong>Ready to Switch On (State 2):</strong> Drive ready. Statusword mask: <code>0x006F == 0x0021</code>. Command: Master writes Controlword <code>0x0007</code> (Switch On command) &rarr; transitions to State 3.</li>
+<li><strong>Switched On (State 3):</strong> Power stage ready, motor holding brake still engaged. Statusword mask: <code>0x006F == 0x0023</code>. Command: Master writes Controlword <code>0x000F</code> (Enable Operation command) &rarr; transitions to State 4.</li>
+<li><strong>Operation Enabled (State 4):</strong> Motor brake released, PWM inverter active, drive following cyclic position setpoints. Statusword mask: <code>0x006F == 0x0027</code>.</li>
+<li><strong>Fault Reaction Active &rarr; Fault (State 7):</strong> Over-current, tracking error, or watchdog trip. Drive executes quick-stop ramp, engages mechanical brake, and enters Fault. Statusword bit 3 is set (<code>0x0008</code>). Command to reset: Master writes Controlword <code>0x0080</code> (Fault Reset).</li>
+</ol>
+
+<div class="callout info">
+<h4>Cyclic Synchronous Position (CSP) Mode Selection</h4>
+<p>In multi-axis manipulators, the drive operating mode must be configured to <strong>Mode 8: Cyclic Synchronous Position (CSP)</strong> by writing <code>0x08</code> to Object <code>0x6060</code> (Modes of Operation). In CSP mode, the external trajectory planner computes synchronized Cartesian-to-joint paths and injects absolute joint encoder counts into Object <code>0x607A</code> (Target Position) every cycle. The drive internal position loop compares target position with actual encoder counts from Object <code>0x6064</code> (Position Actual Value) and performs closed-loop field-oriented current control at its internal current-loop frequency (typically 10 kHz to 32 kHz).</p>
+</div>
+
+<h3>Process Data Object (PDO) Mapping via CoE</h3>
+<p>To ensure microsecond-level transfer speeds, cyclic variables are pre-mapped into fixed Process Data Objects (PDOs) during the PRE-OP state via Service Data Objects (SDOs). Standard mapping for a 6-axis robot joint drive includes:</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>PDO Assignment</th>
+<th>CoE Index / Sub</th>
+<th>Object Name</th>
+<th>Data Type / Size</th>
+<th>Engineering Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Master &rarr; Drive (RxPDO)</strong></td>
+<td><code>0x1600</code> (RxPDO 1)</td>
+<td><code>0x6040:00</code></td>
+<td>Controlword</td>
+<td>UINT16 (2 bytes)</td>
+<td>State machine command bits (Enable, Stop, Reset)</td>
+</tr>
+<tr>
+<td><strong>Master &rarr; Drive (RxPDO)</strong></td>
+<td><code>0x1600</code> (RxPDO 1)</td>
+<td><code>0x6060:00</code></td>
+<td>Modes of Operation</td>
+<td>INT8 (1 byte)</td>
+<td>Sets CSP mode (<code>0x08</code>)</td>
+</tr>
+<tr>
+<td><strong>Master &rarr; Drive (RxPDO)</strong></td>
+<td><code>0x1600</code> (RxPDO 1)</td>
+<td><code>0x607A:00</code></td>
+<td>Target Position</td>
+<td>INT32 (4 bytes)</td>
+<td>Commanded joint position in encoder counts</td>
+</tr>
+<tr>
+<td><strong>Master &rarr; Drive (RxPDO)</strong></td>
+<td><code>0x1600</code> (RxPDO 1)</td>
+<td><code>0x60B1:00</code></td>
+<td>Velocity Offset</td>
+<td>INT32 (4 bytes)</td>
+<td>Velocity feedforward to minimize tracking lag</td>
+</tr>
+<tr>
+<td><strong>Master &rarr; Drive (RxPDO)</strong></td>
+<td><code>0x1600</code> (RxPDO 1)</td>
+<td><code>0x60B2:00</code></td>
+<td>Torque Offset</td>
+<td>INT16 (2 bytes)</td>
+<td>Gravity compensation &amp; dynamic torque feedforward</td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x6041:00</code></td>
+<td>Statusword</td>
+<td>UINT16 (2 bytes)</td>
+<td>State machine status &amp; fault warning flags</td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x6061:00</code></td>
+<td>Modes of Operation Display</td>
+<td>INT8 (1 byte)</td>
+<td>Active drive mode confirmation</td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x6064:00</code></td>
+<td>Position Actual Value</td>
+<td>INT32 (4 bytes)</td>
+<td>Current joint position from <a href="joint-encoders-robot-arm">high-resolution joint encoders</a></td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x606C:00</code></td>
+<td>Velocity Actual Value</td>
+<td>INT32 (4 bytes)</td>
+<td>Filtered joint velocity feedback</td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x6077:00</code></td>
+<td>Torque Actual Value</td>
+<td>INT16 (2 bytes)</td>
+<td>Actual motor current in units of 0.1% rated torque</td>
+</tr>
+<tr>
+<td><strong>Drive &rarr; Master (TxPDO)</strong></td>
+<td><code>0x1A00</code> (TxPDO 1)</td>
+<td><code>0x603F:00</code></td>
+<td>Error Code</td>
+<td>UINT16 (2 bytes)</td>
+<td>Active CiA 402 drive fault diagnostic code</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2>Checkpoint 5: Distributed Clocks (DC) Sync Pulse Generation &amp; Jitter Budgeting</h2>
+<p>The defining technical feature that separates EtherCAT from ordinary Ethernet fieldbuses is <strong>Distributed Clocks (DC)</strong>. In a multi-axis manipulator, physical servo drives must sample their position feedback and latch new setpoints into their PWM generators at the exact same physical instant. If Joint 1 latches at t = 0.000 microseconds while Joint 2 latches at t = 12.500 microseconds due to frame propagation delays, the resulting mechanical phase lag creates a dynamic contouring error during high-speed interpolated movements.</p>
+
+<h3>The Mechanism of Distributed Clocks</h3>
+<p>EtherCAT achieves sub-microsecond clock synchronization by establishing a hardware Reference Clock (typically the ESC hardware timer inside Slave 1, Joint 1). During the PRE-OP to SAFE-OP transition, the master performs the following four-stage synchronization routine:</p>
+
+<ol>
+<li><strong>Propagation Delay Measurement:</strong> The master transmits a broadcast timing telegram. Each slave's ESC hardware latches the precise entry and exit timestamps (t1, t2, t3, t4) of the frame on its physical ports. The master calculates the exact physical wire propagation delay between every adjacent pair of joint drives (typically 5 nanoseconds per meter of copper cable plus ~250 nanoseconds internal ESC forwarding delay).</li>
+<li><strong>Offset Compensation:</strong> The master writes delay offset values to each slave's System Time Offset register (<code>0x0920</code>), aligning all slave hardware clocks to the Reference Clock.</li>
+<li><strong>Drift Compensation:</strong> During normal cyclic operation, small differences in local quartz crystal oscillator frequencies (typically &plusmn;20 ppm) cause individual clocks to drift. The master continuously sends cyclic drift-correction datagrams (ARMW) that instruct the ESC internal phase-locked loop (PLL) to speed up or slow down its clock rate, keeping all slave timers locked within &plusmn;20 nanoseconds of each other.</li>
+<li><strong>SYNC0 Pulse Triggering:</strong> Each drive's ESC fires a hardware interrupt line (<code>SYNC0</code>) directly into the drive microprocessor. When the local DC timer matches the programmed cycle period (e.g., every 1,000,000 ns), the drive synchronously latches encoder readings and executes its position control algorithm.</li>
+</ol>
+
+<div class="callout">
+<h4>Example Calculation: Frame Transmission Time &amp; Bus Utilization Budget</h4>
+<p><strong>Illustrative Scenario:</strong> Consider a 6-axis industrial robot arm with an additional EtherCAT I/O slice module for pneumatic gripper control at the wrist. The master operates at a 1.0 ms (1,000 &micro;s) cyclic update rate over 100BASE-TX Fast Ethernet (100 Mbit/s = 12.5 MB/s = 12.5 bytes/&micro;s).</p>
+<p><strong>Step 1: Calculate Process Data Length per Node</strong><br />
+- Six servo drives: Each drive maps 13 bytes RxPDO (Commands) + 17 bytes TxPDO (Feedback) = 30 bytes.<br />
+- Total drive process data = 6 &times; 30 = 180 bytes.<br />
+- One digital I/O module: 4 bytes RxPDO + 4 bytes TxPDO = 8 bytes.<br />
+- Total EtherCAT Process Data = 180 + 8 = 188 bytes.</p>
+<p><strong>Step 2: Add Protocol Overhead</strong><br />
+- Ethernet Preamble &amp; Start Frame Delimiter: 8 bytes.<br />
+- Ethernet Header (Destination MAC, Source MAC, EtherType <code>0x88A4</code>): 14 bytes.<br />
+- EtherCAT Header (Length, Reserved, Type): 2 bytes.<br />
+- EtherCAT Datagram Header (Cmd, Index, Address, Length, Flags, IRQ): 10 bytes.<br />
+- EtherCAT Working Counter (WKC): 2 bytes.<br />
+- Ethernet Frame Check Sequence (FCS / CRC32): 4 bytes.<br />
+- Inter-packet gap (minimum 96 bit times): 12 bytes.<br />
+- <strong>Total Physical Frame Length on Wire:</strong> 8 + 14 + 2 + 10 + 188 + 2 + 4 + 12 = 240 bytes.</p>
+<p><strong>Step 3: Calculate On-Wire Transmission Time</strong><br />
+Transmission Time = (240 bytes) / (12.5 bytes/&micro;s) = 19.2 microseconds.</p>
+<p><strong>Step 4: Calculate Total Bus Cycle Time &amp; Slack Margin</strong><br />
+- On-wire frame transmission time: 19.2 &micro;s.<br />
+- Total ESC forwarding and propagation delay through 7 nodes (7 &times; 0.28 &micro;s): 1.96 &micro;s.<br />
+- Total round-trip bus time: 19.2 + 1.96 = 21.16 &micro;s.<br />
+- Master cycle budget: 1000.0 &micro;s.<br />
+- <strong>Bus Utilization:</strong> (21.16 &micro;s / 1000.0 &micro;s) &times; 100% = <strong>2.12%</strong>.<br />
+- <strong>Available Master Compute Slack:</strong> 1000.0 - 21.16 = <strong>978.84 microseconds</strong> (97.8% headroom available for ROS 2 kinematics, trajectory generation, and collision checking).</p>
+</div>
+
+<h2>Checkpoint 6: Trajectory Execution with ROS 2 ros2_control Hardware Interface</h2>
+<p>In modern robotics software architectures, the EtherCAT master stack is integrated directly into the <code>ros2_control</code> framework as an asynchronous or synchronous <code>hardware_interface::SystemInterface</code> C++ plugin. This architecture abstracts the physical drive hardware, allowing higher-level trajectory planners like MoveIt 2 to stream joint position and velocity commands without hardcoding fieldbus details.</p>
+
+<p>The diagram below illustrates the complete software and hardware pipeline, from high-level Cartesian planning down to physical servo PWM generation:</p>
+
+<p><img src="../articles/diagram-plc-robot-integration.jpg" alt="System architecture diagram of a real-time Linux EtherCAT master communicating over daisy-chained 100BASE-TX to multi-axis robot servo drives" loading="lazy" style="max-width:100%; border-radius:8px; margin:24px 0; border:1px solid var(--border);" width="1376" height="768" /></p>
+
+<h3>Structure of an EtherCAT ros2_control Hardware Plugin</h3>
+<p>The C++ hardware interface plugin implements four core lifecycle and execution methods:</p>
+
+<ol>
+<li><code>on_init()</code>: Parses URDF joint limits, reads drive network IDs and PDO mappings from the robot description.</li>
+<li><code>on_configure()</code> / <code>on_activate()</code>: Initializes the SOEM master context, performs the bus scan, verifies the Reference Clock DC lock, and executes the CiA 402 state machine transitions to bring all six drives into <strong>Operation Enabled (State 4)</strong>.</li>
+<li><code>read()</code>: Executed at 1 kHz within the real-time thread. Calls <code>ec_receive_processdata()</code>, extracts <code>Position Actual Value</code> and <code>Torque Actual Value</code> from the TxPDO buffer, converts raw encoder counts to radians, and writes them to ROS 2 joint state interfaces.</li>
+<li><code>write()</code>: Takes commanded joint positions (in radians) from the ROS 2 controller manager (e.g., <code>joint_trajectory_controller</code>), converts radians to integer encoder counts, writes them into the RxPDO <code>Target Position</code> buffer, and calls <code>ec_send_processdata()</code>.</li>
+</ol>
+
+<pre><code>// Example snippet: Real-time read/write loop in ros2_control EtherCAT hardware interface
+return_type EthercatRobotHardware::read(const rclcpp::Time &amp; /*time*/, const rclcpp::Duration &amp; /*period*/) {
+    // 1. Receive cyclic EtherCAT frame from the physical network
+    int wkc = ec_receive_processdata(EC_TIMEOUTRET);
+    if (wkc &lt; expected_wkc_) {
+        // Working Counter (WKC) failure indicates packet loss or slave fault
+        ++consecutive_dropped_frames_;
+        if (consecutive_dropped_frames_ &gt; 3) {
+            RCLCPP_FATAL(logger_, "EtherCAT communication lost! Tripping emergency stop.");
+            return return_type::ERROR;
+        }
+    } else {
+        consecutive_dropped_frames_ = 0;
+    }
+
+    // 2. Parse joint feedback from TxPDO buffers
+    for (size_t i = 0; i &lt; num_joints_; ++i) {
+        int32_t raw_counts = *(int32_t*)(ec_slave[i + 1].inputs + offset_pos_actual_);
+        int16_t raw_torque = *(int16_t*)(ec_slave[i + 1].inputs + offset_torque_actual_);
+        
+        // Convert raw encoder increments to radians
+        joint_positions_[i] = (static_cast&lt;double&gt;(raw_counts) / encoder_counts_per_rev_[i]) * 2.0 * M_PI;
+        joint_efforts_[i] = (static_cast&lt;double&gt;(raw_torque) / 1000.0) * rated_torque_nm_[i];
+    }
+    return return_type::OK;
+}
+
+return_type EthercatRobotHardware::write(const rclcpp::Time &amp; /*time*/, const rclcpp::Duration &amp; /*period*/) {
+    // 1. Pack commanded joint angles into RxPDO buffers
+    for (size_t i = 0; i &lt; num_joints_; ++i) {
+        int32_t target_counts = static_cast&lt;int32_t&gt;((joint_position_commands_[i] / (2.0 * M_PI)) * encoder_counts_per_rev_[i]);
+        *(int32_t*)(ec_slave[i + 1].outputs + offset_target_pos_) = target_counts;
+        
+        // Ensure Controlword remains 0x000F (Operation Enabled)
+        *(uint16_t*)(ec_slave[i + 1].outputs + offset_controlword_) = 0x000F;
+    }
+
+    // 2. Transmit frame synchronously to physical network
+    ec_send_processdata();
+    return return_type::OK;
+}</code></pre>
+
+<h2>Indicative 2026 Hardware Prices for EtherCAT Robot Arm Motion Systems</h2>
+<p>When budgeting an EtherCAT motion control architecture for an industrial or custom 6-DOF manipulator, costs divide between the central real-time compute host, industrial network interface controllers, multi-axis AC servo drive packages, and specialized flex-rated cabling. All figures below represent <strong>indicative 2026 prices</strong> in USD (with CAD reference conversions) compiled from public distributor and manufacturer documentation (Beckhoff, Leadshine, Inovance, Copley Controls, Mouser, DigiKey) as of August 2026. Industrial hardware is configuration- and quote-dependent; these figures represent representative single-unit to small-batch budgetary ranges.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Subsystem Component</th>
+<th>Representative Model / Spec</th>
+<th>Key Technical Attributes</th>
+<th>Indicative 2026 Price (USD)</th>
+<th>Indicative 2026 Price (CAD)</th>
+<th>Pricing Category / Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Industrial RT Master PC</strong></td>
+<td>Advantech / Beckhoff DIN-Rail IPC</td>
+<td>Intel Core i5, 16GB DDR4, Dual Intel I210 GbE, Fanless</td>
+<td>$1,150 &ndash; $1,850</td>
+<td>$1,550 &ndash; $2,500</td>
+<td>Distributor catalog list price</td>
+</tr>
+<tr>
+<td><strong>Single-Board Master SBC</strong></td>
+<td>Raspberry Pi 5 (8GB) + PCIe I210 NIC</td>
+<td>ARM Cortex-A76, RT-PREEMPT Linux, PCIe Gen 2 NIC</td>
+<td>$115 &ndash; $165</td>
+<td>$155 &ndash; $225</td>
+<td>Retail distributor pricing</td>
+</tr>
+<tr>
+<td><strong>Base/Shoulder Servo Drive</strong></td>
+<td>Leadshine EL8-EC750 / Inovance IS620N</td>
+<td>750W 230VAC, CoE CiA 402, DC Sync, STO SIL3 Cat 3</td>
+<td>$280 &ndash; $420 per axis</td>
+<td>$380 &ndash; $570 per axis</td>
+<td>Public OEM automation list</td>
+</tr>
+<tr>
+<td><strong>Wrist Micro-Servo Drive</strong></td>
+<td>Copley Accelnet Plus / Synapticon SOM</td>
+<td>48VDC 15A Peak, Ultra-compact PCB mount, Dual BiSS-C</td>
+<td>$340 &ndash; $590 per axis</td>
+<td>$460 &ndash; $800 per axis</td>
+<td>Manufacturer quote range</td>
+</tr>
+<tr>
+<td><strong>High-Flex S/FTP Cable</strong></td>
+<td>Igus CFBUS.045 / Lapp Etherline Torsion</td>
+<td>Cat5e SF/UTP, &plusmn;180&deg;/m Torsion rated, PUR jacket (50m)</td>
+<td>$185 &ndash; $260</td>
+<td>$250 &ndash; $350</td>
+<td>Specialty distributor list</td>
+</tr>
+<tr>
+<td><strong>Industrial Connectors</strong></td>
+<td>Phoenix Contact M12 D-Code Shielded</td>
+<td>IP67 Metal screw-crimp connector set (12 units)</td>
+<td>$140 &ndash; $190</td>
+<td>$190 &ndash; $260</td>
+<td>Electrical distributor catalog</td>
+</tr>
+<tr>
+<td><strong>Bus Coupler / Gripper I/O</strong></td>
+<td>Beckhoff EK1100 + EL2008 Digital Slice</td>
+<td>EtherCAT Coupler + 8-channel 24VDC 0.5A output module</td>
+<td>$240 &ndash; $330</td>
+<td>$325 &ndash; $445</td>
+<td>Industrial distributor list</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2>Troubleshooting Common EtherCAT Bus Faults in Robotic Cells</h2>
+<p>When commissioning or servicing a 6-axis manipulator, communication faults manifest rapidly due to the strict microsecond watchdog thresholds. The table below outlines a symptom-to-cause diagnostic matrix for rapid resolution in the field, expanding on our general <a href="robot-arm-troubleshooting">diagnostic workflow for electrical and communication faults</a>:</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Observed Symptom / Error</th>
+<th>Direct Root Cause</th>
+<th>Oscilloscope / Tool Checkpoint</th>
+<th>Permanent Corrective Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Working Counter (WKC) Mismatch</strong><br />Master reports <code>wkc &lt; expected</code></td>
+<td>One or more slave ESCs failed to process datagram; corrupt packet or disconnected cable downstream.</td>
+<td>Check ESC Lost Link counters in register <code>0x0310-0x0313</code> and Rx Error counters in <code>0x0300-0x0307</code>.</td>
+<td>Replace damaged high-flex patch lead; verify M12 connector pins for contamination or oxidation.</td>
+</tr>
+<tr>
+<td><strong>Sync Manager Watchdog Trip</strong><br />Drive trips CiA 402 fault <code>0x87A0</code></td>
+<td>Master failed to write new cyclic output PDO before drive SM2 watchdog timer expired (typically 10 ms).</td>
+<td>Run <code>cyclictest</code> on master host; verify real-time thread priority is <code>SCHED_FIFO 98</code>.</td>
+<td>Enable <code>isolcpus</code> in kernel boot options; disable CPU power-saving C-states; lock memory with <code>mlockall</code>.</td>
+</tr>
+<tr>
+<td><strong>Distributed Clock Drift Alarm</strong><br />Drive reports DC Sync0 PLL out of lock</td>
+<td>Severe clock drift on master host or corrupted ARMW drift-compensation packets caused by EMI.</td>
+<td>Inspect physical cable routing; check for 50 mm clearance from 480V servo power cables.</td>
+<td>Bond drive chassis to PE with 6 mm&sup2; copper braid; install ferrite chokes on inverter outputs.</td>
+</tr>
+<tr>
+<td><strong>Drive Refuses Operation Enabled</strong><br />Statusword stuck at <code>0x0040</code> (Switch On Disabled)</td>
+<td>Hardware Safe Torque Off (STO) circuit open, auxiliary 24V logic power missing, or main DC bus under-voltage.</td>
+<td>Measure voltage across STO1/STO2 terminal pins (must be +24VDC nominal).</td>
+<td>Verify safety relay / emergency stop circuit continuity; check main contactor status.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2>Typical Reader Question: CSP vs. Profile Position Mode for Robot Arms</h2>
+<div class="callout info">
+<h4>Typical Reader Question</h4>
+<p><em>"I am building a 6-axis arm. Why shouldn't I just use Profile Position Mode (PPM) or Profile Velocity Mode (PVM) and send target waypoints over EtherCAT whenever a move starts?"</em></p>
+</div>
+<p><strong>Engineering Analysis:</strong> Profile Position Mode (PPM, CiA 402 Mode 1) is designed for single-axis point-to-point positioning applications, such as a conveyor indexer or a packaging feed screw. In PPM, you send a target position (e.g., Joint 1 move 90 degrees), and the internal drive microprocessor generates its own trapezoidal or S-curve velocity profile. Because each joint drive has different internal cycle rates, different payload inertias, and different servo loop gains, each axis completes its acceleration and deceleration at slightly different instants.</p>
+
+<p>In a 6-DOF articulated manipulator, Cartesian motion (such as drawing a straight line or maintaining constant tool orientation) requires that all six joints trace mathematically coupled, continuous polynomial curves. If you use PPM, the Tool Center Point will deviate wildly through Cartesian space between the start and end points, risking severe collisions with fixtures and destroying toolpath accuracy. In <strong>Cyclic Synchronous Position (CSP) Mode</strong>, the central controller calculates the inverse kinematics at 1,000 Hz and dictates the exact instantaneous joint angle for every axis every millisecond, ensuring strict multi-axis path coordination, contrasting sharply with simpler <a href="smart-servo-robot-arm">digital bus servo architectures</a>.</p>
+
+<h2>Safety Standards, Redundant STO &amp; Professional Boundaries</h2>
+<p>EtherCAT provides exceptional motion determinism, but standard EtherCAT telegrams are non-safety-rated. In industrial robotic installations across the United States and Canada, machine safeguarding must comply with <strong>ANSI/RIA R15.06</strong>, <strong>CSA Z434</strong>, and <strong>ISO 10218-1/2</strong>.</p>
+
+<p>To safely shut down motor power during an emergency stop, light curtain breach, or safety gate opening, robot builders must employ one of two certified architectures:</p>
+
+<ol>
+<li><strong>Hardwired Dual-Channel Safe Torque Off (STO):</strong> The conventional and universally compatible approach. Each servo drive includes dedicated, hardware-isolated STO1 and STO2 input pins. An external certified safety relay (or safety PLC) drops 24V power to the STO terminals, physically disabling the gate driver optocouplers on the inverter IGBTs. This achieves ISO 13849-1 Category 3 / 4, Performance Level e (PL e) safety without relying on the real-time software stack.</li>
+<li><strong>FailSafe over EtherCAT (FSoE / Safety-over-EtherCAT):</strong> An IEC 61784-3 certified functional safety protocol that encapsulates safety-critical data inside standard EtherCAT cyclic frames (the "black channel" principle). Requires certified FSoE master controllers and FSoE-enabled servo drives.</li>
+</ol>
+
+<p><em>Safety Warning:</em> Software-only commands (such as writing Controlword <code>0x0000</code> or commanding zero velocity) do NOT constitute a machine emergency stop under OSHA regulations, NFPA 79, or Canadian provincial occupational safety rules. Always implement hardwired STO circuits verified by a qualified automation engineer.</p>
+
+<h2>Sources and Methodology</h2>
+<p>This technical guide was compiled through analysis of published industrial automation standards and manufacturer documentation, accessed August 2026:</p>
+<ul>
+<li><strong>EtherCAT Technology Group (ETG):</strong> ETG.1000.2 through ETG.1000.6 (EtherCAT Physical Layer, Data Link Layer, and Application Layer Protocol Specifications) and ETG.5003 (Semiconductor Device Profile).</li>
+<li><strong>CAN in Automation (CiA):</strong> CiA 402-1, CiA 402-2, and CiA 402-3 (CANopen Device Profile for Drives and Motion Control / IEC 61800-7-201).</li>
+<li><strong>Linux Foundation Real-Time Project:</strong> RT-PREEMPT Kernel documentation, latency measurement methodologies, and <code>cyclictest</code> benchmarking guidelines.</li>
+<li><strong>Industrial Component Documentation:</strong> Technical manuals, CoE object dictionaries, and hardware schematics from Beckhoff Automation (TwinCAT / AX5000), Leadshine Technology (EL8-EC series), Inovance (IS620N), and Copley Controls (Accelnet series).</li>
+</ul>
+
+<h2>Frequently asked questions</h2>
+
+<div class="faq-item"><h4>Why is EtherCAT preferred over standard CANopen for 6-axis robot arms?</h4><p>Standard CANopen operates at a maximum bus speed of 1 Mbit/s, which creates a communication bottleneck when transmitting high-frequency position commands and status feedback for six or more axes. Refreshing six drives with standard CANopen PDOs typically takes 5 to 10 milliseconds, which is too slow for dynamic trajectory tracking. EtherCAT uses 100BASE-TX Ethernet at 100 Mbit/s and process data on-the-fly, allowing a master to update position, velocity, and torque for six axes in under 15 microseconds with sub-microsecond clock synchronization.</p></div>
+<div class="faq-item"><h4>What is the difference between Cyclic Synchronous Position (CSP) and Profile Position Mode (PPM)?</h4><p>In Profile Position Mode (PPM), the controller sends target coordinates and target velocities to the drive, and the drive calculates its own internal trajectory interpolation. In a multi-axis robot arm, this causes coordinate synchronization failure because each drive reaches its target independently without coordinated trajectory interpolation. In Cyclic Synchronous Position (CSP) mode (CiA 402 mode 8), the central kinematics planner computes the coordinated Cartesian-to-joint trajectory and injects new position setpoints into every drive synchronously every 1 millisecond, ensuring perfect multi-axis coordination.</p></div>
+<div class="faq-item"><h4>Do I need a dedicated real-time operating system like VxWorks or QNX to run an EtherCAT master?</h4><p>No. A standard Linux kernel patched with the RT-PREEMPT patch set (such as Ubuntu 24.04 LTS or 22.04 LTS with real-time kernel) delivers deterministic loop jitter under 15 microseconds on standard x86 industrial PCs and ARM64 single-board computers like the Raspberry Pi 5 or NVIDIA Jetson. This provides sufficient deterministic performance for 1 kHz (1 millisecond) and 2 kHz (500 microsecond) robot control loops without expensive proprietary RTOS licenses.</p></div>
+<div class="faq-item"><h4>Why is Distributed Clocks (DC) synchronization critical for robot joint drives?</h4><p>Without Distributed Clocks (DC), each servo drive samples its position command and executes its current loop at the moment it receives the Ethernet packet, which varies due to software jitter and network latency. This causes phase jitter between joint axes, resulting in path ripple and high-frequency acoustic noise. Distributed Clocks synchronizes all slave clocks to a reference clock (typically the first DC-capable slave) with sub-microsecond precision, firing the internal drive control loops simultaneously across all six joints.</p></div>
+<div class="faq-item"><h4>What happens when an EtherCAT network cable is disconnected during robot motion?</h4><p>When the EtherCAT master detects a missed cyclic frame or a broken link, the master and slave watchdog timers expire within the configured watchdog period (typically 5 to 10 milliseconds). The CiA 402 state machine in each servo drive transitions immediately to Fault Reaction Active, applies deceleration according to the configured Quick Stop ramp, trips the mechanical motor brake, and de-energizes the inverter stage into a safe torque off (STO) state.</p></div>
+<div class="faq-item"><h4>How do I choose between the SOEM and IgH EtherCAT Master stacks?</h4><p>SOEM (Simple Open EtherCAT Master) is an embeddable, user-space C library that integrates cleanly with custom C++ control applications, ROS 2 ros2_control hardware interfaces, and microcontrollers. IgH EtherCAT Master (EtherLab) is a kernel-space Linux driver that replaces standard network drivers with native real-time NIC drivers for lower CPU overhead in high-axis-count industrial controllers. For most 6-DOF robot arm projects in ROS 2, SOEM provides faster integration and easier debugging.</p></div>
+
+<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
+<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Component values and specifications come from published ETG/CiA standards and official manufacturer documentation; no equipment named here was bench-tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 30, 2026 &middot; last reviewed August 30, 2026</span></p></aside>
+
+<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+</div>
+</main>
+
+<footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
+<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+<div>
+<a href="../" class="logo">Robotics <span>Engineering</span></a>
+<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
+</div>
+<div style="display:flex; gap:48px; flex-wrap:wrap;">
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+<ul style="list-style:none;">
+<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+</ul>
+</div>
+<div>
+<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+<ul style="list-style:none;">
+<li><a href="ros2-robot-arm-control" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">ROS 2 Control</a></li>
+<li><a href="smart-servo-robot-arm" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Smart Servos</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+  if (!read()) box.hidden = false;
+
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
