@@ -30,6 +30,19 @@
 <meta name="twitter:image:alt" content="An industrial robot arm base joint exposing internal cycloidal speed reducers and precision bearings" />
 <meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
 
+<!-- FIX 1: KaTeX para renderizar fórmulas matemáticas -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ],
+    throwOnError: false
+  });"></script>
+
 <!-- Structured Data: Article -->
 <script type="application/ld+json">
 {
@@ -162,487 +175,1013 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-:root { --ink:#0b0e14; --surface:#0f1116; --surface-card:#181b21; --text-primary:#f2f0eb; --text-secondary:#b0ab9f; --text-muted:#77736e; --accent:#c9a96e; --accent-2:#5f8ed8; --border:rgba(255,255,255,0.06); --radius:16px; }
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-body { font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif; background:var(--ink); color:var(--text-primary); line-height:1.65; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-::selection { background:rgba(201,169,110,0.25); color:#fff; }
-.container { max-width:1100px; margin:0 auto; padding:0 24px; }
-.site-nav { position:sticky; top:0; z-index:100; background:rgba(11,14,20,0.82); backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%); border-bottom:1px solid var(--border); padding:14px 24px; }
-.nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-.logo { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; font-weight:600; color:var(--text-primary); text-decoration:none; letter-spacing:-0.01em; }
-.logo span { color:var(--accent); font-weight:300; }
-.nav-links { display:flex; gap:24px; align-items:center; }
-.nav-links a { color:var(--text-secondary); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color 0.15s; }
-.nav-links a:hover { color:var(--text-primary); }
-.hero-article { position:relative; min-height:440px; display:flex; align-items:flex-end; padding:64px 24px 48px; border-bottom:1px solid var(--border); overflow:hidden; }
-.hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; filter:brightness(0.32); z-index:0; }
-.hero-inner { position:relative; z-index:1; max-width:820px; margin:0 auto; width:100%; }
-.hero-badge { display:inline-flex; align-items:center; gap:8px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:16px; font-weight:600; }
-.hero-badge .line { width:24px; height:1px; background:var(--accent); }
-.hero-article h1 { font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(2rem,4.5vw,3.1rem); font-weight:400; line-height:1.15; color:var(--text-primary); margin-bottom:16px; letter-spacing:-0.02em; }
-.hero-sub { font-size:1.05rem; color:var(--text-secondary); font-weight:300; line-height:1.55; max-width:680px; margin-bottom:24px; }
-.hero-meta { display:flex; gap:20px; align-items:center; font-size:0.8rem; color:var(--text-muted); flex-wrap:wrap; }
-.hero-meta time { color:var(--text-secondary); }
-.article-container { max-width:820px; margin:0 auto; padding:48px 24px 80px; }
-.article-body h2 { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.85rem; font-weight:400; color:var(--text-primary); margin:48px 0 16px; letter-spacing:-0.01em; border-bottom:1px solid var(--border); padding-bottom:8px; }
-.article-body h3 { font-size:1.15rem; font-weight:600; color:var(--text-primary); margin:32px 0 12px; }
-.article-body p { margin-bottom:20px; color:var(--text-secondary); font-size:0.98rem; font-weight:300; }
-.article-body strong { color:var(--text-primary); font-weight:500; }
-.article-body ul, .article-body ol { margin:0 0 24px 20px; color:var(--text-secondary); font-size:0.95rem; font-weight:300; }
-.article-body li { margin-bottom:8px; }
-.article-body a { color:var(--accent-2); text-decoration:none; border-bottom:1px solid rgba(95,142,216,0.3); transition:border-color 0.15s; }
-.article-body a:hover { border-color:var(--accent-2); }
-.article-body code { font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:0.88em; background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:var(--accent); }
-.article-body pre { background:var(--surface-card); border:1px solid var(--border); border-radius:8px; padding:18px 20px; overflow-x:auto; margin:0 0 24px; font-size:0.85rem; line-height:1.5; color:#d6d3cb; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
-.callout { background:var(--surface-card); border-left:3px solid var(--accent); padding:20px 24px; margin:28px 0; border-radius:0 8px 8px 0; }
-.callout.warn { border-left-color:#e06c75; }
-.callout.info { border-left-color:var(--accent-2); }
-.callout h4 { font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:8px; }
-.callout p { margin:0; font-size:0.9rem; color:var(--text-secondary); }
-.table-wrap { overflow-x:auto; margin:28px 0; border:1px solid var(--border); border-radius:8px; }
-table { width:100%; border-collapse:collapse; font-size:0.88rem; text-align:left; }
-th { background:var(--surface-card); color:var(--text-primary); font-weight:500; padding:12px 16px; border-bottom:1px solid var(--border); }
-td { padding:12px 16px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
-tr:last-child td { border-bottom:none; }
-.faq-item { background:var(--surface-card); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px; }
-.faq-item h4 { color:var(--text-primary); font-size:0.95rem; font-weight:600; margin-bottom:8px; }
-.faq-item p { margin:0; font-size:0.9rem; color:var(--text-secondary); line-height:1.55; }
-.footer-nav { display:flex; justify-content:space-between; margin-top:40px; padding-top:20px; border-top:1px solid var(--border); }
-.back-link { color:var(--accent-2); text-decoration:none; font-size:0.88rem; }
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --ink:          #0b0e14;
+  --surface:      #0f1116;
+  --surface-card: #181b21;
+  --text-primary: #f2f0eb;
+  --text-secondary:#b0ab9f;
+  --text-muted:   #77736e;
+  --accent:       #c9a96e;
+  --accent-2:     #5f8ed8;
+  --border:       rgba(255,255,255,0.06);
+  --radius:       16px;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+  background: var(--ink);
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+::selection { background: rgba(201,169,110,0.25); color: #fff; }
+
+/* ─── Layout helpers ─────────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── Navigation ─────────────────────────────────────────────── */
+/* FIX 5: Responsive nav con flex-wrap y menú hamburguesa */
+.site-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(11,14,20,0.82);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 20px;
+}
+.logo {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.35rem; font-weight: 600;
+  color: var(--text-primary); text-decoration: none;
+  letter-spacing: -0.01em; white-space: nowrap;
+}
+.logo span { color: var(--accent); font-weight: 300; }
+
+/* Hamburger button (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  background: none; border: none;
+  cursor: pointer; padding: 6px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.nav-toggle svg { display: block; width: 22px; height: 22px; }
+
+.nav-links {
+  display: flex; gap: 24px; align-items: center;
+  flex-wrap: wrap;
+}
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 0.875rem; font-weight: 500;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--text-primary); }
+
+@media (max-width: 640px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(11,14,20,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px; gap: 16px;
+  }
+  .nav-links.open { display: flex; }
+}
+
+/* ─── Hero ───────────────────────────────────────────────────── */
+.hero-article {
+  position: relative; min-height: 440px;
+  display: flex; align-items: flex-end;
+  padding: 64px 24px 48px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  filter: brightness(0.32); z-index: 0;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 820px; margin: 0 auto; width: 100%;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--accent);
+  margin-bottom: 16px; font-weight: 600;
+}
+.hero-badge .line { width: 24px; height: 1px; background: var(--accent); }
+.hero-article h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 4.5vw, 3.1rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--text-primary); margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.hero-sub {
+  font-size: 1.05rem; color: var(--text-secondary);
+  font-weight: 300; line-height: 1.55;
+  max-width: 680px; margin-bottom: 24px;
+}
+.hero-meta {
+  display: flex; gap: 20px; align-items: center;
+  font-size: 0.8rem; color: var(--text-muted); flex-wrap: wrap;
+}
+.hero-meta time { color: var(--text-secondary); }
+
+/* ─── Article body ───────────────────────────────────────────── */
+.article-container { max-width: 820px; margin: 0 auto; padding: 48px 24px 80px; }
+
+.article-body h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.85rem; font-weight: 400;
+  color: var(--text-primary); margin: 48px 0 16px;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--border); padding-bottom: 8px;
+}
+.article-body h3 {
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--text-primary); margin: 32px 0 12px;
+}
+.article-body p {
+  margin-bottom: 20px; color: var(--text-secondary);
+  font-size: 0.98rem; font-weight: 300;
+}
+.article-body strong { color: var(--text-primary); font-weight: 500; }
+.article-body ul,
+.article-body ol { margin: 0 0 24px 20px; color: var(--text-secondary); font-size: 0.95rem; font-weight: 300; }
+.article-body li { margin-bottom: 8px; }
+.article-body a {
+  color: var(--accent-2); text-decoration: none;
+  border-bottom: 1px solid rgba(95,142,216,0.3);
+  transition: border-color 0.15s;
+}
+.article-body a:hover { border-color: var(--accent-2); }
+.article-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88em; background: rgba(255,255,255,0.06);
+  padding: 2px 6px; border-radius: 4px; color: var(--accent);
+}
+.article-body pre {
+  background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px 20px; overflow-x: auto;
+  margin: 0 0 24px; font-size: 0.85rem; line-height: 1.5;
+  color: #d6d3cb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* FIX 1: KaTeX display block centering */
+.katex-display { overflow-x: auto; padding: 8px 0; }
+
+/* ─── Callouts ───────────────────────────────────────────────── */
+.callout {
+  background: var(--surface-card);
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px; margin: 28px 0;
+  border-radius: 0 8px 8px 0;
+}
+.callout.warn  { border-left-color: #e06c75; }
+.callout.info  { border-left-color: var(--accent-2); }
+.callout h4 {
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--text-primary); margin-bottom: 8px;
+}
+.callout p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
+
+/* ─── Tables ─────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto; margin: 28px 0;
+  border: 1px solid var(--border); border-radius: 8px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left; }
+th {
+  background: var(--surface-card); color: var(--text-primary);
+  font-weight: 500; padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+tr:last-child td { border-bottom: none; }
+
+/* ─── FAQ items ──────────────────────────────────────────────── */
+.faq-item {
+  background: var(--surface-card);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 20px; margin-bottom: 16px;
+}
+.faq-item h4 { color: var(--text-primary); font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+.faq-item p  { margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+
+/* ─── Article footer nav ─────────────────────────────────────── */
+.footer-nav {
+  display: flex; justify-content: space-between;
+  margin-top: 40px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap; gap: 12px;
+}
+.back-link { color: var(--accent-2); text-decoration: none; font-size: 0.88rem; }
+
+/* FIX 8: Footer list spacing ────────────────────────────────── */
+footer ul { list-style: none; padding: 0; }
+footer ul li { margin-bottom: 10px; }
+footer ul li:last-child { margin-bottom: 0; }
+
+/* ─── Diagram image ──────────────────────────────────────────── */
+/* FIX 2: Fallback styles so missing diagram doesn't break layout */
+.diagram-img {
+  max-width: 100%; border-radius: 8px;
+  margin: 24px 0; border: 1px solid var(--border);
+  background: var(--surface-card);
+  min-height: 60px; display: block;
+}
+
+/* ─── Author aside ───────────────────────────────────────────── */
+/* FIX 6: Proper aria-label applied in HTML */
+.author-aside {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin: 40px 0 12px; padding: 18px 20px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px; background: rgba(255,255,255,.03);
+}
+.author-avatar {
+  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg,#e4c07a,#6fa3d8);
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif; font-weight: 700; color: #1a1408;
+  font-size: 1rem;
+}
+.author-aside p { margin: 0; color: #b5b0a6; font-size: .88rem; line-height: 1.55; }
+.author-aside a { color: #6fa3d8; }
+.author-aside .author-meta { color: #6e677a; font-size: .82rem; display: block; margin-top: 4px; }
 </style>
 </head>
 
 <body>
+<!-- ─── Navigation ──────────────────────────────────────────── -->
 <nav class="site-nav" aria-label="Site navigation">
-<div class="nav-inner">
-<a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
-<div class="nav-links">
-<a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
-</div></div></nav>
+  <div class="nav-inner">
+    <a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
 
+    <!-- FIX 5: Hamburger toggle para móvil -->
+    <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6"  x2="21" y2="6"  />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+
+    <div class="nav-links" id="primary-nav" role="list">
+      <a href="../"                   role="listitem">Home</a>
+      <a href="./"                    role="listitem">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide" role="listitem">Guide</a>
+      <a href="../about"              role="listitem">About</a>
+      <a href="../contact"            role="listitem">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── Hero ───────────────────────────────────────────────── -->
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="An industrial robot arm base joint exposing internal cycloidal speed reducers and precision bearings" loading="eager" decoding="async" width="1536" height="1024" />
-<div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Mechanical Design &amp; Materials &mdash; Published August 30, 2026</div>
-<h1>Cycloidal Drive Robot Arm Design: Joint Sizing, Shock Overload Factors &amp; Mechanical Constraints</h1><p class="hero-sub">A constraint-based engineering selection guide for sizing cycloidal pinwheel speed reducers, evaluating shock overload factors, lost motion hysteresis, torsional stiffness, and cross-roller bearing life in industrial robot joints.</p>
-<div class="hero-meta"><time datetime="2026-08-30">August 30, 2026</time><span>&middot;</span><span>20 min read</span><span>&middot;</span><span>By Marcus Chen</span></div>
-</div></header>
+  <!-- FIX 7: fetchpriority="high" para LCP -->
+  <img
+    class="hero-bg"
+    src="../industrial_robot_arm.jpg"
+    alt="An industrial robot arm base joint exposing internal cycloidal speed reducers and precision bearings"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    width="1536"
+    height="1024"
+  />
+  <div class="hero-inner">
+    <div class="hero-badge" aria-label="Category">
+      <span class="line" aria-hidden="true"></span>
+      Mechanical Design &amp; Materials &mdash; Published August 30, 2026
+    </div>
+    <h1>Cycloidal Drive Robot Arm Design: Joint Sizing, Shock Overload Factors &amp; Mechanical Constraints</h1>
+    <p class="hero-sub">
+      A constraint-based engineering selection guide for sizing cycloidal pinwheel speed reducers,
+      evaluating shock overload factors, lost motion hysteresis, torsional stiffness, and cross-roller
+      bearing life in industrial robot joints.
+    </p>
+    <div class="hero-meta">
+      <time datetime="2026-08-30">August 30, 2026</time>
+      <span>&middot;</span>
+      <span>20 min read</span>
+      <span>&middot;</span>
+      <span>By Marcus Chen</span>
+    </div>
+  </div>
+</header>
 
+<!-- ─── Article ────────────────────────────────────────────── -->
 <main class="article-container">
 <div class="article-body">
 
 <div class="callout info">
-<h4>Editorial Disclosure &amp; Scope Notice</h4>
-<p>This technical sizing guide is an independent engineering analysis based on published mechanical gearing standards (AGMA / ISO 6336) and official manufacturer documentation (Nabtesco, Spinea, Sumitomo Drive Technologies). Robotics Engineering Lab did not destructively test the gearboxes analyzed below. Sizing heavy mechanical speed reducers for multi-axis industrial robots requires rigorous structural simulation of peak emergency stop moments and dynamic payload inertia using our <a href="robot-arm-payload-calculator">joint torque and reflected inertia calculations</a>. Always consult certified mechanical engineering data and manufacturer application engineers prior to final production release.</p>
+  <h4>Editorial Disclosure &amp; Scope Notice</h4>
+  <p>
+    This technical sizing guide is an independent engineering analysis based on published mechanical
+    gearing standards (AGMA&nbsp;/&nbsp;ISO&nbsp;6336) and official manufacturer documentation
+    (Nabtesco, Spinea, Sumitomo Drive Technologies). Robotics Engineering Lab did not destructively
+    test the gearboxes analyzed below. Sizing heavy mechanical speed reducers for multi-axis industrial
+    robots requires rigorous structural simulation of peak emergency stop moments and dynamic payload
+    inertia using our
+    <a href="robot-arm-payload-calculator">joint torque and reflected inertia calculations</a>.
+    Always consult certified mechanical engineering data and manufacturer application engineers prior
+    to final production release.
+  </p>
 </div>
 
 <h2>Cycloidal Drive Robot Arm Applications: Heavy Joint Demands</h2>
-<p>In a 6-degree-of-freedom (6-DOF) articulated industrial manipulator, the mechanical speed reducer is the single most load-critical component in the entire drivetrain. While wrist joints (Joints 4, 5, and 6) prioritize ultra-low mass and compact outer diameters, the primary positioning axes &mdash; the base waist (Joint 1), shoulder (Joint 2), and elbow (Joint 3) &mdash; are subjected to extreme cantilevered gravitational torques, massive dynamic acceleration moments, and severe emergency stop shock loads.</p>
+<p>
+  In a 6-degree-of-freedom (6-DOF) articulated industrial manipulator, the mechanical speed reducer
+  is the single most load-critical component in the entire drivetrain. While wrist joints (Joints&nbsp;4,
+  5, and 6) prioritize ultra-low mass and compact outer diameters, the primary positioning axes &mdash;
+  the base waist (Joint&nbsp;1), shoulder (Joint&nbsp;2), and elbow (Joint&nbsp;3) &mdash; are subjected
+  to extreme cantilevered gravitational torques, massive dynamic acceleration moments, and severe
+  emergency stop shock loads.
+</p>
+<p>
+  For decades, roboticists building lightweight manipulators frequently specified
+  <a href="harmonic-drive-review">strain wave harmonic drives</a> across all six axes due to their
+  near-zero backlash, compact coaxial geometry, and large central through-holes. However, when applied
+  to high-payload base and shoulder joints (&gt;&nbsp;10&nbsp;kg payload), harmonic drives suffer a
+  fatal vulnerability: the flexible steel cup (flexspline) has very limited fatigue limits and low
+  torsional stiffness under shock loads. An unexpected emergency stop at full arm extension generates
+  a dynamic inertial spike that can shear flexspline teeth or cause catastrophic cup fatigue fracture.
+</p>
+<p>
+  To withstand these severe dynamic forces without sacrificing positioning precision, industrial robot
+  manufacturers (including FANUC, ABB, KUKA, Yaskawa, and Kawasaki) exclusively utilize
+  <strong>cycloidal speed reducers</strong> (also known as pinwheel reducers, RV reducers, or Spinea
+  TwinSpin drives) in Joints&nbsp;1, 2, and 3. A <strong>cycloidal drive robot arm</strong> joint
+  delivers unmatched shock overload resistance (withstanding momentary shock peaks up to 500% of
+  nominal rated torque), exceptional torsional rigidity ($K_T &gt; 100\text{ Nm/arcmin}$), and
+  integrated heavy-duty cross-roller bearings capable of directly absorbing massive overturning moments
+  without secondary external bearing supports, contrasting with conventional
+  <a href="belt-drive-vs-gear-drive">timing belts and planetary gearboxes</a>.
+</p>
 
-<p>For decades, roboticists building lightweight manipulators frequently specified <a href="harmonic-drive-review">strain wave harmonic drives</a> across all six axes due to their near-zero backlash, compact coaxial geometry, and large central through-holes. However, when applied to high-payload base and shoulder joints (&gt; 10 kg payload), harmonic drives suffer a fatal vulnerability: the flexible steel cup (flexspline) has very limited fatigue limits and low torsional stiffness under shock loads. An unexpected emergency stop at full arm extension generates a dynamic inertial spike that can shear flexspline teeth or cause catastrophic cup fatigue fracture.</p>
-
-<p>To withstand these severe dynamic forces without sacrificing positioning precision, industrial robot manufacturers (including FANUC, ABB, KUKA, Yaskawa, and Kawasaki) exclusively utilize <strong>cycloidal speed reducers</strong> (also known as pinwheel reducers, RV reducers, or Spinea TwinSpin drives) in Joints 1, 2, and 3. A <strong>cycloidal drive robot arm</strong> joint delivers unmatched shock overload resistance (withstanding momentary shock peaks up to 500% of nominal rated torque), exceptional torsional rigidity ($K_T > 100\text{ Nm/arcmin}$), and integrated heavy-duty cross-roller bearings capable of directly absorbing massive overturning moments without secondary external bearing supports, contrasting with conventional <a href="belt-drive-vs-gear-drive">timing belts and planetary gearboxes</a>.</p>
-
-<p><img src="../articles/diagram-robot-transmissions.jpg" alt="Engineering cross-section diagram of a cycloidal speed reducer illustrating eccentric shaft, dual cycloid discs, ring pin rollers, and output pin carriers" loading="lazy" style="max-width:100%; border-radius:8px; margin:24px 0; border:1px solid var(--border);" width="1376" height="768" /></p>
+<!-- FIX 2: Imagen con onerror fallback + clase diagram-img -->
+<img
+  class="diagram-img"
+  src="../articles/diagram-robot-transmissions.jpg"
+  alt="Engineering cross-section diagram of a cycloidal speed reducer illustrating eccentric shaft, dual cycloid discs, ring pin rollers, and output pin carriers"
+  loading="lazy"
+  width="1376"
+  height="768"
+  onerror="this.style.display='none'"
+/>
 
 <h2>Operating Principle and Kinematics of Cycloidal Gearing</h2>
-<p>A cycloidal drive transforms high-speed motor rotation into high-torque, low-speed output through the rolling interaction of an epitrochoid-profile disc against stationary ring pins:</p>
+<p>
+  A cycloidal drive transforms high-speed motor rotation into high-torque, low-speed output through
+  the rolling interaction of an epitrochoid-profile disc against stationary ring pins:
+</p>
 
 <h3>The Kinematic Architecture</h3>
 <p>A precision robotic cycloidal reducer consists of four core mechanical sub-assemblies:</p>
 <ol>
-<li><strong>High-Speed Input Shaft with Dual Eccentric Cams:</strong> The servo motor couples directly to the input shaft, which features two eccentric cam lobes machined $180^\circ$ out of phase with an eccentricity $e$ (typically $1.0\text{ mm}$ to $3.5\text{ mm}$).</li>
-<li><strong>Dual Cycloid Discs:</strong> Two identical tool-steel discs with perimeter cycloidal lobes are mounted onto needle roller bearings on the eccentric cams. The dual-disc configuration balances rotating centrifugal forces dynamically, eliminating high-speed vibration.</li>
-<li><strong>Stationary Ring Pin Housing (Stator):</strong> The outer housing holds $N_p$ precision ground cylindrical pins (or roller sleeves) arranged in a pitch circle of radius $R_p$. The number of lobes on each cycloid disc is $N_g = N_p - 1$.</li>
-<li><strong>Output Shaft &amp; Carrier Pins:</strong> A rigid output flange contains $N_c$ heavy cylindrical drive pins (fitted with low-friction sliding or needle roller bushings) that pass through oversized circular drive holes machined into the cycloid discs. The diameter of the disc holes equals the carrier pin diameter plus twice the eccentricity ($D_{\text{hole}} = D_{\text{pin}} + 2e$).</li>
+  <li>
+    <strong>High-Speed Input Shaft with Dual Eccentric Cams:</strong> The servo motor couples directly
+    to the input shaft, which features two eccentric cam lobes machined $180^\circ$ out of phase with
+    an eccentricity $e$ (typically $1.0\text{ mm}$ to $3.5\text{ mm}$).
+  </li>
+  <li>
+    <strong>Dual Cycloid Discs:</strong> Two identical tool-steel discs with perimeter cycloidal lobes
+    are mounted onto needle roller bearings on the eccentric cams. The dual-disc configuration balances
+    rotating centrifugal forces dynamically, eliminating high-speed vibration.
+  </li>
+  <li>
+    <strong>Stationary Ring Pin Housing (Stator):</strong> The outer housing holds $N_p$ precision
+    ground cylindrical pins (or roller sleeves) arranged in a pitch circle of radius $R_p$. The number
+    of lobes on each cycloid disc is $N_g = N_p - 1$.
+  </li>
+  <li>
+    <strong>Output Shaft &amp; Carrier Pins:</strong> A rigid output flange contains $N_c$ heavy
+    cylindrical drive pins (fitted with low-friction sliding or needle roller bushings) that pass
+    through oversized circular drive holes machined into the cycloid discs. The diameter of the disc
+    holes equals the carrier pin diameter plus twice the eccentricity
+    ($D_{\text{hole}} = D_{\text{pin}} + 2e$).
+  </li>
 </ol>
 
 <h3>Kinematic Reduction Ratio Derivation</h3>
-<p>For every full $360^\circ$ revolution of the eccentric input shaft, the cycloid disc is driven through one eccentric orbit. Because the disc has $N_g = N_p - 1$ lobes interacting with $N_p$ stationary pins, the disc advances by exactly one lobe in the opposite direction of the input shaft. The single-stage cycloidal reduction ratio $R$ is strictly governed by the lobe count:</p>
+<p>
+  For every full $360^\circ$ revolution of the eccentric input shaft, the cycloid disc is driven through
+  one eccentric orbit. Because the disc has $N_g = N_p - 1$ lobes interacting with $N_p$ stationary
+  pins, the disc advances by exactly one lobe in the opposite direction of the input shaft. The
+  single-stage cycloidal reduction ratio $R$ is strictly governed by the lobe count:
+</p>
 
 $$R = \frac{N_g}{N_p - N_g} = \frac{N_p - 1}{N_p - (N_p - 1)} = N_p - 1 = N_g$$
 
-<p>In modern industrial RV-type reducers (such as Nabtesco RV-E / RV-N series), a primary spur gear stage ($i_1$) precedes the cycloidal stage ($i_2$), yielding total single-housing reduction ratios from $i_{\text{total}} = i_1 \times i_2 = 30:1$ up to $300:1$ in an exceptionally compact axial length.</p>
+<p>
+  In modern industrial RV-type reducers (such as Nabtesco RV-E&nbsp;/&nbsp;RV-N series), a primary spur
+  gear stage ($i_1$) precedes the cycloidal stage ($i_2$), yielding total single-housing reduction
+  ratios from $i_{\text{total}} = i_1 \times i_2 = 30{:}1$ up to $300{:}1$ in an exceptionally compact
+  axial length.
+</p>
 
 <h2>Constraint 1: Peak Torque, Emergency Stop Moments &amp; Shock Factor</h2>
-<p>The primary engineering constraint when sizing a cycloidal drive for a robot joint is ensuring the reducer withstands dynamic peak torque $T_{\text{peak}}$ and emergency stop shock torque $T_{\text{E-stop}}$ without exceeding the manufacturer's momentary peak limit $T_{\text{max}}$.</p>
+<p>
+  The primary engineering constraint when sizing a cycloidal drive for a robot joint is ensuring the
+  reducer withstands dynamic peak torque $T_{\text{peak}}$ and emergency stop shock torque
+  $T_{\text{E-stop}}$ without exceeding the manufacturer's momentary peak limit $T_{\text{max}}$.
+</p>
 
 <h3>Multi-Tooth Load Sharing Mechanism</h3>
-<p>In standard involute spur or planetary gears, the entire transmitted load is concentrated across one or two tooth pairs under sliding contact, making them vulnerable to tooth root bending fatigue. In a cycloidal drive, the rolling disc lobes engage <strong>30% to 50% of the ring pins simultaneously</strong> under pure compressive rolling contact. This distributes contact stress across multiple hardened surfaces, allowing cycloidal reducers to safely absorb momentary shock loads up to <strong>500% of their rated nominal torque</strong> ($T_{\text{momentary}} = 5 \times T_{\text{rated}}$).</p>
+<p>
+  In standard involute spur or planetary gears, the entire transmitted load is concentrated across one
+  or two tooth pairs under sliding contact, making them vulnerable to tooth root bending fatigue. In a
+  cycloidal drive, the rolling disc lobes engage <strong>30% to 50% of the ring pins
+  simultaneously</strong> under pure compressive rolling contact. This distributes contact stress across
+  multiple hardened surfaces, allowing cycloidal reducers to safely absorb momentary shock loads up to
+  <strong>500% of their rated nominal torque</strong>
+  ($T_{\text{momentary}} = 5 \times T_{\text{rated}}$).
+</p>
 
 <div class="callout">
-<h4>The Shock Load Sizing Equation</h4>
-<p>When selecting a reducer, compute the required maximum torque rating $T_{\text{req}}$ using the application shock factor $K_s$:</p>
-$$T_{\text{req}} \ge \left( T_{\text{gravity\_max}} + T_{\text{accel\_max}} \right) \times K_s$$
-<p>Where:<br />
-- $T_{\text{gravity\_max}}$ is the maximum static gravitational moment at maximum horizontal arm reach.<br />
-- $T_{\text{accel\_max}} = J_{\text{total}} \times \alpha_{\text{joint}}$ is the dynamic acceleration torque from joint reflected inertia.<br />
-- $K_s$ is the operational shock factor: <strong>$1.5$</strong> for smooth palletizing, <strong>$2.0$</strong> for high-speed pick-and-place, and <strong>$2.5$</strong> for heavy CNC machine loading or stamping press transfers.</p>
+  <h4>The Shock Load Sizing Equation</h4>
+  <p>
+    When selecting a reducer, compute the required maximum torque rating $T_{\text{req}}$ using the
+    application shock factor $K_s$:
+  </p>
+  $$T_{\text{req}} \ge \left( T_{\text{gravity\_max}} + T_{\text{accel\_max}} \right) \times K_s$$
+  <p>
+    Where:<br />
+    &bull; $T_{\text{gravity\_max}}$ — maximum static gravitational moment at maximum horizontal arm reach.<br />
+    &bull; $T_{\text{accel\_max}} = J_{\text{total}} \times \alpha_{\text{joint}}$ — dynamic acceleration
+      torque from joint reflected inertia.<br />
+    &bull; $K_s$ — operational shock factor:
+      <strong>$1.5$</strong> for smooth palletizing,
+      <strong>$2.0$</strong> for high-speed pick-and-place, and
+      <strong>$2.5$</strong> for heavy CNC machine loading or stamping press transfers.
+  </p>
 </div>
 
 <h2>Constraint 2: Torsional Rigidity, Lost Motion &amp; Backlash</h2>
-<p>In precision robotics, positional repeatability at the Tool Center Point depends directly on the <strong>torsional stiffness</strong> ($K_T$) and <strong>lost motion</strong> of each joint reducer. When the robot changes direction or accelerates rapidly, joint elasticity causes angular deflection, resulting in TCP overshoot, path tracking errors, and settling time delays.</p>
+<p>
+  In precision robotics, positional repeatability at the Tool Center Point depends directly on the
+  <strong>torsional stiffness</strong> ($K_T$) and <strong>lost motion</strong> of each joint reducer.
+  When the robot changes direction or accelerates rapidly, joint elasticity causes angular deflection,
+  resulting in TCP overshoot, path tracking errors, and settling time delays.
+</p>
 
 <h3>Lost Motion vs. True Backlash</h3>
-<p>Unlike standard gearboxes, precision cycloidal drives exhibit <strong>zero geometric backlash</strong> because the cycloidal lobes and ring pins are manufactured with tight tolerances and negative clearances (radial preloading). Instead, manufacturers specify <strong>Lost Motion</strong>:</p>
+<p>
+  Unlike standard gearboxes, precision cycloidal drives exhibit <strong>zero geometric backlash</strong>
+  because the cycloidal lobes and ring pins are manufactured with tight tolerances and negative
+  clearances (radial preloading). Instead, manufacturers specify <strong>Lost Motion</strong>:
+</p>
 
 <div class="callout info">
-<h4>Definition of Lost Motion</h4>
-<p>Lost Motion is the total angular displacement measured at the output flange when the output shaft is loaded in both directions to &plusmn;3% of rated output torque ($&plusmn; T_{\text{rated}} \times 0.03$). In high-grade industrial cycloidal drives, lost motion is strictly guaranteed to be <strong>$< 1.0\text{ arcminute}$ (typically $0.4$ to $0.8\text{ arcmin}$)</strong>.</p>
+  <h4>Definition of Lost Motion</h4>
+  <p>
+    Lost Motion is the total angular displacement measured at the output flange when the output shaft
+    is loaded in both directions to &plusmn;3% of rated output torque ($\pm T_{\text{rated}} \times 0.03$).
+    In high-grade industrial cycloidal drives, lost motion is strictly guaranteed to be
+    <strong>$&lt; 1.0\text{ arcminute}$ (typically $0.4$ to $0.8\text{ arcmin}$)</strong>.
+  </p>
 </div>
 
 <h3>Torsional Spring Constant ($K_T$) and TCP Deflection</h3>
 <p>The elastic torque-deflection curve of a cycloidal drive is non-linear, divided into three distinct stiffness regions:</p>
 <ul>
-<li><strong>Low-Torque Region ($0$ to $0.5 \times T_{\text{rated}}$):</strong> Spring constant $K_1 \approx 60\text{ to } 90\text{ Nm/arcmin}$.</li>
-<li><strong>Mid-Torque Region ($0.5 \times T_{\text{rated}}$ to $1.0 \times T_{\text{rated}}$):</strong> Spring constant $K_2 \approx 100\text{ to } 160\text{ Nm/arcmin}$.</li>
-<li><strong>High-Torque Region ($> 1.0 \times T_{\text{rated}}$):</strong> Spring constant $K_3 \approx 150\text{ to } 220\text{ Nm/arcmin}$.</li>
+  <li><strong>Low-Torque Region ($0$ to $0.5 \times T_{\text{rated}}$):</strong> Spring constant $K_1 \approx 60\text{ to } 90\text{ Nm/arcmin}$.</li>
+  <li><strong>Mid-Torque Region ($0.5 \times T_{\text{rated}}$ to $1.0 \times T_{\text{rated}}$):</strong> Spring constant $K_2 \approx 100\text{ to } 160\text{ Nm/arcmin}$.</li>
+  <li><strong>High-Torque Region ($&gt; 1.0 \times T_{\text{rated}}$):</strong> Spring constant $K_3 \approx 150\text{ to } 220\text{ Nm/arcmin}$.</li>
 </ul>
 
-<p>The angular deflection $\theta_{\text{def}} = \frac{T}{K_T}$ creates a physical linear deflection at the robot end effector of $\Delta x_{\text{TCP}} = L_{\text{reach}} \times \sin(\theta_{\text{def}})$. For a $1.5\text{ m}$ reach arm with a $300\text{ Nm}$ dynamic torque load and $K_T = 120\text{ Nm/arcmin}$:</p>
+<p>
+  The angular deflection $\theta_{\text{def}} = T / K_T$ creates a physical linear deflection at the
+  robot end effector of $\Delta x_{\text{TCP}} = L_{\text{reach}} \times \sin(\theta_{\text{def}})$.
+  For a $1.5\text{ m}$ reach arm with a $300\text{ Nm}$ dynamic torque load and
+  $K_T = 120\text{ Nm/arcmin}$:
+</p>
 
 $$\theta_{\text{def}} = \frac{300\text{ Nm}}{120\text{ Nm/arcmin}} = 2.5\text{ arcmin} = 0.000727\text{ rad}$$
 $$\Delta x_{\text{TCP}} = 1500\text{ mm} \times 0.000727 = \mathbf{1.09\text{ mm}}$$
 
-<p>This shows why high torsional stiffness in base and shoulder joints is essential for maintaining sub-millimeter precision under dynamic loads.</p>
+<p>
+  This shows why high torsional stiffness in base and shoulder joints is essential for maintaining
+  sub-millimeter precision under dynamic loads.
+</p>
 
 <h2>Constraint 3: Integrated Cross-Roller Bearing Capacities</h2>
-<p>A major design advantage of modern cycloidal speed reducers is the integration of an internal high-capacity <strong>cross-roller output bearing</strong> (or paired angular contact ball bearings) directly inside the reducer housing. This allows the reducer to act as the primary structural joint bearing, eliminating external pivot shafts and secondary pillow blocks.</p>
+<p>
+  A major design advantage of modern cycloidal speed reducers is the integration of an internal
+  high-capacity <strong>cross-roller output bearing</strong> (or paired angular contact ball bearings)
+  directly inside the reducer housing. This allows the reducer to act as the primary structural joint
+  bearing, eliminating external pivot shafts and secondary pillow blocks.
+</p>
 
 <h3>Overturning Moment &amp; Equivalent Load Calculation</h3>
-<p>Robot joints 1 and 2 experience massive tilting (overturning) moments $M_t$ caused by the cantilevered mass of the entire upper arm and payload. The integrated bearing must support simultaneous radial forces $F_r$, axial thrust $F_a$, and tilting moment $M_t$:</p>
+<p>
+  Robot joints 1 and 2 experience massive tilting (overturning) moments $M_t$ caused by the
+  cantilevered mass of the entire upper arm and payload. The integrated bearing must support
+  simultaneous radial forces $F_r$, axial thrust $F_a$, and tilting moment $M_t$:
+</p>
 
 $$M_t = F_r \times L_{\text{moment\_arm}} + F_a \times R_{\text{thrust\_radius}}$$
 
-<p>The equivalent dynamic radial load $P_c$ acting on the integrated cross-roller bearing is calculated according to ISO 281:</p>
+<p>
+  The equivalent dynamic radial load $P_c$ acting on the integrated cross-roller bearing is calculated
+  according to ISO&nbsp;281:
+</p>
 
 $$P_c = X \cdot F_r + Y \cdot \left( \frac{2 M_t}{d_{\text{pitch}}} + F_a \right)$$
 
-<p>Where $d_{\text{pitch}}$ is the bearing pitch circle diameter, and $X, Y$ are radial/axial dynamic load factors. The nominal $L_{10}$ bearing fatigue service life in operating hours is given by:</p>
+<p>
+  Where $d_{\text{pitch}}$ is the bearing pitch circle diameter, and $X, Y$ are radial/axial dynamic
+  load factors. The nominal $L_{10}$ bearing fatigue service life in operating hours is given by:
+</p>
 
 $$L_{10h} = \frac{10^6}{60 \cdot n_{\text{avg}}} \left( \frac{C_{\text{dyn}}}{P_c \cdot f_w} \right)^{10/3}$$
 
-<p>Where $C_{\text{dyn}}$ is the basic dynamic load rating (in kN), $n_{\text{avg}}$ is the mean output speed (RPM), and $f_w$ is the service load factor (typically $1.2$ to $1.5$ for industrial robotics). Industrial robot specifications require $L_{10h} \ge \mathbf{20,000\text{ hours}}$ of continuous production life.</p>
+<p>
+  Where $C_{\text{dyn}}$ is the basic dynamic load rating (in kN), $n_{\text{avg}}$ is the mean output
+  speed (RPM), and $f_w$ is the service load factor (typically $1.2$ to $1.5$ for industrial robotics).
+  Industrial robot specifications require $L_{10h} \ge \mathbf{20{,}000\text{ hours}}$ of continuous
+  production life.
+</p>
 
 <h2>Constraint 4: Input Speed, Thermal Equilibrium &amp; Lubrication</h2>
-<p>While cycloidal reducers excel in torque density, high input rotational speeds generate significant frictional heat through rolling and sliding contact between the eccentric cam bearings, disc lobes, and carrier bushings. Operating temperature directly influences lubricant film breakdown, seal life, and thermal growth.</p>
+<p>
+  While cycloidal reducers excel in torque density, high input rotational speeds generate significant
+  frictional heat through rolling and sliding contact between the eccentric cam bearings, disc lobes,
+  and carrier bushings. Operating temperature directly influences lubricant film breakdown, seal life,
+  and thermal growth.
+</p>
 
 <h3>Thermal Dissipation &amp; Maximum Continuous Input Speed</h3>
-<p>Modern brushless AC servo motors operate at rated speeds of 3,000 to 6,000 RPM. However, large cycloidal reducers (such as size 80E or 160E) have maximum continuous input speed ratings of <strong>1,500 to 2,500 RPM</strong> due to thermal dissipation limits in enclosed aluminum/steel robot link castings. The continuous input power loss $P_{\text{loss}} = T_{\text{in}} \cdot \omega_{\text{in}} \cdot (1 - \eta)$ converts directly into heat. At 90% mechanical efficiency, a 3 kW drive dissipates 300 Watts of thermal energy inside the joint casting.</p>
+<p>
+  Modern brushless AC servo motors operate at rated speeds of 3,000 to 6,000&nbsp;RPM. However, large
+  cycloidal reducers (such as size 80E or 160E) have maximum continuous input speed ratings of
+  <strong>1,500 to 2,500&nbsp;RPM</strong> due to thermal dissipation limits in enclosed
+  aluminum/steel robot link castings. The continuous input power loss
+  $P_{\text{loss}} = T_{\text{in}} \cdot \omega_{\text{in}} \cdot (1 - \eta)$ converts directly into
+  heat. At 90% mechanical efficiency, a 3&nbsp;kW drive dissipates 300&nbsp;W of thermal energy inside
+  the joint casting.
+</p>
 
 <h3>Lubrication Selection: Synthetic Semi-Fluid Grease</h3>
-<p>Precision cycloidal reducers must be lubricated with specialized <strong>NLGI 00 or NLGI 0 synthetic extreme-pressure (EP) semi-fluid grease</strong> (such as Nabtesco Molywhite RE No. 00, Harmonic Drive 4B No. 2, or Castrol Tribol GR). Never use standard stiff automotive grease (NLGI grade 2). Heavy grease cannot flow into the tight 5 &micro;m clearances of the eccentric needle bearings, resulting in dry contact, severe frictional overheating, and rapid pin galling within hundreds of operating hours.</p>
+<p>
+  Precision cycloidal reducers must be lubricated with specialized
+  <strong>NLGI&nbsp;00 or NLGI&nbsp;0 synthetic extreme-pressure (EP) semi-fluid grease</strong>
+  (such as Nabtesco Molywhite RE No.&nbsp;00, Harmonic Drive 4B No.&nbsp;2, or Castrol Tribol GR).
+  Never use standard stiff automotive grease (NLGI grade&nbsp;2). Heavy grease cannot flow into the
+  tight 5&nbsp;&micro;m clearances of the eccentric needle bearings, resulting in dry contact, severe
+  frictional overheating, and rapid pin galling within hundreds of operating hours.
+</p>
 
 <h2>Constraint 5: Joint Packaging, Hollow Bore &amp; Cable Routing</h2>
-<p>When selecting a cycloidal reducer for an articulated robot, mechanical packaging and cable management must be considered early in the structural design:</p>
-
+<p>
+  When selecting a cycloidal reducer for an articulated robot, mechanical packaging and cable
+  management must be considered early in the structural design:
+</p>
 <ul>
-<li><strong>Solid-Shaft Reducers (Nabtesco RV-E / Sumitomo F2C):</strong> Most compact outer diameter and highest torque density. However, because the center of the reducer is occupied by the eccentric input shaft, all motor power leads, encoder feedback lines, pneumatic air hoses, and EtherCAT network cables must be routed externally around the joint casting via flexible energy chains or slip rings.</li>
-<li><strong>Hollow-Shaft Reducers (Nabtesco RV-C / RV-N / Spinea TwinSpin):</strong> Features a large central through-hole (ranging from 25 mm to 100 mm diameter) passing directly through the center of the gearbox. This allows internal routing of all electrical and pneumatic lines through the neutral axis of the robot arm, protecting cables from welding slag, coolant spray, and mechanical snagging, as detailed in our guide to <a href="robot-arm-base-mounting">robot base mounting and reaction forces</a>.</li>
+  <li>
+    <strong>Solid-Shaft Reducers (Nabtesco RV-E&nbsp;/&nbsp;Sumitomo F2C):</strong> Most compact outer
+    diameter and highest torque density. However, because the center of the reducer is occupied by the
+    eccentric input shaft, all motor power leads, encoder feedback lines, pneumatic air hoses, and
+    EtherCAT network cables must be routed externally around the joint casting via flexible energy
+    chains or slip rings.
+  </li>
+  <li>
+    <strong>Hollow-Shaft Reducers (Nabtesco RV-C&nbsp;/&nbsp;RV-N&nbsp;/&nbsp;Spinea TwinSpin):</strong>
+    Features a large central through-hole (ranging from 25&nbsp;mm to 100&nbsp;mm diameter) passing
+    directly through the center of the gearbox. This allows internal routing of all electrical and
+    pneumatic lines through the neutral axis of the robot arm, protecting cables from welding slag,
+    coolant spray, and mechanical snagging, as detailed in our guide to
+    <a href="robot-arm-base-mounting">robot base mounting and reaction forces</a>.
+  </li>
 </ul>
 
-<h2>Worked Engineering Calculation: Sizing Shoulder Joint (J2) of a 15 kg Payload Robot</h2>
+<h2>Worked Engineering Calculation: Sizing Shoulder Joint (J2) of a 15&nbsp;kg Payload Robot</h2>
 <div class="callout">
-<h4>Illustrative Sizing Calculation: 15 kg Payload Industrial Robot Arm</h4>
-<p><strong>Design Requirements:</strong> Size the cycloidal speed reducer for Joint 2 (Shoulder) of a 6-axis articulated industrial robot performing heavy CNC machine loading.</p>
+  <h4>Illustrative Sizing Calculation: 15&nbsp;kg Payload Industrial Robot Arm</h4>
+  <p><strong>Design Requirements:</strong> Size the cycloidal speed reducer for Joint&nbsp;2 (Shoulder) of a 6-axis articulated industrial robot performing heavy CNC machine loading.</p>
 
-<p><strong>System Parameters:</strong><br />
-- Maximum horizontal reach from Joint 2 axis to TCP: $L_{\text{arm}} = 1.40\text{ m}$ ($55.1\text{ in}$).<br />
-- Rated Payload mass (part + pneumatic gripper): $m_{\text{payload}} = 15.0\text{ kg}$.<br />
-- Upper arm link + wrist assembly mass: $m_{\text{link}} = 24.0\text{ kg}$ (center of mass located at $L_{\text{CG}} = 0.65\text{ m}$ from J2).<br />
-- Maximum joint angular velocity: $\omega_{\text{max}} = 150^\circ/\text{s} = 2.618\text{ rad/s}$ ($25.0\text{ RPM}$).<br />
-- Acceleration time to max speed: $t_{\text{acc}} = 0.25\text{ s}$ &rarr; Angular acceleration $\alpha = \frac{2.618}{0.25} = 10.47\text{ rad/s}^2$.<br />
-- Application shock factor: $K_s = 1.50$ (smooth machine tending).</p>
+  <p>
+    <strong>System Parameters:</strong><br />
+    &bull; Maximum horizontal reach from Joint&nbsp;2 axis to TCP: $L_{\text{arm}} = 1.40\text{ m}$ ($55.1\text{ in}$).<br />
+    &bull; Rated Payload mass (part + pneumatic gripper): $m_{\text{payload}} = 15.0\text{ kg}$.<br />
+    &bull; Upper arm link + wrist assembly mass: $m_{\text{link}} = 24.0\text{ kg}$ (center of mass located at $L_{\text{CG}} = 0.65\text{ m}$ from J2).<br />
+    &bull; Maximum joint angular velocity: $\omega_{\text{max}} = 150^\circ/\text{s} = 2.618\text{ rad/s}$ ($25.0\text{ RPM}$).<br />
+    &bull; Acceleration time to max speed: $t_{\text{acc}} = 0.25\text{ s}$ &rarr; Angular acceleration $\alpha = 2.618 / 0.25 = 10.47\text{ rad/s}^2$.<br />
+    &bull; Application shock factor: $K_s = 1.50$ (smooth machine tending).
+  </p>
 
-<p><strong>Step 1: Calculate Maximum Static Gravitational Torque ($T_g$)</strong><br />
-$$T_g = \left( m_{\text{payload}} \times g \times L_{\text{arm}} \right) + \left( m_{\text{link}} \times g \times L_{\text{CG}} \right)$$
-$$T_g = (15.0\text{ kg} \times 9.81\text{ m/s}^2 \times 1.40\text{ m}) + (24.0\text{ kg} \times 9.81\text{ m/s}^2 \times 0.65\text{ m})$$
-$$T_g = 206.01\text{ Nm} + 153.04\text{ Nm} = \mathbf{359.05\text{ Nm}}$$</p>
+  <p>
+    <strong>Step 1: Maximum Static Gravitational Torque ($T_g$)</strong>
+    $$T_g = \left( m_{\text{payload}} \times g \times L_{\text{arm}} \right) + \left( m_{\text{link}} \times g \times L_{\text{CG}} \right)$$
+    $$T_g = (15.0 \times 9.81 \times 1.40) + (24.0 \times 9.81 \times 0.65) = 206.01 + 153.04 = \mathbf{359.05\text{ Nm}}$$
+  </p>
 
-<p><strong>Step 2: Calculate Dynamic Rotational Inertia ($J_{\text{total}}$) &amp; Acceleration Torque ($T_a$)</strong><br />
-$$J_{\text{payload}} = m_{\text{payload}} \times L_{\text{arm}}^2 = 15.0 \times (1.40)^2 = 29.40\text{ kg}\cdot\text{m}^2$$
-$$J_{\text{link}} = m_{\text{link}} \times L_{\text{CG}}^2 + J_{\text{link\_CG}} = 24.0 \times (0.65)^2 + 1.20 = 11.34\text{ kg}\cdot\text{m}^2$$
-$$J_{\text{total}} = 29.40 + 11.34 = 40.74\text{ kg}\cdot\text{m}^2$$
-$$T_a = J_{\text{total}} \times \alpha = 40.74\text{ kg}\cdot\text{m}^2 \times 10.47\text{ rad/s}^2 = \mathbf{426.55\text{ Nm}}$$</p>
+  <p>
+    <strong>Step 2: Rotational Inertia ($J_{\text{total}}$) &amp; Acceleration Torque ($T_a$)</strong>
+    $$J_{\text{payload}} = 15.0 \times (1.40)^2 = 29.40\text{ kg·m}^2$$
+    $$J_{\text{link}} = 24.0 \times (0.65)^2 + 1.20 = 11.34\text{ kg·m}^2$$
+    $$J_{\text{total}} = 29.40 + 11.34 = 40.74\text{ kg·m}^2$$
+    $$T_a = 40.74 \times 10.47 = \mathbf{426.55\text{ Nm}}$$
+  </p>
 
-<p><strong>Step 3: Calculate Peak Dynamic Torque &amp; Apply Shock Factor</strong><br />
-$$T_{\text{peak}} = T_g + T_a = 359.05\text{ Nm} + 426.55\text{ Nm} = 785.60\text{ Nm}$$
-$$T_{\text{req\_max}} = T_{\text{peak}} \times K_s = 785.60\text{ Nm} \times 1.50 = \mathbf{1,178.40\text{ Nm}}$$</p>
+  <p>
+    <strong>Step 3: Peak Dynamic Torque &amp; Shock Factor</strong>
+    $$T_{\text{peak}} = 359.05 + 426.55 = 785.60\text{ Nm}$$
+    $$T_{\text{req\_max}} = 785.60 \times 1.50 = \mathbf{1{,}178.40\text{ Nm}}$$
+  </p>
 
-<p><strong>Step 4: Reducer Selection &amp; Margin Verification</strong><br />
-From published manufacturer catalogs, we evaluate the <strong>Nabtesco RV-80E</strong> (or Spinea TwinSpin TS140 / Sumitomo F2C-A45):<br />
-- Rated Nominal Output Torque ($T_{\text{rated}}$): $784\text{ Nm}$<br />
-- Acceleration Peak Torque ($T_{\text{acc\_limit}}$): $1,568\text{ Nm}$<br />
-- Momentary Emergency Stop Torque ($T_{\text{max}}$): $3,920\text{ Nm}$<br />
-- Torsional Rigidity ($K_T$): $147\text{ Nm/arcmin}$<br />
-- Lost Motion: $< 1.0\text{ arcmin}$<br />
-- Maximum Overturning Moment ($M_{\text{max}}$): $2,940\text{ Nm}$</p>
+  <p>
+    <strong>Step 4: Reducer Selection — Nabtesco RV-80E</strong><br />
+    &bull; Rated Nominal Output Torque: $784\text{ Nm}$<br />
+    &bull; Acceleration Peak Torque: $1{,}568\text{ Nm}$<br />
+    &bull; Momentary Emergency Stop Torque: $3{,}920\text{ Nm}$<br />
+    &bull; Torsional Rigidity: $147\text{ Nm/arcmin}$<br />
+    &bull; Lost Motion: $&lt; 1.0\text{ arcmin}$<br />
+    &bull; Maximum Overturning Moment: $2{,}940\text{ Nm}$
+  </p>
 
-<p><strong>Step 5: Margin Assessment</strong><br />
-- Peak dynamic acceleration requirement ($785.6\text{ Nm}$) is well within the acceleration limit of $1,568\text{ Nm}$ (50.1% utilization).<br />
-- The shock-factored requirement ($1,178.4\text{ Nm}$) operates safely below the momentary shock limit ($3,920\text{ Nm}$) with a <strong>3.32x safety margin</strong> against catastrophic E-stop tooth failure.<br />
-- Joint angular deflection under peak static hold: $\theta_{\text{def}} = \frac{359.05\text{ Nm}}{147\text{ Nm/arcmin}} = 2.44\text{ arcmin}$, producing a maximum static tip deflection of $\Delta x = 1400\text{ mm} \times \sin(2.44') = \mathbf{0.99\text{ mm}}$, meeting precision automation specifications.</p>
+  <p>
+    <strong>Step 5: Margin Assessment</strong><br />
+    &bull; Peak dynamic acceleration ($785.6\text{ Nm}$) is 50.1% of the acceleration limit ($1{,}568\text{ Nm}$).<br />
+    &bull; Shock-factored requirement ($1{,}178.4\text{ Nm}$) gives a <strong>3.32&times; safety margin</strong> against the emergency stop limit ($3{,}920\text{ Nm}$).<br />
+    &bull; Static tip deflection: $\theta = 359.05 / 147 = 2.44\text{ arcmin}$ &rarr; $\Delta x = 1400 \times \sin(2.44') = \mathbf{0.99\text{ mm}}$.
+  </p>
 </div>
 
 <h2>Comprehensive Decision Matrix: Cycloidal vs. Harmonic vs. Planetary</h2>
 <p>The table below provides an evidence-based comparison across the three primary speed reducer technologies used in modern robotic manipulator joints:</p>
 
 <div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Engineering Metric</th>
-<th>Precision Cycloidal Reducer</th>
-<th>Strain Wave Harmonic Drive</th>
-<th>Multi-Stage Precision Planetary</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Primary Joint Application</strong></td>
-<td>Joints 1, 2, 3 (Base, Shoulder, Elbow)</td>
-<td>Joints 4, 5, 6 (Wrist Pitch, Yaw, Roll)</td>
-<td>Linear 7th Axis / AGV Wheel Drives</td>
-</tr>
-<tr>
-<td><strong>Reduction Ratio Range</strong></td>
-<td>30:1 to 300:1 (Single/Dual Stage)</td>
-<td>30:1 to 160:1 (Single Stage)</td>
-<td>3:1 to 100:1 (1 to 3 Stages)</td>
-</tr>
-<tr>
-<td><strong>Backlash / Lost Motion</strong></td>
-<td>&lt; 1.0 arcmin (Zero true backlash)</td>
-<td>&lt; 0.5 arcmin (Zero backlash)</td>
-<td>1.0 to 3.0 arcmin (Low backlash)</td>
-</tr>
-<tr>
-<td><strong>Shock Overload Capacity</strong></td>
-<td><strong>400% to 500%</strong> of rated torque</td>
-<td>200% to 250% (Flexspline failure risk)</td>
-<td>200% to 300% (Tooth shear risk)</td>
-</tr>
-<tr>
-<td><strong>Torsional Rigidity ($K_T$)</strong></td>
-<td><strong>100 to 300 Nm/arcmin</strong> (High)</td>
-<td>20 to 60 Nm/arcmin (Moderate/Low)</td>
-<td>50 to 120 Nm/arcmin (Moderate)</td>
-</tr>
-<tr>
-<td><strong>Tilting Moment Bearing Life</strong></td>
-<td>Integrated heavy cross-roller (&gt;20k hrs)</td>
-<td>Integrated light cross-roller</td>
-<td>Requires external pivot bearings</td>
-</tr>
-<tr>
-<td><strong>Torque Density ($Nm/kg$)</strong></td>
-<td>100 to 180 Nm/kg</td>
-<td><strong>150 to 250 Nm/kg</strong> (Highest)</td>
-<td>60 to 110 Nm/kg</td>
-</tr>
-<tr>
-<td><strong>Mechanical Efficiency</strong></td>
-<td>85% to 92%</td>
-<td>75% to 88%</td>
-<td><strong>90% to 97%</strong> (Highest)</td>
-</tr>
-<tr>
-<td><strong>Indicative 2026 Price per Axis</strong></td>
-<td>$850 &ndash; $2,400 USD</td>
-<td>$650 &ndash; $1,850 USD</td>
-<td>$350 &ndash; $950 USD</td>
-</tr>
-</tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Engineering Metric</th>
+        <th>Precision Cycloidal Reducer</th>
+        <th>Strain Wave Harmonic Drive</th>
+        <th>Multi-Stage Precision Planetary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Primary Joint Application</strong></td>
+        <td>Joints 1, 2, 3 (Base, Shoulder, Elbow)</td>
+        <td>Joints 4, 5, 6 (Wrist Pitch, Yaw, Roll)</td>
+        <td>Linear 7th Axis / AGV Wheel Drives</td>
+      </tr>
+      <tr>
+        <td><strong>Reduction Ratio Range</strong></td>
+        <td>30:1 to 300:1 (Single/Dual Stage)</td>
+        <td>30:1 to 160:1 (Single Stage)</td>
+        <td>3:1 to 100:1 (1 to 3 Stages)</td>
+      </tr>
+      <tr>
+        <td><strong>Backlash / Lost Motion</strong></td>
+        <td>&lt; 1.0 arcmin (Zero true backlash)</td>
+        <td>&lt; 0.5 arcmin (Zero backlash)</td>
+        <td>1.0 to 3.0 arcmin (Low backlash)</td>
+      </tr>
+      <tr>
+        <td><strong>Shock Overload Capacity</strong></td>
+        <td><strong>400% to 500%</strong> of rated torque</td>
+        <td>200% to 250% (Flexspline failure risk)</td>
+        <td>200% to 300% (Tooth shear risk)</td>
+      </tr>
+      <tr>
+        <td><strong>Torsional Rigidity ($K_T$)</strong></td>
+        <td><strong>100 to 300 Nm/arcmin</strong> (High)</td>
+        <td>20 to 60 Nm/arcmin (Moderate/Low)</td>
+        <td>50 to 120 Nm/arcmin (Moderate)</td>
+      </tr>
+      <tr>
+        <td><strong>Tilting Moment Bearing Life</strong></td>
+        <td>Integrated heavy cross-roller (&gt;20k hrs)</td>
+        <td>Integrated light cross-roller</td>
+        <td>Requires external pivot bearings</td>
+      </tr>
+      <tr>
+        <td><strong>Torque Density (Nm/kg)</strong></td>
+        <td>100 to 180 Nm/kg</td>
+        <td><strong>150 to 250 Nm/kg</strong> (Highest)</td>
+        <td>60 to 110 Nm/kg</td>
+      </tr>
+      <tr>
+        <td><strong>Mechanical Efficiency</strong></td>
+        <td>85% to 92%</td>
+        <td>75% to 88%</td>
+        <td><strong>90% to 97%</strong> (Highest)</td>
+      </tr>
+      <tr>
+        <td><strong>Indicative 2026 Price per Axis</strong></td>
+        <td>$850 &ndash; $2,400 USD</td>
+        <td>$650 &ndash; $1,850 USD</td>
+        <td>$350 &ndash; $950 USD</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Indicative 2026 Prices &amp; Lead Times for Robotic Cycloidal Reducers</h2>
-<p>Precision cycloidal speed reducers are high-precision mechanical components manufactured from vacuum-degassed bearing steel with sub-micron CNC grinding. All prices below represent <strong>indicative 2026 prices</strong> in USD (with CAD reference conversions) compiled from public distributor catalogs and manufacturer quotation guidelines (Nabtesco, Spinea, Sumitomo, OnRobot) as of August 2026. OEM volume pricing varies by annual production volume and frame customization.</p>
+<p>
+  Precision cycloidal speed reducers are high-precision mechanical components manufactured from
+  vacuum-degassed bearing steel with sub-micron CNC grinding. All prices below represent
+  <strong>indicative 2026 prices</strong> in USD (with CAD reference conversions) compiled from public
+  distributor catalogs and manufacturer quotation guidelines (Nabtesco, Spinea, Sumitomo, OnRobot)
+  as of August 2026. OEM volume pricing varies by annual production volume and frame customization.
+</p>
 
 <div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Manufacturer &amp; Model Series</th>
-<th>Frame Size / Rated Torque</th>
-<th>Mechanical Architecture</th>
-<th>Indicative 2026 Price (USD)</th>
-<th>Indicative 2026 Price (CAD)</th>
-<th>Typical Production Lead Time</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Nabtesco RV-E Series</strong></td>
-<td>RV-20E ($196\text{ Nm}$ Rated)</td>
-<td>Solid shaft, integrated cross-roller</td>
-<td>$820 &ndash; $1,150</td>
-<td>$1,100 &ndash; $1,550</td>
-<td>4 to 8 weeks (Stock to build)</td>
-</tr>
-<tr>
-<td><strong>Nabtesco RV-N Series</strong></td>
-<td>RV-80N ($784\text{ Nm}$ Rated)</td>
-<td>Ultra-compact solid, 30% lighter</td>
-<td>$1,450 &ndash; $1,980</td>
-<td>$1,950 &ndash; $2,680</td>
-<td>6 to 10 weeks</td>
-</tr>
-<tr>
-<td><strong>Nabtesco RV-C Series</strong></td>
-<td>RV-42C ($412\text{ Nm}$, 45mm bore)</td>
-<td>Hollow through-bore for cable routing</td>
-<td>$1,650 &ndash; $2,350</td>
-<td>$2,220 &ndash; $3,180</td>
-<td>8 to 12 weeks</td>
-</tr>
-<tr>
-<td><strong>Spinea TwinSpin TS Series</strong></td>
-<td>TS140 ($520\text{ Nm}$ Rated)</td>
-<td>High-rigidity cycloidal reducer</td>
-<td>$1,380 &ndash; $1,890</td>
-<td>$1,860 &ndash; $2,550</td>
-<td>6 to 10 weeks</td>
-</tr>
-<tr>
-<td><strong>Sumitomo Fine Cyclo F2C</strong></td>
-<td>F2C-A35 ($343\text{ Nm}$ Rated)</td>
-<td>Zero-backlash robotic gearbox</td>
-<td>$950 &ndash; $1,420</td>
-<td>$1,280 &ndash; $1,920</td>
-<td>4 to 8 weeks</td>
-</tr>
-<tr>
-<td><strong>Open-Source / Maker CNC Kits</strong></td>
-<td>NEMA 23/34 cycloidal kits</td>
-<td>Machined 7075 aluminum / 52100 steel</td>
-<td>$180 &ndash; $340</td>
-<td>$245 &ndash; $460</td>
-<td>1 to 3 weeks (In stock)</td>
-</tr>
-</tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Manufacturer &amp; Model Series</th>
+        <th>Frame Size / Rated Torque</th>
+        <th>Mechanical Architecture</th>
+        <th>Indicative 2026 Price (USD)</th>
+        <th>Indicative 2026 Price (CAD)</th>
+        <th>Typical Production Lead Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Nabtesco RV-E Series</strong></td>
+        <td>RV-20E ($196\text{ Nm}$ Rated)</td>
+        <td>Solid shaft, integrated cross-roller</td>
+        <td>$820 &ndash; $1,150</td>
+        <td>$1,100 &ndash; $1,550</td>
+        <td>4 to 8 weeks (Stock to build)</td>
+      </tr>
+      <tr>
+        <td><strong>Nabtesco RV-N Series</strong></td>
+        <td>RV-80N ($784\text{ Nm}$ Rated)</td>
+        <td>Ultra-compact solid, 30% lighter</td>
+        <td>$1,450 &ndash; $1,980</td>
+        <td>$1,950 &ndash; $2,680</td>
+        <td>6 to 10 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Nabtesco RV-C Series</strong></td>
+        <td>RV-42C ($412\text{ Nm}$, 45&nbsp;mm bore)</td>
+        <td>Hollow through-bore for cable routing</td>
+        <td>$1,650 &ndash; $2,350</td>
+        <td>$2,220 &ndash; $3,180</td>
+        <td>8 to 12 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Spinea TwinSpin TS Series</strong></td>
+        <td>TS140 ($520\text{ Nm}$ Rated)</td>
+        <td>High-rigidity cycloidal reducer</td>
+        <td>$1,380 &ndash; $1,890</td>
+        <td>$1,860 &ndash; $2,550</td>
+        <td>6 to 10 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Sumitomo Fine Cyclo F2C</strong></td>
+        <td>F2C-A35 ($343\text{ Nm}$ Rated)</td>
+        <td>Zero-backlash robotic gearbox</td>
+        <td>$950 &ndash; $1,420</td>
+        <td>$1,280 &ndash; $1,920</td>
+        <td>4 to 8 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Open-Source / Maker CNC Kits</strong></td>
+        <td>NEMA 23/34 cycloidal kits</td>
+        <td>Machined 7075 aluminum / 52100 steel</td>
+        <td>$180 &ndash; $340</td>
+        <td>$245 &ndash; $460</td>
+        <td>1 to 3 weeks (In stock)</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <h2>Typical Reader Question: Can 3D-Printed Cycloidal Drives Work for Real Robot Arms?</h2>
 <div class="callout info">
-<h4>Typical Reader Question</h4>
-<p><em>"Can I 3D-print a cycloidal reducer using PETG or Nylon on my desktop 3D printer for a functional 6-axis robot arm project?"</em></p>
+  <h4>Typical Reader Question</h4>
+  <p><em>"Can I 3D-print a cycloidal reducer using PETG or Nylon on my desktop 3D printer for a functional 6-axis robot arm project?"</em></p>
 </div>
-<p><strong>Engineering Analysis:</strong> 3D-printed cycloidal drives made from PLA, PETG, or carbon-fiber reinforced nylon (PA-CF) can function effectively for <strong>educational desktop demonstrators</strong> and lightweight hobby arms carrying under 500 grams payload. However, polymer materials present four insurmountable physical limitations in functional robotic applications, as explored in our guide to <a href="3d-printed-robot-arm-parts">3D printed robotic arm joints</a>:</p>
-
+<p>
+  <strong>Engineering Analysis:</strong> 3D-printed cycloidal drives made from PLA, PETG, or
+  carbon-fiber reinforced nylon (PA-CF) can function effectively for <strong>educational desktop
+  demonstrators</strong> and lightweight hobby arms carrying under 500&nbsp;g payload. However, polymer
+  materials present four insurmountable physical limitations in functional robotic applications, as
+  explored in our guide to
+  <a href="3d-printed-robot-arm-parts">3D printed robotic arm joints</a>:
+</p>
 <ol>
-<li><strong>Viscoelastic Creep Under Static Gravity:</strong> When the arm holds a horizontal pose, sustained contact pressure causes polymer cycloid lobes to creep (plastically deform) over time, resulting in lost motion that increases from 5 arcmin to over 30 arcmin within weeks.</li>
-<li><strong>Thermal Softening:</strong> The glass transition temperature ($T_g$) of PLA is $60^\circ\text{C}$ and PETG is $80^\circ\text{C}$. High-speed motor rotation generates sufficient friction in the eccentric needle bearings to soften the printed cam within 15 minutes of continuous cycling.</li>
-<li><strong>Manufacturing Tolerances:</strong> Industrial steel reducers maintain pin-to-lobe clearances under <strong>5 &micro;m ($0.0002\text{ in}$)</strong>. FDM 3D printers have dimensional tolerances of &plusmn;100 to 200 &micro;m, requiring large clearances that introduce 10 to 20 arcminutes of mechanical backlash.</li>
+  <li>
+    <strong>Viscoelastic Creep Under Static Gravity:</strong> When the arm holds a horizontal pose,
+    sustained contact pressure causes polymer cycloid lobes to creep (plastically deform) over time,
+    resulting in lost motion that increases from 5&nbsp;arcmin to over 30&nbsp;arcmin within weeks.
+  </li>
+  <li>
+    <strong>Thermal Softening:</strong> The glass transition temperature ($T_g$) of PLA is
+    $60^\circ\text{C}$ and PETG is $80^\circ\text{C}$. High-speed motor rotation generates sufficient
+    friction in the eccentric needle bearings to soften the printed cam within 15 minutes of continuous
+    cycling.
+  </li>
+  <li>
+    <strong>Manufacturing Tolerances:</strong> Industrial steel reducers maintain pin-to-lobe clearances
+    under <strong>5&nbsp;&micro;m ($0.0002\text{ in}$)</strong>. FDM 3D printers have dimensional
+    tolerances of &plusmn;100 to 200&nbsp;&micro;m, requiring large clearances that introduce 10 to
+    20&nbsp;arcminutes of mechanical backlash.
+  </li>
 </ol>
 
 <h2>Machining Tolerances &amp; Preventive Maintenance Protocol</h2>
-<p>For custom robotic joint manufacturing, cycloidal disc profiles must be machined using CNC Wire Electrical Discharge Machining (EDM) or specialized profile grinding. The critical manufacturing tolerances include:</p>
-
+<p>
+  For custom robotic joint manufacturing, cycloidal disc profiles must be machined using CNC Wire
+  Electrical Discharge Machining (EDM) or specialized profile grinding. The critical manufacturing
+  tolerances include:
+</p>
 <ul>
-<li><strong>Disc Profile Tolerance:</strong> Profile form tolerance within <strong>&plusmn; 0.005 mm (5 &micro;m)</strong> with surface finish $R_a \le 0.4\text{ \mu m}$.</li>
-<li><strong>Material Specification:</strong> Disc core and ring pins machined from high-purity vacuum-degassed <strong>AISI 52100 (100Cr6) bearing steel</strong> or <strong>AISI 4340 alloy steel</strong>, case-hardened to <strong>HRC 58&ndash;62</strong> with effective case depth $\ge 1.2\text{ mm}$.</li>
-<li><strong>Shaft &amp; Housing Fits:</strong> Input eccentric shaft bearing seats ground to <strong>ISO k5 / m5</strong>; outer pin housing bored to <strong>ISO H6</strong>.</li>
+  <li><strong>Disc Profile Tolerance:</strong> Profile form tolerance within <strong>&plusmn;&nbsp;0.005&nbsp;mm (5&nbsp;&micro;m)</strong> with surface finish $R_a \le 0.4\text{ μm}$.</li>
+  <li><strong>Material Specification:</strong> Disc core and ring pins machined from high-purity vacuum-degassed <strong>AISI&nbsp;52100 (100Cr6) bearing steel</strong> or <strong>AISI&nbsp;4340 alloy steel</strong>, case-hardened to <strong>HRC&nbsp;58&ndash;62</strong> with effective case depth $\ge 1.2\text{ mm}$.</li>
+  <li><strong>Shaft &amp; Housing Fits:</strong> Input eccentric shaft bearing seats ground to <strong>ISO k5&nbsp;/&nbsp;m5</strong>; outer pin housing bored to <strong>ISO H6</strong>.</li>
 </ul>
 
 <h3>Preventive Maintenance &amp; Grease Replacement Schedule</h3>
 <p>To ensure the target 20,000-hour operational lifespan, maintain the following servicing intervals:</p>
 <ol>
-<li><strong>Initial Run-In Inspection (500 operating hours):</strong> Measure operating surface temperature; check input/output shaft oil seals for synthetic grease seepage.</li>
-<li><strong>Routine Grease Sampling (Every 5,000 operating hours / Annually):</strong> Extract a 5 ml grease sample from the drain port. Analyze for iron particulate concentration ($> 500\text{ ppm}$ indicates abnormal disc wear) and oil separation.</li>
-<li><strong>Complete Lubricant Flush &amp; Refill (Every 10,000 to 20,000 operating hours):</strong> Flush old grease using low-viscosity synthetic flushing oil and recharge with certified NLGI 00 synthetic grease to the manufacturer's specified volume fill ratio (typically <strong>70% to 80% internal cavity fill</strong> to allow for thermal expansion).</li>
+  <li><strong>Initial Run-In Inspection (500 operating hours):</strong> Measure operating surface temperature; check input/output shaft oil seals for synthetic grease seepage.</li>
+  <li><strong>Routine Grease Sampling (Every 5,000 operating hours / Annually):</strong> Extract a 5&nbsp;ml grease sample from the drain port. Analyze for iron particulate concentration ($&gt; 500\text{ ppm}$ indicates abnormal disc wear) and oil separation.</li>
+  <li><strong>Complete Lubricant Flush &amp; Refill (Every 10,000 to 20,000 operating hours):</strong> Flush old grease using low-viscosity synthetic flushing oil and recharge with certified NLGI&nbsp;00 synthetic grease to the manufacturer's specified volume fill ratio (typically <strong>70% to 80% internal cavity fill</strong> to allow for thermal expansion).</li>
 </ol>
 
 <h2>Functional Safety &amp; Motor Holding Brake Integration</h2>
-<p>When integrating cycloidal gearboxes on vertical robot axes, functional safety under <strong>ISO 10218-1/2</strong> and <strong>ISO 13849-1</strong> requires careful placement of the joint holding brake:</p>
-
-<p>Because precision cycloidal reducers have high mechanical backdriving efficiency (85% to 92%), cutting power to the arm will cause gravity-induced joint backdriving. A certified spring-applied electromagnetic holding brake must be incorporated. Mounting the brake on the <strong>motor input shaft</strong> (pre-gearbox) allows a compact brake size because brake holding torque is multiplied by the gear reduction ratio $R$ ($T_{\text{brake\_req}} = \frac{T_{\text{gravity}}}{R \cdot \eta}$).</p>
-
-<p><em>Safety Warning:</em> Pre-gearbox brakes rely on the mechanical integrity of the gearbox. For critical human-collaborative cells or heavy industrial gantries over operating personnel, conduct a risk assessment under ISO 13849-1 to determine whether a secondary redundant output holding brake is required to safeguard against gearbox mechanical failure.</p>
+<p>
+  When integrating cycloidal gearboxes on vertical robot axes, functional safety under
+  <strong>ISO&nbsp;10218-1/2</strong> and <strong>ISO&nbsp;13849-1</strong> requires careful placement
+  of the joint holding brake:
+</p>
+<p>
+  Because precision cycloidal reducers have high mechanical backdriving efficiency (85% to 92%),
+  cutting power to the arm will cause gravity-induced joint backdriving. A certified spring-applied
+  electromagnetic holding brake must be incorporated. Mounting the brake on the <strong>motor input
+  shaft</strong> (pre-gearbox) allows a compact brake size because brake holding torque is multiplied
+  by the gear reduction ratio $R$:
+  $$T_{\text{brake\_req}} = \frac{T_{\text{gravity}}}{R \cdot \eta}$$
+</p>
+<p>
+  <em>Safety Warning:</em> Pre-gearbox brakes rely on the mechanical integrity of the gearbox. For
+  critical human-collaborative cells or heavy industrial gantries over operating personnel, conduct a
+  risk assessment under ISO&nbsp;13849-1 to determine whether a secondary redundant output holding
+  brake is required to safeguard against gearbox mechanical failure.
+</p>
 
 <h2>Sources and Methodology</h2>
 <p>This technical sizing guide was developed through analysis of published mechanical engineering gear literature and official manufacturer technical manuals, accessed August 2026:</p>
 <ul>
-<li><strong>Manufacturer Technical Manuals:</strong> Nabtesco Corporation (Precision Reduction Gear RV Series Design Manual, RV-E/RV-N/RV-C Engineering Catalogs), Spinea s.r.o. (TwinSpin High Precision Reduction Gears Technical Guide), and Sumitomo Heavy Industries (Fine Cyclo Zero-Backlash Speed Reducers).</li>
-<li><strong>Gearing Standards:</strong> AGMA 6001-E08 (Design and Selection of Components for Enclosed Gear Drives) and ISO 6336 (Calculation of load capacity of spur and helical gears &mdash; surface durability and scuffing).</li>
-<li><strong>Bearing Life Standards:</strong> ISO 281 (Rolling bearings &mdash; Dynamic load ratings and rating life) and ISO 76 (Rolling bearings &mdash; Static load ratings).</li>
-<li><strong>Academic Literature:</strong> <em>Kinematic and Dynamic Analysis of Cycloid Speed Reducers</em> (Sensinger &amp; Lipsey, IEEE Transactions on Robotics) and <em>Design Optimization of Cycloidal Drives for Robotic Manipulators</em>.</li>
+  <li><strong>Manufacturer Technical Manuals:</strong> Nabtesco Corporation (Precision Reduction Gear RV Series Design Manual, RV-E/RV-N/RV-C Engineering Catalogs), Spinea s.r.o. (TwinSpin High Precision Reduction Gears Technical Guide), and Sumitomo Heavy Industries (Fine Cyclo Zero-Backlash Speed Reducers).</li>
+  <li><strong>Gearing Standards:</strong> AGMA 6001-E08 (Design and Selection of Components for Enclosed Gear Drives) and ISO 6336 (Calculation of load capacity of spur and helical gears — surface durability and scuffing).</li>
+  <li><strong>Bearing Life Standards:</strong> ISO 281 (Rolling bearings — Dynamic load ratings and rating life) and ISO 76 (Rolling bearings — Static load ratings).</li>
+  <li><strong>Academic Literature:</strong> <em>Kinematic and Dynamic Analysis of Cycloid Speed Reducers</em> (Sensinger &amp; Lipsey, IEEE Transactions on Robotics) and <em>Design Optimization of Cycloidal Drives for Robotic Manipulators</em>.</li>
 </ul>
 
-<h2>Frequently asked questions</h2>
+<h2>Frequently Asked Questions</h2>
 
-<div class="faq-item"><h4>Why are cycloidal drives preferred over harmonic drives for base and shoulder robot joints?</h4><p>Cycloidal drives share transmitted loads across 30 to 50 percent of their ring pins simultaneously under pure rolling contact, providing momentary shock overload ratings up to 500 percent of nominal torque without permanent damage. In contrast, strain-wave harmonic drives rely on thin, flexible steel flexsplines that suffer tooth shearing or fatigue rupture under heavy dynamic emergency stops and high overturning moments characteristic of Joint 1, Joint 2, and Joint 3.</p></div>
-<div class="faq-item"><h4>What is the difference between lost motion and backlash in a cycloidal speed reducer?</h4><p>True backlash is the mechanical clearance between non-contacting gear teeth when the input direction reverses at zero load. Precision cycloidal drives have zero true geometric backlash due to preloaded pin engagement. Lost motion is the measured angular deflection when the output shaft is subjected to plus or minus 3 percent of its rated torque. It combines micro-clearances with elastic material deflection, typically measuring under 1.0 arcminute in industrial precision reducers.</p></div>
-<div class="faq-item"><h4>Can a cycloidal drive backdrive when power is removed from the robot arm?</h4><p>Yes. Because modern precision cycloidal drives operate with high mechanical efficiency (85 to 92 percent) through rolling-element needle bearings, high output gravity torques from the robot arm links will backdrive the eccentric input shaft when motor power is cut. All vertical robotic joints (Joints 2 and 3) require spring-applied electromagnetic holding brakes mounted directly on the motor input shaft.</p></div>
-<div class="faq-item"><h4>What lubrication is required for high-reduction cycloidal robot joints?</h4><p>Precision cycloidal reducers require semi-fluid synthetic extreme-pressure (EP) grease formulated with NLGI grade 00 or grade 0 consistency, such as Nabtesco Molywhite RE No. 00 or Castrol Tribol GR. Standard heavy chassis grease (NLGI 2) is too viscous, causing severe churning heat, grease channeling, and premature pin roller wear at motor input speeds above 1,500 RPM.</p></div>
-<div class="faq-item"><h4>How do dual cycloid discs eliminate vibration in high-speed robotic joints?</h4><p>A single cycloid disc rotates eccentrically around the input shaft, creating an unbalanced rotating centrifugal mass that produces severe radial vibration at high input speeds. Precision cycloidal reducers mount two identical cycloid discs 180 degrees out of phase on dual eccentric cam lobes. The equal and opposite centrifugal forces cancel dynamically, eliminating high-speed shaft vibration while doubling the load-bearing pin contact area.</p></div>
-<div class="faq-item"><h4>Can 3D-printed cycloidal gearboxes achieve acceptable precision for robot arms?</h4><p>3D-printed cycloidal gearboxes made from PLA, PETG, or nylon are suitable for low-cost educational and lightweight demonstration arms, but they exhibit 10 to 30 arcminutes of lost motion and suffer rapid tooth deformation under sustained continuous loads. Industrial precision requiring under 1 arcminute lost motion and 20,000-hour service life requires vacuum-degassed chrome-moly steel (AISI 52100 / 4340) case-hardened to HRC 58-62 with CNC profile grinding tolerances under 5 micrometers.</p></div>
-
-<aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
-<div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Sizing formulas and technical specifications derive from AGMA/ISO standards and official manufacturer documentation; no gearbox named here was bench-tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 30, 2026 &middot; last reviewed August 30, 2026</span></p></aside>
-
-<div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
+<div class="faq-item">
+  <h4>Why are cycloidal drives preferred over harmonic drives for base and shoulder robot joints?</h4>
+  <p>Cycloidal drives share transmitted loads across 30 to 50 percent of their ring pins simultaneously under pure rolling contact, providing momentary shock overload ratings up to 500 percent of nominal torque without permanent damage. In contrast, strain-wave harmonic drives rely on thin, flexible steel flexsplines that suffer tooth shearing or fatigue rupture under heavy dynamic emergency stops and high overturning moments characteristic of Joint 1, Joint 2, and Joint 3.</p>
 </div>
+<div class="faq-item">
+  <h4>What is the difference between lost motion and backlash in a cycloidal speed reducer?</h4>
+  <p>True backlash is the mechanical clearance between non-contacting gear teeth when the input direction reverses at zero load. Precision cycloidal drives have zero true geometric backlash due to preloaded pin engagement. Lost motion is the measured angular deflection when the output shaft is subjected to plus or minus 3 percent of its rated torque. It combines micro-clearances with elastic material deflection, typically measuring under 1.0 arcminute in industrial precision reducers.</p>
+</div>
+<div class="faq-item">
+  <h4>Can a cycloidal drive backdrive when power is removed from the robot arm?</h4>
+  <p>Yes. Because modern precision cycloidal drives operate with high mechanical efficiency (85 to 92 percent) through rolling-element needle bearings, high output gravity torques from the robot arm links will backdrive the eccentric input shaft when motor power is cut. All vertical robotic joints (Joints 2 and 3) require spring-applied electromagnetic holding brakes mounted directly on the motor input shaft.</p>
+</div>
+<div class="faq-item">
+  <h4>What lubrication is required for high-reduction cycloidal robot joints?</h4>
+  <p>Precision cycloidal reducers require semi-fluid synthetic extreme-pressure (EP) grease formulated with NLGI grade 00 or grade 0 consistency, such as Nabtesco Molywhite RE No. 00 or Castrol Tribol GR. Standard heavy chassis grease (NLGI 2) is too viscous, causing severe churning heat, grease channeling, and premature pin roller wear at motor input speeds above 1,500 RPM.</p>
+</div>
+<div class="faq-item">
+  <h4>How do dual cycloid discs eliminate vibration in high-speed robotic joints?</h4>
+  <p>A single cycloid disc rotates eccentrically around the input shaft, creating an unbalanced rotating centrifugal mass that produces severe radial vibration at high input speeds. Precision cycloidal reducers mount two identical cycloid discs 180 degrees out of phase on dual eccentric cam lobes. The equal and opposite centrifugal forces cancel dynamically, eliminating high-speed shaft vibration while doubling the load-bearing pin contact area.</p>
+</div>
+<div class="faq-item">
+  <h4>Can 3D-printed cycloidal gearboxes achieve acceptable precision for robot arms?</h4>
+  <p>3D-printed cycloidal gearboxes made from PLA, PETG, or nylon are suitable for low-cost educational and lightweight demonstration arms, but they exhibit 10 to 30 arcminutes of lost motion and suffer rapid tooth deformation under sustained continuous loads. Industrial precision requiring under 1 arcminute lost motion and 20,000-hour service life requires vacuum-degassed chrome-moly steel (AISI 52100 / 4340) case-hardened to HRC 58-62 with CNC profile grinding tolerances under 5 micrometers.</p>
+</div>
+
+<!-- FIX 6: Author aside con aria-label correcto -->
+<aside class="author-aside" aria-label="About the author">
+  <div class="author-avatar" aria-hidden="true">MC</div>
+  <p>
+    Written and edited by
+    <a href="../author/marcus-chen" rel="author"><strong>Marcus Chen</strong></a>,
+    robotics engineer and editor of Robotics Engineering Lab. Sizing formulas and technical
+    specifications derive from AGMA/ISO standards and official manufacturer documentation; no gearbox
+    named here was bench-tested by this site.
+    <a href="../editorial-standards">How we label content &rarr;</a>
+    <span class="author-meta">Published August 30, 2026 &middot; last reviewed August 30, 2026</span>
+  </p>
+</aside>
+
+<div class="footer-nav" aria-label="Article navigation">
+  <a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a>
+  <a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a>
+</div>
+
+</div><!-- /.article-body -->
 </main>
 
+<!-- ─── Footer ──────────────────────────────────────────────── -->
 <footer style="border-top:1px solid var(--border); padding:48px 24px;" aria-label="Footer">
-<div style="max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:48px; flex-wrap:wrap;">
-<div>
-<a href="../" class="logo">Robotics <span>Engineering</span></a>
-<p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">Engineering-led articles on robot arms, ROS 2, and industrial automation for the USA and Canada market.</p>
-</div>
-<div style="display:flex; gap:48px; flex-wrap:wrap;">
-<div>
-<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
-<ul style="list-style:none;">
-<li><a href="../" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
-<li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
-</ul>
-</div>
-<div>
-<h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
-<ul style="list-style:none;">
-<li><a href="harmonic-drive-review" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Harmonic Drives</a></li>
-<li><a href="belt-drive-vs-gear-drive" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Belt vs Gear Drive</a></li>
-</ul>
-</div>
-</div>
-</div>
-<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
-      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
-      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
-        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
-        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
-        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
-        <a href="../editorial-standards" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Editorial standards</a>
-        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
-      </nav>
-    </div></footer>
+  <div style="max-width:1100px; margin:0 auto; display:flex; align-items:flex-start; justify-content:space-between; gap:48px; flex-wrap:wrap;">
+    <div>
+      <a href="../" class="logo">Robotics <span>Engineering</span></a>
+      <p style="color:var(--text-muted); font-size:0.82rem; margin-top:8px; max-width:320px;">
+        Engineering-led articles on robot arms, ROS&nbsp;2, and industrial automation for the USA and Canada market.
+      </p>
+    </div>
 
-<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+    <div style="display:flex; gap:48px; flex-wrap:wrap;">
+      <div>
+        <!-- FIX 8: Footer nav lists con spacing correcto -->
+        <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Navigation</h4>
+        <ul>
+          <li><a href="../"                   style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Cover</a></li>
+          <li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:14px;">Topics</h4>
+        <ul>
+          <li><a href="harmonic-drive-review"  style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Harmonic Drives</a></li>
+          <li><a href="belt-drive-vs-gear-drive" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem;">Belt vs Gear Drive</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1100px; margin:28px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,0.08); display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between;">
+    <p style="font-size:0.8rem; opacity:0.6; margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav aria-label="Legal and company links" style="display:flex; flex-wrap:wrap; gap:18px;">
+      <a href="../about"               style="font-size:0.82rem; opacity:0.75; text-decoration:none; color:inherit;">About</a>
+      <a href="../contact"             style="font-size:0.82rem; opacity:0.75; text-decoration:none; color:inherit;">Contact</a>
+      <a href="../privacy"             style="font-size:0.82rem; opacity:0.75; text-decoration:none; color:inherit;">Privacy Policy</a>
+      <a href="../editorial-standards" style="font-size:0.82rem; opacity:0.75; text-decoration:none; color:inherit;">Editorial standards</a>
+      <a href="../terms"               style="font-size:0.82rem; opacity:0.75; text-decoration:none; color:inherit;">Terms &amp; Conditions</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ─── Cookie consent banner ───────────────────────────────── -->
+<!-- FIX 4: aria-modal="true" para diálogo modal correcto -->
+<div id="rel-consent"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="rel-consent-title"
+     hidden
      style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
   <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
     <div style="flex:1;min-width:260px;">
       <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
       <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
-        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may
+        be used to measure and personalize ads. You can decline and still read every article. See our
         <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
       </p>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <button type="button" id="rel-consent-decline"
-        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">
+        Decline
+      </button>
       <button type="button" id="rel-consent-accept"
-        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">
+        Accept all
+      </button>
     </div>
   </div>
 </div>
+
+<!-- ─── Scripts ─────────────────────────────────────────────── -->
 <script>
+/* ── Cookie consent ────────────────────────────────────────── */
 (function () {
   var NAME = 'rel_consent';
-  var box = document.getElementById('rel-consent');
+  var box  = document.getElementById('rel-consent');
   if (!box) return;
 
   function read() {
@@ -661,17 +1200,39 @@ From published manufacturer catalogs, we evaluate the <strong>Nabtesco RV-80E</s
     write(granted ? 'granted' : 'denied');
     if (typeof gtag === 'function') {
       gtag('consent', 'update', {
-        'ad_storage': granted ? 'granted' : 'denied',
-        'ad_user_data': granted ? 'granted' : 'denied',
-        'ad_personalization': granted ? 'granted' : 'denied',
-        'analytics_storage': granted ? 'granted' : 'denied'
+        ad_storage:        granted ? 'granted' : 'denied',
+        ad_user_data:      granted ? 'granted' : 'denied',
+        ad_personalization:granted ? 'granted' : 'denied',
+        analytics_storage: granted ? 'granted' : 'denied'
       });
     }
     box.hidden = true;
   }
 
-  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-accept') .addEventListener('click', function () { decide(true);  });
   document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+
+/* FIX 5: Hamburger menu toggle ────────────────────────────── */
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('primary-nav');
+  if (!btn || !nav) return;
+
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+  });
+
+  /* Cerrar al hacer clic fuera */
+  document.addEventListener('click', function (e) {
+    if (!btn.contains(e.target) && !nav.contains(e.target)) {
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open navigation menu');
+    }
+  });
 })();
 </script>
 </body>
