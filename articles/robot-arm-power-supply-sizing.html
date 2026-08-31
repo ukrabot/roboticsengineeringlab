@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Robot Arm Power Supply Sizing: 5-Step Guide</title>
+<meta name="description" content="Robot arm power supply sizing: budget stall current, inrush and brownout, then wire and commission a 5V or 24-48V DC supply with worked examples." />
+<meta name="author" content="Marcus Chen" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing" />
+<meta name="theme-color" content="#0b0e14" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Robot Arm Power Supply Sizing: 5-Step Wiring Guide" />
+<meta property="og:description" content="Robot arm power supply sizing: budget stall current, inrush and brownout, then wire and commission a 5V or 24-48V DC supply with worked examples." />
+<meta property="og:image" content="https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg" />
+<meta property="og:image:alt" content="A DIY six-degree-of-freedom robot arm on a workbench, the class of project that needs careful servo power supply sizing" />
+<meta property="og:site_name" content="Robotics Engineering Lab" />
+<meta property="article:published_time" content="2026-08-31" />
+<meta property="article:modified_time" content="2026-08-31" />
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Robot Arm Power Supply Sizing: Voltage, Current and Brownout" />
+<meta name="twitter:description" content="Robot arm power supply sizing: budget stall current, inrush and brownout, then wire and commission a 5V or 24-48V DC supply with worked examples." />
+<meta name="twitter:image:alt" content="A DIY six-degree-of-freedom robot arm on a workbench, the class of project that needs careful servo power supply sizing" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": "https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing#article",
+  "headline": "Robot Arm Power Supply Sizing: 5-Step Guide",
+  "description": "Robot arm power supply sizing: budget stall current, inrush and brownout, then wire and commission a 5V or 24-48V DC supply with worked examples.",
+  "author": {
+    "@type": "Person",
+    "name": "Marcus Chen",
+    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
+    "jobTitle": "Robotics Engineer and Editor",
+    "worksFor": { "@type": "Organization", "name": "Robotics Engineering Lab" }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Robotics Engineering Lab",
+    "url": "https://roboticsengineeringlab.com",
+    "logo": { "@type": "ImageObject", "url": "https://roboticsengineeringlab.com/logo.png" }
+  },
+  "datePublished": "2026-08-31",
+  "dateModified": "2026-08-31",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing"
+  },
+  "image": "https://roboticsengineeringlab.com/arduino_arm_tutorial.jpg",
+  "url": "https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing",
+  "inLanguage": "en-US",
+  "wordCount": 3450,
+  "articleSection": "Arduino & embedded control",
+  "keywords": "robot arm power supply, servo power supply sizing, servo current calculation, stall current robot arm, esp32 brownout, servo wire gauge, capacitor bank servo, dc power supply robot arm"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I calculate the power supply current for a robot arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sum the worst-case stall current of every actuator that can run at the same time, because a multi-axis arm can command several joints simultaneously. For six hobby servos with a 2.5 A stall current each, that is 15 A worst case; add a 1.5 to 1.6 times margin for inrush and supply aging, which puts you near a 20 to 25 A supply at the servo voltage. For continuous operation, also compute the RMS current from the duty cycle, because the supply must hold the RMS value indefinitely without overheating."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my ESP32 or Arduino reset when the servos move?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The usual cause is voltage sag: when servos start, their stall or inrush current flows through the power wires, and the resistance of thin wires drops the rail below the controller's brownout threshold. The ESP32 brownout detector resets the chip when the supply sags, and the Arduino's onboard regulator does the same on a weaker margin. Fix it with a separate servo power rail (never the controller's 5 V pin), thick short power wires, a bulk capacitor bank near the servos, and a common ground between the logic and power sides."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I power servos from the Arduino or ESP32 5 V pin?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, not for a robot arm. The Arduino Mega 5 V pin is fed through an onboard regulator rated around 1 A total, and the ESP32's 3.3 V regulator is even weaker; a single hobby servo can draw several amps at stall. Servos and motors must run from a separate power supply rated for the actuator current, with only signal and ground connections to the controller. A common ground between the controller and the servo supply is required so the PWM signals have a reference."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a bulk capacitor bank on a robot arm power supply?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For servo-driven hobby arms, yes, a bulk capacitor bank is the standard fix for transient inrush. The required capacitance is C = I x dt / dV, where I is the inrush current, dt is the duration of the transient, and dV is the sag you allow. A worked example: 15 A inrush for 20 ms with an allowed 0.5 V sag gives C = 15 x 0.02 / 0.5 = 0.6 F, which explains why 470 microfarad caps alone are inadequate and why builders use large electrolytic banks or a battery. Industrial servo drives handle this with a regulated DC bus and built-in capacitance on the drive."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What wire gauge do I need for servo power wiring?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Size the wire so the round-trip voltage drop stays below about 0.3 V at the worst-case current. For 15 A over a 2 m round trip, the resistance budget is 0.3 / 15 = 0.02 ohm, or about 10 milliohm per meter, which requires 14 AWG (8.3 milliohm/m) or larger; 16 AWG (13.2 milliohm/m) gives 0.40 V drop and is too small. Use the same gauge for the return path, keep servo and logic grounds separate until a single star point, and fuse each branch near the supply."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can one power supply run an entire robot cell including a 24 V stepper arm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It can, but only with separate fused branches per load group and a budget that sums the worst-case currents of every branch. A 24 V stepper-based arm such as an AR4-class robot needs roughly 6 to 10 A at 24 V when several axes accelerate, plus whatever the gripper and controller draw, while a 5 or 6 V hobby-servo rail is a completely different voltage that needs a DC-DC converter. Most builders use one main supply per voltage rail, fuse each branch, and keep the logic supply separate from the actuator supply to protect the controller."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home",      "item": "https://roboticsengineeringlab.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Tutorials", "item": "https://roboticsengineeringlab.com/articles/" },
+    { "@type": "ListItem", "position": 3, "name": "Robot Arm Power Supply Sizing: 5-Step Guide", "item": "https://roboticsengineeringlab.com/articles/robot-arm-power-supply-sizing" }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500
+});
+(function(){
+  try {
+    var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    if (c && c[1] === 'granted') {
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
+    }
+  } catch (e) {}
+})();
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+
+<style>
+/* ── Tokens ── */
+:root{
+  --ink:#0b0e14;--surface:#0f1116;--surface-card:#181b21;
+  --text-primary:#f2f0eb;--text-secondary:#b0ab9f;--text-muted:#77736e;
+  --accent:#c9a96e;--accent-2:#5f8ed8;
+  --border:rgba(255,255,255,0.06);--radius:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+  background:var(--ink);color:var(--text-primary);line-height:1.65;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+::selection{background:rgba(201,169,110,0.25);color:#fff;}
+
+/* ── Nav ── */
+.site-nav{position:sticky;top:0;z-index:100;
+  background:rgba(11,14,20,0.82);
+  backdrop-filter:blur(14px) saturate(130%);
+  -webkit-backdrop-filter:blur(14px) saturate(130%);
+  border-bottom:1px solid var(--border);padding:14px 24px;}
+.nav-inner{max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;
+  font-weight:600;color:var(--text-primary);text-decoration:none;
+  letter-spacing:-0.01em;white-space:nowrap;}
+.logo span{color:var(--accent);font-weight:300;}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;color:var(--text-secondary);flex-shrink:0;}
+.nav-toggle svg{display:block;width:22px;height:22px;}
+.nav-links{display:flex;gap:24px;align-items:center;flex-wrap:wrap;}
+.nav-links a{color:var(--text-secondary);text-decoration:none;
+  font-size:0.875rem;font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:var(--text-primary);}
+@media(max-width:640px){
+  .nav-toggle{display:flex;}
+  .nav-links{display:none;flex-direction:column;position:absolute;
+    top:100%;left:0;right:0;background:rgba(11,14,20,0.97);
+    border-bottom:1px solid var(--border);padding:16px 24px;gap:16px;}
+  .nav-links.open{display:flex;}
+}
+
+/* ── Hero ── */
+.hero-article{position:relative;min-height:440px;display:flex;
+  align-items:flex-end;padding:64px 24px 48px;
+  border-bottom:1px solid var(--border);overflow:hidden;}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;filter:brightness(0.32);z-index:0;}
+.hero-inner{position:relative;z-index:1;max-width:820px;margin:0 auto;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:0.75rem;
+  text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);
+  margin-bottom:16px;font-weight:600;}
+.hero-badge .line{width:24px;height:1px;background:var(--accent);}
+.hero-article h1{font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2rem,4.5vw,3.1rem);font-weight:400;line-height:1.15;
+  color:var(--text-primary);margin-bottom:16px;letter-spacing:-0.02em;}
+.hero-sub{font-size:1.05rem;color:var(--text-secondary);font-weight:300;
+  line-height:1.55;max-width:680px;margin-bottom:24px;}
+.hero-meta{display:flex;gap:20px;align-items:center;font-size:0.8rem;
+  color:var(--text-muted);flex-wrap:wrap;}
+.hero-meta time{color:var(--text-secondary);}
+
+/* ── Article ── */
+.article-container{max-width:820px;margin:0 auto;padding:48px 24px 80px;}
+.article-body h2{font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.85rem;font-weight:400;color:var(--text-primary);
+  margin:48px 0 16px;letter-spacing:-0.01em;
+  border-bottom:1px solid var(--border);padding-bottom:8px;}
+.article-body h3{font-size:1.15rem;font-weight:600;color:var(--text-primary);margin:32px 0 12px;}
+.article-body p{margin-bottom:20px;color:var(--text-secondary);font-size:0.98rem;font-weight:300;}
+.article-body strong{color:var(--text-primary);font-weight:500;}
+.article-body ul,.article-body ol{margin:0 0 24px 20px;color:var(--text-secondary);
+  font-size:0.95rem;font-weight:300;}
+.article-body li{margin-bottom:8px;}
+.article-body a{color:var(--accent-2);text-decoration:none;
+  border-bottom:1px solid rgba(95,142,216,0.3);transition:border-color 0.15s;}
+.article-body a:hover{border-color:var(--accent-2);}
+.article-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  font-size:0.88em;background:rgba(255,255,255,0.06);
+  padding:2px 6px;border-radius:4px;color:var(--accent);}
+.article-body pre{background:var(--surface-card);border:1px solid var(--border);
+  border-radius:8px;padding:18px 20px;overflow-x:auto;margin:0 0 24px;
+  font-size:0.85rem;line-height:1.5;color:#d6d3cb;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;}
+
+/* ── Callouts ── */
+.callout{background:var(--surface-card);border-left:3px solid var(--accent);
+  padding:20px 24px;margin:28px 0;border-radius:0 8px 8px 0;}
+.callout.warn{border-left-color:#e06c75;}
+.callout.info{border-left-color:var(--accent-2);}
+.callout h4{font-size:0.95rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+.callout p{margin:0;font-size:0.9rem;color:var(--text-secondary);}
+.callout ul{margin:10px 0 0 18px;font-size:0.9rem;color:var(--text-secondary);}
+.callout ol{margin:10px 0 0 18px;font-size:0.9rem;color:var(--text-secondary);}
+.callout li{margin-bottom:6px;}
+
+/* ── Tables ── */
+.table-wrap{overflow-x:auto;margin:28px 0;border:1px solid var(--border);border-radius:8px;}
+table{width:100%;border-collapse:collapse;font-size:0.88rem;text-align:left;}
+th{background:var(--surface-card);color:var(--text-primary);font-weight:500;
+  padding:12px 16px;border-bottom:1px solid var(--border);}
+td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-secondary);}
+tr:last-child td{border-bottom:none;}
+
+/* ── FAQ ── */
+.faq-item{background:var(--surface-card);border:1px solid var(--border);
+  border-radius:8px;padding:20px;margin-bottom:16px;}
+.faq-item h4{color:var(--text-primary);font-size:0.95rem;font-weight:600;margin-bottom:8px;}
+.faq-item p{margin:0;font-size:0.9rem;color:var(--text-secondary);line-height:1.55;}
+
+/* ── Footer nav ── */
+.footer-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  margin-top:40px;padding-top:20px;border-top:1px solid var(--border);}
+.back-link{color:var(--accent-2);text-decoration:none;font-size:0.88rem;}
+
+/* ── Footer list spacing ── */
+footer ul{list-style:none;padding:0;}
+footer ul li{margin-bottom:10px;}
+footer ul li:last-child{margin-bottom:0;}
+
+/* ── Diagram image ── */
+.diagram-img{max-width:100%;border-radius:8px;margin:24px 0;
+  border:1px solid var(--border);display:block;
+  background:var(--surface-card);min-height:60px;}
+
+/* ── Author aside ── */
+.author-aside{display:flex;gap:14px;align-items:flex-start;
+  margin:40px 0 12px;padding:18px 20px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;background:rgba(255,255,255,.03);}
+.author-avatar{width:48px;height:48px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#e4c07a,#6fa3d8);
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-weight:700;color:#1a1408;font-size:1rem;}
+.author-aside p{margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;}
+.author-aside a{color:#6fa3d8;}
+.author-meta{color:#6e677a;font-size:.82rem;display:block;margin-top:4px;}
+</style>
+</head>
+
+<body>
+
+<!-- ── Nav ── -->
+<nav class="site-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="../" class="logo" aria-label="Back to cover">Robotics <span>Engineering</span></a>
+    <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6"  x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <div class="nav-links" id="primary-nav" role="list">
+      <a href="../"                      role="listitem">Home</a>
+      <a href="./"                       role="listitem">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide" role="listitem">Guide</a>
+      <a href="../about"                 role="listitem">About</a>
+      <a href="../contact"               role="listitem">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<header class="hero-article" aria-label="Article hero">
+  <img class="hero-bg"
+    src="../arduino_arm_tutorial.jpg"
+    alt="A DIY six-degree-of-freedom robot arm on a workbench, the class of project that needs careful servo power supply sizing"
+    loading="eager" fetchpriority="high" decoding="async" width="1536" height="1024"/>
+  <div class="hero-inner">
+    <div class="hero-badge" aria-label="Category">
+      <span class="line" aria-hidden="true"></span>
+      Arduino &amp; Embedded Control &mdash; Published August 31, 2026
+    </div>
+    <h1>Robot Arm Power Supply Sizing: Voltage, Current and Brownout</h1>
+    <p class="hero-sub">A five-step commissioning method for sizing and wiring the DC power supply of a servo- or stepper-driven robot arm: current budgets, inrush and capacitor banks, wire gauge, fusing, grounding, and brownout tests with worked examples.</p>
+    <div class="hero-meta">
+      <time datetime="2026-08-31">August 31, 2026</time>
+      <span>&middot;</span><span>14 min read</span>
+      <span>&middot;</span><span>By Marcus Chen</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── Article ── -->
+<main class="article-container">
+<div class="article-body">
+
+<div class="callout info">
+  <h4>Editorial Disclosure &amp; Technical Scope</h4>
+  <p>This article is a reproducible worked-example tutorial: every formula and number below can be checked against the cited datasheets and documentation. Robotics Engineering Lab has not operated the specific hardware combinations described; the current-budget, inrush, wire-gauge, and brownout behavior follow from published servo and controller specifications plus well-established DC circuit physics. Follow local electrical codes, use a qualified electrician for mains-connected work, and never modify live equipment.</p>
+</div>
+
+<h2>Why Robot Arms Brown Out: Voltage Drop Physics</h2>
+<p><strong>Power supply sizing</strong> for a robot arm is the process of matching a DC supply's voltage, continuous current rating, and transient energy to the actuators' real load profile &mdash; and the reason so many builds fail is that the load profile is far more demanding than the datasheet's "running current" suggests. Most "the arm twitches, the controller resets" problems are not controller bugs; they are voltage physics. A DC rail carrying current <em>I</em> through wiring of total round-trip resistance <em>R</em> loses <em>V&nbsp;=&nbsp;I&nbsp;&times;&nbsp;R</em> volts. When several servo or stepper joints accelerate at once, the current spikes, the rail sags, and the microcontroller's brownout detector trips even though the power supply nameplate looks generous.</p>
+<p>Consider a controller with a 3.3&nbsp;V logic rail. Its brownout detector resets the chip when the rail sags below the detection threshold (roughly 2.4&ndash;3.0&nbsp;V depending on ESP32 model and configuration, per Espressif documentation). A 0.5&nbsp;V sag on a 3.3&nbsp;V rail is enough to reset the controller, and a 0.5&nbsp;V sag is easy to produce: 15&nbsp;A through 33&nbsp;milliohm of wiring, or 10&nbsp;A through 50&nbsp;milliohm. Thin jumper wires, breadboard rails, and USB cables routinely measure 50&ndash;200&nbsp;milliohm, which is why builds that worked on a bench fail the moment all six joints move.</p>
+<p>The fix is architectural, not a bigger fuse: a separate actuator supply, short thick power wiring, a bulk capacitor bank at the load, and a single-point ground. The five steps below build that architecture and then verify it with measurements.</p>
+
+<h2>Step 1 &mdash; Build the Current Budget</h2>
+<p>The current budget starts from datasheet numbers, not from the average "running current" listed on a product page. For a typical hobby servo such as the MG996R, the published figures are roughly <strong>500&ndash;900&nbsp;mA running at 6&nbsp;V</strong> and a <strong>stall current near 2.5&nbsp;A at 6&nbsp;V</strong>; many 20&nbsp;kg&middot;cm class digital servos are similar. For a six-axis arm, the worst case is that several joints command full torque simultaneously, so the budget must sum worst-case stall currents, not running currents.</p>
+<div class="callout">
+  <h4>Example calculation: six hobby servos</h4>
+  <p><strong>Assumptions:</strong> six joints, each with 2.5&nbsp;A stall at 6&nbsp;V and 0.8&nbsp;A typical running current; worst case assumes the five base joints plus the wrist can command stall simultaneously during a fast move.</p>
+  <p><strong>Worst-case budget:</strong> 6 &times; 2.5&nbsp;A = <strong>15&nbsp;A</strong> at 6&nbsp;V.</p>
+  <p><strong>Continuous budget with duty cycle:</strong> a 3&nbsp;s cycle with 1.5&nbsp;s of motion at 2&nbsp;A per servo and 1.5&nbsp;s of holding at 0.5&nbsp;A gives RMS current per servo of sqrt((2&sup2; &times; 1.5 + 0.5&sup2; &times; 1.5) / 3) &asymp; <strong>1.46&nbsp;A</strong>; six servos &asymp; 8.8&nbsp;A RMS, 90&nbsp;W at 6&nbsp;V.</p>
+  <p><strong>Margin rule used by integrators:</strong> multiply the worst-case stall sum by 1.5&ndash;1.6 to cover inrush and supply aging: 15&nbsp;A &times; 1.6 &asymp; <strong>24&nbsp;A</strong>. A supply rated 20&nbsp;A continuous with short-term 30&nbsp;A peak, or 25&nbsp;A continuous, is the realistic purchase target for this arm.</p>
+</div>
+<p>For a stepper-driven arm such as an AR4-class 24&nbsp;V build, the same method applies with the motor/driver currents: six NEMA-23-class steppers with 3&ndash;4&nbsp;A per-axis driver current sum to roughly 18&ndash;24&nbsp;A worst case at 24&nbsp;V if every axis commanded full current at once, though drivers rarely do. The platform's published bill of materials specifies the power-brick class to order, and the same 1.5&times; margin rule applies to the summed driver ratings. Industrial servo drives are budgeted differently &mdash; see Step&nbsp;6.</p>
+
+<h2>Step 2 &mdash; Choose the Voltage Rail</h2>
+<p>The rail voltage is set by the actuators and the controller, not by convenience. Common rails for robot arms:</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Rail</th>
+        <th>Typical loads</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>5.0&nbsp;V</strong></td><td>Analog hobby servos (4.8&ndash;6.6&nbsp;V class), PCA9685 V+</td><td>Voltage drop is critical: a 0.5&nbsp;V sag drops torque noticeably</td></tr>
+      <tr><td><strong>6.0&ndash;7.4&nbsp;V</strong></td><td>Digital bus servos (Dynamixel, Feetech, Hiwonder classes)</td><td>Higher voltage raises speed and stall torque; check the servo's max rating</td></tr>
+      <tr><td><strong>12&nbsp;V</strong></td><td>Small linear actuators, some grippers, 12&nbsp;V stepper systems</td><td>Common accessory rail; often derived from the main rail</td></tr>
+      <tr><td><strong>24&nbsp;V</strong></td><td>AR4-class stepper arms, most light industrial DC servo drives, UFACTORY xArm control boxes</td><td>24&nbsp;V DC is the de facto industrial low-voltage rail</td></tr>
+      <tr><td><strong>48&nbsp;V+ / 230&nbsp;V AC</strong></td><td>Higher-power servo drives and AC servos</td><td>Requires qualified electrical work, proper fusing, and enclosure</td></tr>
+      <tr><td><strong>3.3 / 5&nbsp;V logic</strong></td><td>Arduino, ESP32, drivers' logic side</td><td>Always derived from a separate regulator or supply, never from the actuator rail</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Two rules follow from the table. First, <strong>keep the logic rail separate from the actuator rail</strong>: the controller runs from its own regulator or a small DC-DC module, and only signal plus ground cross to the servo side. Second, <strong>never run the actuator rail through the microcontroller's 5&nbsp;V pin</strong>; the Arduino Mega's onboard regulator is rated around 1&nbsp;A total and an ESP32's 3.3&nbsp;V regulator less. The <a href="esp32-robot-controller">ESP32 controller guide</a> and the <a href="arduino-mega-robot-wiring">Arduino Mega wiring guide</a> both show the logic/servo separation in practice.</p>
+
+<h2>Step 3 &mdash; Power Supply Sizing: Continuous Rating, Inrush, and Capacitance</h2>
+<p>With the current budget in hand, the supply selection has three parts: continuous rating, peak/inrush behavior, and bulk capacitance.</p>
+<h3>Continuous Rating and Peak Headroom</h3>
+<p>The supply must deliver the RMS budget continuously (8.8&nbsp;A in the example above) and the worst-case peak for long enough that the motion completes (24&nbsp;A target). Switching supplies handle peaks poorly when run at their limit: many fold back current, which looks exactly like a brownout. Buying a supply rated 1.5&ndash;1.6&times; the worst-case sum, as in Step&nbsp;1, keeps the supply out of foldback during normal motion.</p>
+<h3>Inrush and the Bulk Capacitor Bank</h3>
+<p>No supply responds instantly. When servos start, they demand current for tens of milliseconds before the supply's feedback loop catches up. The bulk capacitor bank supplies that transient. The sizing formula is:</p>
+<pre>C = I &times; dt / dV</pre>
+<p>where <em>I</em> is the transient current (A), <em>dt</em> the transient duration (s), and <em>dV</em> the sag you allow (V).</p>
+<div class="callout">
+  <h4>Example calculation: capacitor bank</h4>
+  <p><strong>Assumptions:</strong> 15&nbsp;A inrush for 20&nbsp;ms (typical for several servos starting together) with an allowed sag of 0.5&nbsp;V at the servo terminals.</p>
+  <p><strong>C</strong> = 15 &times; 0.020 / 0.5 = <strong>0.6&nbsp;F (600,000&nbsp;&micro;F)</strong>.</p>
+  <p>This is why a single 470&nbsp;&micro;F or 1,000&nbsp;&micro;F capacitor is nowhere near enough for a multi-servo arm, and why builders use banks of large low-ESR electrolytic capacitors or a battery (which is itself a huge capacitor bank). If the wiring is shortened so the sag allowance rises to 1.0&nbsp;V and the inrush window is 10&nbsp;ms, the requirement falls to 0.15&nbsp;F &mdash; still large, but achievable with a modest bank. Always measure, rather than assume, the actual inrush duration.</p>
+</div>
+<p>Linear supplies sag less on fast transients than cheap switching supplies but waste more heat; regulated switching supplies with active current sharing are the usual choice for hobby arms, and for industrial servo systems the equivalent is the drive's regulated DC bus with its own built-in capacitance, as explained in Step&nbsp;6.</p>
+
+<h2>Step 4 &mdash; Wire, Fuse, and Ground the Supply</h2>
+<p>Wiring converts a correctly sized supply into an incorrectly behaving one faster than any other mistake. Size the wire so the round-trip drop stays under about 0.3&nbsp;V at worst-case current.</p>
+<div class="callout">
+  <h4>Example calculation: wire gauge for 15&nbsp;A</h4>
+  <p><strong>Budget:</strong> 0.3&nbsp;V &divide; 15&nbsp;A = 0.02&nbsp;&Omega; total round-trip. For a 2&nbsp;m round trip (1&nbsp;m out, 1&nbsp;m return), that is 0.01&nbsp;&Omega;/m &asymp; 10&nbsp;m&Omega;/m.</p>
+  <ul>
+    <li><strong>14 AWG</strong> (copper, &asymp;8.3&nbsp;m&Omega;/m): drop = 15 &times; 0.0083 &times; 2 &asymp; 0.25&nbsp;V &check; passes</li>
+    <li><strong>16 AWG</strong> (&asymp;13.2&nbsp;m&Omega;/m): drop = 15 &times; 0.0132 &times; 2 &asymp; 0.40&nbsp;V &cross; fails the 0.3&nbsp;V budget</li>
+    <li><strong>18 AWG</strong> (&asymp;20.9&nbsp;m&Omega;/m): drop &asymp; 0.63&nbsp;V &cross; unacceptable</li>
+  </ul>
+  <p>Rule: use the same gauge for the return path, keep the wire short, and put the capacitor bank at the load end, not at the supply.</p>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>AWG (copper)</th>
+        <th>Resistance (m&Omega;/m, 20&nbsp;&deg;C)</th>
+        <th>Max current for &le;0.3&nbsp;V drop over 2&nbsp;m round trip</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>22</td><td>&asymp;53</td><td>&asymp;2.8&nbsp;A</td></tr>
+      <tr><td>20</td><td>&asymp;33</td><td>&asymp;4.5&nbsp;A</td></tr>
+      <tr><td>18</td><td>&asymp;21</td><td>&asymp;7&nbsp;A</td></tr>
+      <tr><td>16</td><td>&asymp;13</td><td>&asymp;11&nbsp;A</td></tr>
+      <tr><td>14</td><td>&asymp;8.3</td><td>&asymp;18&nbsp;A</td></tr>
+      <tr><td>12</td><td>&asymp;5.2</td><td>&asymp;29&nbsp;A</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Fusing: place a slow-blow fuse (or resettable fuse) in each positive branch near the supply, rated about 1.25&times; the branch's continuous maximum, so it clears faults without tripping on motor inrush. Grounding: use a single-point (star) ground where the logic ground and the servo ground meet exactly once; long ground paths shared between logic and motors turn servo current into logic noise and are a classic source of random resets. If the controller and servos must be far apart, run a dedicated ground return for the servo rail and keep the signal ground separate until the star point.</p>
+
+<h2>Step 5 &mdash; Commission with Checkpoints</h2>
+<p>Commissioning is where the numbers become measurements. Run these checkpoints in order, and do not skip to the next one until the current one passes.</p>
+<ol>
+  <li><strong>No-load voltage check:</strong> with the arm powered but idle, measure the rail at the servo terminals (not at the supply). It must hold within 2% of nominal.</li>
+  <li><strong>Single-joint test:</strong> command one joint through its fastest move and watch the terminal voltage with a scope or fast multimeter. Sag must stay under 0.3&nbsp;V. If it sags more, the wire or the capacitor bank is undersized before you ever get to multiple joints.</li>
+  <li><strong>Worst-case synchronized test:</strong> run the motion that commands the most joints at once (typically a full-extension diagonal move). Record the minimum voltage and the duration of the sag. This is the test that reproduces "random" resets.</li>
+  <li><strong>Controller brownout test:</strong> with an ESP32 or Arduino logging to serial, repeat the worst-case move and confirm no brownout/reset messages. For ESP32, the message is the well-known "Brownout detector was triggered" line; if it appears, the logic rail is sagging and needs its own regulator/buffer rather than a bigger servo supply.</li>
+  <li><strong>Thermal test:</strong> run the production duty cycle for 30 minutes. The supply case and capacitor bank should stay below roughly 70&nbsp;&deg;C; a hot supply is a derating and reliability problem, not just a comfort problem.</li>
+  <li><strong>Ground-noise check:</strong> measure AC mV between logic ground and servo ground at the star point; steady readings above ~50&nbsp;mV warrant a wiring review.</li>
+</ol>
+<p>Document the pass/fail values for each checkpoint. That record is what turns a one-off build into a repeatable design, and it is exactly the kind of evidence a reviewer will ask for if the cell is ever expanded. The same checkpoint discipline is described for the full electrical system in the <a href="robot-cell-electrical-design">robot cell electrical design guide</a>.</p>
+
+<img class="diagram-img"
+  src="../articles/diagram-arduino-servo-power.jpg"
+  alt="Editorial wiring diagram of a robot arm servo power system with separate logic and actuator supplies, capacitor bank, fusing, and star ground"
+  loading="lazy" width="1376" height="768"
+  onerror="this.style.display='none'"/>
+
+<h2>Step 6 &mdash; Industrial Servo Drives: The DC Bus Is Not a Power Supply</h2>
+<p>Industrial servo drives change the sizing logic. A drive's DC bus is fed by a power supply or a shared-bus module, but the current on the bus is not the sum of motor currents. As Elmo Motion Control's application note explains, motor current at the drive is largely reactive; the supply is sized by the <em>power</em> the drives actually consume, and one supply can feed several drives because peak power from the drives is rarely simultaneous. A supply rated 20&nbsp;A continuous at a given AC input can feed five or six drives whose nameplates would suggest far more. The equivalent of the hobby-arm capacitor bank is the drive's built-in bus capacitance and the regenerative (shunt) resistor that absorbs deceleration energy. For EtherCAT or other fieldbus-based multi-axis arms, the bus architecture and braking energy handling are covered in the <a href="ethercat-robot-arm">EtherCAT robot arm guide</a>.</p>
+<p>The lesson transfers back to hobby arms: measure actual consumption, and size the supply for the power profile, not the arithmetic sum of nameplates. The Step-1 worst-case sum is a starting point, never a substitute for the Step-5 measurements.</p>
+
+<h2>Indicative 2026 Prices for Power Hardware</h2>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Representative class</th>
+        <th>Indicative 2026 price (USD)</th>
+        <th>Indicative 2026 price (CAD)</th>
+        <th>Pricing basis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>5&nbsp;V / 20&nbsp;A switching supply</strong></td><td>Generic regulated 100&ndash;120&nbsp;W, Mean Well or equivalent class</td><td>$20 &ndash; $45</td><td>$27 &ndash; $61</td><td>Typical US reseller list</td></tr>
+      <tr><td><strong>24&nbsp;V / 15&nbsp;A supply</strong></td><td>Mean Well LRS/S-350-24 class</td><td>$40 &ndash; $60</td><td>$54 &ndash; $81</td><td>Typical distributor list</td></tr>
+      <tr><td><strong>48&nbsp;V / 10&nbsp;A supply</strong></td><td>Mean Well RSP-500-48 class</td><td>$120 &ndash; $170</td><td>$162 &ndash; $230</td><td>Typical distributor list</td></tr>
+      <tr><td><strong>Bulk capacitor bank</strong></td><td>100,000&ndash;600,000&nbsp;&micro;F, low-ESR electrolytic, 25&ndash;35&nbsp;V</td><td>$30 &ndash; $80</td><td>$41 &ndash; $108</td><td>Typical US reseller list</td></tr>
+      <tr><td><strong>DC-DC logic rail module</strong></td><td>5&nbsp;V or 3.3&nbsp;V, 2&ndash;3&nbsp;A</td><td>$8 &ndash; $20</td><td>$11 &ndash; $27</td><td>Typical US reseller list</td></tr>
+      <tr><td><strong>14 AWG silicone power wire</strong></td><td>Per meter, 2-conductor</td><td>$1 &ndash; $3</td><td>$1.4 &ndash; $4</td><td>Typical US reseller list</td></tr>
+      <tr><td><strong>Fuse holders and fuses</strong></td><td>Blade or cartridge, 20&ndash;30&nbsp;A</td><td>$8 &ndash; $20</td><td>$11 &ndash; $27</td><td>Typical US reseller list</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Prices are <strong>indicative 2026 reference ranges</strong> compiled from typical US and Canadian distributor and reseller listings at the date of writing; exact pricing varies by brand, stock, and region and should be confirmed at purchase. Industrial power supplies and drives are configuration- and quote-dependent.</p>
+
+<h2>Typical Reader Question: Why Does My Arm Work on USB but Die on the Supply?</h2>
+<div class="callout info">
+  <h4>Typical Reader Question</h4>
+  <p><em>"My six-servo arm runs fine when I power the controller over USB, but as soon as I use my 'big' 10&nbsp;A power supply, the ESP32 resets during motion. The supply is bigger, so how can it be worse?"</em></p>
+</div>
+<p><strong>Engineering analysis:</strong> The supply is not necessarily the problem; the <em>path</em> is. On USB, the servos are usually running from a different, smaller test supply or from the USB hub's own limit, so the current path is short. With the "big" supply, the wiring is often long and thin (or daisy-chained through the PCA9685's V+ terminals), so the rail at the servos sags under load even though the supply output is fine. Measure at the servo terminals during the failing move: if the supply output stays at 6.0&nbsp;V but the terminals see 5.2&nbsp;V, the answer is wire gauge and capacitor placement, not supply current. Also check that the logic rail is fed separately: a shared 5&nbsp;V rail that sags under servo load will trip the ESP32 brownout detector even with a huge supply behind it.</p>
+
+<h2>Safety: Mains Work, Fusing, and Lockout/Tagout</h2>
+<div class="callout warn">
+  <h4>Safety Warning</h4>
+  <p>Work on the AC mains side of any power supply &mdash; wiring a plug, an inlet, a disconnect, or a breaker &mdash; must be done by a qualified electrician and comply with the applicable electrical code (NEC in the USA, provincial codes in Canada). Always disconnect and lock out the AC supply before working on the DC side of a powered system, verify zero energy with a meter, and never probe live terminals. A robot arm under power can move unexpectedly when a brownout clears; keep hands clear of the arm during testing and use the controller's enable/estop first. This article is educational and does not approve an electrical installation.</p>
+</div>
+
+<h2 id="sources">Sources and Methodology</h2>
+<ul>
+  <li><strong>Adafruit Learning System:</strong> PCA9685 16-channel PWM/Servo Driver guide (learn.adafruit.com/16-channel-pwm-servo-driver), covering separate V+ servo power and common-ground wiring. Accessed 2026-08-31.</li>
+  <li><strong>Espressif documentation:</strong> ESP32 brownout detector and power management documentation (docs.espressif.com), including detection thresholds and reset behavior. Accessed 2026-08-31.</li>
+  <li><strong>Elmo Motion Control:</strong> "Power Supply for Servo Applications" application note (elmomc.com), covering DC-bus sizing, shared supplies, and inrush for servo drives. Accessed 2026-08-31.</li>
+  <li><strong>Servo datasheets:</strong> MG996R published operating (0.5&ndash;0.9&nbsp;A) and stall (2.5&nbsp;A @ 6&nbsp;V) figures, corroborated by the Arduino Forum thread "How do I configure power supply for robot arm?" (forum.arduino.cc, 2022) and Robotics Stack Exchange "Powering 3 MG996R servos" (2023). Accessed 2026-08-31.</li>
+  <li><strong>Integrator rule-of-thumb reference:</strong> Kpower "Servo Robotic Arm Selection Guide" (kpower.com, 2026) for stall-current and supply-margin guidance (e.g., six 40&nbsp;kg&middot;cm servos can exceed 36&nbsp;A peak, recommending a 50&nbsp;A-class supply with bulk capacitance). Accessed 2026-08-31.</li>
+  <li><strong>Platform documentation:</strong> Annin Robotics AR4 build manual (anninrobotics.com) for 24&nbsp;V stepper power expectations. Accessed 2026-08-31.</li>
+  <li><strong>Methodology:</strong> All formulas are standard DC circuit relations (Ohm's law, RMS, capacitor energy); worked examples state their assumptions and should be re-verified by measurement during commissioning. Prices are indicative 2026 reference ranges from typical distributor listings; no hardware described here was bench-tested by this site.</li>
+</ul>
+
+<h2>Frequently Asked Questions</h2>
+
+<div class="faq-item"><h4>How do I calculate the power supply current for a robot arm?</h4><p>Sum the worst-case stall current of every actuator that can run at the same time, because a multi-axis arm can command several joints simultaneously. For six hobby servos with a 2.5 A stall current each, that is 15 A worst case; add a 1.5 to 1.6 times margin for inrush and supply aging, which puts you near a 20 to 25 A supply at the servo voltage. For continuous operation, also compute the RMS current from the duty cycle, because the supply must hold the RMS value indefinitely without overheating.</p></div>
+<div class="faq-item"><h4>Why does my ESP32 or Arduino reset when the servos move?</h4><p>The usual cause is voltage sag: when servos start, their stall or inrush current flows through the power wires, and the resistance of thin wires drops the rail below the controller's brownout threshold. The ESP32 brownout detector resets the chip when the supply sags, and the Arduino's onboard regulator does the same on a weaker margin. Fix it with a separate servo power rail (never the controller's 5 V pin), thick short power wires, a bulk capacitor bank near the servos, and a common ground between the logic and power sides.</p></div>
+<div class="faq-item"><h4>Can I power servos from the Arduino or ESP32 5 V pin?</h4><p>No, not for a robot arm. The Arduino Mega 5 V pin is fed through an onboard regulator rated around 1 A total, and the ESP32's 3.3 V regulator is even weaker; a single hobby servo can draw several amps at stall. Servos and motors must run from a separate power supply rated for the actuator current, with only signal and ground connections to the controller. A common ground between the controller and the servo supply is required so the PWM signals have a reference.</p></div>
+<div class="faq-item"><h4>Do I need a bulk capacitor bank on a robot arm power supply?</h4><p>For servo-driven hobby arms, yes, a bulk capacitor bank is the standard fix for transient inrush. The required capacitance is C = I x dt / dV, where I is the inrush current, dt is the duration of the transient, and dV is the sag you allow. A worked example: 15 A inrush for 20 ms with an allowed 0.5 V sag gives C = 15 x 0.02 / 0.5 = 0.6 F, which explains why 470 microfarad caps alone are inadequate and why builders use large electrolytic banks or a battery. Industrial servo drives handle this with a regulated DC bus and built-in capacitance on the drive.</p></div>
+<div class="faq-item"><h4>What wire gauge do I need for servo power wiring?</h4><p>Size the wire so the round-trip voltage drop stays below about 0.3 V at the worst-case current. For 15 A over a 2 m round trip, the resistance budget is 0.3 / 15 = 0.02 ohm, or about 10 milliohm per meter, which requires 14 AWG (8.3 milliohm/m) or larger; 16 AWG (13.2 milliohm/m) gives 0.40 V drop and is too small. Use the same gauge for the return path, keep servo and logic grounds separate until a single star point, and fuse each branch near the supply.</p></div>
+<div class="faq-item"><h4>Can one power supply run an entire robot cell including a 24 V stepper arm?</h4><p>It can, but only with separate fused branches per load group and a budget that sums the worst-case currents of every branch. A 24 V stepper-based arm such as an AR4-class robot needs roughly 6 to 10 A at 24 V when several axes accelerate, plus whatever the gripper and controller draw, while a 5 or 6 V hobby-servo rail is a completely different voltage that needs a DC-DC converter. Most builders use one main supply per voltage rail, fuse each branch, and keep the logic supply separate from the actuator supply to protect the controller.</p></div>
+
+<aside class="author-aside" aria-label="About the author">
+  <div class="author-avatar" aria-hidden="true">MC</div>
+  <p>Written and edited by <a href="../author/marcus-chen" rel="author"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. The formulas and worked examples in this article follow published servo, controller, and power-supply documentation and standard DC circuit physics; the specific hardware combinations were not bench-tested by this site. Measure and verify every number during commissioning. <a href="../editorial-standards">How we label content &rarr;</a><span class="author-meta">Published August 31, 2026 &middot; last reviewed August 31, 2026</span></p>
+</aside>
+
+<div class="footer-nav" aria-label="Article navigation">
+  <a href="./"         class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a>
+  <a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a>
+</div>
+
+</div>
+</main>
+
+<!-- ── Footer ── -->
+<footer style="border-top:1px solid var(--border);padding:48px 24px;" aria-label="Footer">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:48px;flex-wrap:wrap;">
+    <div>
+      <a href="../" class="logo">Robotics <span>Engineering</span></a>
+      <p style="color:var(--text-muted);font-size:0.82rem;margin-top:8px;max-width:320px;">Engineering-led articles on robot arms, ROS&nbsp;2, and industrial automation for the USA and Canada market.</p>
+    </div>
+    <div style="display:flex;gap:48px;flex-wrap:wrap;">
+      <div>
+        <h4 style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:14px;">Navigation</h4>
+        <ul>
+          <li><a href="../"                      style="color:var(--text-secondary);text-decoration:none;font-size:0.85rem;">Cover</a></li>
+          <li><a href="../6-dof-robot-arm-guide" style="color:var(--text-secondary);text-decoration:none;font-size:0.85rem;">Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:14px;">Topics</h4>
+        <ul>
+          <li><a href="arduino-mega-robot-wiring" style="color:var(--text-secondary);text-decoration:none;font-size:0.85rem;">Arduino Wiring</a></li>
+          <li><a href="robot-arm-battery-power"   style="color:var(--text-secondary);text-decoration:none;font-size:0.85rem;">Battery Power</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023&ndash;2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav aria-label="Legal">
+      <a href="../about"   style="color:var(--text-muted);text-decoration:none;font-size:0.8rem;margin-right:14px;">About</a>
+      <a href="../contact" style="color:var(--text-muted);text-decoration:none;font-size:0.8rem;margin-right:14px;">Contact</a>
+      <a href="../privacy" style="color:var(--text-muted);text-decoration:none;font-size:0.8rem;margin-right:14px;">Privacy</a>
+      <a href="../terms"   style="color:var(--text-muted);text-decoration:none;font-size:0.8rem;">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"  style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Cookie consent ── */
+(function(){
+  var NAME='rel_consent';
+  var box=document.getElementById('rel-consent');
+  if(!box)return;
+  function read(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}
+  function write(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);
+    document.cookie=NAME+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}
+  if(!read())box.hidden=false;
+  function decide(granted){
+    write(granted?'granted':'denied');
+    if(typeof gtag==='function')gtag('consent','update',{
+      ad_storage:granted?'granted':'denied',
+      ad_user_data:granted?'granted':'denied',
+      ad_personalization:granted?'granted':'denied',
+      analytics_storage:granted?'granted':'denied'
+    });
+    box.hidden=true;
+  }
+  document.getElementById('rel-consent-accept') .addEventListener('click',function(){decide(true);});
+  document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});
+})();
+
+/* ── Mobile nav ── */
+(function(){
+  var btn=document.querySelector('.nav-toggle');
+  var nav=document.getElementById('primary-nav');
+  if(!btn||!nav)return;
+  btn.addEventListener('click',function(){
+    var open=nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
+  });
+  document.addEventListener('click',function(e){
+    if(!btn.contains(e.target)&&!nav.contains(e.target)){
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      btn.setAttribute('aria-label','Open navigation menu');
+    }
+  });
+})();
+</script>
+</body>
+</html>
