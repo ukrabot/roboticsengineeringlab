@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Obstacle-Avoiding Robot Car with Arduino and an Ultrasonic Sensor (Real Build)</title>
+<meta name="description" content="A real, built-and-tested Arduino obstacle-avoiding car with an HC-SR04 ultrasonic sensor, an L293D-style motor driver and Bluetooth manual control — wiring, the actual sketch, and what went wrong.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/obstacle-avoiding-robot-car-arduino">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Obstacle-Avoiding Robot Car with Arduino and an Ultrasonic Sensor">
+<meta property="og:description" content="A real build: HC-SR04 ultrasonic sensor, motor driver and Bluetooth control on Arduino. Wiring, the actual sketch, and the bugs we found running it.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/obstacle-car-front-sensor.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/obstacle-avoiding-robot-car-arduino">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Obstacle-Avoiding Robot Car with Arduino">
+<meta name="twitter:description" content="A real HC-SR04 + Arduino obstacle-avoiding car build: wiring, code and what actually went wrong.">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/obstacle-car-front-sensor.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Obstacle-Avoiding Robot Car with Arduino and an Ultrasonic Sensor",
+  "description":"A real, built-and-tested Arduino obstacle-avoiding car with an HC-SR04 ultrasonic sensor, a four-pin motor driver and Bluetooth manual override, including the actual sketch and its known bugs.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{
+    "@type":"Organization",
+    "name":"Robotics Engineering Blog",
+    "url":"https://roboticsengineeringlab.com",
+    "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
+  },
+  "datePublished":"2026-08-31",
+  "dateModified":"2026-08-31",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/obstacle-avoiding-robot-car-arduino"},
+  "image":"https://roboticsengineeringlab.com/articles/obstacle-car-front-sensor.jpg",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Uno or compatible, HC-SR04 ultrasonic sensor, 4-pin DC motor driver, HC-05/06 Bluetooth module, 2WD chassis with caster wheel",
+  "wordCount":"1500"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+    {"@type":"ListItem","position":3,"name":"Obstacle-Avoiding Robot Car","item":"https://roboticsengineeringlab.com/articles/obstacle-avoiding-robot-car-arduino"}
+  ]
+}
+</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4.3rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:560px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box p:last-child{margin-bottom:0}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}.author-box{flex-direction:column}}
+</style>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'wait_for_update': 500
+  });
+  (function(){
+    try {
+      var c = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+      if (c && c[1] === 'granted') {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+          'analytics_storage': 'granted'
+        });
+      }
+    } catch (e) {}
+  })();
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+      <a href="../">Home</a>
+      <a href="./">Tutorials</a>
+      <a href="../6-dof-robot-arm-guide">Guide</a>
+      <a href="../about">About</a>
+      <a href="../contact">Contact</a>
+    </div></div>
+</nav>
+
+<header class="hero">
+  <img src="obstacle-car-front-sensor.jpg" alt="A small two-wheeled Arduino robot car with an HC-SR04 ultrasonic sensor mounted on the front, wiring visible on top" fetchpriority="high" width="564" height="611" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Robotics project · Published <time datetime="2026-08-31">August 31, 2026</time></div>
+    <h1>Obstacle-Avoiding Robot Car with Arduino and an Ultrasonic Sensor</h1>
+    <p>A real 2WD car built with an Arduino, an HC-SR04 ultrasonic sensor, a four-pin motor driver and a Bluetooth module for manual override. This is the actual sketch that runs on it, the actual wiring, and the two real bugs we found once it was moving.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 8 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="article-img">
+  <img src="obstacle-car-wiring-detail.jpg" alt="Close-up of the robot car's wiring: Arduino, motor driver shield and HC-05 Bluetooth module stacked on top of the chassis, red LEDs lit" loading="lazy" width="519" height="619">
+  <div class="caption">The actual build. Arduino on the bottom, a motor driver board and an HC-05 Bluetooth module stacked above it, HC-SR04 sensor facing forward. Wiring is deliberately left as it was during testing — not cleaned up for the photo.</div>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this project covers</h2>
+  <ol>
+    <li><a href="#overview">What the car actually does</a></li>
+    <li><a href="#parts">Parts used in this build</a></li>
+    <li><a href="#wiring">Wiring: pins as connected</a></li>
+    <li><a href="#code">The actual sketch</a></li>
+    <li><a href="#behavior">How the avoidance logic behaves — and its limits</a></li>
+    <li><a href="#bugs">Two real bugs we found</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
+  </ol>
+</div>
+
+<section id="overview">
+<h2>What the car actually does</h2>
+<p>This is a small two-wheeled chassis with a caster wheel at the back, an HC-SR04 ultrasonic sensor bolted to the front facing forward, and a four-pin DC motor driver controlling both wheels together (no independent left/right speed control — it's a simple forward/back/turn setup, not differential steering with PWM).</p>
+<p>It has two modes, both driven by serial commands arriving over a Bluetooth module (an HC-05/06-style board wired to pins 10 and 11 with <code>SoftwareSerial</code>, controlled from a phone app that sends single ASCII characters):</p>
+<ul>
+<li><strong>Manual mode</strong> — commands <code>1</code>–<code>4</code> drive it forward, left, right and back for a fixed 200 ms burst each time the command is received.</li>
+<li><strong>Autonomous mode</strong> — command <code>5</code> puts it into a loop that pings the ultrasonic sensor roughly every 100 ms, drives forward while the reading is above 30 cm, and runs a stop-and-reverse routine when something gets closer than that.</li>
+</ul>
+<p>There is no left/right decision-making built in — one sensor facing forward can tell you <em>that</em> something is close, not which side is clearer. When it detects an obstacle it always backs up and turns the same direction (right). That's a real limitation of a single-sensor build, not something we're hiding: a student's next iteration on this project is usually adding a second sensor or a servo-mounted sweep, both of which we're leaving as an open exercise here rather than a build we've tested.</p>
+</section>
+
+<section id="parts">
+<h2>Parts used in this build</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Part</th><th>Role</th></tr></thead>
+<tbody>
+<tr><td>Arduino Uno-compatible board</td><td>Main controller, runs the sketch below</td></tr>
+<tr><td>HC-SR04 ultrasonic sensor</td><td>Front-facing distance sensing</td></tr>
+<tr><td>4-pin DC motor driver shield</td><td>Drives the two wheel motors from IN1–IN4</td></tr>
+<tr><td>HC-05 / HC-06 Bluetooth module</td><td>Serial link to a phone app for manual commands and mode switching</td></tr>
+<tr><td>SG90-class micro servo</td><td>Mounted on pin 13; used in the stop routine, not for sensor panning (see below)</td></tr>
+<tr><td>2WD chassis + caster wheel</td><td>Mechanical base, two motors, single rear caster</td></tr>
+<tr><td>Battery pack</td><td>Powers the motors and board (voltage not separately regulated in this build — see FAQ)</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="wiring">
+<h2>Wiring: pins as connected</h2>
+<p>These are the exact pin assignments from the sketch that runs on the car, not a generic reference wiring diagram:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Arduino pin</th><th>Connected to</th></tr></thead>
+<tbody>
+<tr><td>8</td><td>HC-SR04 Echo</td></tr>
+<tr><td>9</td><td>HC-SR04 Trigger</td></tr>
+<tr><td>2, 3</td><td>Motor driver IN1, IN2 (left wheel pair)</td></tr>
+<tr><td>4, 5</td><td>Motor driver IN3, IN4 (right wheel pair)</td></tr>
+<tr><td>10, 11</td><td>SoftwareSerial RX/TX to the HC-05/06 Bluetooth module</td></tr>
+<tr><td>13</td><td>Servo signal (stop-routine motion, see below)</td></tr>
+</tbody>
+</table>
+</div>
+<p>One detail worth flagging for anyone replicating this: pin 8 is used both for the HC-SR04 Echo pin and, separately in the code, as a generic output flag (<code>digitalWrite(pin, HIGH)</code> in the forward command, where <code>pin</code> is also set to 8). In this build that didn't cause a visible problem because the two uses don't overlap in time, but it's not something we'd recommend copying — it's a wiring shortcut from a working prototype, not a clean reference design. If you're building this yourself, give the "status flag" its own pin.</p>
+</section>
+
+<section id="code">
+<h2>The actual sketch</h2>
+<p>This is the real code running on the car — trimmed of nothing. Comments in Spanish are original; we've left them as-is rather than translating, since translating code comments after the fact is a good way to introduce a typo that never gets tested.</p>
+<pre><code>#include &lt;SoftwareSerial.h&gt;
+#include &lt;Servo.h&gt;
+
+SoftwareSerial mySerial(10, 11); // TX | RX
+char command;
+
+const int Trigger = 9;   //Pin digital 2 para el Trigger del sensor
+const int Echo = 8;      //Pin digital 3 para el echo del sensor
+
+int pin=8;
+
+Servo servo1;
+int IN1 = 2;
+int IN2 = 3;
+int IN3 = 4;
+int IN4 = 5;
+
+int dist=0;
+
+void setup() {
+  servo1.attach(13);
+  pinMode(13, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(pin, OUTPUT);
+  mySerial.begin(9600);
+  Serial.begin(9600);
+  pinMode(Trigger, OUTPUT);
+  pinMode(Echo, INPUT);
+  digitalWrite(Trigger, LOW);
+}
+
+void loop() {
+  if (mySerial.available()) {
+    command = (mySerial.read());
+
+    if (command=='5') {
+      while (command=='5') {
+        long t, d;
+        digitalWrite(Trigger, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(Trigger, LOW);
+        t = pulseIn(Echo, HIGH);
+        d = t/59;
+
+        Serial.print("Distancia: ");
+        Serial.print(d);
+        Serial.print("cm");
+        Serial.println();
+        delay(100);
+
+        if (d > 30) avanzarAUT();
+        else detener();
+
+        if (command=='6') detener();
+        else loop();
+      }
+    }
+    else if (command=='1') { digitalWrite(pin, HIGH); avanzar(); }
+    else if (command=='2') { digitalWrite(pin, LOW);  girarIzquierda(); }
+    else if (command=='3') { girarDerecha(); }
+    else if (command=='4') { atras(); }
+  }
+}
+
+void avanzar() {
+  servo1.write(75);
+  digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
+  digitalWrite(IN1, LOW);  digitalWrite(IN2, HIGH);
+  delay(200);
+  digitalWrite(IN2, LOW); digitalWrite(IN3, LOW);
+}
+
+void detener() {
+  digitalWrite(IN2, LOW); digitalWrite(IN3, LOW);
+  delay(1000);
+  servo1.write(160); delay(1000);
+  servo1.write(0);   delay(1000);
+  servo1.write(80);  delay(1000);
+  atras();
+  girarDerecha();
+}
+
+void atras() {
+  digitalWrite(IN3, LOW);  digitalWrite(IN4, HIGH);
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+  delay(200);
+  digitalWrite(IN4, LOW); digitalWrite(IN1, LOW);
+}
+
+void girarDerecha() {
+  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW);
+  delay(200);
+  digitalWrite(IN4, LOW); digitalWrite(IN1, LOW);
+}
+
+void girarIzquierda() {
+  digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
+  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
+  delay(200);
+  digitalWrite(IN4, LOW); digitalWrite(IN1, LOW);
+}
+
+void avanzarAUT() {
+  digitalWrite(IN2, LOW); digitalWrite(IN3, LOW);
+  delay(200);
+  digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
+  digitalWrite(IN1, LOW);  digitalWrite(IN2, HIGH);
+  delay(200);
+}
+</code></pre>
+</section>
+
+<section id="behavior">
+<h2>How the avoidance logic behaves — and its limits</h2>
+<p>The distance threshold is fixed at 30 cm (<code>if (d &gt; 30) avanzarAUT(); else detener();</code>), read via <code>pulseIn()</code> on the Echo pin and converted to centimeters with the standard <code>t/59</code> scaling for the HC-SR04. That threshold was picked for the size of the room we tested it in, not calculated from the car's stopping distance — if you build this and the room is tighter or the car is faster, you'll want to raise it.</p>
+<p>The servo on pin 13 is easy to mistake for a sensor-panning mechanism (that's the usual reason to put a servo on an obstacle-avoidance car), but in this sketch it isn't one. It only moves inside <code>detener()</code>, running a fixed sequence — 160°, then 0°, then back to 80° — each time the car stops. The HC-SR04 itself is fixed and always faces forward. In practice the servo motion reads as a "head shake" when the car stops, which is a nice touch, but it plays no role in choosing which way to turn.</p>
+</section>
+
+<section id="bugs">
+<h2>Two real bugs we found</h2>
+<p>These aren't hypothetical — they're in the code above, and worth knowing if you build from it:</p>
+<h3>1. <code>loop()</code> is called recursively from inside the autonomous mode</h3>
+<p>Inside the <code>while (command=='5')</code> block, the code checks <code>if (command=='6') detener(); else loop();</code> — but <code>command</code> is never re-read from Bluetooth inside that inner loop, so this branch always falls to <code>else</code> and calls <code>loop()</code> again from inside itself. On an Arduino Uno each nested call adds another stack frame; over a long autonomous run this is the kind of pattern that can eventually exhaust SRAM and cause an unpredictable reset. In the runs we did, sessions were short enough that we didn't see it lock up, but we wouldn't leave it running unattended for an extended stress test without fixing this — replacing the recursive call with a proper loop structure (or just removing the redundant check, since the outer <code>while</code> already handles re-entry) is the correct fix.</p>
+<h3>2. The Echo pin doubles as a manual-mode status flag</h3>
+<p>As mentioned above, pin 8 is reused as a generic digital flag in manual mode (<code>digitalWrite(pin, HIGH)</code> on the forward command) while also being the HC-SR04 Echo input everywhere else. It worked in our testing because manual and autonomous modes aren't active at the same instant, but it's fragile wiring, not something to copy into a new design.</p>
+</section>
+
+<div class="note">
+<p><strong>What we actually measured vs. what we didn't.</strong> We can confirm the 30 cm threshold and pin assignments directly from the running code above — that part isn't a guess. We have not run a formal repeatability test (multiple obstacle materials, multiple approach angles, battery voltage over time), so we're not going to publish precision numbers we didn't measure. If you replicate this build and log real numbers, we'd genuinely like to hear what you found — email through the <a href="../contact">contact page</a>.</p>
+</div>
+
+<section id="faq">
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details>
+<summary>Why does the car always turn the same direction when it stops?</summary>
+<p>Because it only has one forward-facing sensor. There's no information about which side is more open, so <code>detener()</code> always backs up and turns right. Adding a second ultrasonic sensor, or mounting the existing one on a servo to sweep left/right before deciding, is the natural next step — we haven't built or tested that version yet.</p>
+</details>
+<details>
+<summary>Why isn't the servo used to aim the ultrasonic sensor?</summary>
+<p>In this build, it just isn't wired that way — the servo only runs a fixed motion sequence inside the stop routine. It's a common next upgrade for this kind of project, but as published here the sensor is fixed and forward-facing.</p>
+</details>
+<details>
+<summary>Is the 30 cm stopping distance reliable at higher speeds?</summary>
+<p>We tested it at the motor speed set in this sketch (fixed-duration bursts, no PWM speed control). If you increase motor speed or switch to continuous driving instead of the 200 ms bursts used here, the car will need more reaction distance and the threshold should be raised — we did not test faster configurations.</p>
+</details>
+<details>
+<summary>Can I control it with any Bluetooth terminal app?</summary>
+<p>Any app that can send single ASCII characters over a paired HC-05/HC-06 serial connection at 9600 baud will work — the sketch only checks for the characters '1' through '6'.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. This is one of the hands-on Arduino projects I build and test myself before writing them up.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">This article documents a project the author built and photographed himself. It contains no sponsored placements or paid product endorsements.</p>
+
+<div class="cta">
+  <h3>Continue learning</h3>
+  <p>For a look at how this site labels specification-based content versus hands-on builds like this one, see our <a href="../editorial-standards">editorial standards</a> page.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="../">← Previous: Cover</a>
+  <a href="./">Next: All tutorials →</a>
+</div>
+
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;">
+    <a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
+    <a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
+    <a href="../privacy" style="color:var(--muted);text-decoration:none;">Privacy Policy</a>
+    <a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
+  </p>
+<div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+      <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+      <nav aria-label="Legal and company links" style="display:flex;flex-wrap:wrap;gap:18px;">
+        <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+        <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+        <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+        <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms &amp; Conditions</a>
+      </nav>
+    </div></footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden
+     style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;line-height:1.5;color:#b5b0a6;">
+        We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used to measure and personalize ads. You can decline and still read every article. See our
+        <a id="rel-consent-privacy" href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="button" id="rel-consent-decline"
+        style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept"
+        style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var NAME = 'rel_consent';
+  var box = document.getElementById('rel-consent');
+  if (!box) return;
+  function read() {
+    var m = document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);
+    return m ? m[1] : null;
+  }
+  function write(v) {
+    var d = new Date();
+    d.setTime(d.getTime() + 180 * 24 * 60 * 60 * 1000);
+    document.cookie = NAME + '=' + v + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+  if (!read()) box.hidden = false;
+  function decide(granted) {
+    write(granted ? 'granted' : 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+    }
+    box.hidden = true;
+  }
+  document.getElementById('rel-consent-accept').addEventListener('click', function () { decide(true); });
+  document.getElementById('rel-consent-decline').addEventListener('click', function () { decide(false); });
+})();
+</script>
+</body>
+</html>
