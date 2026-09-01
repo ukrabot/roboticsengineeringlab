@@ -13,12 +13,12 @@
 <meta property="og:title" content="ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control">
 <meta property="og:description" content="A practical engineering guide to controlling robot-arm servos with an ESP32, including power design, timing, wireless limits, safety and tested Arduino code.">
 <meta property="og:url" content="https://roboticsengineeringlab.com/articles/esp32-robot-controller">
-<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-arduino-servo-power.jpg">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ESP32 Robot Arm Controller: Wiring, PWM, Wi-Fi and Safe Control">
 <meta name="twitter:description" content="A practical guide to ESP32 robot-arm control, servo power, PWM, Wi-Fi, safety and Arduino code.">
-<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-arduino-servo-power.jpg">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -30,7 +30,7 @@
   "datePublished":"2024-09-09",
   "dateModified":"2025-02-08",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/esp32-robot-controller"},
-  "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "image":"https://roboticsengineeringlab.com/articles/diagram-arduino-servo-power.jpg",
   "proficiencyLevel":"Intermediate"
 }
 </script>
@@ -106,7 +106,7 @@
   <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Diagram is indicative and not to scale.</figcaption>
 </figure>
 
-<div class="article-img"><img src="../industrial_robot_arm.jpg" alt="Industrial robot arm used to illustrate ESP32 robot controller integration" width="1024" height="322" loading="eager"><div class="caption">An ESP32 can coordinate low-voltage actuators and sensors, while power electronics and safety circuits handle the energy of the robot.</div></div>
+<div class="article-img"><img src="diagram-arduino-servo-power.jpg" alt="Industrial robot arm used to illustrate ESP32 robot controller integration" width="1024" height="322" loading="eager"><div class="caption">An ESP32 can coordinate low-voltage actuators and sensors, while power electronics and safety circuits handle the energy of the robot.</div></div>
 <div class="toc" id="contents"><strong>In this guide</strong><ol><li><a href="#architecture">What the ESP32 should control</a></li><li><a href="#power">Power and wiring architecture</a></li><li><a href="#pwm">PWM and servo timing</a></li><li><a href="#code">Working Arduino example</a></li><li><a href="#wireless">Wi-Fi and Bluetooth limits</a></li><li><a href="#safety">Safety and commissioning</a></li><li><a href="#troubleshooting">Troubleshooting</a></li><li><a href="#faq">FAQ</a></li></ol></div>
 <h2 id="architecture">What the ESP32 should control</h2>
 <p>The best role for an ESP32 is a real-time-ish actuator and sensor node, not an excuse to put every function inside one loop. A typical system divides responsibilities into layers: a high-level computer or PLC calculates a trajectory; the ESP32 receives bounded joint targets; motor drivers or smart servos close the position loop; and a separate safety chain can remove actuator power. For a small arm, the ESP32 may also calculate inverse kinematics, but the motion must still be limited by joint ranges, speed, acceleration and workspace rules.</p>

@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Robot Arm Calibration Techniques: Accuracy, Repeatability & Error Correction" />
 <meta property="og:description" content="Engineering guide to 6-axis robot arm calibration. Mastering, laser tracking, ball-bar tests, and software error correction for industrial precision." />
-<meta property="og:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-6dof-kinematics.svg" />
 <meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-calibration" />
 <meta property="og:locale" content="en_US" />
 
@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Robot Arm Calibration Techniques: Accuracy, Repeatability & Error Correction" />
 <meta name="twitter:description" content="Mastering, laser tracking, ball-bar tests, and software error correction for industrial precision." />
-<meta name="twitter:image" content="https://roboticsengineeringlab.com/industrial_robot_arm.jpg" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-6dof-kinematics.svg" />
 
 <!-- Structured Data: Article -->
 <script type="application/ld+json">
@@ -44,7 +44,7 @@
     "@type": "WebPage",
     "@id": "https://roboticsengineeringlab.com/articles/robot-arm-calibration"
   },
-  "image": "https://roboticsengineeringlab.com/industrial_robot_arm.jpg"
+  "image": "https://roboticsengineeringlab.com/articles/diagram-6dof-kinematics.svg"
 }
 </script>
 
@@ -210,7 +210,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 </nav>
 
 <header class="hero-article" aria-label="Article hero">
-<img class="hero-bg" src="../industrial_robot_arm.jpg" alt="Industrial robot arm undergoing precision laser tracker calibration" loading="eager" decoding="async" width="1024" height="322" />
+<img class="hero-bg" src="diagram-6dof-kinematics.svg" alt="Industrial robot arm undergoing precision laser tracker calibration" loading="eager" decoding="async" width="1024" height="322" />
 <div class="hero-inner">
 <div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Metrology & Maintenance — Updated June 10, 2025</div>
 <h1>Robot Arm Calibration Techniques: Accuracy, Repeatability & Error Correction</h1>
@@ -221,14 +221,14 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <main class="article-body container" aria-label="Main article content">
 
 <div class="article-img" style="margin:32px 0 48px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
-<img src="../industrial_robot_arm.jpg" alt="Metrology engineer operating a laser tracker to map robot arm kinematics" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" loading="lazy" decoding="async" width="1024" height="322" />
+<img src="diagram-6dof-kinematics.svg" alt="Metrology engineer operating a laser tracker to map robot arm kinematics" style="width:100%; display:block; filter:brightness(0.92) contrast(1.05);" loading="lazy" decoding="async" width="1024" height="322" />
 <div style="padding:14px 16px; font-size:0.82rem; color:#77736e; background:#181b21; border-top:1px solid rgba(255,255,255,0.06);">Image: Robot cell calibration using a laser tracker and Spherically Mounted Retroreflector (SMR).</div>
 </div>
 
 <h2>Accuracy vs. Repeatability: The Core Engineering Problem</h2>
 <p>In industrial automation, a robot's value is often tied to its published precision. However, manufacturers frequently confuse two distinct metrics: <strong>repeatability</strong> and <strong>accuracy</strong>. Repeatability is the robot's ability to return to a previously taught physical point. Accuracy is the robot's ability to move to a specific coordinate in 3D space calculated via offline programming (CAD/CAM).</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
-  <img src="diagram-6dof-kinematics.jpg" alt="Editorial joint-frame diagram used when discussing calibration." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
+  <img src="diagram-6dof-kinematics.svg" alt="Editorial joint-frame diagram used when discussing calibration." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
   <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
 </figure>
 
