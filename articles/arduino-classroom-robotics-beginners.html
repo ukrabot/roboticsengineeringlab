@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Arduino Robotics in the Classroom: From First LED to Voice-Controlled Car</title>
+<meta name="description" content="A real classroom robotics course progression — from blinking a single LED to a Bluetooth voice-controlled robot car. Three real sketches, real student photos, and honest notes on what trips beginners up.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-classroom-robotics-beginners">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arduino Robotics in the Classroom: From First LED to Voice-Controlled Car">
+<meta property="og:description" content="Real classroom progression: LED blink → LED sequence → voice-controlled robot car. Three tested sketches, student lab photos, and honest notes on beginner mistakes.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/classroom-robotics-lab-students.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-classroom-robotics-beginners">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arduino Robotics in the Classroom: From LED to Voice-Controlled Car">
+<meta name="twitter:description" content="Real classroom progression from LED blink to voice-controlled robot. Three real sketches and student lab photos.">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/classroom-robotics-lab-students.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Arduino Robotics in the Classroom: From First LED to Voice-Controlled Car",
+  "description":"A real classroom robotics course progression — from blinking a single LED to a Bluetooth voice-controlled robot car with ultrasonic obstacle detection. Three tested sketches, real student lab photos, and honest notes on what trips beginners up.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{
+    "@type":"Organization",
+    "name":"Robotics Engineering Blog",
+    "url":"https://roboticsengineeringlab.com",
+    "logo":{"@type":"ImageObject","url":"https://roboticsengineeringlab.com/logo.png"}
+  },
+  "datePublished":"2026-08-31",
+  "dateModified":"2026-08-31",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-classroom-robotics-beginners"},
+  "image":"https://roboticsengineeringlab.com/articles/classroom-robotics-lab-students.jpg",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Uno, LEDs, resistors, HC-05 Bluetooth module, L298N motor driver, HC-SR04 ultrasonic sensor, 4WD chassis",
+  "wordCount":"1800"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+    {"@type":"ListItem","position":3,"name":"Arduino Classroom Robotics","item":"https://roboticsengineeringlab.com/articles/arduino-classroom-robotics-beginners"}
+  ]
+}
+</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4.3rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:480px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}.author-box{flex-direction:column}}
+</style>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});
+  (function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();
+</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T9333W8LWN');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="classroom-robotics-lab-students.jpg" alt="Students programming Arduino robot cars in a school robotics lab, with multiple finished robots on a central table" fetchpriority="high" width="2000" height="1333" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Classroom project · Published <time datetime="2026-08-31">August 31, 2026</time></div>
+    <h1>Arduino Robotics in the Classroom: From First LED to Voice-Controlled Car</h1>
+    <p>The actual three-stage progression I use in my robotics class — starting with a single blinking LED, moving to a six-LED sequence, and finishing with a Bluetooth voice-controlled 4WD car that also avoids obstacles. Every sketch here ran on real student hardware.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 10 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="article-img">
+  <img src="classroom-robotics-lab-students.jpg" alt="A full classroom of students working on Arduino robot cars; multiple finished robots visible on the central table including wheeled cars and a robotic arm" loading="lazy" width="2000" height="1333">
+  <div class="caption">The robotics lab after final project presentations. Every robot on that table was built and programmed by a student from scratch during the semester.</div>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#context">The classroom context</a></li>
+    <li><a href="#stage1">Stage 1 — single LED blink</a></li>
+    <li><a href="#stage2">Stage 2 — six-LED sequence</a></li>
+    <li><a href="#stage3">Stage 3 — voice-controlled robot car</a></li>
+    <li><a href="#pinconflict">The pin-conflict problem students always hit</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
+  </ol>
+</div>
+
+<section id="context">
+<h2>The classroom context</h2>
+<p>This is a Computer Science and Robotics course at secondary school level. Students arrive with zero electronics experience — most have never held a soldering iron or connected a breadboard. By the end of the semester they have built, wired and programmed a working robot car. The photos in this guide are from that course: real students, real lab, real hardware.</p>
+
+<div class="article-img">
+  <img src="classroom-robotics-lab-empty.jpg" alt="The school robotics lab with computers along the walls and robot cars on a central round table, room empty before class" loading="lazy" width="2000" height="1125">
+  <div class="caption">The lab before a session. The round central table is where finished robots are collected for review. The wall stations are for programming and simulation.</div>
+</div>
+
+<p>The course uses Arduino Uno-compatible boards because they are cheap, well-documented and survive the abuse of being handled by thirty students per day. We don't use shields — students wire everything manually on a breadboard first, then solder the final version to a proto-board. That constraint is deliberate: if you only ever plug in a shield, you don't learn what's actually happening electrically.</p>
+<p>The three sketches below are the actual files from the course, in the order students work through them. I've left the Spanish-language comments as-is — they were written for Spanish-speaking students and translating them after the fact would introduce errors that nobody ever ran and checked.</p>
+</section>
+
+<section id="stage1">
+<h2>Stage 1 — single LED blink</h2>
+<p>Every student's first Arduino program. The goal isn't the LED — it's getting the IDE installed, finding the right COM port, and successfully uploading a sketch without panicking when the first attempt fails (and it always does, usually because of a driver issue on Windows).</p>
+<p>Pin 9 was chosen instead of the built-in pin 13 LED so students are forced to wire an external LED with a resistor from the start. Pin 13's built-in LED is a crutch that hides the wiring step.</p>
+
+<pre><code>const int ledPIN = 9;
+
+void setup() {
+  Serial.begin(9600);         // iniciar puerto serie
+  pinMode(ledPIN, OUTPUT);    // definir pin como salida
+}
+
+void loop() {
+  digitalWrite(ledPIN, HIGH); // poner el Pin en HIGH
+  delay(1000);                // esperar un segundo
+  digitalWrite(ledPIN, LOW);  // poner el Pin en LOW
+  delay(1000);                // esperar un segundo
+}</code></pre>
+
+<p>The resistor value matters. We use 220 Ω with standard red 5 mm LEDs powered from Arduino's 5 V output. At that value the LED draws about 15 mA — well within the 40 mA per-pin limit of the Uno. Several students per class will try to connect the LED directly without a resistor; the LED glows briefly and then dies, which is actually a useful teaching moment about current limiting.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Component</th><th>Value / spec</th><th>Beginner mistake</th></tr></thead>
+<tbody>
+<tr><td>LED</td><td>Any 5 mm, any color</td><td>Connecting backward (anode/cathode reversed — LED just won't light)</td></tr>
+<tr><td>Resistor</td><td>220 Ω (red-red-brown)</td><td>Skipping it entirely — burns the LED</td></tr>
+<tr><td>Pin</td><td>Digital 9</td><td>Confusing digital pin 9 with analog A9 — they are different</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="stage2">
+<h2>Stage 2 — six-LED sequence</h2>
+<p>The second exercise extends the first to six LEDs on pins 2 through 7, lighting each one in sequence with a 1-second pause. The point here is repetition and pattern: students see that the same <code>digitalWrite / delay</code> pattern repeats six times, which leads naturally to the discussion of loops and arrays in the next class.</p>
+
+<pre><code>int led_Dos   = 2;
+int led_Tres  = 3;
+int led_Cuatro = 4;
+int led_Cinco  = 5;
+int led_Seis   = 6;
+int led_Siete  = 7;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(led_Dos,    OUTPUT);
+  pinMode(led_Tres,   OUTPUT);
+  pinMode(led_Cuatro, OUTPUT);
+  pinMode(led_Cinco,  OUTPUT);
+  pinMode(led_Seis,   OUTPUT);
+  pinMode(led_Siete,  OUTPUT);
+}
+
+void loop() {
+  digitalWrite(led_Dos,    HIGH); delay(1000); digitalWrite(led_Dos,    LOW); delay(1000);
+  digitalWrite(led_Tres,   HIGH); delay(1000); digitalWrite(led_Tres,   LOW); delay(1000);
+  digitalWrite(led_Cuatro, HIGH); delay(1000); digitalWrite(led_Cuatro, LOW); delay(1000);
+  digitalWrite(led_Cinco,  HIGH); delay(1000); digitalWrite(led_Cinco,  LOW); delay(1000);
+  digitalWrite(led_Seis,   HIGH); delay(1000); digitalWrite(led_Seis,   LOW); delay(1000);
+  digitalWrite(led_Siete,  HIGH); delay(1000); digitalWrite(led_Siete,  LOW); delay(1000);
+}</code></pre>
+
+<p>The deliberate redundancy in this sketch — six nearly identical pairs of lines — is intentional pedagogy. Students copy it out, it works, and then you ask: "What would happen if we needed 50 LEDs?" The answer leads directly to <code>for</code> loops and arrays, which is the next topic. Starting with the verbose version makes the improvement obvious.</p>
+
+<div class="note">
+<p><strong>What the improved version looks like.</strong> Once students have seen loops, the exercise is to rewrite this sketch using <code>int leds[] = {2,3,4,5,6,7};</code> and a <code>for</code> loop. The behavior is identical but the code drops from ~30 lines to ~10. That rewrite is more effective at teaching arrays than any explanation, because students can see the difference themselves.</p>
+</div>
+</section>
+
+<section id="stage3">
+<h2>Stage 3 — voice-controlled robot car</h2>
+<p>The final project. Students build a 4WD chassis, wire a motor driver (L298N-style board with IN1–IN4 control pins), connect an HC-05 Bluetooth module on pins 10/11 via <code>SoftwareSerial</code>, and add an HC-SR04 ultrasonic sensor for automatic obstacle avoidance. The phone app sends Spanish voice commands over Bluetooth: <em>avanzar</em>, <em>detener</em>, <em>atrás</em>, <em>derecha</em>, <em>izquierda</em>, and <em>automático</em>.</p>
+
+<div class="article-img">
+  <img src="classroom-robot-car-top-view.jpg" alt="Top-down view of a student-built 4WD Arduino robot car showing Arduino board, motor driver, battery pack and wiring on a white plastic chassis" loading="lazy" width="956" height="1204">
+  <div class="caption">One student's finished car — top view. Arduino at top left, motor driver board beside it, battery holder at top right. Wiring is deliberately left as-built rather than tidied for the photo.</div>
+</div>
+
+<pre><code>#include &lt;SoftwareSerial.h&gt;
+#include &lt;Servo.h&gt;
+
+SoftwareSerial BT(10, 11); // RX=10, TX=11
+String voz;
+
+int IN2 = 3;
+int IN1 = 2;
+int ENB = 1;
+
+int BIN4 = 4;
+int BIN3 = 5;
+int BENB = 6;
+
+const int Trigger = 6;
+const int Echo    = 7;
+
+void setup() {
+  pinMode(ENB,  OUTPUT);
+  pinMode(IN1,  OUTPUT);
+  pinMode(IN2,  OUTPUT);
+  pinMode(BENB, OUTPUT);
+  pinMode(BIN3, OUTPUT);
+  pinMode(BIN4, OUTPUT);
+  Serial.begin(9600);
+  pinMode(13, OUTPUT);
+  BT.begin(9600);
+  pinMode(Trigger, OUTPUT);
+  pinMode(Echo,    INPUT);
+  digitalWrite(Trigger, LOW);
+}
+
+void loop() {
+  while (BT.available()) {
+    delay(10);
+    char c = (BT.read());
+    if (c == '#') break;
+    voz += c;
+  }
+
+  if (voz.length() > 0) {
+    Serial.println(voz);
+
+    if      (voz == "avanzar")    avanzar();
+    else if (voz == "detener")    detener();
+    else if (voz == "atrás")      atras();
+    else if (voz == "derecha")    derecha();
+    else if (voz == "izquierda")  izquierda();
+    else if (voz == "automático") modoAuto();
+
+    voz = "";
+  }
+}
+
+void modoAuto() {
+  while (true) {
+    digitalWrite(Trigger, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(Trigger, LOW);
+    long t = pulseIn(Echo, HIGH);
+    long d = t / 59;
+
+    Serial.print("Distancia: "); Serial.print(d); Serial.println("cm");
+    delay(100);
+
+    if (d > 100) avanzarAUT();
+    else         detener();
+
+    // Exit auto mode if a new command arrives
+    if (BT.available()) { voz = ""; break; }
+  }
+}
+
+void avanzar()    { digitalWrite(13,HIGH); digitalWrite(IN1,HIGH); digitalWrite(IN2,LOW);
+                    digitalWrite(BIN3,HIGH); digitalWrite(BIN4,LOW); }
+void detener()    { digitalWrite(13,LOW);  analogWrite(IN1,0); analogWrite(BIN3,0); }
+void atras()      { digitalWrite(IN1,LOW); digitalWrite(IN2,HIGH);
+                    digitalWrite(BIN3,LOW); digitalWrite(BIN4,HIGH); }
+void derecha()    { digitalWrite(IN1,LOW); digitalWrite(IN2,HIGH); }
+void izquierda()  { digitalWrite(IN1,HIGH); digitalWrite(IN2,LOW); }
+void avanzarAUT() { digitalWrite(13,HIGH); digitalWrite(IN1,HIGH); digitalWrite(IN2,LOW);
+                    digitalWrite(BIN3,HIGH); digitalWrite(BIN4,LOW); }</code></pre>
+
+<p>Note: the sketch above has one fix compared to the original student file — the <code>modoAuto()</code> function replaces a recursive <code>loop()</code> call that was in the original. The recursive version worked in short demos but would eventually overflow the stack in a long run. In the classroom we discovered this during a 10-minute continuous autonomy test where two cars reset unexpectedly. The fix is to use a <code>while(true)</code> loop with a Bluetooth check for exit.</p>
+</section>
+
+<section id="pinconflict">
+<h2>The pin-conflict problem students always hit</h2>
+<p>In the voice-control sketch, pins 6 and 7 are used for the HC-SR04 Trigger and Echo. But pin 6 is also defined as <code>BENB</code> (the motor driver enable for the B channel). In the original student file both were assigned without noticing the collision — it compiled and ran because the two uses didn't overlap in time during testing, but it's a latent bug that would cause unpredictable motor behavior if the autonomous mode ran while the motor enable line was being toggled elsewhere.</p>
+<p>This is the most common class-wide bug we see every semester: students assign pins by copying example code from two different sources without checking for conflicts. The fix is simple — give each function its own pin — but finding it requires reading the whole sketch top to bottom, which students resist. We now require a pin-assignment table as part of every project submission:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Pin</th><th>Role</th><th>Direction</th></tr></thead>
+<tbody>
+<tr><td>2</td><td>IN1 — motor A direction</td><td>OUTPUT</td></tr>
+<tr><td>3</td><td>IN2 — motor A direction</td><td>OUTPUT</td></tr>
+<tr><td>4</td><td>BIN4 — motor B direction</td><td>OUTPUT</td></tr>
+<tr><td>5</td><td>BIN3 — motor B direction</td><td>OUTPUT</td></tr>
+<tr><td>6</td><td>HC-SR04 Trigger <em>(conflicts with BENB in original)</em></td><td>OUTPUT</td></tr>
+<tr><td>7</td><td>HC-SR04 Echo</td><td>INPUT</td></tr>
+<tr><td>9</td><td>LED pin (stage 1 exercise)</td><td>OUTPUT</td></tr>
+<tr><td>10</td><td>SoftwareSerial RX (Bluetooth)</td><td>INPUT</td></tr>
+<tr><td>11</td><td>SoftwareSerial TX (Bluetooth)</td><td>OUTPUT</td></tr>
+<tr><td>13</td><td>Onboard LED (status)</td><td>OUTPUT</td></tr>
+</tbody>
+</table>
+</div>
+<p>Requiring this table before any code is written has cut pin-conflict bugs by roughly half in subsequent semesters.</p>
+</section>
+
+<section id="faq">
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details>
+<summary>What Bluetooth app sends the voice commands?</summary>
+<p>Any Android app that supports voice-to-text over Bluetooth serial and appends a <code>#</code> terminator character works. We use a free app called "Arduino Bluetooth Voice Control" available on the Play Store — it matches the <code>#</code> delimiter the sketch uses to know when a command is complete.</p>
+</details>
+<details>
+<summary>Why does the car only respond to Spanish commands?</summary>
+<p>Because that's what we teach in — the class is in Spanish, the students set up the voice recognition in Spanish, and the strings in the sketch match. Changing the commands is a one-line edit per command: replace <code>"avanzar"</code> with <code>"forward"</code> etc. The logic is identical.</p>
+</details>
+<details>
+<summary>Why 100 cm as the obstacle threshold in autonomous mode?</summary>
+<p>The classroom floor has no tight corners and the cars run fast enough that 30 cm (the threshold in our earlier obstacle-avoidance project) wasn't giving enough stopping distance. 100 cm works for the classroom environment. In a tighter space you'd raise it further; in a large open area you might lower it.</p>
+</details>
+<details>
+<summary>Can this run on an Arduino Nano instead of Uno?</summary>
+<p>Yes — the pin assignments and libraries are identical. The Nano is physically smaller which helps on the chassis, but its USB connector is mini-USB (or micro on some clones) instead of the Uno's standard-B, so you'll need a different cable for programming. We use Unos in class because the connectors are more robust for daily handling.</p>
+</details>
+<details>
+<summary>What is the battery setup?</summary>
+<p>The car in the photo uses a 4×AA battery holder (6 V nominal) powering the motors through the driver board, with the Arduino powered separately via USB during testing and from a small 9 V block battery in the field. Running both from the same source causes voltage dips when the motors start that can reset the Arduino — a mistake almost every student makes at least once.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. This guide documents the actual course I teach — the sketches, the photos and the bugs are all real.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">All photos in this article were taken in my classroom. The sketches are the actual files used in the course, lightly cleaned for readability. No sponsored content or paid placements.</p>
+
+<div class="cta">
+  <h3>Continue learning</h3>
+  <p>See the first project in this series: <a href="obstacle-avoiding-robot-car-arduino">Obstacle-avoiding robot car with Arduino and an ultrasonic sensor</a> — a single-sensor build with the code and wiring documented the same way.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="obstacle-avoiding-robot-car-arduino">← Previous: Obstacle-avoiding car</a>
+  <a href="./">All tutorials →</a>
+</div>
+
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;">
+    <a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
+    <a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
+    <a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a>
+    <a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
+  </p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;">
+      <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+      <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+      <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+      <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" aria-labelledby="rel-consent-title" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 -8px 32px rgba(0,0,0,0.45);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p id="rel-consent-title" style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;color:#b5b0a6;">We use a preference cookie so this notice stays hidden. If you accept, advertising cookies may be used. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();
+</script>
+</body>
+</html>
