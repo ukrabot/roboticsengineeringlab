@@ -13,13 +13,13 @@
 <meta property="og:type" content="article" />
 <meta property="og:title" content="Robot Arm Programming Languages: Python, C++, RAPID & KRL Compared" />
 <meta property="og:description" content="A practical comparison of Python/ROS 2, C++, Structured Text, RAPID, KRL, and FANUC TP for programming 6-axis robot arms, with real code examples." />
-<meta property="og:image" content="../industrial_robot_arm.jpg" />
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/diagram-software-integration.svg" />
 <meta property="og:url" content="https://roboticsengineeringlab.com/articles/robot-arm-programming-languages" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Robot Arm Programming Languages: Python, C++, RAPID & KRL Compared" />
 <meta name="twitter:description" content="Python/ROS 2 vs C++ vs Structured Text vs vendor languages (RAPID, KRL, TP) for 6-axis robot arm programming, with code examples." />
-<meta name="twitter:image" content="../industrial_robot_arm.jpg" />
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/diagram-software-integration.svg" />
 
 <script type="application/ld+json">
 {
@@ -27,8 +27,8 @@
   "@type": "Article",
   "headline": "Programming Languages for 6-DOF Robot Arms: Python, C++, Structured Text",
   "description": "A technical comparison of programming environments for 6-axis robot arms: Python with ROS 2, C++, IEC 61131-3 Structured Text, and vendor-specific languages RAPID (ABB), KRL (KUKA), and TP (FANUC).",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
-  "reviewedBy":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen"},
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "reviewedBy":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo"},
   "datePublished": "2024-12-09",
   "dateModified": "2025-07-05",
   "publisher": {
@@ -207,6 +207,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 </head>
 <body>
 
@@ -266,7 +275,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Ask ten robotics engineers which programming language is best for a 6-axis robot arm, and you'll likely get ten different answers — and all of them could be correct, depending on the task. A research team building a novel bin-picking algorithm has completely different needs than a maintenance technician troubleshooting a stalled ABB welding cell on a Tuesday night shift. This guide breaks down the six programming environments you're most likely to encounter when working with 6-DOF robot arms in North America: Python (typically through ROS 2), C++, IEC 61131-3 Structured Text, and the three dominant proprietary vendor languages — RAPID (ABB), KRL (KUKA), and TP (FANUC).</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-ros2-control.jpg" alt="Editorial diagram of application code talking to a robot controller stack." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Editorial illustration for this article.</figcaption>
 </figure>
 
 <p>Rather than declaring a single winner, this guide explains what each language is actually good at, shows real code syntax for each, and gives you a framework for choosing the right tool for your specific project — whether that's a university research lab, a startup building a custom arm, or a Tier 1 automotive supplier running FANUC welding cells.</p>
@@ -516,7 +525,7 @@ END</div>
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 9, 2024 &middot; last reviewed July 5, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/alberto-gallardo" rel="author" style="color:#6fa3d8;"><strong>Alberto Gallardo</strong></a>, Computer Science and Robotics Teacher. Worked example: assumptions are stated so you can re-run the numbers yourself. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published December 9, 2024 &middot; last reviewed July 5, 2025</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>

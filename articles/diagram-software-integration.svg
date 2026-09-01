@@ -1,0 +1,35 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Robot arm software integration stack diagram</title>
+<desc>Schematic of a robot arm software stack from field-level PLC through motion controller to programming language SDK and simulation.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="180" x2="1600" y2="180"/><line x1="0" y1="360" x2="1600" y2="360"/>
+<line x1="0" y1="540" x2="1600" y2="540"/><line x1="0" y1="720" x2="1600" y2="720"/>
+</g>
+<!-- Stack layers -->
+<rect x="200" y="80" width="1200" height="80" rx="10" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="800" y="128" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Simulation &amp; digital twin</text>
+<text x="800" y="150" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">ROS 2 · Gazebo · Isaac Sim · RoboDK</text>
+
+<rect x="200" y="200" width="1200" height="80" rx="10" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="800" y="248" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Programming language / SDK</text>
+<text x="800" y="270" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Python · C++ · Rapid · KRL · Karel</text>
+
+<rect x="200" y="380" width="1200" height="80" rx="10" fill="#181b21" stroke="#c9a96e" stroke-width="2"/>
+<text x="800" y="428" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Motion controller</text>
+<text x="800" y="450" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Trajectory generation · IK · Safety functions</text>
+
+<rect x="200" y="560" width="1200" height="80" rx="10" fill="#181b21" stroke="#c9a96e" stroke-width="1.5"/>
+<text x="800" y="608" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">PLC / fieldbus</text>
+<text x="800" y="630" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">PROFINET · EtherNet/IP · EtherCAT</text>
+
+<rect x="200" y="740" width="1200" height="80" rx="10" fill="#181b21" stroke="#3d4046" stroke-width="1.5"/>
+<text x="800" y="788" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Robot hardware</text>
+<text x="800" y="810" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Servo drives · Encoders · I/O modules</text>
+
+<!-- Connector lines -->
+<line x1="800" y1="160" x2="800" y2="198" stroke="#3d4046" stroke-width="2"/>
+<line x1="800" y1="282" x2="800" y2="378" stroke="#3d4046" stroke-width="2" stroke-dasharray="5 4"/>
+<line x1="800" y1="462" x2="800" y2="558" stroke="#3d4046" stroke-width="2"/>
+<line x1="800" y1="642" x2="800" y2="738" stroke="#3d4046" stroke-width="2"/>
+</svg>

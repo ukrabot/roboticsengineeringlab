@@ -1,0 +1,50 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Industrial robot arm specification comparison</title>
+<desc>Schematic showing four industrial robot arm silhouettes representing different manufacturers, with payload and reach comparison bars.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="225" x2="1600" y2="225"/><line x1="0" y1="450" x2="1600" y2="450"/>
+<line x1="0" y1="675" x2="1600" y2="675"/><line x1="400" y1="0" x2="400" y2="900"/>
+<line x1="800" y1="0" x2="800" y2="900"/><line x1="1200" y1="0" x2="1200" y2="900"/>
+</g>
+<!-- Arm silhouettes: 4 simplified robot arm shapes -->
+<g stroke="#c9a96e" stroke-width="3" fill="none">
+  <line x1="200" y1="700" x2="200" y2="550"/><circle cx="200" cy="550" r="18" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="200" y1="550" x2="280" y2="400"/><circle cx="280" cy="400" r="14" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="280" y1="400" x2="320" y2="280"/><circle cx="320" cy="280" r="12" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="320" y1="280" x2="350" y2="200"/>
+</g>
+<g stroke="#78a6e8" stroke-width="3" fill="none">
+  <line x1="600" y1="700" x2="600" y2="540"/><circle cx="600" cy="540" r="18" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="600" y1="540" x2="700" y2="380"/><circle cx="700" cy="380" r="14" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="700" y1="380" x2="740" y2="260"/><circle cx="740" cy="260" r="12" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="740" y1="260" x2="770" y2="180"/>
+</g>
+<g stroke="#c9a96e" stroke-width="3" fill="none" opacity=".7">
+  <line x1="1000" y1="700" x2="1000" y2="560"/><circle cx="1000" cy="560" r="18" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="1000" y1="560" x2="1080" y2="420"/><circle cx="1080" cy="420" r="14" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="1080" y1="420" x2="1110" y2="300"/><circle cx="1110" cy="300" r="12" fill="#181b21" stroke="#c9a96e"/>
+  <line x1="1110" y1="300" x2="1130" y2="220"/>
+</g>
+<g stroke="#78a6e8" stroke-width="3" fill="none" opacity=".7">
+  <line x1="1400" y1="700" x2="1400" y2="545"/><circle cx="1400" cy="545" r="18" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="1400" y1="545" x2="1490" y2="390"/><circle cx="1490" cy="390" r="14" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="1490" y1="390" x2="1520" y2="270"/><circle cx="1520" cy="270" r="12" fill="#181b21" stroke="#78a6e8"/>
+  <line x1="1520" y1="270" x2="1540" y2="195"/>
+</g>
+<!-- Base plates -->
+<rect x="160" y="700" width="80" height="16" rx="4" fill="#3d4046"/>
+<rect x="560" y="700" width="80" height="16" rx="4" fill="#3d4046"/>
+<rect x="960" y="700" width="80" height="16" rx="4" fill="#3d4046"/>
+<rect x="1360" y="700" width="80" height="16" rx="4" fill="#3d4046"/>
+<!-- Labels -->
+<text x="200" y="760" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="24">Large payload</text>
+<text x="200" y="788" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="16">≥ 100 kg</text>
+<text x="600" y="760" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="24">Mid-range</text>
+<text x="600" y="788" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="16">20 – 80 kg</text>
+<text x="1000" y="760" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="24">Collaborative</text>
+<text x="1000" y="788" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="16">≤ 35 kg</text>
+<text x="1400" y="760" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="24">Compact cobot</text>
+<text x="1400" y="788" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="16">≤ 16 kg</text>
+<text x="800" y="60" text-anchor="middle" fill="#b0ab9f" font-family="Inter,sans-serif" font-size="18">Specification comparison — industrial robot arm classes</text>
+</svg>

@@ -8,7 +8,7 @@
 
 <meta name="description" content="A practical comparison of Raspberry Pi, Arduino Mega, and ESP32 as robot arm controllers: real-time PWM handling, power draw, cost, and when a hybrid architecture makes more sense than any single board." />
 
-<meta name="author" content="Marcus Chen" />
+<meta name="author" content="Alberto Gallardo" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/robot-arm-controller-comparison" />
 
@@ -30,7 +30,7 @@
   "@type": "TechArticle",
   "headline": "Raspberry Pi vs Arduino vs ESP32: Choosing a Controller for Your Robot Arm",
   "description": "A practical comparison of Raspberry Pi, Arduino Mega, and ESP32 as robot arm controllers, covering real-time PWM handling, power draw, cost, and hybrid architectures.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -206,6 +206,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 </head>
 <body>
 
@@ -307,7 +316,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="pullquote">
 <blockquote>"The question isn't which board wins — it's which half of the job each one is actually good at, and whether your project needs both halves."</blockquote>
-<cite>— Marcus Chen, Robotics Engineer</cite>
+<cite>— Alberto Gallardo, Computer Science and Robotics Teacher</cite>
 </div>
 
 <h2 id="cost">Cost Comparison</h2>
@@ -345,7 +354,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="author-box">
 <div class="avatar" aria-hidden="true">MC</div>
 <div>
-<p><strong>Written by Marcus Chen</strong>, Robotics Engineer. The hybrid architecture described here is what I settled on after running into the software-PWM jitter issue firsthand. <a href="../about">More about me and this site →</a></p>
+<p><strong>Written by Alberto Gallardo</strong>, Computer Science and Robotics Teacher. The hybrid architecture described here is what I settled on after running into the software-PWM jitter issue firsthand. <a href="../about">More about me and this site →</a></p>
 <p>Power draw and PWM channel figures are representative; always verify against your specific board revision's datasheet before finalizing a design.</p>
 </div>
 </div>
@@ -377,7 +386,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Specification note: figures transcribed from manufacturer documentation, not a bench test. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published October 9, 2025 &middot; last reviewed March 31, 2026</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/alberto-gallardo" rel="author" style="color:#6fa3d8;"><strong>Alberto Gallardo</strong></a>, Computer Science and Robotics Teacher. Specification note: figures transcribed from manufacturer documentation, not a bench test. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published October 9, 2025 &middot; last reviewed March 31, 2026</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>

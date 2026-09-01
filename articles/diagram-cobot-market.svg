@@ -1,0 +1,43 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Collaborative robot market overview diagram</title>
+<desc>Schematic showing the spectrum from traditional industrial robots to collaborative robots, with human-robot interaction zone in the centre.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="300" x2="1600" y2="300"/><line x1="0" y1="600" x2="1600" y2="600"/>
+<line x1="533" y1="0" x2="533" y2="900"/><line x1="1066" y1="0" x2="1066" y2="900"/>
+</g>
+<!-- Spectrum bar -->
+<defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0%" stop-color="#3d4046"/><stop offset="50%" stop-color="#c9a96e" stop-opacity=".4"/>
+  <stop offset="100%" stop-color="#78a6e8" stop-opacity=".5"/>
+</linearGradient></defs>
+<rect x="100" y="400" width="1400" height="60" rx="8" fill="url(#sg)"/>
+<text x="800" y="395" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="16">Speed / payload spectrum</text>
+<!-- Industrial side -->
+<rect x="80" y="180" width="260" height="180" rx="12" fill="#181b21" stroke="#3d4046" stroke-width="1.5"/>
+<text x="210" y="242" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Industrial</text>
+<text x="210" y="268" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">High speed</text>
+<text x="210" y="290" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">High payload</text>
+<text x="210" y="312" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Fenced cell</text>
+<!-- Cobot centre -->
+<rect x="620" y="150" width="360" height="240" rx="14" fill="#181b21" stroke="#c9a96e" stroke-width="2"/>
+<text x="800" y="218" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="26">Collaborative</text>
+<text x="800" y="248" text-anchor="middle" fill="#c9a96e" font-family="Inter,sans-serif" font-size="16">ISO/TS 15066</text>
+<text x="800" y="274" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Force-limited · Shared space</text>
+<text x="800" y="298" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Certifiable safety functions</text>
+<!-- Future side -->
+<rect x="1260" y="180" width="260" height="180" rx="12" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="1390" y="242" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Next-gen</text>
+<text x="1390" y="268" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">AI-guided</text>
+<text x="1390" y="290" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Vision + force</text>
+<text x="1390" y="312" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Unstructured env.</text>
+<!-- Arrows -->
+<line x1="340" y1="270" x2="618" y2="270" stroke="#3d4046" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="982" y1="270" x2="1258" y2="270" stroke="#3d4046" stroke-width="2" marker-end="url(#ar)"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+  <path d="M2 1L8 5L2 9" fill="none" stroke="#3d4046" stroke-width="1.5" stroke-linecap="round"/>
+</marker></defs>
+<!-- Market size labels -->
+<text x="800" y="680" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="20">Global cobot market growing ~20 % CAGR through 2030 (IFR)</text>
+<text x="800" y="710" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Figures from public IFR and manufacturer documentation — not independently verified by this site</text>
+</svg>

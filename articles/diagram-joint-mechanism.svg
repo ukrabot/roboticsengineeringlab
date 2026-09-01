@@ -1,0 +1,46 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Robot arm joint mechanism cross-section diagram</title>
+<desc>Schematic cross-section of a robot arm joint showing motor, encoder, reduction gearing and output shaft.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="225" x2="1600" y2="225"/><line x1="0" y1="675" x2="1600" y2="675"/>
+<line x1="533" y1="0" x2="533" y2="900"/><line x1="1066" y1="0" x2="1066" y2="900"/>
+</g>
+<!-- Motor -->
+<rect x="160" y="280" width="280" height="340" rx="16" fill="#181b21" stroke="#c9a96e" stroke-width="2"/>
+<rect x="200" y="320" width="200" height="260" rx="8" fill="#0f1218" stroke="#3d4046" stroke-width="1"/>
+<text x="300" y="420" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Motor</text>
+<text x="300" y="448" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">BLDC / servo</text>
+<circle cx="300" cy="510" r="30" fill="#0b0e14" stroke="#c9a96e" stroke-width="2"/>
+<circle cx="300" cy="510" r="10" fill="#c9a96e"/>
+<text x="300" y="582" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Output shaft</text>
+<!-- Encoder -->
+<rect x="520" y="320" width="220" height="260" rx="12" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="630" y="420" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="20">Encoder</text>
+<text x="630" y="448" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Absolute / incremental</text>
+<circle cx="630" cy="510" r="24" fill="#0b0e14" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="630" y="515" text-anchor="middle" fill="#78a6e8" font-family="Inter,sans-serif" font-size="12">PPR</text>
+<!-- Reduction -->
+<rect x="820" y="260" width="280" height="380" rx="16" fill="#181b21" stroke="#c9a96e" stroke-width="2"/>
+<text x="960" y="380" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Reduction</text>
+<text x="960" y="408" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Harmonic / cycloidal</text>
+<text x="960" y="436" text-anchor="middle" fill="#c9a96e" font-family="Inter,sans-serif" font-size="15">50:1 – 160:1</text>
+<!-- Gear rings -->
+<circle cx="960" cy="520" r="60" fill="none" stroke="#c9a96e" stroke-width="2"/>
+<circle cx="960" cy="520" r="40" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="6 4"/>
+<circle cx="960" cy="520" r="14" fill="#c9a96e"/>
+<!-- Output flange -->
+<rect x="1180" y="350" width="220" height="200" rx="12" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="1290" y="430" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="20">Output</text>
+<text x="1290" y="458" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Flange / link</text>
+<rect x="1220" y="472" width="140" height="40" rx="6" fill="#0b0e14" stroke="#78a6e8" stroke-width="1"/>
+<text x="1290" y="498" text-anchor="middle" fill="#78a6e8" font-family="Inter,sans-serif" font-size="13">High torque out</text>
+<!-- Connecting arrows -->
+<line x1="440" y1="450" x2="518" y2="450" stroke="#3d4046" stroke-width="2"/>
+<polygon points="518,445 518,455 528,450" fill="#3d4046"/>
+<line x1="740" y1="450" x2="818" y2="450" stroke="#3d4046" stroke-width="2"/>
+<polygon points="818,445 818,455 828,450" fill="#3d4046"/>
+<line x1="1100" y1="450" x2="1178" y2="450" stroke="#3d4046" stroke-width="2"/>
+<polygon points="1178,445 1178,455 1188,450" fill="#3d4046"/>
+<text x="800" y="800" text-anchor="middle" fill="#b0ab9f" font-family="Inter,sans-serif" font-size="16">Joint mechanism — motor · encoder · reduction gearing · output</text>
+</svg>

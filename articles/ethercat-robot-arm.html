@@ -6,7 +6,7 @@
 
 <title>EtherCAT Robot Arm Control: Real-Time Multi-Axis Master</title>
 <meta name="description" content="EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring." />
-<meta name="author" content="Marcus Chen" />
+<meta name="author" content="Alberto Gallardo" />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/ethercat-robot-arm" />
 <meta name="theme-color" content="#0b0e14" />
@@ -40,9 +40,9 @@
   "description": "EtherCAT robot arm control guide: configure an RT-PREEMPT master, CiA 402 CSP mode, PDO mapping, distributed clocks, and multi-axis servo drive wiring.",
   "author": {
     "@type": "Person",
-    "name": "Marcus Chen",
-    "url": "https://roboticsengineeringlab.com/author/marcus-chen",
-    "jobTitle": "Robotics Engineer and Editor",
+    "name": "Alberto Gallardo",
+    "url": "https://roboticsengineeringlab.com/author/alberto-gallardo",
+    "jobTitle": "Computer Science and Robotics Teacher",
     "worksFor": {
       "@type": "Organization",
       "name": "Robotics Engineering Lab"
@@ -211,6 +211,15 @@ tr:last-child td { border-bottom:none; }
 .footer-nav { display:flex; justify-content:space-between; margin-top:40px; padding-top:20px; border-top:1px solid var(--border); }
 .back-link { color:var(--accent-2); text-decoration:none; font-size:0.88rem; }
 </style>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 </head>
 
 <body>
@@ -225,7 +234,7 @@ tr:last-child td { border-bottom:none; }
 <img class="hero-bg" src="../ros2_robot_control.jpg" alt="An industrial robot arm controller running a real-time EtherCAT master network connected to multi-axis servo drives" loading="eager" decoding="async" width="1536" height="1024" />
 <div class="hero-inner"><div class="hero-badge" aria-label="Category"><span class="line" aria-hidden="true"></span> Industrial Automation &amp; Safety &mdash; Published August 30, 2026</div>
 <h1>EtherCAT Multi-Axis Robot Arm Control: Real-Time Master Setup &amp; CiA 402 Commissioning</h1><p class="hero-sub">A step-by-step commissioning tutorial for configuring an RT-PREEMPT Linux master, CiA 402 Cyclic Synchronous Position (CSP) mode, Distributed Clocks synchronization, and multi-axis servo drive integration for 6-DOF robot arms.</p>
-<div class="hero-meta"><time datetime="2026-08-30">August 30, 2026</time><span>&middot;</span><span>18 min read</span><span>&middot;</span><span>By Marcus Chen</span></div>
+<div class="hero-meta"><time datetime="2026-08-30">August 30, 2026</time><span>&middot;</span><span>18 min read</span><span>&middot;</span><span>By Alberto Gallardo</span></div>
 </div></header>
 
 <main class="article-container">
@@ -804,7 +813,7 @@ return_type EthercatRobotHardware::write(const rclcpp::Time &amp; /*time*/, cons
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
 <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Component values and specifications come from published ETG/CiA standards and official manufacturer documentation; no equipment named here was bench-tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 30, 2026 &middot; last reviewed August 30, 2026</span></p></aside>
+<p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/alberto-gallardo" rel="author" style="color:#6fa3d8;"><strong>Alberto Gallardo</strong></a>, Computer Science and Robotics Teacher. Component values and specifications come from published ETG/CiA standards and official manufacturer documentation; no equipment named here was bench-tested by this site. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published August 30, 2026 &middot; last reviewed August 30, 2026</span></p></aside>
 
 <div class="footer-nav" aria-label="Article navigation"><a href="./" class="back-link" aria-label="Back to tutorial library">&#8592; Back to all tutorials</a><a href="../contact" class="back-link" aria-label="Contact the editors">Report a correction &#8594;</a></div>
 </div>

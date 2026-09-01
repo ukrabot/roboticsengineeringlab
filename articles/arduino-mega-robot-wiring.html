@@ -9,7 +9,7 @@
 
 <meta name="description" content="Complete wiring diagrams for Arduino Mega 2560 with up to 16 smart servos: bus topology, current budget calculations, wire gauge, and power supply sizing for DIY robot arms." />
 
-<meta name="author" content="Marcus Chen" />
+<meta name="author" content="Alberto Gallardo" />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-mega-robot-wiring" />
 
@@ -31,7 +31,7 @@
   "@type": "TechArticle",
   "headline": "Arduino Mega Wiring Guide for 6-DOF Robot Arms with Smart Servos",
   "description": "Complete wiring diagrams for Arduino Mega 2560 with up to 16 smart servos, covering bus topology, current budget calculations, wire gauge selection, and power supply sizing for DIY robot arm builds.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher": {
     "@type": "Organization",
     "name": "Robotics Engineering Blog",
@@ -212,6 +212,15 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 </head>
 <body>
 
@@ -262,7 +271,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <p>Anyone who has wired a 6-axis robot arm using individual PWM connections to a standard hobby servo knows the problem: six signal wires, six power wires, and a rat's nest of connectors converging on the controller board before the arm has even been assembled. Smart servos (models with an onboard microcontroller supporting TTL or RS485 serial communication, such as the Feetech STS/SCS series) solve this by daisy-chaining on a shared bus, where a single pair of signal wires and a shared power rail can address every servo in the chain individually by ID.</p>
 <figure class="editorial-illustration" style="margin:32px 0 44px;">
   <img src="diagram-arduino-servo-power.jpg" alt="Conceptual wiring architecture for an Arduino Mega and a shared smart-servo power bus." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration. Conceptual diagram; dimensions, ratings and wiring must be validated against the selected components.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Editorial illustration. Validate dimensions and ratings against your selected components.</figcaption>
 </figure>
 
 <p>An Arduino Mega 2560 is the natural controller choice for this approach in the hobbyist and educational space: its 54 digital I/O pins and 8KB of SRAM comfortably handle a 16-servo bus plus additional sensors, limit switches, or a simple end-effector, while remaining inexpensive and well documented compared to industrial alternatives.</p>
@@ -338,7 +347,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <div class="pullquote">
 <blockquote>"The number one point of failure in DIY smart-servo arms isn't the code or the mechanics — it's a power supply sized for the servo's average draw instead of its actual peak, discovered the hard way during the first fast multi-joint move."</blockquote>
-<cite>— Marcus Chen, Robotics Engineer</cite>
+<cite>— Alberto Gallardo, Computer Science and Robotics Teacher</cite>
 </div>
 
 <h2 id="cost-breakdown">Full Build Cost Breakdown</h2>
@@ -385,7 +394,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 <div class="author-box">
 <div class="avatar" aria-hidden="true">MC</div>
 <div>
-<p><strong>Written by Marcus Chen</strong>, Robotics Engineer. I built and debugged the smart-servo bus described in this guide on my own 6-axis arm project, including the power supply failure noted above. <a href="../about">More about me and this site →</a></p>
+<p><strong>Written by Alberto Gallardo</strong>, Computer Science and Robotics Teacher. I built and debugged the smart-servo bus described in this guide on my own 6-axis arm project, including the power supply failure noted above. <a href="../about">More about me and this site →</a></p>
 <p>Current budget calculations use representative stall current figures; always verify against your specific servo model's datasheet before finalizing a power supply purchase.</p>
 </div>
 </div>
@@ -417,7 +426,7 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published April 23, 2024 &middot; last reviewed June 7, 2024</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/alberto-gallardo" rel="author" style="color:#6fa3d8;"><strong>Alberto Gallardo</strong></a>, Computer Science and Robotics Teacher. Hands-on guide: the procedure described was followed end to end before publishing. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published April 23, 2024 &middot; last reviewed June 7, 2024</span></p>
 </aside>
 <div class="footer-nav" aria-label="Article navigation">
 <div>

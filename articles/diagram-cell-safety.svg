@@ -1,0 +1,38 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Robot cell safety layout diagram</title>
+<desc>Top-down schematic of a robot work cell showing safety perimeter, light curtain, emergency stop zones and end-effector tool.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="225" x2="1600" y2="225"/><line x1="0" y1="675" x2="1600" y2="675"/>
+<line x1="400" y1="0" x2="400" y2="900"/><line x1="1200" y1="0" x2="1200" y2="900"/>
+</g>
+<!-- Safety perimeter (dashed) -->
+<rect x="300" y="120" width="1000" height="660" rx="20" fill="none" stroke="#c9a96e" stroke-width="2" stroke-dasharray="14 7"/>
+<!-- Robot work envelope (circle) -->
+<circle cx="800" cy="450" r="240" fill="#c9a96e" fill-opacity=".06" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="6 4"/>
+<!-- Robot body -->
+<circle cx="800" cy="450" r="36" fill="#181b21" stroke="#c9a96e" stroke-width="2.5"/>
+<text x="800" y="456" text-anchor="middle" fill="#c9a96e" font-family="Inter,sans-serif" font-size="14" font-weight="600">R</text>
+<!-- Robot arm stick -->
+<line x1="800" y1="450" x2="920" y2="340" stroke="#c9a96e" stroke-width="6" stroke-linecap="round"/>
+<circle cx="920" cy="340" r="16" fill="#181b21" stroke="#c9a96e" stroke-width="2"/>
+<line x1="920" y1="340" x2="990" y2="290" stroke="#c9a96e" stroke-width="4" stroke-linecap="round"/>
+<!-- End effector -->
+<rect x="986" y="278" width="28" height="22" rx="4" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<!-- Light curtain (left) -->
+<g stroke="#78a6e8" stroke-width="2">
+<line x1="302" y1="140" x2="302" y2="760"/>
+<line x1="320" y1="140" x2="320" y2="760"/>
+<line x1="302" y1="140" x2="320" y2="140"/>
+<line x1="302" y1="760" x2="320" y2="760"/>
+</g>
+<text x="260" y="458" text-anchor="middle" fill="#78a6e8" font-family="Inter,sans-serif" font-size="14" transform="rotate(-90,260,458)">Light curtain</text>
+<!-- E-stop markers -->
+<rect x="380" y="750" width="80" height="38" rx="6" fill="#181b21" stroke="#e24b4a" stroke-width="2"/>
+<text x="420" y="774" text-anchor="middle" fill="#e24b4a" font-family="Inter,sans-serif" font-size="14" font-weight="700">E-STOP</text>
+<rect x="1140" y="750" width="80" height="38" rx="6" fill="#181b21" stroke="#e24b4a" stroke-width="2"/>
+<text x="1180" y="774" text-anchor="middle" fill="#e24b4a" font-family="Inter,sans-serif" font-size="14" font-weight="700">E-STOP</text>
+<!-- Labels -->
+<text x="800" y="760" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="15">Work envelope · Safety perimeter · Light curtain · Emergency stops</text>
+<text x="800" y="840" text-anchor="middle" fill="#b0ab9f" font-family="Inter,sans-serif" font-size="16">Robot cell safety layout — ISO 10218 / ANSI-RIA R15.06</text>
+</svg>

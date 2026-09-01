@@ -1,0 +1,46 @@
+<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Robot arm operations lifecycle diagram</title>
+<desc>Schematic showing the four phases of robot arm operations: installation, commissioning, maintenance, and end of life.</desc>
+<rect width="1600" height="900" fill="#0b0e14"/>
+<g stroke="#1c2028" stroke-width="1">
+<line x1="0" y1="300" x2="1600" y2="300"/><line x1="0" y1="600" x2="1600" y2="600"/>
+</g>
+<!-- Timeline bar -->
+<rect x="100" y="430" width="1400" height="40" rx="6" fill="#181b21" stroke="#3d4046" stroke-width="1"/>
+<!-- Phase markers -->
+<circle cx="280"  cy="450" r="16" fill="#c9a96e"/>
+<circle cx="640"  cy="450" r="16" fill="#c9a96e" opacity=".8"/>
+<circle cx="1000" cy="450" r="16" fill="#78a6e8"/>
+<circle cx="1360" cy="450" r="16" fill="#78a6e8" opacity=".6"/>
+<!-- Phase boxes -->
+<rect x="140" y="180" width="280" height="200" rx="12" fill="#181b21" stroke="#c9a96e" stroke-width="1.5"/>
+<text x="280" y="248" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Install</text>
+<text x="280" y="276" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Mechanical mounting</text>
+<text x="280" y="298" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Electrical integration</text>
+<text x="280" y="320" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Safety perimeter</text>
+<line x1="280" y1="380" x2="280" y2="432" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+<rect x="500" y="160" width="280" height="220" rx="12" fill="#181b21" stroke="#c9a96e" stroke-width="1.5"/>
+<text x="640" y="228" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Commission</text>
+<text x="640" y="256" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Calibration</text>
+<text x="640" y="278" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Program & test</text>
+<text x="640" y="300" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Risk assessment</text>
+<text x="640" y="322" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Operator training</text>
+<line x1="640" y1="380" x2="640" y2="432" stroke="#c9a96e" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+<rect x="860" y="180" width="280" height="200" rx="12" fill="#181b21" stroke="#78a6e8" stroke-width="1.5"/>
+<text x="1000" y="248" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Maintain</text>
+<text x="1000" y="276" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Lubrication schedule</text>
+<text x="1000" y="298" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Predictive inspection</text>
+<text x="1000" y="320" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Fault logging</text>
+<line x1="1000" y1="380" x2="1000" y2="432" stroke="#78a6e8" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+<rect x="1220" y="180" width="280" height="200" rx="12" fill="#181b21" stroke="#78a6e8" stroke-width="1.5" opacity=".7"/>
+<text x="1360" y="248" text-anchor="middle" fill="#f2f0eb" font-family="Georgia,serif" font-size="22">Retire / Upgrade</text>
+<text x="1360" y="276" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">End-of-life plan</text>
+<text x="1360" y="298" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Used-arm resale</text>
+<text x="1360" y="320" text-anchor="middle" fill="#77736e" font-family="Inter,sans-serif" font-size="14">Refurbishment</text>
+<line x1="1360" y1="380" x2="1360" y2="432" stroke="#78a6e8" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+<text x="800" y="800" text-anchor="middle" fill="#b0ab9f" font-family="Inter,sans-serif" font-size="16">Robot arm lifecycle — install · commission · maintain · retire</text>
+</svg>

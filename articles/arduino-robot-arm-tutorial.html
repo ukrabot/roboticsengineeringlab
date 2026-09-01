@@ -6,7 +6,7 @@
 
 <title>Build a 6-DOF Robot Arm with Arduino: Full Tutorial</title>
 <meta name="description" content="Learn to build a 6-DOF Arduino robot arm: servo wiring, PCA9685 setup, calibration, inverse kinematics, code examples and safety tips.">
-<meta name="author" content="Marcus Chen">
+<meta name="author" content="Alberto Gallardo">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial">
 
@@ -28,7 +28,7 @@
   "@type":"TechArticle",
   "headline":"How to Build a 6-DOF Robot Arm with Arduino: Wiring, Code and Inverse Kinematics",
   "description":"A practical guide to building and calibrating a six-degree-of-freedom Arduino robot arm with hobby servos and 3D-printed parts.",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{
     "@type":"Organization",
     "name":"Robotics Engineering Blog",
@@ -38,7 +38,7 @@
   "datePublished":"2024-03-09",
   "dateModified":"2024-07-08",
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-robot-arm-tutorial"},
-  "image":"https://roboticsengineeringlab.com/industrial_robot_arm.jpg",
+  "image":"https://roboticsengineeringlab.com/articles/diagram-6dof-kinematics.svg",
   "proficiencyLevel":"Intermediate",
   "dependencies":"Arduino Mega 2560, PCA9685 servo driver, six compatible servos, external 5-8.4 V servo power supply",
   "wordCount":"2400"
@@ -99,6 +99,15 @@
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 </head>
 <body>
 
@@ -121,7 +130,7 @@
     <div class="eyebrow">Robotics tutorial · Updated <time datetime="2024-07-08">July 8, 2024</time></div>
     <h1>How to Build a 6-DOF Robot Arm with Arduino</h1>
     <p>A practical guide to mechanical layout, servo power, PCA9685 wiring, calibration and inverse kinematics for a lightweight educational robot arm — written as a practical educational build: power, wiring, calibration and inverse kinematics, with the failure modes that usually stop a first arm.</p>
-    <p class="byline">By <a href="../about">Marcus Chen</a>, Robotics Engineer · 14 min read</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 14 min read</p>
   </div>
 </header>
 
@@ -158,7 +167,7 @@
 
 <figure class="editorial-illustration" style="margin:32px 0 44px;">
   <img src="diagram-6dof-kinematics.svg" alt="Conceptual coordinate frames and joint axes for a six-degree-of-freedom robot arm." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration. Conceptual diagram; material choices, dimensions and safety limits require project-specific validation.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Editorial illustration. Material choices, dimensions and safety limits require project-specific validation.</figcaption>
 </figure>
 
 <p>The design uses six position-controlled servos: base yaw, shoulder pitch, elbow pitch, wrist pitch, wrist yaw and wrist roll. A gripper can be driven by the wrist-roll channel only if the mechanical design allows it; otherwise use a seventh actuator or replace one wrist axis. Define this detail before ordering parts because "six axes" and "six actuators plus a gripper" are not always the same thing — I ordered servos for my first build before deciding this and ended up short one channel on the driver board.</p>
@@ -331,7 +340,7 @@ void loop() {
   <div class="avatar" aria-hidden="true">MC</div>
   <div>
     <h3>About the author</h3>
-    <p><strong>Marcus Chen</strong> is a robotics engineer specializing in low-cost automation and educational robot platforms. He has built and calibrated multiple Arduino and ROS-based robot arms for prototyping and STEM training, including the six-servo prototype documented in this tutorial. <a href="../about">More about Marcus →</a></p>
+    <p><strong>Alberto Gallardo</strong> is a Computer Science and Robotics teacher. He builds and tests the Arduino and sensor projects published on this site in an educational setting. <a href="../author/alberto-gallardo">More about Alberto →</a></p>
   </div>
 </div>
 

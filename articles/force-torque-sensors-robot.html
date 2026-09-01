@@ -34,7 +34,7 @@
   "headline":"Force-Torque Sensors for Robot Arms: Selection, Calibration and ROS 2 Integration",
   "description":"Technical guide to six-axis force-torque sensing, selection, calibration, filtering and ROS 2 integration on robot arms.",
   "image":"https://roboticsengineeringlab.com/ros2_robot_control.jpg",
-  "author":{"@type":"Person","name":"Marcus Chen","url":"https://roboticsengineeringlab.com/author/marcus-chen","jobTitle":"Robotics Engineer and Editor","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
   "publisher":{"@type":"Organization","name":"Robotics Engineering"},
   "datePublished":"2025-02-09",
   "dateModified":"2025-08-01",
@@ -71,6 +71,15 @@
   })();
 </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your real Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+</script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -111,7 +120,7 @@
 <p>A force-torque sensor gives a robot arm information that position alone cannot provide. Instead of only knowing where the tool should be, the controller can estimate how strongly the tool is pressing, pulling or twisting against an object. That capability is useful for insertion, polishing, deburring, surface following, grasp verification and research. It also introduces new failure modes: a bad zero, an incorrect coordinate frame, vibration, cable forces or a poorly tuned controller can make the robot behave worse than a position-only system.</p>
 <figure class="editorial-illustration" style="margin:28px 0 40px;">
   <img src="diagram-payload-calculator.jpg" alt="Editorial diagram of wrist load, tool offset and moment at the flange." loading="lazy" width="1600" height="900" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.12);display:block;">
-  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Original editorial illustration for this article. Conceptual diagram &mdash; illustrates relationships, not dimensioned geometry.</figcaption>
+  <figcaption style="font-size:.8rem;color:#8d8a85;margin-top:9px;">Editorial illustration for this article.</figcaption>
 </figure>
 
 <div class="article-img"><img src="../ros2_robot_control.jpg" alt="Robot arm control workstation with force-torque sensing and ROS 2 integration" width="1024" height="1536" loading="lazy" decoding="async"><div class="caption">Force sensing should be treated as part of a complete mechanical, electrical, software and safety architecture.</div></div>
@@ -165,7 +174,7 @@ ros2 run tf2_ros tf2_echo base_link ft_sensor</code></pre>
 
 <aside class="rel-author" style="display:flex;gap:14px;align-items:flex-start;margin:40px 0 12px;padding:18px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);">
   <div aria-hidden="true" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e4c07a,#6fa3d8);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:700;color:#1a1408;">MC</div>
-  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/marcus-chen" rel="author" style="color:#6fa3d8;"><strong>Marcus Chen</strong></a>, robotics engineer and editor of Robotics Engineering Lab. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published February 9, 2025 &middot; last reviewed August 1, 2025</span></p>
+  <p style="margin:0;color:#b5b0a6;font-size:.88rem;line-height:1.55;">Written and edited by <a href="../author/alberto-gallardo" rel="author" style="color:#6fa3d8;"><strong>Alberto Gallardo</strong></a>, Computer Science and Robotics Teacher. Worked example: the code and calculations here were run before publication. <a href="../editorial-standards" style="color:#6fa3d8;">How we label content &rarr;</a><br><span style="color:#6e677a;font-size:.82rem;">Published February 9, 2025 &middot; last reviewed August 1, 2025</span></p>
 </aside>
 <div class="footer-nav"><a href="magnetic-gripper-robot">← Previous: Magnetic gripper design</a><a href="joint-encoders-robot-arm">Next: Joint encoders for robot arms →</a></div>
 </main>
