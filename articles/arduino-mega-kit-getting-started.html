@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Arduino Mega Kit: What's Inside and Your First Three Projects</title>
+<meta name="description" content="A real Arduino Mega starter kit unpacked and tested — what each component does, which ones beginners should start with, and three first projects including a 6-LED sequence. Real photo, real code, honest notes.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-mega-kit-getting-started">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arduino Mega Kit: What's Inside and Your First Three Projects">
+<meta property="og:description" content="Real Arduino Mega starter kit unpacked and tested. What each component does, which to start with, and three beginner projects with real code.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/arduino-mega-kit-components.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-mega-kit-getting-started">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arduino Mega Kit: What's Inside and Your First Three Projects">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/arduino-mega-kit-components.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Arduino Mega Kit: What's Inside and Your First Three Projects",
+  "description":"A real Arduino Mega starter kit unpacked and tested — what each component does, which ones beginners should start with, and three first projects including a 6-LED sequence with real code.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-09-02",
+  "dateModified":"2026-09-02",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-mega-kit-getting-started"},
+  "image":"https://roboticsengineeringlab.com/articles/arduino-mega-kit-components.jpg",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Mega 2560, breadboard, LEDs, resistors, push button, rain sensor, I2C module, LCD 16x2, 9V battery connector",
+  "wordCount":"1600"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+    {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+    {"@type":"ListItem","position":3,"name":"Arduino Mega Kit Getting Started","item":"https://roboticsengineeringlab.com/articles/arduino-mega-kit-getting-started"}
+  ]
+}
+</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,4rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;margin:58px 0 16px}.article-body h3{font-size:1.18rem;margin:32px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 42px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:480px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.6rem}.author-box{flex-direction:column}}
+</style>
+<script>
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});
+  (function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();
+</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="arduino-mega-kit-components.jpg" alt="Arduino Mega 2560 kit laid out on a table showing the board, breadboard, LEDs, rain sensor, I2C module, LCD display, button and 9V battery connector" fetchpriority="high" width="956" height="1274" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Beginner guide · Published <time datetime="2026-09-02">September 2, 2026</time></div>
+    <h1>Arduino Mega Kit: What's Inside and Your First Three Projects</h1>
+    <p>I unpacked this kit in class and photographed every component before we touched anything. Here's what each part actually does, which ones a complete beginner should ignore for now, and the first three projects to run in order.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 9 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="article-img">
+  <img src="arduino-mega-kit-components.jpg" alt="Full Arduino Mega 2560 kit contents spread on a white surface: the Mega board, solderless breadboard, assorted LEDs in a compartment box, rain sensor, I2C interface module, 16x2 LCD, push button, 9V battery clip and several sensor modules still in anti-static bags" loading="lazy" width="956" height="1274">
+  <div class="caption">The full kit contents before anything is opened. Photo taken in the classroom before the first session with this hardware.</div>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#whats-inside">What's in the kit — component by component</a></li>
+    <li><a href="#mega-vs-uno">Why Mega instead of Uno for this kit</a></li>
+    <li><a href="#start-order">Which components to start with (and which to skip)</a></li>
+    <li><a href="#project1">Project 1 — single LED blink</a></li>
+    <li><a href="#project2">Project 2 — 6-LED sequence</a></li>
+    <li><a href="#project3">Project 3 — button-controlled LED</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ol>
+</div>
+
+<section id="whats-inside">
+<h2>What's in the kit — component by component</h2>
+<p>This is the kit as it arrived, photographed before opening anything. Not all starter kits are identical — vendors substitute components depending on stock — so I'm describing what's in this specific one, which is what the photo shows.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Component</th><th>What it does</th><th>Beginner priority</th></tr></thead>
+<tbody>
+<tr><td>Arduino Mega 2560</td><td>The main board — 54 digital pins, 16 analog inputs, more memory than the Uno</td><td>✅ Start here</td></tr>
+<tr><td>Solderless breadboard</td><td>Lets you wire circuits without soldering — holes connect in rows</td><td>✅ Start here</td></tr>
+<tr><td>LED assortment (red, green, yellow, blue, white)</td><td>Output indicators — light up when a pin goes HIGH</td><td>✅ Start here</td></tr>
+<tr><td>Push button</td><td>Digital input — reads as HIGH or LOW depending on whether it's pressed</td><td>✅ Week 2</td></tr>
+<tr><td>9V battery clip</td><td>Powers the board without USB — connects to the barrel jack</td><td>✅ Week 2</td></tr>
+<tr><td>Rain / moisture sensor</td><td>Analog sensor — outputs a voltage proportional to water on its surface</td><td>⏳ Week 4+</td></tr>
+<tr><td>I2C interface module</td><td>Lets you control the LCD with only 2 wires instead of 6</td><td>⏳ Week 4+</td></tr>
+<tr><td>16×2 LCD display</td><td>Text display — shows 2 lines of 16 characters each</td><td>⏳ Week 4+</td></tr>
+<tr><td>Additional sensor modules (bagged)</td><td>Varies by kit — typically IR, temperature, or tilt sensors</td><td>⏳ After basics</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The honest advice: leave the LCD, the I2C module and the rain sensor in their bags for the first two weeks. Every beginner class I've taught has at least one student who goes straight for the most complicated component and gets stuck, which kills motivation early. Start with LEDs — they give instant, visible feedback and can't damage anything if you wire them wrong (the LED just won't light, or it'll burn out and you replace it for a few cents).</p>
+</section>
+
+<section id="mega-vs-uno">
+<h2>Why Mega instead of Uno for this kit</h2>
+<p>The Arduino Uno is the standard beginner board and the one most tutorials are written for. The Mega 2560 is larger, has more pins, and costs a bit more. This kit ships with the Mega for a specific reason: the LCD + I2C module + sensors all running simultaneously would use most of the Uno's 14 digital pins, leaving little room for student experimentation. The Mega's 54 digital pins remove that constraint.</p>
+<p>For the first three projects in this guide, the Mega and the Uno are functionally identical — pin numbers, code and wiring are the same. The difference only matters when you get to projects that use many components at once.</p>
+
+<div class="note">
+<p><strong>One thing the Mega does differently:</strong> its USB connector is the large square Type-B (printer-style) plug, not the smaller one on the Uno. If you're buying a cable separately, search for "USB Type-B" or "Arduino Mega cable" — a phone charger cable won't fit.</p>
+</div>
+</section>
+
+<section id="start-order">
+<h2>Which components to start with (and which to skip)</h2>
+<p>Based on running this kit in class, here is the order that works — not the order that looks most impressive:</p>
+<ol>
+  <li><strong>Single LED + resistor on a breadboard</strong> — one component, one pin, immediate result. Gets the IDE installed and the first successful upload done.</li>
+  <li><strong>Six LEDs in sequence</strong> — same concept scaled up. Introduces the idea of multiple outputs and leads naturally to loops.</li>
+  <li><strong>Button input</strong> — first time reading a digital input. Introduces <code>digitalRead()</code> and <code>if</code> statements with real hardware.</li>
+  <li><strong>Rain sensor (analog)</strong> — first analog input, <code>analogRead()</code>, and Serial Monitor for debugging.</li>
+  <li><strong>LCD with I2C</strong> — first library installation, first <code>#include</code>, first I2C address troubleshooting.</li>
+</ol>
+<p>Students who try to jump straight to the LCD on day one spend the session installing the wrong library version and never see the screen light up. The order above means every session ends with something working.</p>
+</section>
+
+<section id="project1">
+<h2>Project 1 — single LED blink</h2>
+<p>Wire a single LED to pin 9 with a 220 Ω resistor in series (longer leg of the LED to the resistor, shorter leg to GND). This is the minimum viable circuit — one component beyond the board itself.</p>
+
+<pre><code>const int ledPIN = 9;
+
+void setup() {
+  Serial.begin(9600);       // iniciar puerto serie
+  pinMode(ledPIN, OUTPUT);  // definir pin como salida
+}
+
+void loop() {
+  digitalWrite(ledPIN, HIGH); // poner el Pin en HIGH
+  delay(1000);                // esperar un segundo
+  digitalWrite(ledPIN, LOW);  // poner el Pin en LOW
+  delay(1000);                // esperar un segundo
+}</code></pre>
+
+<p>What can go wrong and why: if the LED doesn't light, check the polarity first (the longer leg is the anode, goes toward the positive side). If the LED lights but doesn't blink, the upload may have failed silently — check the IDE output for error messages. If the LED glows faintly, the resistor value may be too high; try 100 Ω instead of 220 Ω with dim LEDs.</p>
+</section>
+
+<section id="project2">
+<h2>Project 2 — 6-LED sequence</h2>
+<p>Wire six LEDs to pins 2 through 7, each with its own 220 Ω resistor to GND. All six share the same GND rail on the breadboard. The sketch lights each one in order with a 1-second pause.</p>
+
+<pre><code>int led_Dos    = 2;
+int led_Tres   = 3;
+int led_Cuatro = 4;
+int led_Cinco  = 5;
+int led_Seis   = 6;
+int led_Siete  = 7;
+
+void setup() {
+  Serial.begin(9600);             // iniciar puerto serie
+  pinMode(led_Dos,    OUTPUT);    // definir pin como salida
+  pinMode(led_Tres,   OUTPUT);
+  pinMode(led_Cuatro, OUTPUT);
+  pinMode(led_Cinco,  OUTPUT);
+  pinMode(led_Seis,   OUTPUT);
+  pinMode(led_Siete,  OUTPUT);
+}
+
+void loop() {
+  digitalWrite(led_Dos,    HIGH); delay(1000); digitalWrite(led_Dos,    LOW); delay(1000);
+  digitalWrite(led_Tres,   HIGH); delay(1000); digitalWrite(led_Tres,   LOW); delay(1000);
+  digitalWrite(led_Cuatro, HIGH); delay(1000); digitalWrite(led_Cuatro, LOW); delay(1000);
+  digitalWrite(led_Cinco,  HIGH); delay(1000); digitalWrite(led_Cinco,  LOW); delay(1000);
+  digitalWrite(led_Seis,   HIGH); delay(1000); digitalWrite(led_Seis,   LOW); delay(1000);
+  digitalWrite(led_Siete,  HIGH); delay(1000); digitalWrite(led_Siete,  LOW); delay(1000);
+}</code></pre>
+
+<p>This sketch is intentionally verbose — the same four-line pattern repeated six times. That repetition is the teaching point. After it works, the next exercise is rewriting it with an array and a <code>for</code> loop to produce the same behavior in half the code:</p>
+
+<pre><code>// Refactored version using array + for loop
+int leds[] = {2, 3, 4, 5, 6, 7};
+int numLeds = 6;
+
+void setup() {
+  for (int i = 0; i &lt; numLeds; i++) {
+    pinMode(leds[i], OUTPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i &lt; numLeds; i++) {
+    digitalWrite(leds[i], HIGH);
+    delay(1000);
+    digitalWrite(leds[i], LOW);
+    delay(1000);
+  }
+}</code></pre>
+
+<p>Both versions produce identical behavior. Seeing the difference between them is more effective at teaching arrays than any explanation alone.</p>
+</section>
+
+<section id="project3">
+<h2>Project 3 — button-controlled LED</h2>
+<p>Wire the push button from pin 8 to GND, and enable the internal pull-up resistor in software (<code>INPUT_PULLUP</code>). Wire the LED to pin 9 as before. The LED lights when the button is held, goes off when released.</p>
+
+<pre><code>const int buttonPIN = 8;
+const int ledPIN    = 9;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buttonPIN, INPUT_PULLUP); // use internal pull-up — no external resistor needed
+  pinMode(ledPIN,    OUTPUT);
+}
+
+void loop() {
+  int state = digitalRead(buttonPIN);
+  // INPUT_PULLUP means LOW = pressed, HIGH = not pressed
+  if (state == LOW) {
+    digitalWrite(ledPIN, HIGH);
+    Serial.println("Button pressed");
+  } else {
+    digitalWrite(ledPIN, LOW);
+  }
+}</code></pre>
+
+<p>The <code>INPUT_PULLUP</code> mode is worth explaining to students: without a pull-up or pull-down resistor, an unconnected input pin floats between HIGH and LOW unpredictably, causing the LED to flicker randomly. The internal pull-up holds the pin HIGH until the button connects it to GND. This is why the logic is inverted — LOW means pressed, HIGH means not pressed. Students find this counterintuitive the first time; the Serial Monitor output ("Button pressed") helps them confirm what's happening.</p>
+
+<div class="note">
+<p><strong>Components used across all three projects:</strong> Arduino Mega, solderless breadboard, 6× LEDs (any color from the kit's assortment), 6× 220 Ω resistors, 1× push button, jumper wires. The rain sensor, LCD and I2C module are not needed yet — leave them sealed until project 4 or 5.</p>
+</div>
+</section>
+
+<section id="faq">
+<h2>FAQ</h2>
+<div class="faq">
+<details>
+<summary>Can I use a different pin number for the LED?</summary>
+<p>Yes — any of the Mega's digital pins (2–53) work for <code>digitalWrite</code>. Pins 0 and 1 are reserved for serial communication (TX/RX) and cause problems if used for other purposes while the USB is connected. Pins 2–13 are the safest choice for beginners.</p>
+</details>
+<details>
+<summary>Do I need the exact resistor value listed?</summary>
+<p>Not exact, but close. 220 Ω is the standard value for 5 mm LEDs at 5 V. 100 Ω to 470 Ω all work — lower values make the LED brighter, higher values make it dimmer. Do not skip the resistor entirely: without it the LED draws too much current, overheats and burns out within seconds, and may damage the Arduino pin.</p>
+</details>
+<details>
+<summary>What does the rain sensor actually measure?</summary>
+<p>It measures electrical conductivity across its surface — water (especially tap water with dissolved minerals) conducts electricity, so the sensor's analog output voltage drops when wet. It is not a calibrated rainfall gauge; it detects presence of moisture, not quantity. We use it in class as an introduction to analog inputs (<code>analogRead()</code>) and the Serial Monitor for reading sensor values.</p>
+</details>
+<details>
+<summary>What I2C address does the LCD module use?</summary>
+<p>Most 16×2 LCD modules with the I2C backpack use address <code>0x27</code> or <code>0x3F</code>. If the screen stays blank after uploading, run an I2C scanner sketch (freely available in the Arduino forums) to find the actual address, then update the <code>LiquidCrystal_I2C lcd(0x27, 16, 2);</code> line in your sketch accordingly. Address mismatch is the most common reason the LCD appears dead.</p>
+</details>
+<details>
+<summary>Can I power the Mega from the 9V battery clip in the kit?</summary>
+<p>Yes — the clip connects to the Mega's barrel jack (center-positive, 2.1 mm). A fresh 9V alkaline battery works for light loads (board + a few LEDs). If you add motors or many sensors, the 9V block drains fast and its internal resistance causes voltage sags that can reset the board. For anything beyond LED projects, use a rechargeable Li-ion pack or a wall adapter instead.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. I use this kit in class and photographed it before our first session with it. The project order and the warnings about common mistakes come from watching students work through it.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">Kit photographed and tested in my classroom. No sponsored content or paid placements. The kit shown was purchased at market price for classroom use.</p>
+
+<div class="cta">
+  <h3>Next in this series</h3>
+  <p>Once you have the LED projects running, see <a href="arduino-classroom-robotics-beginners">Arduino robotics in the classroom</a> — the progression from LED sequence to a Bluetooth voice-controlled robot car, with the same hands-on approach.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="arduino-classroom-robotics-beginners">← Previous: Classroom robotics</a>
+  <a href="./">All tutorials →</a>
+</div>
+
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;">
+    <a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a>
+    <a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a>
+    <a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a>
+    <a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a>
+  </p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;">
+      <a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a>
+      <a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a>
+      <a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a>
+      <a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;">
+      <p style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p>
+      <p style="margin:0;font-size:0.85rem;color:#b5b0a6;">Advertising cookies may be used if you accept. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();
+</script>
+</body>
+</html>
