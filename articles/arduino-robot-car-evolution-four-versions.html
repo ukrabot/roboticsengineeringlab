@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Four Generations of Student Robot Cars: How Each Version Fixed the Last One</title>
+<meta name="description" content="A real classroom series of four Arduino robot car builds, each fixing a specific problem found in the previous one — from AFMotor shield to 4WD with servo-mounted ultrasonic sensor. Real photos, real sketches, real lessons.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-robot-car-evolution-four-versions">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Four Generations of Student Robot Cars: How Each Version Fixed the Last One">
+<meta property="og:description" content="Real classroom robot car evolution across four builds. AFMotor shield → wooden chassis → dual ultrasonic → 4WD with servo sensor. Photos, sketches and honest failure notes.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/robot-v4-4wd-overview.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-robot-car-evolution-four-versions">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/robot-v4-4wd-overview.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Four Generations of Student Robot Cars: How Each Version Fixed the Last One",
+  "description":"A real classroom series of four Arduino robot car builds, each fixing a specific problem found in the previous version — from AFMotor shield to 4WD with servo-mounted ultrasonic sensor.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-09-03",
+  "dateModified":"2026-09-03",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-robot-car-evolution-four-versions"},
+  "image":"https://roboticsengineeringlab.com/articles/robot-v4-4wd-overview.jpg",
+  "proficiencyLevel":"Beginner to Intermediate",
+  "wordCount":"1800"
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},{"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},{"@type":"ListItem","position":3,"name":"Four Robot Car Versions","item":"https://roboticsengineeringlab.com/articles/arduino-robot-car-evolution-four-versions"}]}</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:54vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.8rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:58px 0 16px;border-left:3px solid var(--gold);padding-left:16px}.article-body h3{font-size:1.1rem;margin:28px 0 8px;color:var(--gold)}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px;border:none;padding:0}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 36px}.img-grid .article-img{margin:0}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:480px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}.img-grid{grid-template-columns:1fr}}
+</style>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="robot-v4-4wd-overview.jpg" alt="4WD Arduino robot car with blue acrylic chassis, yellow wheels, HC-SR04 ultrasonic sensor on a servo mount, and battery holder" fetchpriority="high" width="956" height="1205" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Classroom build series · Published <time datetime="2026-09-03">September 3, 2026</time></div>
+    <h1>Four Generations of Student Robot Cars: How Each Version Fixed the Last One</h1>
+    <p>Every semester my robotics class builds a new version of the same basic robot car — and every version starts by identifying what broke or frustrated us in the previous one. Here are all four, with photos, the real code, and honest notes on what each one got wrong.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 11 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="toc">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#v1">Version 1 — AFMotor shield + Arduino Mega + LCD</a></li>
+    <li><a href="#v2">Version 2 — Wooden chassis, L293D shield, Bluetooth</a></li>
+    <li><a href="#v3">Version 3 — Round chassis, dual ultrasonic, 18650 power</a></li>
+    <li><a href="#v4">Version 4 — 4WD, servo-mounted sensor, cleaner wiring</a></li>
+    <li><a href="#code">The three real sketches</a></li>
+    <li><a href="#lessons">What each version taught us</a></li>
+  </ol>
+</div>
+
+<p>This isn't a tutorial for a single "best" robot — it's a record of how the design actually evolved across four semesters, driven by real student feedback, real failures and real budget constraints. All six photos below are from these actual builds.</p>
+
+<section id="v1">
+<h2>Version 1 — AFMotor shield + Arduino Mega + LCD</h2>
+
+<div class="article-img">
+  <img src="robot-v1-afmotor-lcd.jpg" alt="Round robot with black chassis, LCD screen on top, AFMotor shield, two servo motors on orange brackets at the front, and colored LEDs visible on the control board" loading="lazy" width="956" height="1192">
+  <div class="caption">Version 1. The LCD was added because students wanted to display distance readings. The two servo brackets at the front were for a planned gripper that never got finished.</div>
+</div>
+
+<p>The first version used an Arduino Mega with an AFMotor shield — a stacked board that drives up to four DC motors via the Adafruit motor library. The Mega was chosen for its extra pins, since students kept running out of pins on the Uno when they added sensors mid-project. The LCD on top was a late addition: students wanted to see the ultrasonic distance reading in real time rather than opening the Serial Monitor every time.</p>
+
+<h3>What it used</h3>
+<ul>
+  <li>Arduino Mega 2560 + AFMotor shield (stacked)</li>
+  <li>4× DC motors controlled via <code>AF_DCMotor</code> library</li>
+  <li>HC-05 Bluetooth module on pins 10/11 via <code>SoftwareSerial</code></li>
+  <li>LCD display (added mid-semester)</li>
+  <li>Two servos on orange brackets (planned gripper, never completed)</li>
+  <li>LED on pin 52 as status indicator</li>
+</ul>
+
+<h3>What went wrong</h3>
+<p>The AFMotor shield + Mega combination worked but was expensive and physically large. More critically, the <code>AF_DCMotor</code> library uses PWM pins that overlap with the servo library on the Mega — students who tried to add servos mid-project hit incompatibility issues that took a full session to diagnose. The LCD wiring also consumed most of the remaining digital pins, leaving no room for sensors. The planned gripper was abandoned because there were no pins left to control it.</p>
+</section>
+
+<section id="v2">
+<h2>Version 2 — Wooden chassis, L293D shield, Bluetooth</h2>
+
+<div class="article-img">
+  <img src="robot-v2-wooden-chassis.jpg" alt="4WD robot car with a laser-cut wooden chassis, blue Arduino Uno with L293D motor driver shield, HC-05 Bluetooth module visible at the left side, and a battery holder at the rear" loading="lazy" width="956" height="1205">
+  <div class="caption">Version 2. The wooden chassis is laser-cut MDF — cheap, easy to modify with a drill, and repairable with wood glue. The L293D shield replaced the AFMotor board to reduce cost and pin conflicts.</div>
+</div>
+
+<p>Version 2 moved to a laser-cut wooden chassis and replaced the AFMotor shield with a simpler L293D-based motor driver shield. The Mega was replaced with an Uno — cheaper, smaller, and sufficient now that the LCD had been dropped. The Bluetooth module (HC-05, visible at the left side of the chassis) handles both manual control and mode switching.</p>
+
+<h3>What it used</h3>
+<ul>
+  <li>Arduino Uno + L293D motor driver shield</li>
+  <li>Laser-cut MDF chassis (4WD with 4 yellow DC motors)</li>
+  <li>HC-05 Bluetooth on pins 10/11</li>
+  <li>Battery holder (4×AA) at the rear</li>
+  <li>IR/analog distance sensor for basic obstacle detection</li>
+</ul>
+
+<h3>What went wrong</h3>
+<p>The wooden chassis was great for prototyping but warped when exposed to moisture — in two cases, chassis cut on a humid day warped enough overnight that the wheel alignment shifted. More practically: the analog IR sensor used in this version (<code>analogRead(4)</code> in the sketch, with a threshold of 350) was unreliable near shiny or black surfaces, which are common on classroom floors and table tops. We also found that 4×AA batteries sag under motor load — the Arduino would reset when all four motors started simultaneously.</p>
+</section>
+
+<section id="v3">
+<h2>Version 3 — Round chassis, dual ultrasonic, 18650 power</h2>
+
+<div class="img-grid">
+  <div class="article-img">
+    <img src="robot-v3-dual-ultrasonic-front.jpg" alt="Front view of round black robot chassis with two HC-SR04 ultrasonic sensors side by side, heavy rainbow-colored wiring, and Arduino Nano visible at the top" loading="lazy" width="956" height="1205">
+    <div class="caption">Front view showing the dual HC-SR04 sensors. The heavy wiring was the main complaint.</div>
+  </div>
+  <div class="article-img">
+    <img src="robot-v3-18650-battery.jpg" alt="Side view of the same robot showing two Ultrafire 18650 Li-ion cells in a holder, red motor driver board, Arduino Mega, and clear acrylic chassis base" loading="lazy" width="956" height="1205">
+    <div class="caption">The 18650 Li-ion cells solved the battery sag problem. The red board is a dedicated motor driver module.</div>
+  </div>
+</div>
+
+<p>Version 3 fixed both main problems from V2: the chassis moved to round acrylic (no warping), and the power supply switched to 18650 Li-ion cells in a dedicated holder. The IR sensor was replaced by two HC-SR04 ultrasonic sensors mounted side by side on the front — the idea was that having two sensors would let the robot choose which direction was more open when it detected an obstacle.</p>
+
+<h3>What it used</h3>
+<ul>
+  <li>Arduino Mega (returned — needed the extra pins for two sensors)</li>
+  <li>Round acrylic chassis, 2WD with ball caster</li>
+  <li>2× HC-SR04 ultrasonic sensors (left and right)</li>
+  <li>Dedicated red L298N motor driver module</li>
+  <li>2× Ultrafire 18650 Li-ion cells (~7.4 V combined)</li>
+</ul>
+
+<h3>What went wrong</h3>
+<p>The dual-sensor logic was harder to code than expected — students needed to read both sensors, compare them, and make a turn decision, which required timing coordination that <code>pulseIn()</code> doesn't handle cleanly when called twice in quick succession (the second call can time out if the first echo is still ringing). Several groups ended up with one sensor reading correctly and one always returning zero. The wiring was also extremely messy — two sensors, a motor driver, a Mega and a battery holder on a small round chassis meant the wire runs were long and tangled. The photo shows this honestly.</p>
+</section>
+
+<section id="v4">
+<h2>Version 4 — 4WD, servo-mounted sensor, cleaner wiring</h2>
+
+<div class="img-grid">
+  <div class="article-img">
+    <img src="robot-v4-front-sensor-servo.jpg" alt="Front close-up of 4WD robot with a single HC-SR04 ultrasonic sensor mounted on a small servo motor, battery holder visible at the back, blue acrylic chassis" loading="lazy" width="956" height="1205">
+    <div class="caption">The servo-mounted sensor can sweep left and right to find the clearest path — solving the dual-sensor problem with one sensor instead of two.</div>
+  </div>
+  <div class="article-img">
+    <img src="robot-v4-4wd-overview.jpg" alt="Full overview of the 4WD blue robot car with yellow wheels, servo-mounted HC-SR04 at the front left, battery holder at the rear, and integrated controller board in the centre" loading="lazy" width="956" height="1205">
+    <div class="caption">Version 4 overview. The all-in-one controller board reduced wire count significantly compared to V3.</div>
+  </div>
+</div>
+
+<p>Version 4 solved the dual-sensor problem elegantly: one HC-SR04 mounted on a small servo. When the robot detects an obstacle, the servo sweeps left then right, takes a reading at each position, and turns toward whichever side has more clearance. This is the same approach used in many commercial robot toys, and it works well at classroom speeds. The chassis moved back to 4WD (dropped in V3 due to wiring complexity) and an all-in-one controller board replaced the separate Mega + motor driver combination, reducing the wire count substantially.</p>
+
+<h3>What it used</h3>
+<ul>
+  <li>All-in-one robot controller board (integrated motor driver + Arduino-compatible MCU)</li>
+  <li>Round blue acrylic chassis, 4WD with yellow wheels</li>
+  <li>1× HC-SR04 on a micro servo (sweep for direction finding)</li>
+  <li>Battery holder (rear-mounted, 18650 or AA depending on availability)</li>
+</ul>
+
+<h3>What this version got right</h3>
+<p>Fewer wires, more reliable obstacle avoidance, and students could actually finish it in the allotted time. The servo-sweep approach is also more teachable — students understand "look left, look right, go the clearer way" intuitively, whereas the dual-sensor timing issue in V3 required a level of debugging experience most first-semester students didn't have yet.</p>
+</section>
+
+<section id="code">
+<h2>The three real sketches</h2>
+
+<h3>Sketch 1 — AFMotor Bluetooth control (Version 1)</h3>
+<p>Uses the Adafruit <code>AFMotor</code> library. Commands arrive over Bluetooth: <code>'1'</code> = forward, <code>'2'</code> = stop, <code>'3'</code> = blink LED on pin 52. All four motors run at full speed (255).</p>
+<pre><code>#include &lt;SoftwareSerial.h&gt;
+#include &lt;Servo.h&gt;
+#include &lt;AFMotor.h&gt;
+
+SoftwareSerial mySerial(10, 11); // TX | RX
+char command;
+
+AF_DCMotor Motor1(1);
+AF_DCMotor Motor2(2);
+AF_DCMotor Motor3(3);
+AF_DCMotor Motor4(4);
+
+int ledPin = 52;
+
+void setup() {
+  mySerial.begin(9600);
+  Serial.begin(9600);
+  Motor1.setSpeed(255);
+  Motor2.setSpeed(255);
+  Motor3.setSpeed(255);
+  Motor4.setSpeed(255);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  if (mySerial.available()) {
+    command = (mySerial.read());
+    if (command == '1') avanzar();
+    if (command == '2') detener();
+    if (command == '3') led();
+  }
+}
+
+void avanzar() {
+  Motor1.run(FORWARD); Motor2.run(FORWARD);
+  Motor3.run(FORWARD); Motor4.run(FORWARD);
+}
+
+void detener() {
+  Motor1.run(RELEASE); Motor2.run(RELEASE);
+  Motor3.run(RELEASE); Motor4.run(RELEASE);
+}
+
+void led() {
+  digitalWrite(ledPin, HIGH); delay(1000);
+  digitalWrite(ledPin, LOW);  delay(1000);
+}</code></pre>
+
+<h3>Sketch 2 — IR analog sensor + Bluetooth (Version 2)</h3>
+<p>Replaces the AFMotor library with direct <code>digitalWrite</code> on IN1–IN4. The autonomous mode reads an analog IR sensor on pin A4 (<code>analogRead(4)</code>) and stops when the value exceeds 350. Contains the same recursive <code>loop()</code> bug documented in our <a href="obstacle-avoiding-robot-car-arduino">first obstacle-avoidance article</a>.</p>
+<pre><code>#include &lt;SoftwareSerial.h&gt;
+#include &lt;Servo.h&gt;
+
+SoftwareSerial mySerial(10, 11);
+char command;
+int pin = 8;
+Servo servo1;
+int IN1=2, IN2=3, IN3=4, IN4=5;
+int dist = 0;
+
+void setup() {
+  Serial.begin(9600);
+  servo1.attach(13);
+  pinMode(IN1,OUTPUT); pinMode(IN2,OUTPUT);
+  pinMode(IN3,OUTPUT); pinMode(IN4,OUTPUT);
+  pinMode(pin, OUTPUT);
+  mySerial.begin(9600);
+}
+
+void loop() {
+  if (mySerial.available()) {
+    command = (mySerial.read());
+    if (command == '5') {
+      while (command == '5') {
+        dist = analogRead(4);           // IR sensor on A4
+        if (dist &lt; 350) avanzarAUT();
+        else             detener();
+        // BUG: recursive loop() call here — see article notes
+        if (command != '6') loop();
+      }
+    }
+    else if (command=='1') { digitalWrite(pin,HIGH); avanzar(); }
+    else if (command=='2') { digitalWrite(pin,LOW);  girarIzquierda(); }
+    else if (command=='3') { girarDerecha(); }
+    else if (command=='4') { atras(); }
+  }
+}
+
+void avanzar()       { digitalWrite(IN3,HIGH);digitalWrite(IN4,LOW);
+                       digitalWrite(IN1,LOW);digitalWrite(IN2,HIGH);delay(200);
+                       digitalWrite(IN2,LOW);digitalWrite(IN3,LOW); }
+void detener()       { digitalWrite(IN2,LOW);digitalWrite(IN3,LOW);delay(1000);
+                       servo1.write(160);delay(1000);servo1.write(0);delay(1000);
+                       servo1.write(80);delay(1000);atras();girarDerecha(); }
+void atras()         { digitalWrite(IN3,LOW);digitalWrite(IN4,HIGH);
+                       digitalWrite(IN1,HIGH);digitalWrite(IN2,LOW);delay(200);
+                       digitalWrite(IN4,LOW);digitalWrite(IN1,LOW); }
+void girarDerecha()  { digitalWrite(IN3,LOW);digitalWrite(IN4,LOW);
+                       digitalWrite(IN1,HIGH);digitalWrite(IN2,LOW);delay(200);
+                       digitalWrite(IN4,LOW);digitalWrite(IN1,LOW); }
+void girarIzquierda(){ digitalWrite(IN3,LOW);digitalWrite(IN4,HIGH);
+                       digitalWrite(IN1,LOW);digitalWrite(IN2,LOW);delay(200);
+                       digitalWrite(IN4,LOW);digitalWrite(IN1,LOW); }
+void avanzarAUT()    { digitalWrite(IN2,LOW);digitalWrite(IN3,LOW);delay(200);
+                       digitalWrite(IN3,HIGH);digitalWrite(IN4,LOW);
+                       digitalWrite(IN1,LOW);digitalWrite(IN2,HIGH);delay(200); }</code></pre>
+
+<h3>Sketch 3 — AFMotor speed ramp test (motor validation)</h3>
+<p>A standalone test sketch used to verify a motor and driver are working before integrating them into the robot. Ramps a single motor from 0 to 255 and back, forward and backward, with a 10 ms step delay. The <code>i--</code> in the original file had a Unicode dash instead of two hyphens — it compiled only in some IDE versions. The corrected version uses <code>i--</code>.</p>
+<pre><code>#include &lt;AFMotor.h&gt;
+
+AF_DCMotor motor(4);
+
+void setup() {
+  motor.setSpeed(200);
+  motor.run(RELEASE);
+}
+
+void loop() {
+  uint8_t i;
+  motor.run(FORWARD);
+  for (i = 0;   i &lt; 255; i++) { motor.setSpeed(i); delay(10); }
+  for (i = 255; i != 0;  i--) { motor.setSpeed(i); delay(10); }
+
+  motor.run(BACKWARD);
+  for (i = 0;   i &lt; 255; i++) { motor.setSpeed(i); delay(10); }
+  for (i = 255; i != 0;  i--) { motor.setSpeed(i); delay(10); }
+
+  motor.run(RELEASE);
+  delay(1000);
+}</code></pre>
+<p>We use this sketch at the start of every build session to confirm the motor driver is wired correctly before spending time on the full robot code. If the motor ramps smoothly forward and backward, the hardware is good. If it only runs one direction, the IN1/IN2 wiring is reversed.</p>
+</section>
+
+<section id="lessons">
+<h2>What each version taught us</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Version</th><th>Main improvement</th><th>What it broke or missed</th></tr></thead>
+<tbody>
+<tr><td>V1 — AFMotor + Mega + LCD</td><td>More pins, library motor control</td><td>PWM conflicts with servo library; too many pins used by LCD; expensive</td></tr>
+<tr><td>V2 — Wooden + L293D + Bluetooth</td><td>Cheaper, simpler, repairable</td><td>Chassis warps; IR sensor unreliable on dark/shiny surfaces; battery sag</td></tr>
+<tr><td>V3 — Round acrylic + dual ultrasonic + 18650</td><td>Solved power sag, no more warping</td><td>Dual-sensor timing conflicts; messy wiring; more complex code than students could debug</td></tr>
+<tr><td>V4 — 4WD + servo sensor + integrated board</td><td>Fewer wires, reliable avoidance, finishable in one semester</td><td>Servo sweep adds ~600 ms dead time during obstacle decision — fast obstacles can still be hit</td></tr>
+</tbody>
+</table>
+</div>
+<p>The 600 ms dead time in V4 is a known limitation: while the servo sweeps and takes two readings, the robot is stopped. A fast-moving obstacle (another robot, a student walking by) can enter the cleared path before the robot starts moving again. Fixing this properly requires non-blocking sensor reads — replacing <code>pulseIn()</code> with interrupt-based timing — which is the natural next project for students who have completed V4.</p>
+</section>
+
+<section>
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details>
+<summary>Which version should I build first?</summary>
+<p>Version 2 if you have a laser cutter or can source a pre-cut wooden chassis, or Version 4 if you want to buy a complete kit. V1 is interesting as a learning exercise for the AFMotor library but the Mega + shield combination is expensive and the LCD adds complexity that isn't necessary for a first build.</p>
+</details>
+<details>
+<summary>Why does the V2 sketch use analogRead for obstacle detection?</summary>
+<p>That version used an infrared distance sensor (the kind with a single analog output) rather than an HC-SR04 ultrasonic sensor. The analog reading drops below 350 (out of 1023) when an obstacle is within roughly 20–30 cm on a light-colored surface. On dark or shiny surfaces the IR reflection behaves differently and the threshold needs adjustment — or the sensor needs to be replaced with an ultrasonic sensor, which is what V3 did.</p>
+</details>
+<details>
+<summary>What is the AccelStepper library file for?</summary>
+<p>It was used in an earlier experimental version (not shown here) that used stepper motors instead of DC motors for more precise positioning. The stepper approach was too slow for obstacle avoidance at classroom floor speeds and was abandoned in favor of the DC motor builds documented above. The AccelStepper library itself is solid — it's the application (fast obstacle avoidance with steppers) that didn't work well.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. All four robots shown here were built in my class. The failure notes are from real sessions, not hypothetical scenarios.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">All photos taken during classroom sessions. Sketches are the actual files used in the course. No sponsored content or paid placements.</p>
+
+<div class="cta">
+  <h3>More in this series</h3>
+  <p>See the original obstacle-avoidance build: <a href="obstacle-avoiding-robot-car-arduino">Obstacle-avoiding robot car with Arduino and HC-SR04</a>, and the full classroom progression: <a href="arduino-classroom-robotics-beginners">From first LED to voice-controlled car</a>.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="arduino-classroom-robotics-beginners">← Previous: Classroom robotics</a>
+  <a href="./">All tutorials →</a>
+</div>
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;"><a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a><a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a><a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a><a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a></p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;"><a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a><a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a><a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a><a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a></nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;"><p style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p><p style="margin:0;font-size:0.85rem;color:#b5b0a6;">Advertising cookies may be used if you accept. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();</script>
+</body>
+</html>
