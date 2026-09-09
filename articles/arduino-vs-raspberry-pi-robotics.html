@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arduino vs Raspberry Pi for Robotics: Which One Should You Actually Use?</title>
+<meta name="description" content="Arduino or Raspberry Pi for your robot? A practical comparison of real-time control, power draw, boot time, cost and I/O — with the decision rule I use when students ask, and when to use both together.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/arduino-vs-raspberry-pi-robotics">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arduino vs Raspberry Pi for Robotics: Which One Should You Actually Use?">
+<meta property="og:description" content="A practical comparison for robot builders: real-time control, boot time, power draw, I/O and cost — plus when using both together is the right answer.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/ultrasonic-led-parts-before.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/arduino-vs-raspberry-pi-robotics">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Arduino vs Raspberry Pi for Robotics">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/ultrasonic-led-parts-before.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"Arduino vs Raspberry Pi for Robotics: Which One Should You Actually Use?",
+  "description":"A practical comparison of Arduino microcontrollers and Raspberry Pi single-board computers for robotics: real-time control, boot behaviour, power draw, I/O, cost and the hybrid architecture that uses both.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-09-09",
+  "dateModified":"2026-09-09",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/arduino-vs-raspberry-pi-robotics"},
+  "image":"https://roboticsengineeringlab.com/articles/ultrasonic-led-parts-before.jpg",
+  "proficiencyLevel":"Beginner to Intermediate",
+  "wordCount":"2100"
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+ {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+ {"@type":"ListItem","position":3,"name":"Arduino vs Raspberry Pi for Robotics","item":"https://roboticsengineeringlab.com/articles/arduino-vs-raspberry-pi-robotics"}
+]}</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"Is Arduino or Raspberry Pi better for robotics?","acceptedAnswer":{"@type":"Answer","text":"Neither is universally better. Arduino is better when the robot needs precise, predictable timing for motors and sensors, runs on batteries, and must start instantly. Raspberry Pi is better when the robot needs a camera, networking, ROS 2, or on-board processing that a microcontroller cannot do. Many robots use both: a Pi for high-level decisions and an Arduino for real-time motor and sensor control."}},
+ {"@type":"Question","name":"Can a Raspberry Pi control motors directly?","acceptedAnswer":{"@type":"Answer","text":"A Raspberry Pi cannot drive motors directly from its GPIO pins — the pins supply 3.3V at a few milliamps and will be damaged by motor current. A motor driver board is required, exactly as with Arduino. The Pi can generate PWM in software, but because Linux is not a real-time operating system, that PWM can jitter when the CPU is busy, which is why many builders delegate motor control to a microcontroller."}},
+ {"@type":"Question","name":"Do I need to learn Linux to use a Raspberry Pi for robotics?","acceptedAnswer":{"@type":"Answer","text":"Yes, at a basic level. You need to be comfortable with the terminal, file permissions, installing packages, and configuring services that start on boot. This is a real learning curve compared to Arduino, where uploading a sketch is a single button. Budget extra time for it if you are new to Linux."}},
+ {"@type":"Question","name":"Which is cheaper for a first robot?","acceptedAnswer":{"@type":"Answer","text":"Arduino, in nearly every case. An Uno-compatible board plus a motor driver and sensors costs a fraction of a Raspberry Pi setup, which additionally needs a microSD card, an adequate power supply, and often a camera. For a first robot that drives and avoids obstacles, the Arduino path is substantially cheaper and less fragile."}}
+]}</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:52vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.34);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.7rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:54px 0 16px}.article-body h3{font-size:1.12rem;margin:30px 0 8px;color:var(--gold)}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box,.verdict{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.verdict{border-left:3px solid var(--gold)}.verdict p:last-child{margin-bottom:0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:560px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem;color:var(--text)}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}}
+</style>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="ultrasonic-led-parts-before.jpg" alt="Arduino Uno board next to an HC-SR04 ultrasonic sensor, micro servo, breadboard and jumper wires on a classroom desk" fetchpriority="high" width="819" height="1456" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Comparison guide · Published <time datetime="2026-09-09">September 9, 2026</time></div>
+    <h1>Arduino vs Raspberry Pi for Robotics: Which One Should You Actually Use?</h1>
+    <p>Students ask me this every semester, usually after watching a video where someone built something impressive on a Pi. The honest answer is that these are different classes of device solving different problems — and picking the wrong one costs weeks. Here is how to decide.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 12 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="verdict">
+  <h3 style="margin-top:0;">The short answer</h3>
+  <p><strong>Building a robot that drives, senses and reacts?</strong> Use an Arduino. It starts instantly, its timing is predictable, it runs on batteries for hours, and it cannot be corrupted by pulling the power.</p>
+  <p><strong>Building a robot that sees, navigates, or talks to a network?</strong> Use a Raspberry Pi. Cameras, ROS 2, computer vision and Wi-Fi are things a microcontroller genuinely cannot do.</p>
+  <p><strong>Building something that does both?</strong> Use both. The Pi decides <em>where to go</em>; the Arduino handles <em>making the wheels turn</em>. This is the architecture most serious hobby and research robots converge on, and it is covered in detail <a href="#hybrid">further down this page</a>.</p>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#different-things">They are not competing products</a></li>
+    <li><a href="#spec-table">Specification comparison</a></li>
+    <li><a href="#realtime">Real-time control: the difference that actually matters</a></li>
+    <li><a href="#boot-power">Boot time, power draw and battery life</a></li>
+    <li><a href="#io">GPIO, analog inputs and motor control</a></li>
+    <li><a href="#cost">Real cost of each path</a></li>
+    <li><a href="#learning">Learning curve and time-to-first-robot</a></li>
+    <li><a href="#hybrid">The hybrid architecture: using both</a></li>
+    <li><a href="#decision">A decision rule you can apply in 30 seconds</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
+  </ol>
+</div>
+
+<section id="different-things">
+<h2>They are not competing products</h2>
+<p>The single most useful thing to understand before comparing them: an Arduino is a <strong>microcontroller board</strong> and a Raspberry Pi is a <strong>single-board computer</strong>. That is not a marketing distinction — it changes what each device can promise you.</p>
+<p>An Arduino runs one program. That program is the only thing on the chip. When you write <code>digitalWrite(pin, HIGH)</code>, the pin changes state within a fraction of a microsecond, every time, with nothing that can interrupt it except code you wrote yourself. There is no operating system, no scheduler, no background processes.</p>
+<p>A Raspberry Pi runs Linux. Your robot program is one process among dozens, scheduled by a kernel that is optimised for throughput and fairness — not for guaranteeing that your motor pulse happens at exactly the right microsecond. It also has a filesystem that can be corrupted if power is removed at the wrong moment, which is a real failure mode in a battery-powered robot that runs its pack flat.</p>
+<p>Neither of these is a flaw. They are design choices, and they point at different jobs.</p>
+</section>
+
+<section id="spec-table">
+<h2>Specification comparison</h2>
+<p>Comparing the two most common boards in each category. Figures are from the manufacturers' published specifications:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>&nbsp;</th><th>Arduino Uno R3</th><th>Raspberry Pi 5 (4 GB)</th></tr></thead>
+<tbody>
+<tr><td>Class of device</td><td>Microcontroller board</td><td>Single-board computer</td></tr>
+<tr><td>Processor</td><td>ATmega328P, 8-bit, 16 MHz</td><td>Quad-core Arm Cortex-A76, 64-bit, 2.4 GHz</td></tr>
+<tr><td>RAM</td><td>2 KB SRAM</td><td>4 GB or 8 GB LPDDR4X</td></tr>
+<tr><td>Program storage</td><td>32 KB flash</td><td>microSD card or NVMe SSD</td></tr>
+<tr><td>Operating system</td><td>None — bare metal</td><td>Linux (Raspberry Pi OS, Ubuntu)</td></tr>
+<tr><td>Boot time</td><td>Effectively instant</td><td>Roughly 20–30 seconds to a usable desktop</td></tr>
+<tr><td>Digital I/O</td><td>14 pins (6 PWM-capable)</td><td>40-pin header, 26 usable GPIO</td></tr>
+<tr><td>Analog inputs</td><td>6 × 10-bit ADC built in</td><td>None — external ADC required</td></tr>
+<tr><td>Logic level</td><td>5 V</td><td>3.3 V (not 5 V tolerant)</td></tr>
+<tr><td>Camera support</td><td>No</td><td>Yes — dedicated CSI connectors</td></tr>
+<tr><td>Networking</td><td>No (add a module)</td><td>Wi-Fi, Bluetooth, Gigabit Ethernet built in</td></tr>
+<tr><td>Typical current draw</td><td>Tens of milliamps</td><td>Hundreds of milliamps to over an amp under load</td></tr>
+<tr><td>Safe to cut power abruptly</td><td>Yes</td><td>No — risks filesystem corruption</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Look at three rows in particular: <strong>analog inputs</strong>, <strong>logic level</strong> and <strong>safe to cut power</strong>. Those three explain most of the frustration people hit when they choose a Pi for a job an Arduino was built for.</p>
+</section>
+
+<section id="realtime">
+<h2>Real-time control: the difference that actually matters</h2>
+<p>This is the section that changes people's minds, so it is worth being precise.</p>
+<p>Many robotics tasks are <em>timing-critical</em>. Reading an HC-SR04 ultrasonic sensor means measuring the width of an echo pulse in microseconds — a 58 µs error translates to roughly one centimetre of distance error. Driving a hobby servo means producing a pulse between 1000 µs and 2000 µs wide, repeated every 20 ms, where tens of microseconds of jitter shows up as visible twitching. Stepper motors need step pulses at consistent intervals or they lose position silently.</p>
+<p>On an Arduino, these are trivial. Nothing else is running. The timing you write is the timing you get.</p>
+<p>On a Raspberry Pi running standard Linux, your process can be pre-empted by the kernel at any moment. Most of the time this is invisible. But when the CPU is busy — decoding a camera frame, writing to the SD card, handling a Wi-Fi interrupt — a software-generated pulse can be late by milliseconds. For a web server that is irrelevant. For a servo pulse it is the difference between a steady arm and a twitching one.</p>
+
+<div class="note">
+<p><strong>This is solvable, but at a cost.</strong> A Pi can do hard real-time work with a <code>PREEMPT_RT</code> patched kernel, by using the Pi 5's hardware PWM channels, or by offloading timing to the RP1 I/O chip or a PIO-capable microcontroller. These are real solutions used in real robots. They are also several evenings of work that an Arduino solves by existing. Choose deliberately, not by accident.</p>
+</div>
+
+<p>Concretely: the ultrasonic sensor sketch in our <a href="hc-sr04-ultrasonic-led-proximity-alert">HC-SR04 proximity alert build</a> uses <code>pulseIn()</code>, which busy-waits and measures the echo pulse directly. That function exists on Arduino precisely because nothing else is competing for the processor. The equivalent on a Pi needs either an interrupt-based approach with timestamp filtering, or the acceptance that occasional readings will be wrong and must be discarded.</p>
+</section>
+
+<section id="boot-power">
+<h2>Boot time, power draw and battery life</h2>
+
+<h3>Boot time</h3>
+<p>An Arduino begins running your program essentially the moment it has power. Flip the switch on a robot car and it drives.</p>
+<p>A Raspberry Pi takes roughly twenty to thirty seconds to boot Linux and start your program — and that is if you have correctly configured a <code>systemd</code> service to launch it on startup, which is itself a task people forget until the robot sits motionless at a competition. For a demonstration or a classroom exercise, thirty seconds of dead time before every single test run adds up fast.</p>
+
+<h3>Power draw</h3>
+<p>The gap here is roughly an order of magnitude. An Arduino Uno driving sensors draws tens of milliamps. A Raspberry Pi 5 under load draws hundreds of milliamps to well over an amp, and it is genuinely fussy about supply quality — an undersized power bank causes brownouts, and brownouts on a Linux system mean SD card corruption, not just a reset.</p>
+<p>On a small robot chassis, this cascades. The Pi needs a bigger battery, the bigger battery is heavier, the heavier robot needs more motor current, and the motor current causes the voltage sag that brings the Pi down. We hit exactly this problem with 4×AA packs in one of our builds — documented in the <a href="arduino-robot-car-evolution-four-versions">four-generation robot car write-up</a> — and that was with an Arduino, which is far more tolerant of supply dips than a Pi.</p>
+
+<h3>Pulling the plug</h3>
+<p>Worth repeating because it catches people out: you can cut power to an Arduino at any instant, thousands of times, with no consequence. Do that to a Raspberry Pi and you will eventually corrupt the SD card. On a robot that runs until its battery dies, "eventually" arrives quickly. Mitigations exist — read-only root filesystems, better cards, supervised shutdown — but they are work you must remember to do.</p>
+</section>
+
+<section id="io">
+<h2>GPIO, analog inputs and motor control</h2>
+
+<h3>Neither can drive a motor directly</h3>
+<p>This is the most common beginner misconception and it applies equally to both boards. Arduino pins supply around 20 mA; Raspberry Pi pins supply a few milliamps at 3.3 V. A small DC motor draws hundreds of milliamps at stall. Connecting a motor directly to either board damages it. Both need a motor driver — an L298N, an L293D shield, a TB6612, or similar — which takes a low-current logic signal and switches the high-current motor supply.</p>
+
+<h3>Analog inputs: a genuine Arduino advantage</h3>
+<p>An Arduino Uno has six 10-bit analog inputs built in. <code>analogRead(A0)</code> returns a value from 0 to 1023 and you are done. A large fraction of cheap, useful sensors — potentiometers, LDRs, many IR distance sensors, moisture and gas sensors — output an analog voltage.</p>
+<p>A Raspberry Pi has <strong>no analog inputs at all</strong>. Reading any analog sensor requires an external ADC chip (an MCP3008 or ADS1115, typically) wired over SPI or I²C, plus its library and its own wiring to get wrong. If your robot's sensor set is analog-heavy, this alone can decide the question.</p>
+
+<h3>Logic levels: 5 V vs 3.3 V</h3>
+<p>Arduino Uno GPIO runs at 5 V. Raspberry Pi GPIO runs at 3.3 V and is <em>not</em> 5 V tolerant — applying 5 V to a Pi input pin can permanently damage it. Since an enormous number of hobby modules are 5 V devices (the HC-SR04's Echo output being the classic example), connecting them to a Pi requires a level shifter or a voltage divider. Forgetting this is one of the more expensive mistakes a beginner can make, because the damage is invisible and permanent.</p>
+</section>
+
+<section id="cost">
+<h2>Real cost of each path</h2>
+<p>Board price alone is misleading, because each path drags in different mandatory extras. Prices vary by region and over time — treat these as relative weights, not quotes, and check current local pricing before you buy.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Arduino path</th><th>Raspberry Pi path</th></tr></thead>
+<tbody>
+<tr><td>Main board</td><td>Uno or Uno-compatible</td><td>Raspberry Pi 5 or Pi Zero 2 W</td></tr>
+<tr><td>Storage</td><td>Not needed</td><td>microSD card (quality matters)</td></tr>
+<tr><td>Power supply</td><td>USB or a battery pack</td><td>Adequate regulated supply — undersized causes brownouts</td></tr>
+<tr><td>Motor driver</td><td>Required</td><td>Required</td></tr>
+<tr><td>Analog sensors</td><td>Connect directly</td><td>Plus an external ADC board</td></tr>
+<tr><td>5 V sensors</td><td>Connect directly</td><td>Plus level shifters</td></tr>
+<tr><td>Cooling</td><td>None</td><td>Heatsink or fan recommended on Pi 5 under load</td></tr>
+<tr><td>Cost of a mistake</td><td>Low — clone boards are cheap to replace</td><td>Higher — and damaged GPIO may not be repairable</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>For a classroom or a first personal robot, the Arduino path is meaningfully cheaper — not just at purchase, but in replacement cost when something inevitably gets wired backwards. That replaceability has real pedagogical value: students experiment more freely when a mistake costs a few dollars instead of a month's budget.</p>
+</section>
+
+<section id="learning">
+<h2>Learning curve and time-to-first-robot</h2>
+<p>Getting an Arduino from unboxed to blinking an LED is: install the IDE, select the board and port, click upload. When that fails it is almost always the port selection or a driver on Windows, and it is fixable in a few minutes.</p>
+<p>Getting a Raspberry Pi from unboxed to a running robot program is: flash an OS image to a card, boot it, configure Wi-Fi and SSH, update packages, install Python libraries, write the program, then configure it to start automatically on boot. Every one of those steps is reasonable. Together they are a different scale of task, and they require comfort with a Linux terminal.</p>
+<p>That is not an argument against the Pi. It is an argument for being honest with yourself about what you are actually trying to learn. If the goal is <em>a robot that avoids obstacles</em>, the Arduino gets you there in one session — see our <a href="obstacle-avoiding-robot-car-arduino">obstacle-avoiding robot car build</a> or the <a href="arduino-classroom-robotics-beginners">full classroom progression from LED to voice control</a>. If the goal is <em>learning Linux and computer vision</em>, the Pi is the point of the exercise, and the extra setup is the curriculum rather than an obstacle to it.</p>
+</section>
+
+<section id="hybrid">
+<h2>The hybrid architecture: using both</h2>
+<p>Once a robot needs both a camera and precise motor control, the answer stops being "one or the other". The standard solution is to give each device the job it is good at:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Layer</th><th>Runs on</th><th>Responsible for</th></tr></thead>
+<tbody>
+<tr><td>High level</td><td>Raspberry Pi</td><td>Camera and computer vision, path planning, ROS 2 nodes, networking, logging, user interface</td></tr>
+<tr><td>Low level</td><td>Arduino / microcontroller</td><td>Motor PWM, encoder counting, servo pulses, ultrasonic timing, emergency stop</td></tr>
+<tr><td>Between them</td><td>USB serial, UART or I²C</td><td>Compact commands down, sensor readings and status up</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The interface is the part worth designing carefully. Keep the messages small and infrequent: the Pi should send <em>intent</em> ("drive forward at this speed", "turn to this heading"), not a stream of individual pin toggles. The microcontroller owns the fast loop and, importantly, owns the safety behaviour — if serial messages stop arriving for some timeout, it should stop the motors on its own rather than continuing the last command indefinitely. A robot that keeps driving because the Pi crashed mid-command is a robot that hits a wall.</p>
+<p>This split is also why the Bluetooth command protocols in our robot car builds use single characters or short strings rather than continuous control streams. The same principle applies whether the commanding device is a phone or a Pi.</p>
+
+<div class="note">
+<p><strong>A middle option worth knowing:</strong> the ESP32 sits between these categories — microcontroller timing with built-in Wi-Fi and Bluetooth, at a price closer to an Arduino than a Pi. For a robot that needs wireless control but not computer vision, it often beats both. It does not run Linux and it will not process camera frames the way a Pi will, but for telemetry, remote control and networked sensors it is frequently the right answer.</p>
+</div>
+</section>
+
+<section id="decision">
+<h2>A decision rule you can apply in 30 seconds</h2>
+<p>Work down this list and stop at the first line that describes your project:</p>
+<ol>
+  <li><strong>Does it need a camera, computer vision, or a machine-learning model on board?</strong> → Raspberry Pi.</li>
+  <li><strong>Does it need to run ROS 2, or connect to a network as a full participant?</strong> → Raspberry Pi.</li>
+  <li><strong>Does it need to run for hours on a small battery?</strong> → Arduino.</li>
+  <li><strong>Does it need to start instantly when switched on?</strong> → Arduino.</li>
+  <li><strong>Is the sensor set mostly analog?</strong> → Arduino, or a Pi with an external ADC.</li>
+  <li><strong>Does it need precise servo, stepper or ultrasonic timing?</strong> → Arduino, or an Arduino subordinate to a Pi.</li>
+  <li><strong>Is this your first robot?</strong> → Arduino. Build the thing that works, then add the Pi when you have a specific reason.</li>
+  <li><strong>Do two or more of the above conflict?</strong> → Use both, with the split described in the <a href="#hybrid">hybrid section</a>.</li>
+</ol>
+<p>The most common wrong answer I see is choosing a Pi for a robot that only needed to drive and avoid obstacles, because a Pi feels more capable. It is more capable — at things that project did not require — while being worse at everything that project did require.</p>
+</section>
+
+<section id="faq">
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details>
+<summary>Is Arduino or Raspberry Pi better for robotics?</summary>
+<p>Neither is better in general. Arduino wins when timing must be predictable, power is limited, the robot must start instantly, or the sensors are analog. Raspberry Pi wins when the robot needs vision, networking, ROS 2, or real computation. Robots that need both usually use both, with the Pi commanding and the Arduino executing.</p>
+</details>
+<details>
+<summary>Can a Raspberry Pi control motors directly?</summary>
+<p>No — and neither can an Arduino. Both need a motor driver board between the controller and the motor. The Pi can generate PWM in software, but that PWM can jitter under CPU load because Linux is not a real-time OS, which is a common reason to delegate motor control to a microcontroller.</p>
+</details>
+<details>
+<summary>Do I need to learn Linux to use a Raspberry Pi for robotics?</summary>
+<p>Yes, at least the basics: terminal navigation, permissions, installing packages, and setting up a service that starts your program on boot. If you have never used a terminal, budget real time for this. It is a worthwhile skill, but it is a separate learning project layered on top of learning robotics.</p>
+</details>
+<details>
+<summary>Which is cheaper for a first robot?</summary>
+<p>Arduino, clearly. Beyond the board price, the Pi path also requires a microSD card, a solid power supply, and often an ADC and level shifters for common sensors. Replacement cost after a wiring mistake is also much lower on Arduino, which matters when you are learning.</p>
+</details>
+<details>
+<summary>What about ESP32 — where does it fit?</summary>
+<p>Between the two. It has microcontroller-grade timing with built-in Wi-Fi and Bluetooth, at close to Arduino pricing. For wireless robots that do not need vision or Linux, it is often the best choice of the three. It does not replace a Pi for camera work or ROS 2.</p>
+</details>
+<details>
+<summary>Can I run ROS 2 on an Arduino?</summary>
+<p>Not full ROS 2 — it needs an operating system and far more memory than a microcontroller has. What you can run is micro-ROS, which lets a microcontroller participate in a ROS 2 system as a node while a Linux machine handles the rest. That fits the hybrid architecture described above.</p>
+</details>
+<details>
+<summary>Will an Arduino be fast enough for my robot?</summary>
+<p>For driving motors, reading distance and line sensors, controlling servos and responding to commands — comfortably, and with margin. Where it runs out is anything needing large amounts of memory or heavy computation: image processing, mapping, or storing significant data. Those are exactly the tasks that belong on the Pi side of a hybrid build.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. The comparisons here come from choosing boards for classroom robot builds where budget, battery life and setup time all matter — and from watching which choices leave students with a working robot at the end of the term.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">Specification figures are from Arduino and Raspberry Pi published documentation. Prices vary by region and are described in relative terms rather than quoted. No sponsored content or paid product endorsements.</p>
+
+<div class="cta">
+  <h3>Build something with it</h3>
+  <p>If the answer for you is Arduino, start here: <a href="hc-sr04-ultrasonic-led-proximity-alert">HC-SR04 ultrasonic sensor and LED proximity alert</a> for the sensing basics, then <a href="obstacle-avoiding-robot-car-arduino">the obstacle-avoiding robot car</a>. For the full teaching sequence, see <a href="arduino-classroom-robotics-beginners">from first LED to voice-controlled car</a>.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="hc-sr04-ultrasonic-led-proximity-alert">← Previous: HC-SR04 proximity alert</a>
+  <a href="./">All tutorials →</a>
+</div>
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;"><a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a><a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a><a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a><a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a></p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;"><a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a><a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a><a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a><a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a></nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;"><p style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p><p style="margin:0;font-size:0.85rem;color:#b5b0a6;">Advertising cookies may be used if you accept. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();</script>
+</body>
+</html>
