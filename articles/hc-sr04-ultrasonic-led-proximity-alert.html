@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HC-SR04 Ultrasonic Sensor + LED Proximity Alert with Arduino (Real Build)</title>
+<meta name="description" content="A real breadboard build: HC-SR04 ultrasonic sensor triggers an LED when an object gets within 20 cm. Clean 40-line sketch, 3 real photos, Serial Monitor output explained, and a TikTok demo of it running.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/hc-sr04-ultrasonic-led-proximity-alert">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HC-SR04 Ultrasonic Sensor + LED Proximity Alert with Arduino">
+<meta property="og:description" content="Real breadboard build: HC-SR04 triggers an LED under 20 cm. 40-line sketch, 3 real photos, Serial Monitor output explained, TikTok demo.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/ultrasonic-led-wired-running.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/hc-sr04-ultrasonic-led-proximity-alert">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/ultrasonic-led-wired-running.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"HC-SR04 Ultrasonic Sensor + LED Proximity Alert with Arduino (Real Build)",
+  "description":"A real breadboard build: HC-SR04 ultrasonic sensor triggers an LED when an object gets within 20 cm. 40-line sketch, 3 real photos, Serial Monitor output explained, and a video demo.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-09-09",
+  "dateModified":"2026-09-09",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/hc-sr04-ultrasonic-led-proximity-alert"},
+  "image":"https://roboticsengineeringlab.com/articles/ultrasonic-led-wired-running.jpg",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Uno, HC-SR04 ultrasonic sensor, LED, 220Ω resistor, breadboard, jumper wires",
+  "wordCount":"1400"
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+  {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+  {"@type":"ListItem","position":3,"name":"HC-SR04 LED Proximity Alert","item":"https://roboticsengineeringlab.com/articles/hc-sr04-ultrasonic-led-proximity-alert"}
+]}</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:52vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.38);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.8rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:54px 0 16px}.article-body h3{font-size:1.1rem;margin:28px 0 8px}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 36px}.img-grid .article-img{margin:0}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:400px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted)}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.serial-output{background:#080a0e;border:1px solid #1a2a1a;border-radius:12px;padding:18px;color:#4ec94e;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.6;margin:20px 0}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.video-wrap{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:0 0 36px;background:var(--card);display:flex;justify-content:center;padding:20px 0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}.img-grid{grid-template-columns:1fr}}
+</style>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="ultrasonic-led-wired-running.jpg" alt="Arduino Uno connected to an HC-SR04 ultrasonic sensor and a micro servo on a breadboard, with colorful jumper wires, USB cable connected to a laptop" fetchpriority="high" width="1456" height="819" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Beginner project · Published <time datetime="2026-09-09">September 9, 2026</time></div>
+    <h1>HC-SR04 Ultrasonic Sensor + LED Proximity Alert with Arduino</h1>
+    <p>A 40-line sketch that lights the built-in LED whenever something gets within 20 cm of the sensor. Simple enough for a first electronics class, useful enough to become the sensing core of a robot car. Real build, real photos, real Serial Monitor output.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 8 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="toc">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#what-it-does">What the circuit actually does</a></li>
+    <li><a href="#parts">Parts and wiring</a></li>
+    <li><a href="#code">The sketch — line by line</a></li>
+    <li><a href="#serial">Reading the Serial Monitor output</a></li>
+    <li><a href="#demo">Video demo</a></li>
+    <li><a href="#next">What to add next: servo sweep</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ol>
+</div>
+
+<section id="what-it-does">
+<h2>What the circuit actually does</h2>
+<p>The HC-SR04 sends an ultrasonic pulse (40 kHz, inaudible) from one transducer and listens for the echo on the other. The Arduino measures how long the echo takes to return using <code>pulseIn()</code>, converts that time to centimeters, and prints the result to the Serial Monitor every 100 ms. If the distance is 20 cm or less, pin 13 goes HIGH — which lights the Arduino's built-in LED (and any external LED wired to the same pin).</p>
+<p>That's the whole project. It's intentionally minimal: one sensor, one output, one condition. The point is to understand how the HC-SR04 actually works before embedding it in something more complex like a robot car, where it's easy to lose track of what the sensor is doing amid all the motor control code.</p>
+</section>
+
+<section id="parts">
+<h2>Parts and wiring</h2>
+
+<div class="img-grid">
+  <div class="article-img">
+    <img src="ultrasonic-led-parts-before.jpg" alt="Components laid out before assembly: Arduino Uno (upside down showing 'Made in Italy' label), HC-SR04 sensor, SG90 micro servo, breadboard, USB cable and jumper wires" loading="lazy" width="819" height="1456">
+    <div class="caption">Components before wiring. Note the genuine Arduino Uno — "Made in Italy" label visible. The servo is present for the next exercise (sweep), not this sketch.</div>
+  </div>
+  <div class="article-img">
+    <img src="ultrasonic-led-components-layout.jpg" alt="Same components now wired on breadboard — HC-SR04 plugged in at top, servo at right, Arduino connected via USB, colored jumper wires connecting everything" loading="lazy" width="1456" height="819">
+    <div class="caption">Wired and running. HC-SR04 in the breadboard top-left, servo at right (not used in this sketch yet). Color-coded wires: red = 5V, black/brown = GND, yellow = Trigger, orange = Echo.</div>
+  </div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Component</th><th>Arduino pin</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>HC-SR04 VCC</td><td>5V</td><td>Do not use 3.3V — the sensor requires 5V to operate</td></tr>
+<tr><td>HC-SR04 GND</td><td>GND</td><td>Share GND rail on breadboard</td></tr>
+<tr><td>HC-SR04 Trigger</td><td>Digital 2</td><td>OUTPUT — sends the pulse</td></tr>
+<tr><td>HC-SR04 Echo</td><td>Digital 3</td><td>INPUT — receives the echo</td></tr>
+<tr><td>LED (built-in or external)</td><td>Digital 13</td><td>220 Ω resistor to GND if using external LED</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<p><strong>About the servo in the photos:</strong> both photos show a micro servo (SG90) wired to the breadboard. It is not used in this sketch — it's there because this circuit is the first stage of a two-session class exercise. Session 1 is this sketch (ultrasonic + LED). Session 2 adds servo sweep to scan left and right and find the clearest direction, which is the upgrade path into a robot car obstacle-avoidance system. See <a href="#next">What to add next</a> at the bottom of this page.</p>
+</div>
+</section>
+
+<section id="code">
+<h2>The sketch — line by line</h2>
+<p>This is the actual file used in class, comments in Spanish left as-is:</p>
+
+<pre><code>const int Trigger = 2;   // Pin digital 2 para el Trigger del sensor
+const int Echo    = 3;   // Pin digital 3 para el Echo del sensor
+int led = 13;
+
+void setup() {
+  Serial.begin(9600);          // iniciailzamos la comunicación
+  pinMode(Trigger, OUTPUT);    // pin como salida
+  pinMode(Echo,    INPUT);     // pin como entrada
+  digitalWrite(Trigger, LOW);  // Inicializamos el pin con 0
+  pinMode(led, OUTPUT);
+}
+
+void loop() {
+  long t;  // tiempo que demora en llegar el eco
+  long d;  // distancia en centímetros
+
+  digitalWrite(Trigger, HIGH);
+  delayMicroseconds(10);       // Enviamos un pulso de 10µs
+  digitalWrite(Trigger, LOW);
+
+  t = pulseIn(Echo, HIGH);     // obtenemos el ancho del pulso
+  d = t / 59;                  // escalamos el tiempo a distancia en cm
+
+  if (d &lt;= 20) {
+    digitalWrite(led, HIGH);
+  } else {
+    digitalWrite(led, LOW);
+  }
+
+  Serial.print("Distancia: ");
+  Serial.print(d);             // Enviamos serialmente el valor de la distancia
+  Serial.print("cm");
+  Serial.println();
+  delay(100);                  // Hacemos una pausa de 100ms
+}</code></pre>
+
+<h3>Why <code>t / 59</code> and not <code>t / 58</code>?</h3>
+<p>The standard formula for converting HC-SR04 pulse time to centimeters is <code>d = t / 58</code>, based on sound traveling at 340 m/s (the pulse travels to the object and back, so distance = time × speed / 2, which simplifies to <code>t / 58.8</code>). This sketch uses 59, which is close enough for classroom purposes and produces readings within 1–2 cm of the 58 version at typical distances. Either value works — just be consistent within your project.</p>
+
+<h3>Why initialize Trigger LOW in setup?</h3>
+<p><code>digitalWrite(Trigger, LOW)</code> in <code>setup()</code> is a defensive initialization: it ensures the Trigger pin starts LOW before the first pulse. Without it, the pin state after reset is undefined on some board clones, and an accidental HIGH on Trigger at startup would cause the sensor to send a spurious pulse and produce a bogus first reading. In practice most genuine Arduino Unos start with pins LOW, but it's a good habit that prevents intermittent bugs on clone boards.</p>
+
+<h3>The 100 ms delay</h3>
+<p><code>delay(100)</code> at the end of <code>loop()</code> means the sensor takes 10 readings per second. The HC-SR04 datasheet recommends at least 60 ms between triggers to avoid echo interference from the previous pulse — 100 ms is comfortably above that. If you need faster polling (for a faster-moving robot), you can reduce to 60 ms, but going below 60 ms causes the previous echo to interfere with the new trigger and produces erratic readings.</p>
+</section>
+
+<section id="serial">
+<h2>Reading the Serial Monitor output</h2>
+<p>Open the Arduino IDE Serial Monitor (Ctrl+Shift+M) at 9600 baud. You'll see a continuous stream like this:</p>
+
+<div class="serial-output">Distancia: 84cm<br>
+Distancia: 83cm<br>
+Distancia: 82cm<br>
+Distancia: 21cm<br>
+Distancia: 19cm  ← LED turns ON here<br>
+Distancia: 18cm<br>
+Distancia: 17cm<br>
+Distancia: 18cm<br>
+Distancia: 22cm  ← LED turns OFF here<br>
+Distancia: 83cm</div>
+
+<p>A few things to notice in real use: readings at distances above roughly 3–4 meters become unreliable (the echo is too faint to trigger <code>pulseIn()</code>). Very close distances — below about 3 cm — also read incorrectly because the echo arrives before <code>pulseIn()</code> has fully started listening. Both are real HC-SR04 limitations, not bugs in the sketch.</p>
+<p>You'll also occasionally see a reading of <code>0cm</code> in the stream. This happens when <code>pulseIn()</code> times out — it waits 1 second by default and returns 0 if no echo is received. Dividing 0 by 59 gives 0, which is below the 20 cm threshold and would incorrectly light the LED. In a production project you'd add a check like <code>if (t == 0) return;</code> to skip timed-out readings. In a classroom context we leave it in and use it as a teaching moment about sensor failure modes.</p>
+</section>
+
+<section id="demo">
+<h2>Video demo</h2>
+<p>This is the actual circuit running — filmed for the school's robotics TikTok account. You can see the LED on pin 13 turning on and off as a hand approaches and retreats from the sensor, and the Serial Monitor in the background showing the live distance readings:</p>
+
+<div class="video-wrap">
+  <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@roboticachile/video/7549199951511735558" data-video-id="7549199951511735558" style="max-width:605px;min-width:325px;">
+    <section><a target="_blank" title="@roboticachile" href="https://www.tiktok.com/@roboticachile?refer=embed">@roboticachile</a></section>
+  </blockquote>
+  <script async src="https://www.tiktok.com/embed.js"></script>
+</div>
+
+<p>If the embed doesn't load, watch directly on TikTok: <a href="https://www.tiktok.com/@roboticachile/video/7549199951511735558" target="_blank" rel="noopener">@roboticachile — ultrasonic LED demo</a>.</p>
+</section>
+
+<section id="next">
+<h2>What to add next: servo sweep</h2>
+<p>The servo visible in both photos is the natural next step. Once the HC-SR04 is returning reliable distance readings, you mount it on the servo horn and add a sweep routine: the servo rotates to 0°, takes a reading; rotates to 90°, takes a reading; rotates to 180°, takes a reading; then points toward whichever direction had the most clearance. This is exactly the scanning logic used in the Version 4 robot car documented in the <a href="arduino-robot-car-evolution-four-versions">four-generation robot car article</a>.</p>
+<p>The key change needed in the sketch is adding the <code>Servo</code> library and replacing the fixed <code>led</code> output with motor control calls. The sensor-reading code (<code>Trigger</code>, <code>Echo</code>, <code>pulseIn()</code>, <code>t/59</code>) stays exactly the same — that's the value of building and understanding this minimal version first.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>This sketch</th><th>With servo sweep added</th></tr></thead>
+<tbody>
+<tr><td>HC-SR04 on pins 2, 3</td><td>Same</td></tr>
+<tr><td>LED on pin 13</td><td>Replace with motor driver calls</td></tr>
+<tr><td>Fixed single reading</td><td>Servo sweeps 0°→90°→180°, reads at each</td></tr>
+<tr><td>Threshold: 20 cm</td><td>Adjust to 30–100 cm for robot speed</td></tr>
+<tr><td>No decision logic</td><td>Turn toward direction with most clearance</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="faq">
+<h2>FAQ</h2>
+<div class="faq">
+<details>
+<summary>Can I change the 20 cm threshold?</summary>
+<p>Yes — change the <code>20</code> in <code>if (d &lt;= 20)</code> to any distance in centimeters. For a robot car at typical classroom speeds, 30–50 cm gives more reaction time. For a short-range parking sensor on a desk, 10–15 cm is more useful.</p>
+</details>
+<details>
+<summary>Why does the reading sometimes jump to 0 or a huge number?</summary>
+<p>Two causes: a 0 reading means <code>pulseIn()</code> timed out (no echo received — usually because the object is too far away or the sensor is pointed at a surface that scatters the sound, like fabric or angled walls). A very large reading means the echo from a previous cycle is being picked up — reduce the delay between readings or add <code>if (t == 0 || t > 25000) return;</code> to filter both cases.</p>
+</details>
+<details>
+<summary>Does this work at 3.3V (for an ESP32 or similar)?</summary>
+<p>The HC-SR04 requires 5V on its VCC pin to operate — it will not trigger reliably at 3.3V. For 3.3V microcontrollers, use the HC-SR04P variant (which accepts 3–5.5V) or add a logic-level shifter between the ESP32 and the sensor's Echo pin (since the Echo output is at 5V, which can damage some 3.3V-only GPIO pins).</p>
+</details>
+<details>
+<summary>What is the maximum reliable range?</summary>
+<p>The HC-SR04 datasheet specifies 2 cm to 400 cm. In practice, reliable readings drop off above 2–3 meters on soft or angled surfaces. On a hard flat wall, we've gotten consistent readings up to about 3 meters in classroom conditions. Below 3 cm, the echo returns before the sensor is ready to listen and readings are not usable.</p>
+</details>
+<details>
+<summary>Can I use a different pin for Trigger or Echo?</summary>
+<p>Yes — any digital pin works. The sketch uses pins 2 and 3, which are also the interrupt pins on the Uno. Using them for <code>pulseIn()</code> (which doesn't use interrupts) is fine, but if you later want to add interrupt-based echo timing for faster readings, pins 2 and 3 are the right choice to start with.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. This circuit is the one I demonstrate in class before students build their first robot car. The photos and video are from that session.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">Photos and video taken during a classroom session. The TikTok video is from the school's own account (@roboticachile). No sponsored content or paid placements.</p>
+
+<div class="cta">
+  <h3>Continue in this series</h3>
+  <p>Once this circuit is working, the natural next project is the <a href="obstacle-avoiding-robot-car-arduino">obstacle-avoiding robot car</a> — which uses the same HC-SR04 wiring as the foundation of its avoidance logic. For the full classroom progression, see <a href="arduino-classroom-robotics-beginners">from first LED to voice-controlled car</a>.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="obstacle-avoiding-robot-car-arduino">← Previous: Obstacle-avoiding car</a>
+  <a href="./">All tutorials →</a>
+</div>
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;"><a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a><a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a><a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a><a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a></p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;"><a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a><a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a><a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a><a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a></nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;"><p style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p><p style="margin:0;font-size:0.85rem;color:#b5b0a6;">Advertising cookies may be used if you accept. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();</script>
+</body>
+</html>
