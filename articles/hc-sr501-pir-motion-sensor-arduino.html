@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HC-SR501 PIR Motion Sensor with Arduino: Complete Wiring, Trimpot and Jumper Guide</title>
+<meta name="description" content="How the HC-SR501 passive infrared sensor actually works: the two trimpots, the H/L jumper, the 3.3V output problem with 5V boards, the warm-up period, and why false triggers happen. Real photos and working code.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/hc-sr501-pir-motion-sensor-arduino">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HC-SR501 PIR Motion Sensor with Arduino: Complete Wiring, Trimpot and Jumper Guide">
+<meta property="og:description" content="The two trimpots, the H/L jumper, the 3.3V output issue, the warm-up period and the real causes of false triggers — explained properly, with working code.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/pir-hcsr501-lens-top.webp">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/hc-sr501-pir-motion-sensor-arduino">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HC-SR501 PIR Motion Sensor with Arduino: Complete Guide">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/pir-hcsr501-lens-top.webp">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"HC-SR501 PIR Motion Sensor with Arduino: Complete Wiring, Trimpot and Jumper Guide",
+  "description":"A complete technical guide to the HC-SR501 passive infrared motion sensor: BISS0001 architecture, sensitivity and time-delay trimpots, the H/L retrigger jumper, the 3.3V output level issue on 5V boards, warm-up behaviour and the real causes of false triggering.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-09-14",
+  "dateModified":"2026-09-14",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/hc-sr501-pir-motion-sensor-arduino"},
+  "image":"https://roboticsengineeringlab.com/articles/pir-hcsr501-lens-top.webp",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Uno or compatible, HC-SR501 PIR module, LED, 220 ohm resistor, jumper wires",
+  "wordCount":"2400"
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+ {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+ {"@type":"ListItem","position":3,"name":"HC-SR501 PIR Motion Sensor","item":"https://roboticsengineeringlab.com/articles/hc-sr501-pir-motion-sensor-arduino"}
+]}</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"What do the two potentiometers on the HC-SR501 do?","acceptedAnswer":{"@type":"Answer","text":"One sets sensitivity, which adjusts the detection range roughly between 3 and 7 metres. The other sets the time delay, which is how long the output stays HIGH after motion is detected, adjustable from a fraction of a second up to several minutes. Which trimpot is which varies between manufacturing batches, so identify them by testing rather than by position."}},
+ {"@type":"Question","name":"What does the H and L jumper on the HC-SR501 mean?","acceptedAnswer":{"@type":"Answer","text":"H selects repeatable (retriggerable) mode: continued motion keeps restarting the timer, so the output stays HIGH while movement continues. L selects non-repeatable (single trigger) mode: the output goes HIGH for the set delay and then drops LOW regardless of whether motion is still happening. For most applications, H is the mode you want."}},
+ {"@type":"Question","name":"Can the HC-SR501 output drive a 5V Arduino input?","acceptedAnswer":{"@type":"Answer","text":"Yes, in practice. The module outputs about 3.3V when triggered. A 5V AVR Arduino reads a digital input as HIGH above roughly 3.0V, so 3.3V is recognised but with only about 0.3V of margin. It works reliably on short wiring with a clean supply, and it works with full margin on 3.3V boards like the ESP32."}},
+ {"@type":"Question","name":"Why does the HC-SR501 trigger with nothing in front of it?","acceptedAnswer":{"@type":"Answer","text":"The most common causes are the warm-up period after power-on, an unstable power supply, heat sources such as heating vents or direct sunlight moving across the field of view, and long unshielded signal wiring picking up noise. Waiting 60 seconds after power-up and adding a decoupling capacitor across the supply resolves most cases."}},
+ {"@type":"Question","name":"Can a PIR sensor detect a person who is standing still?","acceptedAnswer":{"@type":"Answer","text":"No. A passive infrared sensor detects changes in infrared radiation across its segmented field of view, not the presence of a warm body. Someone who stops moving stops producing a changing signal and the sensor output returns to LOW. This is a fundamental property of the technology, not a fault in the module."}}
+]}</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:52vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.34);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.08;font-weight:400;max-width:920px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:54px 0 16px}.article-body h3{font-size:1.12rem;margin:30px 0 8px;color:var(--gold)}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box,.verdict{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.verdict{border-left:3px solid var(--gold)}.verdict p:last-child{margin-bottom:0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 36px}.img-grid .article-img{margin:0}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:520px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.serial-output{background:#080a0e;border:1px solid #1a2a1a;border-radius:12px;padding:18px;color:#4ec94e;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.6;margin:20px 0}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem;color:var(--text)}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}.img-grid{grid-template-columns:1fr}}
+</style>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7032484018692343" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Site navigation"><div class="nav-inner"><a class="logo" href="../">Robotics <span>Engineering</span></a><div class="nav-links">
+  <a href="../">Home</a><a href="./">Tutorials</a><a href="../6-dof-robot-arm-guide">Guide</a><a href="../about">About</a><a href="../contact">Contact</a>
+</div></div></nav>
+
+<header class="hero">
+  <img src="pir-hcsr501-lens-top.webp" alt="HC-SR501 PIR motion sensor module seen from above, showing the white segmented Fresnel lens dome mounted on the green circuit board" fetchpriority="high" width="1080" height="1440" loading="lazy" decoding="async">
+  <div class="hero-inner">
+    <div class="eyebrow">Sensor guide · Published <time datetime="2026-09-14">September 14, 2026</time></div>
+    <h1>HC-SR501 PIR Motion Sensor with Arduino: Wiring, Trimpots and the H/L Jumper</h1>
+    <p>Most guides to this module tell you to connect three wires and read a pin. That works until it doesn't — and then you are left with a sensor that triggers at random, stays HIGH forever, or ignores you entirely. This guide covers what those two knobs and that little yellow jumper actually change.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo">Alberto Gallardo</a>, Computer Science and Robotics Teacher · 13 min read</p>
+  </div>
+</header>
+
+<main class="container article-body">
+<article>
+
+<div class="verdict">
+  <h3 style="margin-top:0;">The three things that cause most HC-SR501 problems</h3>
+  <p><strong>1. The warm-up period.</strong> The module needs roughly 30 to 60 seconds after power-on to stabilise. Triggers during that window are meaningless. Most "my sensor is broken" reports are this.</p>
+  <p><strong>2. The jumper.</strong> H and L select completely different output behaviours. If your output drops LOW while someone is still moving, you are in L mode and probably did not intend to be.</p>
+  <p><strong>3. The 3.3V output.</strong> The module outputs about 3.3V, not 5V. A 5V Arduino accepts it, but with only around 0.3V of margin — which is why long wires and noisy supplies cause intermittent failures that look like sensor faults.</p>
+</div>
+
+<div class="toc" aria-label="Table of contents">
+  <h2>What this guide covers</h2>
+  <ol>
+    <li><a href="#how-it-works">How a PIR sensor actually detects motion</a></li>
+    <li><a href="#board-tour">Board tour: what each component does</a></li>
+    <li><a href="#trimpots">The two trimpots: sensitivity and time delay</a></li>
+    <li><a href="#jumper">The H/L jumper: repeatable vs single trigger</a></li>
+    <li><a href="#wiring">Wiring to an Arduino</a></li>
+    <li><a href="#logic-levels">The 3.3V output and 5V logic thresholds</a></li>
+    <li><a href="#code">Working code with state tracking</a></li>
+    <li><a href="#false-triggers">Diagnosing false triggers</a></li>
+    <li><a href="#limits">What this sensor fundamentally cannot do</a></li>
+    <li><a href="#faq">Frequently asked questions</a></li>
+  </ol>
+</div>
+
+<section id="how-it-works">
+<h2>How a PIR sensor actually detects motion</h2>
+<p>"PIR" stands for <strong>passive infrared</strong>. Passive is the important word: unlike an ultrasonic sensor, which emits a pulse and listens for the echo, a PIR sensor emits nothing at all. It only listens.</p>
+<p>Every object above absolute zero radiates infrared energy, and a human body radiates strongly in the range this sensor is tuned to. Underneath the white dome sit two (sometimes four) pyroelectric elements wired in opposition. When both elements see the same amount of infrared, their signals cancel and the output is zero. When something warm moves across the field of view, it crosses one element before the other, the balance breaks, and the difference produces a measurable signal.</p>
+<p>That differential arrangement is a deliberate design choice, and it explains the sensor's single most misunderstood behaviour: <strong>it detects change, not presence</strong>. Ambient room temperature rising slowly affects both elements equally and produces nothing. A person walking across the beam produces a strong signal. A person standing perfectly still produces nothing after a second or two, and the output drops back to LOW.</p>
+
+<h3>What the white dome is for</h3>
+<p>The dome is a <strong>Fresnel lens</strong>, and it is not decorative. Look closely at the moulded facets — each one focuses infrared from a different narrow slice of the room onto the sensing elements. This slices the detection area into a fan of alternating sensitive and blind zones.</p>
+<p>The result is that a warm body crossing the field passes through zone, gap, zone, gap, producing a sharp alternating signal that is easy to distinguish from a slow ambient drift. Without the lens, the sensor would have a single wide undifferentiated view and would be far worse at telling motion apart from background change. It is also why walking <em>across</em> the sensor triggers it much more reliably than walking directly <em>towards</em> it — moving straight at the sensor crosses far fewer zone boundaries.</p>
+</section>
+
+<section id="board-tour">
+<h2>Board tour: what each component does</h2>
+
+<div class="img-grid">
+  <div class="article-img">
+    <img src="pir-hcsr501-lens-top.webp" alt="Top view of the HC-SR501 showing the white faceted Fresnel lens dome clipped over the pyroelectric sensor" loading="lazy" width="1080" height="1440">
+    <div class="caption">Lens side. The faceted dome divides the field of view into alternating detection zones.</div>
+  </div>
+  <div class="article-img">
+    <img src="pir-hcsr501-pcb-trimpots.webp" alt="Underside of the HC-SR501 circuit board showing the BISS0001 integrated circuit, two black adjustment trimpots, a yellow jumper and electrolytic capacitors" loading="lazy" width="1080" height="1440">
+    <div class="caption">Component side. The BISS0001 controller is the large chip at left; the two black trimpots and the yellow jumper are the only user adjustments.</div>
+  </div>
+</div>
+
+<p>The board is built around the <strong>BISS0001</strong>, a dedicated PIR controller chip that handles the entire analogue signal chain. The raw output from a pyroelectric element is tiny and noisy, so the BISS0001 provides a two-stage amplifier, a comparator with a fixed threshold, and the retriggerable timing logic that holds the output HIGH for the configured delay. The chip in the photo above is marked <code>BISS0001</code> with a date code below it.</p>
+<div class="article-img">
+  <img src="pir-hcsr501-pcb-in-bag.jpg" alt="Close-up of an HC-SR501 circuit board held against antistatic bags, showing the BISS0001 controller chip, electrolytic capacitors, the three-pin header and the yellow mode jumper" loading="lazy" width="1080" height="1440">
+  <div class="caption">The BISS0001 controller and its supporting components. The three-pin header is at the left edge, the yellow mode jumper at lower right, and the electrolytic capacitors that decouple the supply rail sit at the corners.</div>
+</div>
+
+<p>Everything else on the board supports that chip. The onboard voltage regulator lets the module accept a wide supply range and feed the BISS0001 a clean rail. The electrolytic capacitors decouple that rail — PIR front-end gain is high enough that supply ripple would otherwise show up as false detections. The three-pin header carries VCC, OUT and GND.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Feature</th><th>Typical value</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td>Controller IC</td><td>BISS0001</td><td>Handles amplification, thresholding and retrigger timing on-chip</td></tr>
+<tr><td>Supply voltage</td><td>Roughly 4.5 V to 20 V</td><td>Runs directly from Arduino 5V, or from a 9 V or 12 V rail</td></tr>
+<tr><td>Output voltage</td><td>About 3.3 V HIGH, 0 V LOW</td><td>Not 5 V — see the <a href="#logic-levels">logic level section</a></td></tr>
+<tr><td>Detection range</td><td>Roughly 3 m to 7 m, adjustable</td><td>Set by the sensitivity trimpot</td></tr>
+<tr><td>Detection angle</td><td>Roughly 100° to 120° cone</td><td>Wide, but blind directly behind and to the sides</td></tr>
+<tr><td>Output delay</td><td>Under a second up to several minutes</td><td>Set by the time-delay trimpot</td></tr>
+<tr><td>Warm-up time</td><td>Roughly 30 to 60 seconds</td><td>Output during this window is unreliable</td></tr>
+<tr><td>Blocking interval</td><td>Roughly 2.5 s after output drops</td><td>Sensor ignores motion briefly before it can retrigger</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<p><strong>Specifications vary between clones.</strong> The HC-SR501 is an unbranded design manufactured by many factories, and the figures above are typical rather than guaranteed. Supply range, output voltage and trimpot travel all differ slightly between production runs. Treat the numbers as a starting point and verify the behaviour of the specific modules you have — which is exactly what the test sketch further down is for.</p>
+</div>
+</section>
+
+<section id="trimpots">
+<h2>The two trimpots: sensitivity and time delay</h2>
+<p>The two black adjusters are the module's only tuning controls, and getting them right is most of the work.</p>
+
+<h3>Sensitivity</h3>
+<p>Sets the comparator threshold, which effectively controls detection range — roughly 3 metres at minimum, roughly 7 metres at maximum. Turning it up does not just extend range; it also makes the module more willing to act on weaker signals, which means more false triggers from heat sources at the edge of the field.</p>
+<p>The practical approach is to start at minimum, then increase until the sensor reliably catches motion at the distance you actually care about, and stop there. Resist the urge to max it out — a sensor covering a 3-metre doorway set to 7-metre sensitivity will pick up movement through the doorway from the next room.</p>
+
+<h3>Time delay</h3>
+<p>Sets how long the output stays HIGH after a detection, from well under a second at minimum to several minutes at maximum. This is done in hardware by the BISS0001, not in your code — the pin genuinely stays HIGH for that whole period regardless of what your sketch does.</p>
+<p>For testing and for reading the sensor in software, set this to <strong>minimum</strong>. A long hardware delay makes debugging miserable, because every test requires waiting out the timer before the sensor will respond again. If your application needs a light to stay on for two minutes, it is almost always better to keep the hardware delay short and handle the timing in your sketch, where you can change it without a screwdriver.</p>
+
+<div class="note">
+<p><strong>Which trimpot is which varies by batch.</strong> There is no reliable universal rule — position, orientation and even which direction counts as "increase" differ between manufacturing runs of this module. Identify them empirically: set the time delay knob you suspect to minimum, then turn the other and watch how detection distance changes. Two minutes of testing beats guessing from a diagram that was drawn for a different factory's board.</p>
+</div>
+</section>
+
+<section id="jumper">
+<h2>The H/L jumper: repeatable vs single trigger</h2>
+<p>The small yellow jumper — visible at the left edge of the component-side photo above — selects between two genuinely different output behaviours. This is the setting that most tutorials skip, and it causes a disproportionate share of confusion.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>&nbsp;</th><th>H — repeatable (retriggerable)</th><th>L — non-repeatable (single trigger)</th></tr></thead>
+<tbody>
+<tr><td>On detection</td><td>Output goes HIGH</td><td>Output goes HIGH</td></tr>
+<tr><td>If motion continues</td><td>Timer restarts continuously — output stays HIGH</td><td>Timer runs out — output drops LOW even with motion present</td></tr>
+<tr><td>Output pattern with a person in the room</td><td>One continuous HIGH</td><td>Repeating HIGH / LOW pulses</td></tr>
+<tr><td>Good for</td><td>Occupancy lighting, "someone is here" logic, most projects</td><td>Counting discrete events, triggering a single action per detection</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>In <strong>H mode</strong>, every new detection resets the delay timer. Someone walking around the room keeps the output HIGH continuously and it only drops once the room has been still for the full delay period. This is what you want for a light that should stay on while a room is occupied.</p>
+<p>In <strong>L mode</strong>, the timer is not restarted by further motion. The output goes HIGH, runs its delay, and drops — then a blocking interval passes, and only then can it trigger again. With continuous motion the output pulses on and off. This is occasionally useful if you want one discrete event per detection cycle, but it is rarely what a beginner intends.</p>
+<p>If your symptom is "the light keeps turning off while I am standing right in front of it", check this jumper before anything else.</p>
+</section>
+
+<section id="wiring">
+<h2>Wiring to an Arduino</h2>
+<p>Three wires, and the pin order is printed on the board underneath the header — worth checking, because it is not identical across all clones.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>HC-SR501 pin</th><th>Arduino</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>VCC</td><td>5V</td><td>The onboard regulator handles it; the module also runs from 9 V or 12 V if needed</td></tr>
+<tr><td>OUT</td><td>Digital pin 2</td><td>Digital input, no pull-up needed — the module drives both HIGH and LOW actively</td></tr>
+<tr><td>GND</td><td>GND</td><td>Common ground with the Arduino is essential</td></tr>
+<tr><td>LED (optional)</td><td>Digital pin 13 + 220 Ω to GND</td><td>Pin 13 also drives the onboard LED, so an external one is optional</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Pin 2 is a deliberate choice: on an Arduino Uno it is one of the two external interrupt pins. This sketch polls the pin rather than using an interrupt, but wiring it to pin 2 from the start means you can move to <code>attachInterrupt()</code> later without rewiring — useful once the sketch grows and polling every loop stops being practical.</p>
+<p>Unlike a button, the OUT pin does not need <code>INPUT_PULLUP</code>. The module actively drives the line to about 3.3 V for HIGH and to ground for LOW, so a plain <code>pinMode(pin, INPUT)</code> is correct. Adding a pull-up would fight the module's LOW drive.</p>
+</section>
+
+<section id="logic-levels">
+<h2>The 3.3V output and 5V logic thresholds</h2>
+<p>This deserves its own section because it is the source of the most frustrating class of HC-SR501 failure: the one that works on the bench and fails intermittently in the finished project.</p>
+<p>The module's OUT pin goes to roughly <strong>3.3 V</strong> when triggered, not 5 V. On a 5 V AVR Arduino, a digital input is guaranteed to read HIGH above about 0.6 × V<sub>CC</sub>, which is 3.0 V. So 3.3 V is read as HIGH — with roughly <strong>0.3 V of margin</strong>.</p>
+<p>That margin is enough on a short jumper wire with a clean supply. It erodes quickly when you add a two-metre signal run, share a supply with motors, or run the Arduino from a slightly high regulator that pushes V<sub>CC</sub> above 5 V — which raises the threshold and shrinks the margin further. The failure mode is not a dead sensor; it is a sensor that works most of the time and occasionally misses a detection, which is far harder to diagnose.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Board</th><th>Logic level</th><th>Margin on a 3.3 V HIGH</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>Arduino Uno / Mega / Nano</td><td>5 V</td><td>About 0.3 V</td><td>Works; keep wiring short and the supply clean</td></tr>
+<tr><td>ESP32 / ESP8266</td><td>3.3 V</td><td>Full margin</td><td>Ideal match</td></tr>
+<tr><td>Arduino Due / Zero</td><td>3.3 V</td><td>Full margin</td><td>Ideal match</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>If you need real margin on a 5 V board, the clean fix is a small NPN transistor or a logic-level MOSFET as a level translator, or simply moving the sensor to a 3.3 V microcontroller. For a classroom exercise on a 30 cm jumper wire, direct connection is fine — just know why it is fine, so that when the same circuit misbehaves inside a two-metre enclosure you already know where to look.</p>
+</section>
+
+<section id="code">
+<h2>Working code with state tracking</h2>
+<p>The naive sketch — <code>digitalRead()</code> and print — floods the Serial Monitor with hundreds of identical lines per second and tells you nothing about <em>when</em> things changed. This version tracks state transitions and reports only the edges, which is what you actually want when tuning the trimpots.</p>
+
+<pre><code>// HC-SR501 PIR motion sensor - edge-detecting test sketch
+// OUT -> pin 2, LED -> pin 13
+// Set the time-delay trimpot to MINIMUM while testing.
+
+const int PIR_PIN = 2;
+const int LED_PIN = 13;
+
+const unsigned long WARMUP_MS = 60000UL;  // 60 s stabilisation
+
+int  lastState = LOW;
+unsigned long motionStartedAt = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PIR_PIN, INPUT);     // module drives both levels; no pull-up
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+
+  Serial.println(F("HC-SR501 warming up - ignore output for 60 s"));
+  unsigned long start = millis();
+  while (millis() - start &lt; WARMUP_MS) {
+    // blink slowly so it is obvious the board is alive, not frozen
+    digitalWrite(LED_PIN, (millis() / 500) % 2);
+    delay(10);
+  }
+  digitalWrite(LED_PIN, LOW);
+  lastState = digitalRead(PIR_PIN);   // adopt whatever state it settled into
+  Serial.println(F("Ready. Watching for motion."));
+}
+
+void loop() {
+  int state = digitalRead(PIR_PIN);
+
+  if (state == HIGH &amp;&amp; lastState == LOW) {
+    motionStartedAt = millis();
+    digitalWrite(LED_PIN, HIGH);
+    Serial.print(F("MOTION START  at "));
+    Serial.print(millis() / 1000.0, 1);
+    Serial.println(F(" s"));
+  }
+  else if (state == LOW &amp;&amp; lastState == HIGH) {
+    unsigned long heldMs = millis() - motionStartedAt;
+    digitalWrite(LED_PIN, LOW);
+    Serial.print(F("MOTION END    held HIGH for "));
+    Serial.print(heldMs / 1000.0, 1);
+    Serial.println(F(" s"));
+  }
+
+  lastState = state;
+}</code></pre>
+
+<p>Three things make this sketch more useful than the usual example:</p>
+<ul>
+  <li><strong>It enforces the warm-up</strong> rather than leaving it as a comment, and blinks the LED during it so the board does not look dead.</li>
+  <li><strong>It reports only transitions</strong>, so the Serial Monitor stays readable and you can see exactly when each detection began and ended.</li>
+  <li><strong>It measures how long the output stayed HIGH</strong>, which is the direct way to calibrate the time-delay trimpot. Turn the knob, trigger the sensor, read the number.</li>
+</ul>
+
+<p>Typical output once running:</p>
+<div class="serial-output">HC-SR501 warming up - ignore output for 60 s<br>
+Ready. Watching for motion.<br>
+MOTION START  at 61.4 s<br>
+MOTION END    held HIGH for 2.8 s<br>
+MOTION START  at 70.2 s<br>
+MOTION END    held HIGH for 2.8 s</div>
+
+<p>That repeated "held HIGH for 2.8 s" is the time-delay trimpot at its minimum setting on this particular module. Turn the knob clockwise and the number grows. If it never drops back to LOW while you keep moving, you are in H mode — which, as covered above, is usually the correct mode.</p>
+</section>
+
+<section id="false-triggers">
+<h2>Diagnosing false triggers</h2>
+<p>Work down this list in order. The causes are roughly ordered by how often they turn out to be the answer.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td>Random triggers in the first minute after power-on</td><td>Warm-up period not respected</td><td>Ignore all output for 60 s — the sketch above does this for you</td></tr>
+<tr><td>Triggers when motors or relays switch</td><td>Supply dips coupling into the high-gain front end</td><td>Add a 100 µF electrolytic plus a 100 nF ceramic across the module's VCC and GND, close to the module</td></tr>
+<tr><td>Triggers at the same time each day</td><td>Sunlight moving across the field of view</td><td>Reposition, or shade the lens from direct sun</td></tr>
+<tr><td>Triggers near a window, door or vent</td><td>Moving air at a different temperature</td><td>Move the sensor away from vents and draughts; lower sensitivity</td></tr>
+<tr><td>Intermittent missed detections</td><td>3.3 V output margin eroded by long wiring or a high V<sub>CC</sub></td><td>Shorten the signal run, or use a 3.3 V board — see <a href="#logic-levels">logic levels</a></td></tr>
+<tr><td>Output stuck HIGH permanently</td><td>Time-delay trimpot near maximum, in H mode with ongoing motion</td><td>Turn the delay trimpot to minimum and retest in a still room</td></tr>
+<tr><td>Output pulses on and off with a person present</td><td>Jumper in L (single trigger) mode</td><td>Move the jumper to H</td></tr>
+<tr><td>Detects nothing at all</td><td>Sensitivity at minimum, or wrong pin order on a clone</td><td>Verify the pin labels on the board silkscreen; raise sensitivity</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>The decoupling capacitor fix is worth emphasising. The PIR front end amplifies a very small signal by a large factor, so ripple on the supply that would be harmless to a digital circuit lands squarely in the sensor's signal band. Any project where the PIR shares a supply with motors, servos or relays should have that capacitor pair fitted as a default, not as a troubleshooting step. The same principle applies to the battery-sag problems documented in our <a href="arduino-robot-car-evolution-four-versions">four-generation robot car write-up</a> — shared supplies are a recurring source of bugs that look like sensor faults.</p>
+</section>
+
+<section id="limits">
+<h2>What this sensor fundamentally cannot do</h2>
+<p>Choosing the right sensor matters more than tuning the wrong one. These are properties of the technology, not defects:</p>
+<ul>
+  <li><strong>It cannot detect a motionless person.</strong> The differential pyroelectric design responds to change. Someone sitting still at a desk will stop registering within seconds. If you need occupancy rather than motion, you need a different technology — a microwave or mmWave radar module, for example.</li>
+  <li><strong>It cannot measure distance.</strong> The output is a single digital HIGH or LOW. There is no distance value available, only "something moved within the configured range". For distance, use an ultrasonic sensor — see our <a href="hc-sr04-ultrasonic-led-proximity-alert">HC-SR04 proximity alert build</a>.</li>
+  <li><strong>It cannot tell you direction or count people.</strong> Two people or one produce the same output. Some projects approximate direction with two sensors and timing analysis, but the individual module gives you nothing.</li>
+  <li><strong>It cannot see through glass.</strong> Ordinary window glass blocks the infrared wavelengths involved. Pointing a PIR through a window at a garden will not work, and putting one inside a sealed clear enclosure usually will not either — the enclosure needs an IR-transparent window, typically HDPE.</li>
+  <li><strong>It struggles to distinguish humans from pets.</strong> A dog is also a moving warm body. Commercial alarm PIRs use shaped lenses to create a blind zone at floor level; the generic HC-SR501 lens does not. Mounting height and downward angle are your only real controls.</li>
+  <li><strong>Its performance drops as ambient temperature approaches body temperature.</strong> The sensor works on the contrast between a warm body and a cooler background. On a very hot day that contrast shrinks and effective range falls.</li>
+</ul>
+</section>
+
+<section id="projects">
+<h2>Where it fits in a project</h2>
+
+<div class="article-img">
+  <img src="pir-hcsr501-batch-bags.jpg" alt="Several HC-SR501 PIR modules in individual antistatic bags laid out on a white surface, with one unpacked module in the centre showing its white lens" loading="lazy" width="1080" height="1440">
+  <div class="caption">A batch of HC-SR501 modules as they arrive — individually bagged in antistatic packaging. Buying in quantity is how these get used in a classroom, and it also means checking a few for consistency before handing them out.</div>
+</div>
+
+<p>Once the module is behaving, the HC-SR501 is a genuinely useful building block precisely because it does one thing and does it in hardware. A few directions worth taking it:</p>
+<ul>
+  <li><strong>Automatic lighting.</strong> The archetypal use. Keep the hardware delay short and manage the on-time in software so you can adjust it without a screwdriver.</li>
+  <li><strong>Battery-powered alerts.</strong> The module's current draw is low enough that a PIR plus a sleeping microcontroller can run a long time on batteries. Wire OUT to an interrupt-capable pin and let the detection wake the board.</li>
+  <li><strong>Robot wake-on-approach.</strong> A PIR on a robot lets it stay idle until a person is nearby, rather than driving its avoidance loop continuously and draining the pack.</li>
+  <li><strong>Data logging.</strong> Counting detection events over hours tells you about room usage patterns — and it is a good exercise in appreciating that what you are logging is motion events, not people.</li>
+</ul>
+
+<div class="note">
+<p><strong>A note on cameras and privacy.</strong> A common next step is triggering a camera from a PIR detection. That is a reasonable project, but recording people creates obligations that vary by country and by setting — schools and workplaces in particular often have specific rules. Check what applies where you are before pointing a triggered camera at a space other people use. This is a legal question rather than a technical one, and worth asking a person qualified to answer it.</p>
+</div>
+</section>
+
+<section id="faq">
+<h2>Frequently asked questions</h2>
+<div class="faq">
+<details>
+<summary>What do the two potentiometers on the HC-SR501 do?</summary>
+<p>One sets sensitivity, which adjusts detection range roughly between 3 and 7 metres. The other sets the time delay — how long the output stays HIGH after a detection — from under a second to several minutes. Which is which varies between manufacturing batches, so identify them by testing rather than trusting a diagram.</p>
+</details>
+<details>
+<summary>What does the H and L jumper mean?</summary>
+<p>H is repeatable (retriggerable) mode: continued motion keeps restarting the timer, so the output stays HIGH while movement continues. L is non-repeatable mode: the output goes HIGH for the set delay then drops, regardless of ongoing motion. H is the right choice for most projects.</p>
+</details>
+<details>
+<summary>Can the 3.3 V output drive a 5 V Arduino input?</summary>
+<p>Yes. A 5 V AVR reads HIGH above about 3.0 V, so 3.3 V registers — with roughly 0.3 V of margin. That is adequate on short wiring with a clean supply, and it is a full-margin match on 3.3 V boards like the ESP32. Intermittent missed detections on a 5 V board with long wiring usually trace back to this margin.</p>
+</details>
+<details>
+<summary>Why does it trigger with nothing in front of it?</summary>
+<p>Most often the warm-up period, an unstable supply, sunlight or a heat vent moving across the field of view, or noise picked up on a long signal run. Wait 60 seconds after power-up and fit a 100 µF and 100 nF capacitor pair across the module's supply; that resolves the majority of cases.</p>
+</details>
+<details>
+<summary>Can it detect someone standing still?</summary>
+<p>No. It detects changes in infrared across its field of view, not presence. A person who stops moving stops generating a signal and the output returns to LOW. For genuine occupancy detection you need a different sensor technology, such as microwave or mmWave radar.</p>
+</details>
+<details>
+<summary>Does it work through glass?</summary>
+<p>No. Standard window glass blocks the infrared wavelengths the sensor relies on. A sealed clear plastic enclosure usually blocks it too — an IR-transparent window such as HDPE is needed.</p>
+</details>
+<details>
+<summary>How do I make it ignore pets?</summary>
+<p>The generic HC-SR501 has no pet-immunity feature; commercial alarm sensors achieve it with specially shaped lenses that create a blind zone near the floor. Your practical controls are mounting height, downward angle and reduced sensitivity. Complete pet immunity is not achievable with this module.</p>
+</details>
+<details>
+<summary>Can I use it with an ESP32 or ESP8266?</summary>
+<p>Yes, and it is arguably a better match than an Arduino Uno. The 3.3 V output lines up exactly with ESP logic levels, giving full noise margin instead of the narrow margin you get on a 5 V board. Power the module from the 5 V pin if your board supplies one, or from its VIN rail.</p>
+</details>
+</div>
+</section>
+
+<div class="author-box">
+  <div class="avatar">AG</div>
+  <div>
+    <h3>Alberto Gallardo</h3>
+    <p>Computer Science and Robotics teacher. The modules photographed here are from a batch bought for classroom use — the troubleshooting order in this guide reflects which problems come up first when a room full of people wire the same sensor at the same time.</p>
+    <a href="../author/alberto-gallardo">More about the author →</a>
+  </div>
+</div>
+
+<p class="disclosure">Module photographs taken by the author. Specification figures are typical values for this unbranded design and vary between manufacturers; verify against the modules you have. No sponsored content or paid product endorsements.</p>
+
+<div class="cta">
+  <h3>Related sensor guides</h3>
+  <p>For distance rather than motion, see the <a href="hc-sr04-ultrasonic-led-proximity-alert">HC-SR04 ultrasonic proximity alert build</a>. If you are choosing a controller board for a sensor project, our <a href="arduino-vs-raspberry-pi-robotics">Arduino vs Raspberry Pi comparison</a> covers the logic-level and timing issues that matter here. New to Arduino entirely? Start with the <a href="arduino-mega-kit-getting-started">Arduino Mega kit guide</a>.</p>
+</div>
+
+<div class="footer-nav">
+  <a href="arduino-vs-raspberry-pi-robotics">← Previous: Arduino vs Raspberry Pi</a>
+  <a href="./">All tutorials →</a>
+</div>
+</article>
+</main>
+
+<footer class="container" style="border-top:1px solid var(--line);padding-top:34px;padding-bottom:45px;color:var(--quiet);font-size:.85rem">
+  <p>Robotics Engineering Blog · Practical tutorials for Arduino, robot arms and automation.</p>
+  <p style="margin-top:10px;"><a href="../about" style="color:var(--muted);text-decoration:none;margin-right:16px;">About</a><a href="../contact" style="color:var(--muted);text-decoration:none;margin-right:16px;">Contact</a><a href="../privacy" style="color:var(--muted);text-decoration:none;margin-right:16px;">Privacy Policy</a><a href="../editorial-standards" style="color:var(--muted);text-decoration:none;">Editorial standards</a></p>
+  <div style="max-width:1100px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;">
+    <p style="font-size:0.8rem;opacity:0.6;margin:0;">&copy; 2023–2026 Robotics Engineering Blog. All rights reserved.</p>
+    <nav style="display:flex;flex-wrap:wrap;gap:18px;"><a href="../about" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">About</a><a href="../contact" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Contact</a><a href="../privacy" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Privacy Policy</a><a href="../terms" style="font-size:0.82rem;opacity:0.75;text-decoration:none;color:inherit;">Terms</a></nav>
+  </div>
+</footer>
+
+<div id="rel-consent" role="dialog" aria-modal="false" hidden style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#161820;border-top:1px solid rgba(255,255,255,0.12);padding:20px 24px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;">
+    <div style="flex:1;min-width:260px;"><p style="margin:0 0 6px;font-size:0.95rem;font-weight:600;color:#f5f3ee;">We use cookies</p><p style="margin:0;font-size:0.85rem;color:#b5b0a6;">Advertising cookies may be used if you accept. See our <a href="../privacy" style="color:#6fa3d8;">Privacy Policy</a>.</p></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" id="rel-consent-decline" style="padding:11px 22px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:transparent;color:#f5f3ee;font-family:inherit;font-weight:600;font-size:0.85rem;cursor:pointer;">Decline</button>
+      <button type="button" id="rel-consent-accept" style="padding:11px 22px;border-radius:999px;border:none;background:#e4c07a;color:#1a1408;font-family:inherit;font-weight:700;font-size:0.85rem;cursor:pointer;">Accept all</button>
+    </div>
+  </div>
+</div>
+<script>(function(){var N='rel_consent',b=document.getElementById('rel-consent');if(!b)return;function r(){var m=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);return m?m[1]:null;}function w(v){var d=new Date();d.setTime(d.getTime()+180*24*60*60*1000);document.cookie=N+'='+v+';expires='+d.toUTCString()+';path=/;SameSite=Lax';}if(!r())b.hidden=false;function decide(g){w(g?'granted':'denied');if(typeof gtag==='function')gtag('consent','update',{'ad_storage':g?'granted':'denied','ad_user_data':g?'granted':'denied','ad_personalization':g?'granted':'denied','analytics_storage':g?'granted':'denied'});b.hidden=true;}document.getElementById('rel-consent-accept').addEventListener('click',function(){decide(true);});document.getElementById('rel-consent-decline').addEventListener('click',function(){decide(false);});})();</script>
+</body>
+</html>
