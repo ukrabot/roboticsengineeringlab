@@ -53,6 +53,84 @@
 <style>
 :root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:52vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.34);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.7rem);line-height:1.08;font-weight:400;max-width:900px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:54px 0 16px}.article-body h3{font-size:1.12rem;margin:30px 0 8px;color:var(--gold)}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box,.verdict{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.verdict{border-left:3px solid var(--gold)}.verdict p:last-child{margin-bottom:0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:560px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem;color:var(--text)}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}}
+
+/* ==========================================================
+   RESPONSIVE PATCH — appended last so it wins the cascade.
+   Fixes site-wide horizontal overflow on small screens.
+   ========================================================== */
+
+/* 1. Nothing may push the page wider than the viewport. */
+html, body { max-width: 100%; overflow-x: hidden; }
+*, *::before, *::after { min-width: 0; }
+
+/* 2. Media and embeds stay inside their container. */
+img, svg, video, iframe, canvas, blockquote.tiktok-embed {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3. Long words, URLs and code must not force a wide line box. */
+p, li, td, th, h1, h2, h3, h4, dd, dt, figcaption, summary, cite {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+pre { max-width: 100%; overflow-x: auto; }
+pre code { white-space: pre; }
+
+/* 4. Any table can scroll inside itself rather than widening the page. */
+table { display: block; max-width: 100%; overflow-x: auto; }
+.table-wrap, .table-scroll { max-width: 100%; overflow-x: auto; }
+.table-wrap table, .table-scroll table { display: table; }
+
+@media (max-width: 860px) {
+  /* 5. Root cause: the nav row is wider than a phone screen.
+     Let it wrap, and shrink it so it usually doesn't need to. */
+  .nav-inner {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    row-gap: 6px;
+  }
+  .nav-links a { font-size: 0.8rem; }
+  .logo { font-size: 1.15rem; }
+
+  /* 6. Full-height heroes waste most of a phone screen. */
+  .hero, .hero-article { min-height: 0; }
+  .hero-inner, .hero-article-inner, .hero-article > .container {
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+
+  /* 7. Side-by-side layouts become single column. */
+  .img-grid,
+  .card-grid,
+  .grid-2,
+  .guide-layout { grid-template-columns: 1fr !important; }
+
+  .footer-nav,
+  .author-box { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+  /* 8. Breathing room at the page edges. */
+  .container, .article-container, .article-body { padding-left: 18px; padding-right: 18px; }
+}
+
+@media (max-width: 480px) {
+  .nav-links { gap: 4px 10px; }
+  .nav-links a { font-size: 0.75rem; }
+  .article-body h2 { font-size: 1.45rem; }
+  .article-body h3 { font-size: 1.02rem; }
+  pre { padding: 14px; font-size: 0.78rem; }
+  th, td { padding: 9px 10px; font-size: 0.82rem; }
+  .container, .article-container, .article-body { padding-left: 14px; padding-right: 14px; }
+}
 </style>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
 <meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />

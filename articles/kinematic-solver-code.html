@@ -118,6 +118,84 @@ tbody td:first-child { color:var(--text-primary); font-weight:500; }
 .footer-nav .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--accent); text-decoration:none; font-weight:600; font-size:0.88rem; letter-spacing:0.03em; }
 .footer-nav .back-link:hover { text-decoration:underline; }
 @media (max-width: 700px) { .nav-links { gap:14px; } .hero-inner h1 { font-size:2rem; } .article-body h2 { font-size:1.5rem; } .footer-nav { flex-direction:column; align-items:flex-start; } }
+
+/* ==========================================================
+   RESPONSIVE PATCH — appended last so it wins the cascade.
+   Fixes site-wide horizontal overflow on small screens.
+   ========================================================== */
+
+/* 1. Nothing may push the page wider than the viewport. */
+html, body { max-width: 100%; overflow-x: hidden; }
+*, *::before, *::after { min-width: 0; }
+
+/* 2. Media and embeds stay inside their container. */
+img, svg, video, iframe, canvas, blockquote.tiktok-embed {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3. Long words, URLs and code must not force a wide line box. */
+p, li, td, th, h1, h2, h3, h4, dd, dt, figcaption, summary, cite {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+pre { max-width: 100%; overflow-x: auto; }
+pre code { white-space: pre; }
+
+/* 4. Any table can scroll inside itself rather than widening the page. */
+table { display: block; max-width: 100%; overflow-x: auto; }
+.table-wrap, .table-scroll { max-width: 100%; overflow-x: auto; }
+.table-wrap table, .table-scroll table { display: table; }
+
+@media (max-width: 860px) {
+  /* 5. Root cause: the nav row is wider than a phone screen.
+     Let it wrap, and shrink it so it usually doesn't need to. */
+  .nav-inner {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    row-gap: 6px;
+  }
+  .nav-links a { font-size: 0.8rem; }
+  .logo { font-size: 1.15rem; }
+
+  /* 6. Full-height heroes waste most of a phone screen. */
+  .hero, .hero-article { min-height: 0; }
+  .hero-inner, .hero-article-inner, .hero-article > .container {
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+
+  /* 7. Side-by-side layouts become single column. */
+  .img-grid,
+  .card-grid,
+  .grid-2,
+  .guide-layout { grid-template-columns: 1fr !important; }
+
+  .footer-nav,
+  .author-box { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+  /* 8. Breathing room at the page edges. */
+  .container, .article-container, .article-body { padding-left: 18px; padding-right: 18px; }
+}
+
+@media (max-width: 480px) {
+  .nav-links { gap: 4px 10px; }
+  .nav-links a { font-size: 0.75rem; }
+  .article-body h2 { font-size: 1.45rem; }
+  .article-body h3 { font-size: 1.02rem; }
+  pre { padding: 14px; font-size: 0.78rem; }
+  th, td { padding: 9px 10px; font-size: 0.82rem; }
+  .container, .article-container, .article-body { padding-left: 14px; padding-right: 14px; }
+}
 </style>
   <script>
   window.dataLayer = window.dataLayer || [];
