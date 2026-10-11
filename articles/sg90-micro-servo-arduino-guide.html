@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SG90 Micro Servo Motor with Arduino: Wiring, Code and Common Problems</title>
+<meta name="description" content="Complete guide to the SG90 9g micro servo: PWM signal explained, Arduino wiring diagram, Servo library code, jitter fixes, brown-out prevention, and real classroom projects. With photos and tested sketches.">
+<meta name="author" content="Alberto Gallardo">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://roboticsengineeringlab.com/articles/sg90-micro-servo-arduino-guide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SG90 Micro Servo Motor with Arduino: Wiring, Code and Common Problems">
+<meta property="og:description" content="Everything you need to know about the SG90 servo: PWM signal, wiring, code, jitter, brown-out and stall current — from a robotics teacher who has used hundreds of them.">
+<meta property="og:image" content="https://roboticsengineeringlab.com/articles/sg90-servo-batch-table.jpg">
+<meta property="og:url" content="https://roboticsengineeringlab.com/articles/sg90-micro-servo-arduino-guide">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SG90 Micro Servo Motor with Arduino: Complete Guide">
+<meta name="twitter:image" content="https://roboticsengineeringlab.com/articles/sg90-servo-batch-table.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TechArticle",
+  "headline":"SG90 Micro Servo Motor with Arduino: Wiring, Code and Common Problems",
+  "description":"Complete technical guide to the Tower Pro SG90 9g micro servo motor: how the PWM control signal works, three-wire connection to Arduino, the Servo library, common problems (jitter, brown-out, gear stripping) and fixes. Includes real classroom code and photos.",
+  "author":{"@type":"Person","name":"Alberto Gallardo","url":"https://roboticsengineeringlab.com/author/alberto-gallardo","jobTitle":"Computer Science and Robotics Teacher","worksFor":{"@type":"Organization","name":"Robotics Engineering Lab"}},
+  "publisher":{"@type":"Organization","name":"Robotics Engineering Blog","url":"https://roboticsengineeringlab.com"},
+  "datePublished":"2026-10-11",
+  "dateModified":"2026-10-11",
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://roboticsengineeringlab.com/articles/sg90-micro-servo-arduino-guide"},
+  "image":"https://roboticsengineeringlab.com/articles/sg90-servo-batch-table.jpg",
+  "proficiencyLevel":"Beginner",
+  "dependencies":"Arduino Uno or Mega, SG90 micro servo, jumper wires, optional external 5V supply",
+  "wordCount":"3200"
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+ {"@type":"ListItem","position":1,"name":"Home","item":"https://roboticsengineeringlab.com/"},
+ {"@type":"ListItem","position":2,"name":"Articles","item":"https://roboticsengineeringlab.com/articles/"},
+ {"@type":"ListItem","position":3,"name":"SG90 Micro Servo Guide","item":"https://roboticsengineeringlab.com/articles/sg90-micro-servo-arduino-guide"}
+]}</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+ {"@type":"Question","name":"What is the difference between the SG90 and the MG90S servo?","acceptedAnswer":{"@type":"Answer","text":"Both are 9g micro servos with identical dimensions and the same control signal. The SG90 has nylon gears and costs around $1.50. The MG90S has metal gears, holds up better under load, costs around $4, and is slightly heavier (about 13g vs 9g). For classroom projects and light loads, the SG90 is fine. For anything that takes repeated physical impacts — like a robot car bumper or a gripper that stalls against objects — the MG90S lasts longer."}},
+ {"@type":"Question","name":"Can I power the SG90 directly from an Arduino pin?","acceptedAnswer":{"@type":"Answer","text":"No. Arduino digital pins supply a maximum of 40mA, but the SG90 draws 100-250mA under normal operation and can spike to 650mA during stall. The servo is powered from the 5V pin (which is the USB or regulator supply rail) or, better, from an external 5V source. The signal wire goes to a digital pin. Only the signal wire connects to a GPIO pin, never the power wire."}},
+ {"@type":"Question","name":"Why does my SG90 servo jitter or vibrate when it should be still?","acceptedAnswer":{"@type":"Answer","text":"The most common causes are: electrical noise on the signal wire (add a 100nF capacitor between the signal pin and GND, or keep wires short), insufficient supply voltage causing the internal feedback loop to hunt (use an external 5V supply, not USB through a long cable), or a mechanical dead-band issue inherent to cheap servos. Calling servo.detach() after reaching position also stops jitter, but you lose holding torque."}},
+ {"@type":"Question","name":"What angle range does the SG90 actually support?","acceptedAnswer":{"@type":"Answer","text":"The datasheet says 180 degrees, and the Arduino Servo library defaults to a 544-2400 microsecond pulse range that maps to 0-180 degrees. In practice, most SG90 units only reach about 170 degrees before hitting the internal mechanical stop and stalling. Some clones top out at 160. You can hear the motor strain at the ends of the range — if it buzzes at 0 or 180, back off by 5-10 degrees."}},
+ {"@type":"Question","name":"How many SG90 servos can I run from one Arduino?","acceptedAnswer":{"@type":"Answer","text":"The Arduino Servo library supports up to 12 servos on a standard Uno (it uses Timer1, which disables PWM on pins 9 and 10). On a Mega, it supports up to 48 using multiple timers. However, the real limit is power: each servo draws 100-250mA, so three servos can already exceed what the 5V regulator safely supplies. Beyond two servos, use a dedicated 5V BEC or power supply with common ground to the Arduino."}}
+]}</script>
+
+<style>
+:root{--ink:#0b0e14;--card:#181b21;--text:#f2f0eb;--muted:#b0ab9f;--quiet:#77736e;--gold:#c9a96e;--blue:#78a6e8;--line:rgba(255,255,255,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:3px}.container{max-width:1050px;margin:auto;padding:0 24px}.site-nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;max-width:1050px;margin:auto}.logo{color:var(--text);text-decoration:none;font-family:Georgia,serif;font-size:1.35rem}.logo span{color:var(--gold);font-style:italic}.nav-links{display:flex;gap:20px;font-size:.86rem}.nav-links a{color:var(--muted);text-decoration:none}.hero{position:relative;min-height:52vh;display:flex;align-items:end;overflow:hidden}.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.34);z-index:-2}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(11,14,20,.96));z-index:-1}.hero-inner{padding:100px 24px 70px;width:100%;max-width:1050px;margin:auto}.eyebrow{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.08;font-weight:400;max-width:920px;margin:18px 0}.hero p{color:var(--muted);max-width:720px;font-size:1.05rem}.byline{color:var(--quiet);font-size:.85rem;margin-top:14px}.byline a{color:var(--gold);text-decoration:none}.article-body{padding-top:64px;padding-bottom:90px}.article-body h2{font-family:Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.2;margin:54px 0 16px}.article-body h3{font-size:1.12rem;margin:30px 0 8px;color:var(--gold)}.article-body p{color:var(--muted);margin:0 0 20px}.article-body li{color:var(--muted);margin:8px 0}.toc,.note,.cta,.author-box,.verdict{background:linear-gradient(135deg,rgba(201,169,110,.1),rgba(95,142,216,.06));border:1px solid var(--line);border-radius:14px;padding:24px;margin:28px 0}.verdict{border-left:3px solid var(--gold)}.verdict p:last-child{margin-bottom:0}.toc h2{font-family:inherit;font-size:1.05rem;margin:0 0 10px}.toc ol{margin:0;padding-left:22px}.article-img{margin:0 0 36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}.article-img img{width:100%;display:block}.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 36px}.img-grid .article-img{margin:0}.caption{padding:12px 16px;background:var(--card);color:var(--quiet);font-size:.82rem}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:520px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}th{background:var(--card);color:var(--text);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}td:first-child{color:var(--text);font-weight:600}pre{overflow:auto;background:#080a0e;border:1px solid var(--line);border-radius:12px;padding:20px;color:#e8d9b6;line-height:1.5;font-size:.85rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.serial-output{background:#080a0e;border:1px solid #1a2a1a;border-radius:12px;padding:18px;color:#4ec94e;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;line-height:1.6;margin:20px 0}.faq{border-bottom:1px solid var(--line)}details{border-top:1px solid var(--line);padding:16px 0}summary{cursor:pointer;color:var(--text);font-weight:600}details p{padding-top:10px;margin-bottom:0}.author-box{display:flex;gap:16px;align-items:flex-start}.author-box .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#1a1408}.author-box h3{margin:0 0 6px;font-size:1rem;color:var(--text)}.author-box p{margin:0 0 8px;font-size:.88rem}.author-box a{color:var(--gold);font-size:.82rem}.disclosure{font-size:.78rem;color:var(--quiet);border-top:1px solid var(--line);padding-top:16px;margin-top:34px}.footer-nav{border-top:1px solid var(--line);padding-top:34px;margin-top:54px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:700px){.nav-links{gap:10px}.hero-inner{padding-top:80px}.article-body h2{font-size:1.5rem}.author-box{flex-direction:column}.img-grid{grid-template-columns:1fr}}
+
+/* ==========================================================
+   RESPONSIVE PATCH — appended last so it wins the cascade.
+   ========================================================== */
+html, body { max-width: 100%; overflow-x: hidden; }
+*, *::before, *::after { min-width: 0; }
+img, svg, video, iframe, canvas {
+  max-width: 100%;
+  height: auto;
+}
+p, li, td, th, h1, h2, h3, h4, dd, dt, figcaption, summary, cite {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+pre { max-width: 100%; overflow-x: auto; }
+pre code { white-space: pre; }
+table { display: block; max-width: 100%; overflow-x: auto; }
+.table-wrap, .table-scroll { max-width: 100%; overflow-x: auto; }
+.table-wrap table, .table-scroll table { display: table; }
+@media (max-width: 860px) {
+  .nav-inner {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    row-gap: 6px;
+  }
+  .nav-links a { font-size: 0.8rem; }
+  .logo { font-size: 1.15rem; }
+  .hero, .hero-article { min-height: 0; }
+  .hero-inner, .hero-article-inner, .hero-article > .container {
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 64px;
+    padding-bottom: 40px;
+  }
+  .img-grid,
+  .card-grid,
+  .grid-2,
+  .guide-layout { grid-template-columns: 1fr !important; }
+  .footer-nav,
+  .author-box { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .container, .article-container, .article-body { padding-left: 18px; padding-right: 18px; }
+}
+@media (max-width: 480px) {
+  .nav-links { gap: 4px 10px; }
+  .nav-links a { font-size: 0.75rem; }
+  .article-body h2 { font-size: 1.45rem; }
+  .article-body h3 { font-size: 1.02rem; }
+  pre { padding: 14px; font-size: 0.78rem; }
+  th, td { padding: 9px 10px; font-size: 0.82rem; }
+  .container, .article-container, .article-body { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500});(function(){try{var c=document.cookie.match(/(?:^|;\s*)rel_consent=([^;]+)/);if(c&&c[1]==='granted'){gtag('consent','update',{'ad_storage':'granted','ad_user_data':'granted','ad_personalization':'granted','analytics_storage':'granted'});}}catch(e){}})();</script>
+<meta name="google-site-verification" content="9fVdHIWb-wT4s_ew9OVoXm7ivQYrYAypqp3nJ45PNpM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T9333W8LWN"></script>
+<script>gtag('js',new Date());gtag('config','G-T9333W8LWN');</script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main">
+ <div class="nav-inner">
+  <a href="../index.html" class="logo">Robotics<span>Lab</span></a>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="index.html">Articles</a>
+    <a href="../author/alberto-gallardo.html">About</a>
+  </div>
+ </div>
+</nav>
+
+<header class="hero">
+  <img src="sg90-servo-batch-table.jpg" alt="Four SG90 micro servo motors in individual bags laid out on a wooden table, each with horn attachments and red-brown-yellow wiring" width="1200" height="900">
+  <div class="hero-inner">
+    <span class="eyebrow">Arduino Components</span>
+    <h1>SG90 Micro Servo Motor with Arduino: Wiring, Code and Common Problems</h1>
+    <p>How the 9g micro servo actually works, how to wire it without burning your Arduino, and the three problems every beginner hits &mdash; with fixes for each one.</p>
+    <p class="byline">By <a href="../author/alberto-gallardo.html">Alberto Gallardo</a> &bull; Oct 11, 2026 &bull; 12 min read</p>
+  </div>
+</header>
+
+<article class="article-body container">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>In This Article</h2>
+    <ol>
+      <li><a href="#what-is-sg90">What the SG90 Actually Is (and What It Is Not)</a></li>
+      <li><a href="#specs">Specifications &mdash; the Real Numbers</a></li>
+      <li><a href="#pwm">How the PWM Control Signal Works</a></li>
+      <li><a href="#wiring">Wiring to Arduino &mdash; the Right Way</a></li>
+      <li><a href="#code">Arduino Code: Three Sketches</a></li>
+      <li><a href="#problems">The Three Problems Everyone Hits</a></li>
+      <li><a href="#multi">Running Multiple Servos</a></li>
+      <li><a href="#projects">Real Classroom Projects Using the SG90</a></li>
+      <li><a href="#vs">SG90 vs MG90S vs MG996R: Which One to Buy</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ol>
+  </nav>
+
+  <!-- SECTION 1 -->
+  <h2 id="what-is-sg90">What the SG90 Actually Is (and What It Is Not)</h2>
+
+  <p>The SG90 is a <strong>9-gram micro servo motor</strong> &mdash; a small, self-contained actuator that rotates its output shaft to a specific angle when you send it a pulse-width-modulated signal. It is the most common servo in the Arduino ecosystem, and the one you will find in almost every beginner kit.</p>
+
+  <p>A servo motor is not a continuous-rotation motor. A regular DC motor spins freely; a servo holds a position. Inside the SG90's translucent blue case there is a small DC motor, a set of nylon reduction gears, a potentiometer (the feedback sensor), and a tiny control board. The control board reads the PWM signal on the orange wire, compares it to the potentiometer's current position, and drives the motor until the two match. This is a closed-loop system, but the feedback stays inside the servo &mdash; the Arduino never receives position data back.</p>
+
+  <div class="img-grid">
+    <div class="article-img">
+      <img src="sg90-servo-hand-closeup.jpg" alt="Hand holding an SG90 micro servo with multiple units in plastic bags visible in the background, showing the blue translucent case, white horn attachments and red-brown-yellow wiring" loading="lazy" width="819" height="1456">
+      <div class="caption">SG90 micro servos fresh from the bag. The translucent blue case lets you see the gear train inside. Each one comes with a set of plastic horn attachments in a separate bag.</div>
+    </div>
+    <div class="article-img">
+      <img src="sg90-servo-connector-detail.jpg" alt="Close-up of the SG90 servo connector showing the three-pin female header with red (VCC), brown (GND) and yellow (signal) wires" loading="lazy" width="819" height="1456">
+      <div class="caption">The three-wire connector. Red is power (4.8&ndash;6V), brown is ground, yellow/orange is the PWM signal. The connector is a standard 2.54mm (0.1") pitch that fits directly onto Arduino header pins.</div>
+    </div>
+  </div>
+
+  <p>The name &ldquo;Tower Pro SG90&rdquo; is a specific product, but &ldquo;SG90&rdquo; has become a generic label for any 9g micro servo in this form factor. The ones I buy for my classroom in Chile come in bulk bags of 4&ndash;10 units, typically from AliExpress or MercadoLibre. They work identically to brand-name Tower Pro units. I have used over a hundred of these across four years of teaching, and the failure rate is about 1 in 15 &mdash; almost always stripped gears from students stalling them against hard stops.</p>
+
+  <!-- SECTION 2 -->
+  <h2 id="specs">Specifications &mdash; the Real Numbers</h2>
+
+  <p>The SG90 datasheet numbers are nominal. Here is what the datasheet says alongside what I have measured in practice:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Parameter</th><th>Datasheet</th><th>Measured / practical</th></tr></thead>
+      <tbody>
+        <tr><td>Weight</td><td>9 g</td><td>9&ndash;10 g (varies by clone)</td></tr>
+        <tr><td>Operating voltage</td><td>4.8&ndash;6.0 V</td><td>Works at 3.3V but very weak</td></tr>
+        <tr><td>Stall torque @ 4.8V</td><td>1.8 kg&middot;cm</td><td>~1.5 kg&middot;cm typical</td></tr>
+        <tr><td>Stall torque @ 6.0V</td><td>2.2 kg&middot;cm</td><td>Not tested (risk of damage)</td></tr>
+        <tr><td>Operating speed @ 4.8V</td><td>0.12 s / 60&deg;</td><td>~0.1 s observed</td></tr>
+        <tr><td>Rotation range</td><td>180&deg;</td><td>160&ndash;170&deg; usable</td></tr>
+        <tr><td>No-load current</td><td>100 mA</td><td>80&ndash;120 mA measured</td></tr>
+        <tr><td>Stall current</td><td>650 mA</td><td>Up to 750 mA on some clones</td></tr>
+        <tr><td>PWM signal period</td><td>20 ms (50 Hz)</td><td>Tolerant of 40&ndash;200 Hz in practice</td></tr>
+        <tr><td>Pulse width range</td><td>1000&ndash;2000 &micro;s</td><td>544&ndash;2400 &micro;s (Arduino Servo.h default)</td></tr>
+        <tr><td>Dead band</td><td>10 &micro;s</td><td>Varies, cheap clones have 20+ &micro;s</td></tr>
+        <tr><td>Gear material</td><td>Nylon</td><td>Nylon &mdash; strips under sustained stall</td></tr>
+        <tr><td>Connector</td><td>JR / Futaba compatible</td><td>3-pin 2.54 mm female header</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <p><strong>The number that matters most:</strong> 650 mA stall current. This is why you cannot power the SG90 from a digital pin (40 mA max) and why running more than two from the Arduino 5V regulator (500 mA from USB) is unreliable. This single spec drives every wiring decision below.</p>
+  </div>
+
+  <!-- SECTION 3 -->
+  <h2 id="pwm">How the PWM Control Signal Works</h2>
+
+  <p>The servo expects a pulse every 20 milliseconds (50 Hz). The <strong>width</strong> of each pulse &mdash; not its frequency &mdash; tells the servo which angle to hold. This is different from the analogWrite() PWM you use for LED brightness, which varies the duty cycle at a fixed frequency of ~490 Hz on most Arduino pins.</p>
+
+  <ul>
+    <li><strong>~1 ms pulse</strong> (1000 &micro;s) &rarr; 0&deg; &mdash; fully counter-clockwise</li>
+    <li><strong>~1.5 ms pulse</strong> (1500 &micro;s) &rarr; 90&deg; &mdash; center position</li>
+    <li><strong>~2 ms pulse</strong> (2000 &micro;s) &rarr; 180&deg; &mdash; fully clockwise</li>
+  </ul>
+
+  <p>The Arduino <code>Servo</code> library actually uses a wider range by default: 544 &micro;s for 0&deg; and 2400 &micro;s for 180&deg;. This stretches beyond what most SG90 units can physically reach, which is why many people hear the motor buzzing at <code>servo.write(0)</code> or <code>servo.write(180)</code> &mdash; the pulse is commanding an angle past the internal mechanical stop. The fix is simple: either avoid 0 and 180 (use 5&ndash;175), or restrict the pulse range with <code>servo.attach(pin, 600, 2400)</code>.</p>
+
+  <p><strong>Important:</strong> do not use <code>analogWrite()</code> to control a servo. It runs at the wrong frequency (490 Hz instead of 50 Hz) and the duty-cycle steps are too coarse. Always use the <code>Servo</code> library or generate the pulses with <code>delayMicroseconds()</code> yourself.</p>
+
+  <!-- SECTION 4 -->
+  <h2 id="wiring">Wiring to Arduino &mdash; the Right Way</h2>
+
+  <h3>The three wires</h3>
+  <p>The SG90 connector has three wires. The colour coding is almost always:</p>
+  <ul>
+    <li><strong>Red</strong> &rarr; VCC (power, 4.8&ndash;6V)</li>
+    <li><strong>Brown</strong> (or black) &rarr; GND</li>
+    <li><strong>Yellow</strong> (or orange) &rarr; Signal (PWM)</li>
+  </ul>
+
+  <div class="article-img">
+    <img src="sg90-servo-label-bag.jpg" alt="SG90 servo in its plastic bag showing the Tower Pro label with specifications printed on the sticker, with horn attachments and wiring visible" loading="lazy" width="819" height="1456">
+    <div class="caption">The label on this unit reads &ldquo;Tower Pro&rdquo; with model SG90. The sticker shows the rated voltage (4.8V) and torque. Most clones reproduce this label regardless of actual origin.</div>
+  </div>
+
+  <h3>Minimal wiring (one servo, USB power)</h3>
+  <p>For a single servo running with no load:</p>
+  <ul>
+    <li>Red wire &rarr; Arduino <strong>5V pin</strong> (not a digital pin)</li>
+    <li>Brown wire &rarr; Arduino <strong>GND</strong></li>
+    <li>Yellow wire &rarr; Arduino <strong>digital pin 9</strong> (any digital pin works, but 9 is conventional)</li>
+  </ul>
+
+  <p>This works when the Arduino is powered over USB and the servo is unloaded. The USB port supplies 500 mA, the Arduino itself uses ~50 mA, leaving ~450 mA &mdash; enough for one servo under normal operation but not enough if it stalls.</p>
+
+  <h3>Proper wiring (external power)</h3>
+  <p>For anything beyond a basic demo:</p>
+  <ul>
+    <li>Red wire &rarr; External <strong>5V supply positive</strong></li>
+    <li>Brown wire &rarr; External supply <strong>GND</strong></li>
+    <li>Yellow wire &rarr; Arduino <strong>digital pin 9</strong></li>
+    <li><strong>External supply GND connected to Arduino GND</strong> (common ground &mdash; required)</li>
+  </ul>
+
+  <div class="verdict">
+    <p><strong>The common-ground rule:</strong> if the servo and the Arduino do not share a ground reference, the signal wire has no return path and the servo will ignore commands or behave erratically. This is the single most common wiring mistake in my classroom.</p>
+  </div>
+
+  <!-- SECTION 5 -->
+  <h2 id="code">Arduino Code: Three Sketches</h2>
+
+  <h3>Sketch 1: Basic sweep &mdash; the 6-line version</h3>
+  <p>This is the absolute minimum code to make a servo sweep back and forth. Every student writes this first.</p>
+
+<pre><code>#include &lt;Servo.h&gt;
+
+Servo myServo;
+
+void setup() {
+  myServo.attach(9);
+}
+
+void loop() {
+  for (int angle = 10; angle &lt;= 170; angle++) {
+    myServo.write(angle);
+    delay(15);
+  }
+  for (int angle = 170; angle &gt;= 10; angle--) {
+    myServo.write(angle);
+    delay(15);
+  }
+}</code></pre>
+
+  <p><strong>Why 10&ndash;170 instead of 0&ndash;180:</strong> as explained in the PWM section, most SG90 units hit their mechanical stop before reaching 0&deg; or 180&deg;. Using 10&ndash;170 avoids the stall buzz and extends the servo&rsquo;s lifespan. The <code>delay(15)</code> between steps gives a smooth, visible sweep; reduce it to 5 for faster motion or increase to 30 for a slow scan.</p>
+
+  <h3>Sketch 2: Serial-controlled angle</h3>
+  <p>This sketch reads an angle from the Serial Monitor and moves the servo to that position. Useful for finding the actual usable range of your specific servo unit.</p>
+
+<pre><code>#include &lt;Servo.h&gt;
+
+Servo myServo;
+
+void setup() {
+  Serial.begin(9600);
+  myServo.attach(9);
+  Serial.println("Enter angle (0-180):");
+}
+
+void loop() {
+  if (Serial.available() &gt; 0) {
+    int angle = Serial.parseInt();
+    if (angle &gt;= 0 &amp;&amp; angle &lt;= 180) {
+      myServo.write(angle);
+      Serial.print("Moved to: ");
+      Serial.print(angle);
+      Serial.println(" degrees");
+    }
+  }
+}</code></pre>
+
+  <div class="serial-output">
+Enter angle (0-180):<br>
+Moved to: 90 degrees<br>
+Moved to: 10 degrees<br>
+Moved to: 170 degrees<br>
+Moved to: 175 degrees  &lt;-- buzzing starts here on my unit
+  </div>
+
+  <p>Open the Serial Monitor at 9600 baud, type a number, and press Enter. Start at 90, then work toward the extremes. When you hear the motor strain, you have found your servo&rsquo;s actual limit.</p>
+
+  <h3>Sketch 3: Servo in a robot car &mdash; from my classroom</h3>
+  <p>This is extracted from one of my student&rsquo;s robot car projects (<code>Robot_2_0.ino</code>). The servo is used in the obstacle-avoidance routine: when the car detects an object in front, it stops, sweeps the servo-mounted sensor left and right to scan for the clearest path, then reverses and turns.</p>
+
+<pre><code>// Extracted from the detener() function in Robot_2_0.ino
+// Called when an obstacle is detected in front
+
+void detener() {
+  // Stop both motors
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+
+  // Scan right
+  delay(1000);
+  servo1.write(160);
+
+  // Scan left
+  delay(1000);
+  servo1.write(0);
+
+  // Return to center
+  delay(1000);
+  servo1.write(80);
+
+  // After scanning, reverse and turn
+  delay(1000);
+  atras();
+  girarDerecha();
+}</code></pre>
+
+  <p><strong>Note the bug:</strong> this code uses <code>servo1.write(0)</code>, which stalls the servo against its mechanical stop on most SG90 units. The fix is <code>servo1.write(10)</code>. Also, the centre position is set at 80&deg; rather than 90&deg; &mdash; this was because the specific servo had a slight offset, which is normal for cheap units. In a classroom, I tell students to find their own servo&rsquo;s centre point using Sketch 2 above.</p>
+
+  <p>The full sketch uses <code>servo1.attach(13)</code> and the car is controlled via Bluetooth (<code>SoftwareSerial</code> on pins 10 and 11). The servo scans in fixed positions rather than a continuous sweep &mdash; simple to code but slow. A future improvement would be to take distance readings at several angles using the <a href="hc-sr04-ultrasonic-led-proximity-alert">HC-SR04 ultrasonic sensor</a> and pick the direction with the maximum clearance.</p>
+
+  <!-- SECTION 6 -->
+  <h2 id="problems">The Three Problems Everyone Hits</h2>
+
+  <h3>Problem 1: Jitter (servo vibrates when it should be still)</h3>
+  <p>You command <code>servo.write(90)</code> and the horn trembles in place instead of holding steady. This is the most common SG90 complaint.</p>
+  <p><strong>Causes:</strong></p>
+  <ul>
+    <li>Electrical noise on the signal line (long wires, breadboard with poor contacts)</li>
+    <li>Insufficient power supply &mdash; voltage drops when the servo draws current, the feedback loop hunts</li>
+    <li>The dead band of cheap servos is wider than the control resolution, so the motor oscillates between two positions</li>
+  </ul>
+  <p><strong>Fixes:</strong></p>
+  <ul>
+    <li>Add a <strong>100 nF (0.1 &micro;F) ceramic capacitor</strong> between the signal pin and GND, as close to the servo connector as possible</li>
+    <li>Add a <strong>470 &micro;F electrolytic capacitor</strong> across the servo&rsquo;s power lines (VCC and GND) to absorb current spikes</li>
+    <li>Use an external 5V supply instead of USB power</li>
+    <li>Call <code>servo.detach()</code> after the servo reaches its target, then <code>servo.attach(pin)</code> before the next move &mdash; this stops the PWM signal entirely, eliminating jitter but also losing holding torque</li>
+  </ul>
+
+  <h3>Problem 2: Brown-out (Arduino resets when servo moves)</h3>
+  <p>The servo starts moving, and the Arduino restarts &mdash; the serial monitor prints the setup message again, LEDs blink as if powered on. This happens because the servo&rsquo;s current spike pulls the 5V rail below the Arduino&rsquo;s minimum operating voltage (~4.2V for the Uno).</p>
+  <p><strong>Fix:</strong> use an external power supply for the servo. Do not rely on USB power for a servo that is doing real work. A 4xAA battery pack (6V) or a 5V 2A wall adapter works perfectly. Remember common ground.</p>
+
+  <h3>Problem 3: Stripped gears (servo stops responding to certain angles)</h3>
+  <p>The servo moves partway, then slips or makes a clicking sound. The nylon gears inside are stripped.</p>
+  <p><strong>Why it happens:</strong> the SG90&rsquo;s nylon gears cannot survive sustained stalling. In my classroom, this happens when students physically hold the horn while the servo is trying to move, or when the code commands an angle past the mechanical stop and the motor runs continuously against it.</p>
+  <p><strong>Prevention:</strong></p>
+  <ul>
+    <li>Never go below 5&deg; or above 175&deg; in code</li>
+    <li>Never physically force the horn while the servo is powered</li>
+    <li>Use <code>servo.detach()</code> during robot assembly so students can position the horn by hand</li>
+    <li>For applications with impact risk (robot car bumpers, gripper arms), switch to the <strong>MG90S</strong> (metal gears, same form factor)</li>
+  </ul>
+
+  <!-- SECTION 7 -->
+  <h2 id="multi">Running Multiple Servos</h2>
+
+  <p>The <code>Servo</code> library can control up to 12 servos on an Arduino Uno and up to 48 on a Mega. Each servo gets its own instance:</p>
+
+<pre><code>#include &lt;Servo.h&gt;
+
+Servo pan;   // horizontal sweep
+Servo tilt;  // vertical sweep
+
+void setup() {
+  pan.attach(9);
+  tilt.attach(10);
+}
+
+void loop() {
+  pan.write(45);
+  tilt.write(90);
+  delay(1000);
+  pan.write(135);
+  tilt.write(45);
+  delay(1000);
+}</code></pre>
+
+  <p><strong>Timer conflict:</strong> on the Uno, the Servo library uses Timer1, which <strong>disables analogWrite() on pins 9 and 10</strong> regardless of which pins the servos are connected to. This catches many students by surprise when their LED dimming code stops working after adding a servo. On the Mega, Timer1 affects pins 11 and 12 instead, and additional servos use Timer5 (affecting pins 44, 45, 46).</p>
+
+  <p><strong>Power:</strong> two SG90 servos drawing 200 mA each = 400 mA, already near the USB limit. Three or more servos require external power. A good option for classroom use is a <strong>5V 3A BEC</strong> (battery eliminator circuit) from an RC hobby shop &mdash; they are designed for exactly this job.</p>
+
+  <!-- SECTION 8 -->
+  <h2 id="projects">Real Classroom Projects Using the SG90</h2>
+
+  <p>These are projects my students have built using SG90 servos in my robotics classes:</p>
+
+  <ul>
+    <li><strong>Ultrasonic sensor pan mount:</strong> an SG90 sweeps an HC-SR04 sensor left and right, building a simple distance map. This is the upgrade step after the basic <a href="hc-sr04-ultrasonic-led-proximity-alert">ultrasonic LED project</a>.</li>
+    <li><strong>Obstacle-avoiding robot car:</strong> SG90 mounted on the front of a 2WD chassis, carrying an HC-SR04 or IR sensor. The <a href="obstacle-avoiding-robot-car-arduino">obstacle-avoiding car article</a> documents a version of this build.</li>
+    <li><strong>Bluetooth-controlled gripper:</strong> two SG90 servos forming a simple two-finger gripper, controlled via a phone app and an HC-05 Bluetooth module.</li>
+    <li><strong>Automatic barrier gate:</strong> one SG90 lifts a cardboard arm when a PIR sensor detects someone. This uses the <a href="hc-sr501-pir-motion-sensor-arduino">HC-SR501 PIR module</a> covered in another article.</li>
+  </ul>
+
+  <p>All of these use the same basic wiring and code patterns described above. The SG90 is the perfect classroom servo because it is cheap enough that stripped gears are not a catastrophe &mdash; at ~$1.50 each, I budget for 10% attrition per semester.</p>
+
+  <!-- SECTION 9 -->
+  <h2 id="vs">SG90 vs MG90S vs MG996R: Which One to Buy</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>SG90</th><th>MG90S</th><th>MG996R</th></tr></thead>
+      <tbody>
+        <tr><td>Weight</td><td>9 g</td><td>13 g</td><td>55 g</td></tr>
+        <tr><td>Torque @ 4.8V</td><td>1.8 kg&middot;cm</td><td>1.8 kg&middot;cm</td><td>9.4 kg&middot;cm</td></tr>
+        <tr><td>Stall current</td><td>650 mA</td><td>700 mA</td><td>2500 mA</td></tr>
+        <tr><td>Gear material</td><td>Nylon</td><td>Metal</td><td>Metal</td></tr>
+        <tr><td>Size</td><td>23 &times; 12 &times; 29 mm</td><td>23 &times; 12 &times; 29 mm</td><td>40 &times; 19 &times; 43 mm</td></tr>
+        <tr><td>Price (approx.)</td><td>$1&ndash;2</td><td>$3&ndash;5</td><td>$4&ndash;7</td></tr>
+        <tr><td>Best for</td><td>Classroom projects, light loads, pan/tilt</td><td>Pan/tilt with impacts, small grippers</td><td>Robot arms, heavy grippers, steering</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>My recommendation for beginners:</strong> start with the SG90 for learning. Switch to the MG90S for anything that takes physical abuse (robot car sensor mounts, grippers that stall). The MG996R is a different class entirely &mdash; it is a standard-size servo for robot arms and large projects, and it absolutely requires external power (2.5A stall current will instantly brown-out an Arduino).</p>
+
+  <div class="article-img">
+    <img src="sg90-servo-batch-table.jpg" alt="Four Tower Pro SG90 micro servos in plastic bags arranged on a wooden table surface, showing the label markings and various horn attachments" loading="lazy" width="1200" height="900">
+    <div class="caption">A batch of SG90 servos as they arrive from AliExpress. I buy them in packs of 10 for the classroom. At ~$15 for ten units, they are the cheapest actuator you can put in a student&rsquo;s hands. Each bag includes three horn styles: cross, single-arm, and disc.</div>
+  </div>
+
+  <!-- SECTION 10 -->
+  <h2 id="faq">Frequently Asked Questions</h2>
+
+  <div class="faq">
+    <details>
+      <summary>What is the difference between the SG90 and the MG90S servo?</summary>
+      <p>Both are 9g micro servos with identical dimensions and the same control signal. The SG90 has nylon gears (~$1.50). The MG90S has metal gears (~$4), holds up better under load, and is slightly heavier (13g vs 9g). For classroom work and light loads, the SG90 is fine. For anything that takes repeated impacts, the MG90S lasts longer.</p>
+    </details>
+    <details>
+      <summary>Can I power the SG90 directly from an Arduino pin?</summary>
+      <p>No. Arduino digital pins supply 40 mA max, but the SG90 draws 100&ndash;250 mA normally and can spike to 650 mA during stall. The servo is powered from the 5V pin (USB/regulator rail) or, better, from an external 5V source. Only the signal wire (yellow/orange) connects to a digital pin.</p>
+    </details>
+    <details>
+      <summary>Why does my SG90 servo jitter or vibrate when it should be still?</summary>
+      <p>The most common causes are: electrical noise on the signal wire (add a 100nF capacitor), insufficient supply voltage causing the feedback loop to hunt (use an external supply), or a dead-band issue inherent to cheap servos. Calling <code>servo.detach()</code> after reaching position stops jitter but loses holding torque.</p>
+    </details>
+    <details>
+      <summary>What angle range does the SG90 actually support?</summary>
+      <p>The datasheet says 180&deg;, but most SG90 units only reach about 170&deg; before hitting the internal mechanical stop and stalling. Some clones top out at 160&deg;. If the motor buzzes at 0 or 180, back off by 5&ndash;10 degrees. Using 10&ndash;170 is the safe default.</p>
+    </details>
+    <details>
+      <summary>How many SG90 servos can I run from one Arduino?</summary>
+      <p>The Servo library supports up to 12 on an Uno and 48 on a Mega. But the real limit is power: each draws 100&ndash;250 mA, so three servos exceed what USB power can safely supply. Beyond two servos, use a dedicated 5V supply with common ground to the Arduino.</p>
+    </details>
+  </div>
+
+  <!-- AUTHOR BOX -->
+  <div class="author-box">
+    <div class="avatar" aria-hidden="true">AG</div>
+    <div>
+      <h3><a href="../author/alberto-gallardo.html">Alberto Gallardo</a></h3>
+      <p>Computer Science and Robotics teacher. I have been using SG90 servos in my classroom since 2020 &mdash; they are cheap, they fail in ways students can understand, and they turn an abstract &ldquo;PWM signal&rdquo; into something you can actually see move. The code in this article comes from my own lessons and from student projects I have supervised.</p>
+      <a href="../author/alberto-gallardo.html">View all articles &rarr;</a>
+    </div>
+  </div>
+
+  <p class="disclosure">This article was written from first-hand classroom experience with purchased components. No manufacturer provided free units or sponsored this content. For our full editorial approach, see <a href="../editorial-standards.html">editorial standards</a>.</p>
+
+  <nav class="footer-nav" aria-label="Related articles">
+    <a href="hc-sr04-ultrasonic-led-proximity-alert">&larr; HC-SR04 Ultrasonic + LED Project</a>
+    <a href="arduino-robot-car-evolution-four-versions">Robot Car Evolution: 4 Versions &rarr;</a>
+  </nav>
+
+</article>
+
+<footer style="border-top:1px solid var(--line);padding:28px 24px;text-align:center;color:var(--quiet);font-size:.78rem">
+  &copy; 2026 Robotics Engineering Lab &middot; <a href="../privacy.html" style="color:var(--quiet)">Privacy</a> &middot; <a href="../editorial-standards.html" style="color:var(--quiet)">Editorial Standards</a>
+</footer>
+
+</body>
+</html>
