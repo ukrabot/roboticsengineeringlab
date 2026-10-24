@@ -1,6 +1,0 @@
-# Sitio HTML estático. Evita que GitHub Pages publique notas internas,
-# prompts o informes en Markdown que se dejen en el repositorio.
-exclude:
-  - "*.md"
-  - "*.zip"
-  - "*.patch"
